@@ -72,3 +72,18 @@ test_that("biproportional with names", {
     expect_equivalent(colnames(uri20_output), colnames(uri20_result))
     expect_true(!is.null(divisors(uri20_output)))
 })
+
+test_that("expand divisor range", {
+    suomi19_votes = structure(
+        list(list_id = c("SDP", "PS", "KOK", "PS", "KOK", "SDP", "KOK", "SDP", "PS"),
+             entity_id = c("HEL", "UUS", "HAEM", "HEL", "UUS", "HAEM", "HEL", "UUS", "HAEM"),
+             list_votes = c(4000, 9000, 17000, 23000, 29500, 36000, 42500, 49000, 17999)),
+        row.names = c(NA, -9L), class = "data.frame")
+    suomi19_distr_seats = structure(
+        list(entity_id = c("HEL", "UUS", "HAEM"),
+             election_mandates = c(5, 10, 15)),
+        row.names = c(NA, -3L), class = "data.frame")
+
+    suomi19 = pukelsheim(suomi19_votes, suomi19_distr_seats)
+    expect_equal(sum(suomi19$seats), sum(suomi19_distr_seats$election_mandates))
+})

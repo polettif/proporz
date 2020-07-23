@@ -197,14 +197,14 @@ lower_apportionment = function(M, seats_district, seats_party) {
     stopifnot(sum(M %% 1) == 0,
               (seats_district %% 1) == 0,
               (seats_party %% 1) == 0)
-    # divisor districts
-    dD <- round(colSums(M)/seats_district)
-    dD.min <- round(colSums(M)/(seats_district+1))
-    dD.max <- round(colSums(M)/(seats_district-1))
     # divisor parties
-    dP <- rep(1, nrow(M))
+    dP = rep(1, nrow(M))
     dP.min = rep(0.5, nrow(M))
     dP.max = rep(1.5, nrow(M))
+    # divisor districts
+    dD = round(colSums(M)/seats_district)
+    dD.min = floor(colSums(M)/(seats_district+1) / max(dP.max))
+    dD.max = ceiling(colSums(M)/(seats_district-1) / min(dP.min))
 
     # calculate raw seat matrix
     # acesses function environment variables div_distr and div_party
@@ -291,5 +291,18 @@ find_divisor = function(votes,
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))
+
+    # Divisors should be within votes/(seats-1) and votes/(seats+1).
+    # It might be necessary to increase the search range given that
+    # party divisors are applied as well
+    while(fun(divisor_range[1]) > 0 && fun(divisor_range[2]) > 0) {
+        # expand lower limit
+        divisor_range[1] <- divisor_range[1]/2
+    }
+    while(fun(divisor_range[1]) < 0 && fun(divisor_range[2]) < 0) {
+        # expand upper limit
+        divisor_range[2] <- divisor_range[2]*2
+    }
+
     bisect(fun, divisor_range[1], divisor_range[2], tol)
 }
