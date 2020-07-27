@@ -1,12 +1,31 @@
 #' Biproportional apportionment with data frames
 #'
-#' Parties failing to reach at least one quorum have their votes set to zero.
+#' Method to proportionally allocate seatsamong parties/lists and
+#' districts/regions/entities ("Doppelter Pukelsheim").
 #'
-#' @param votes_df data.frame (long format) with 3 columns: party id/name,
-#'                 district id/name, and votes (actual colnames can differ)
-#' @param district_seats_df data.frame with 2 colums: district id/name,
-#'                          number of seats for a district (actual colnames
-#'                          can differ)
+#' Each party nominates a candidate list for every district. The voters vote for the
+#' parties of their district. The seat allocation is calculated in two steps:
+#'
+#' \enumerate{
+#'   \item In the so called \emph{upper apportionment} the number of seats for each party
+#'   (over all districts) is determined.
+#'   \item In the so called \emph{lower apportionment} the seats are distributed to the
+#'   regional party list respecting the results from the upper apportionment.
+#' }
+#'
+#' Parties failing to reach at least one aquorum have their votes set to zero.
+#'
+#' @param votes_df data.frame (long format) with 3 columns (actual colnames can differ):
+#'                 \itemize{
+#'                   \item party id/name
+#'                   \item district id/name
+#'                   \item votes
+#'                   }
+#' @param district_seats_df data.frame with 2 colums (actual colnames can differ):
+#'                          \itemize{
+#'                            \item district id/name
+#'                            \item number of seats for a district
+#'                          }
 #' @param new_seats_col name of the new column
 #' @inheritParams biprop_quorum
 #'
@@ -89,12 +108,28 @@ pukelsheim = function(votes_df, district_seats_df,
 
 #' Biproportional apportionment
 #'
+#' Method to proportionally allocate seatsamong parties (or lists) and
+#' districts (or entities, regions).
+#'
+#' Each party nominates a candidate list for every district. The voters vote for the
+#' parties of their district. The seat allocation is calculated in two steps:
+#' \enumerate{
+#' \item In the so called \emph{upper apportionment} the number of seats for each party
+#'    (over all districts) is determined. Normally, the number of seats for each region
+#'    are defined before the election and are independent of the vote counts.
+#' \item In the so called \emph{lower apportionment} the seats are distributed to the
+#'    regional party list respecting the results from the upper apportionment.
+#' }
+#'
 #' Parties failing to reach at least one quorum cannot get seats.
 #'
 #' @param votes_matrix Vote count matrix with votes by party in rows
-#'                     and votes by district in columns and
-#' @param seats_per_district vector defining the number of seats per district.
-#'                           Must be the same length as ncol(votes_matrix).
+#'                     and votes by district in columns
+#' @param district_seats Vector defining the number of seats per district.
+#'                       Must be the same length as ncol(votes_matrix). If the number
+#'                       of seats per district should be assigned according to the
+#'                       number of votes (not the general use case), a single
+#'                       number for the total number of seats can be used.
 #' @inheritParams biprop_quorum
 #'
 #' @examples
@@ -130,21 +165,23 @@ pukelsheim = function(votes_df, district_seats_df,
 #'
 #' @export
 biproportional = function(votes_matrix,
-                          seats_per_district,
+                          district_seats,
                           quorum_districts = 0,
                           quorum_total = 0) {
     if(!is.matrix(votes_matrix)) {
         stop(deparse(substitute(votes_matrix)), " must be a matrix")
     }
-    if(ncol(votes_matrix) != length(seats_per_district)) {
-        stop(deparse(substitute(votes_matrix)),
-             " needs to have districts as columns and parties as rows")
-    }
-    if(!is.null(colnames(votes_matrix))) {
-        if(!all(colnames(votes_matrix) == names(seats_per_district))) {
-            stop(deparse(substitute(seats_per_district)),
-                 " needs to have the same names as the columns in ",
-                 deparse(substitute(votes_matrix)))
+    if(length(district_seats) > 1) {
+        if(ncol(votes_matrix) != length(district_seats)) {
+            stop(deparse(substitute(votes_matrix)),
+                 " needs to have districts as columns and parties as rows")
+        }
+        if(!is.null(colnames(votes_matrix))) {
+            if(!all(colnames(votes_matrix) == names(district_seats))) {
+                stop(deparse(substitute(seats_per_district)),
+                     " needs to have the same names as the columns in ",
+                     deparse(substitute(votes_matrix)))
+            }
         }
     }
 
@@ -154,10 +191,15 @@ biproportional = function(votes_matrix,
                                   quorum_total = quorum_total)
 
     # upper apportionment (Oberzuteilung)
-    seats_party = upper_apportionment(votes_matrix, seats_per_district)
+    if(length(district_seats) == 1) {
+        seats_district = district_seat_apportionment(votes_matrix, district_seats)
+    } else {
+        seats_district = district_seats
+    }
+    seats_party = party_seat_apportionment(votes_matrix, seats_district)
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, seats_per_district, seats_party)
+    seats_matrix = lower_apportionment(votes_matrix, seats_district, seats_party)
     class(seats_matrix) <- append(class(seats_matrix), "proporz_matrix")
     return(seats_matrix)
 }
@@ -168,7 +210,7 @@ biproportional = function(votes_matrix,
 #'
 #' @param votes_matrix matrix containing votes a parties got in districts.
 #'                     Parties by row and districts by column.
-#' @param quorum_districts Vote threshold a party must reach in _at least_ one
+#' @param quorum_districts Vote threshold a party must reach in \emph{at least} one
 #'                         district. Used as quota of total votes within a
 #'                         district if less than 1 otherwise as number of votes.
 #' @param quorum_total Vote threshold a party must reach for all votes cast.
@@ -197,10 +239,16 @@ biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
     return(votes_matrix)
 }
 
-# same as sainte-lague
-upper_apportionment = function(M, n_seats_district, upper_app_fun) {
-    M_seats_district = matrix(rep(n_seats_district, nrow(M)),
-                              byrow = TRUE, ncol = length(n_seats_district))
+# upper apportionment
+district_seat_apportionment = function(M, n_seats_total) {
+    hzv(colSums(M), n_seats_total, 0.5)
+}
+
+# upper apportionment
+party_seat_apportionment = function(M, n_seats_district) {
+    M_seats_district = matrix(
+        rep(n_seats_district, nrow(M)),
+        byrow = TRUE, ncol = length(n_seats_district))
 
     weighted_party_votes = rowSums(M/M_seats_district)
     n_seats = sum(n_seats_district)

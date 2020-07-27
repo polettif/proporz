@@ -6,19 +6,22 @@
 \usage{
 biproportional(
   votes_matrix,
-  seats_per_district,
+  district_seats,
   quorum_districts = 0,
   quorum_total = 0
 )
 }
 \arguments{
 \item{votes_matrix}{Vote count matrix with votes by party in rows
-and votes by district in columns and}
+and votes by district in columns}
 
-\item{seats_per_district}{vector defining the number of seats per district.
-Must be the same length as ncol(votes_matrix).}
+\item{district_seats}{Vector defining the number of seats per district.
+Must be the same length as ncol(votes_matrix). If the number
+of seats per district should be assigned according to the
+number of votes (not the general use case), a single
+number for the total number of seats can be used.}
 
-\item{quorum_districts}{Vote threshold a party must reach in _at least_ one
+\item{quorum_districts}{Vote threshold a party must reach in \emph{at least} one
 district. Used as quota of total votes within a
 district if less than 1 otherwise as number of votes.}
 
@@ -27,6 +30,20 @@ Used as quota of total votes if less than 1 otherwise
 as number of votes.}
 }
 \description{
+Method to proportionally allocate seatsamong parties (or lists) and
+districts (or entities, regions).
+}
+\details{
+Each party nominates a candidate list for every district. The voters vote for the
+parties of their district. The seat allocation is calculated in two steps:
+\enumerate{
+\item In the so called \emph{upper apportionment} the number of seats for each party
+   (over all districts) is determined. Normally, the number of seats for each region
+   are defined before the election and are independent of the vote counts.
+\item In the so called \emph{lower apportionment} the seats are distributed to the
+   regional party list respecting the results from the upper apportionment.
+}
+
 Parties failing to reach at least one quorum cannot get seats.
 }
 \examples{

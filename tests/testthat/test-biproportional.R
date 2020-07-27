@@ -12,8 +12,8 @@ p2 = 4:6
 
 # https://de.wikipedia.org/wiki/Sitzzuteilungsverfahren#Biproportionales_Verfahren
 test_that("upper apportionment", {
-    expect_equal(upper_apportionment(M1, d1), p1)
-    expect_equal(upper_apportionment(M2, d2), p2)
+    expect_equal(party_seat_apportionment(M1, d1), p1)
+    expect_equal(party_seat_apportionment(M2, d2), p2)
 })
 
 test_that("lower apportionment", {
@@ -58,6 +58,15 @@ test_that("quorum with percentages counts", {
     expect_equal(p2,p3)
     p4 = biprop_quorum(vm, quorum_total = 0.09)
     expect_equal(p1, p4)
+})
+
+test_that("free apportionment for districts", {
+    # https://en.wikipedia.org/wiki/Biproportional_apportionment#Specific_Example
+    input_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
+    mtrx_exp = matrix(c(1,4,2,0,4,1,4,3,1), nrow = 3)
+    mtrx_act = biproportional(input_matrix, 20)
+    mtrx_act <- as.matrix(mtrx_act)
+    expect_equal(mtrx_act, mtrx_exp)
 })
 
 test_that("pukelsheim wrapper", {
