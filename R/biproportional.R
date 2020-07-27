@@ -149,7 +149,6 @@ biproportional = function(votes_matrix,
     # Quorum
     votes_matrix <- biprop_quorum(votes_matrix, )
 
-
     # upper apportionment (Oberzuteilung)
     seats_party = upper_apportionment(votes_matrix, seats_per_district)
 
@@ -232,34 +231,36 @@ lower_apportionment = function(M, seats_district, seats_party) {
     while(!all(c(mc(M,dD,dP) == seats_district, mr(M,dD,dP) == seats_party))) {
         # change party divisors
         row_decr = which.min0(mr(M,dD,dP) - seats_party)
-        if(length(row_decr) > 0) {
+        if(length(row_decr) == 1) {
             dP[row_decr] <- find_divisor(
                 M[row_decr,]/dD,
                 dP[row_decr], dP.min[row_decr],
-                seats_party[row_decr], 0.01)
+                seats_party[row_decr])
         }
+
         row_incr = which.max0(mr(M,dD,dP) - seats_party)
-        if(length(row_incr) > 0) {
+        if(length(row_incr) == 1) {
             dP[row_incr] <- find_divisor(
                 M[row_incr,]/dD,
                 dP[row_incr], dP.max[row_incr],
-                seats_party[row_incr], 0.01)
+                seats_party[row_incr])
         }
 
         # change district divisors
         col_decr = which.min0(mc(M,dD,dP) - seats_district)
-        if(length(col_decr) > 0) {
+        if(length(col_decr) == 1) {
             dD[col_decr] <- find_divisor(
                 M[,col_decr]/dP,
                 dD[col_decr], dD.min[col_decr],
-                seats_district[col_decr], 2)
+                seats_district[col_decr])
         }
+
         col_incr = which.max0(mc(M,dD,dP) - seats_district)
-        if(length(col_incr) > 0) {
+        if(length(col_incr) == 1) {
             dD[col_incr] <- find_divisor(
                 M[,col_incr]/dP,
                 dD[col_incr], dD.max[col_incr],
-                seats_district[col_incr], 2)
+                seats_district[col_incr])
         }
     }
 
@@ -274,20 +275,11 @@ lower_apportionment = function(M, seats_district, seats_party) {
 
 find_divisor = function(votes,
                         divisor_from, divisor_to,
-                        target_seats, tol) {
-    stopifnot(length(target_seats) == 1, length(tol) == 1)
-
-    # There's a range of divisors resulting in a 0 difference from the
-    # target seats. We need to find divisor closest to the initial divisor
-    # by still returning 1 or -1 depending on the direction
-    return0 = ifelse(divisor_from < divisor_to, 1, -1)
+                        target_seats) {
+    stopifnot(length(target_seats) == 1)
 
     fun = function(divisor) {
-        diff = target_seats - sum(round(votes/divisor))
-        if(diff == 0) {
-            return(return0)
-        }
-        return(diff)
+        target_seats - sum(round(votes/divisor))
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))
@@ -304,5 +296,5 @@ find_divisor = function(votes,
         divisor_range[2] <- divisor_range[2]*2
     }
 
-    bisect(fun, divisor_range[1], divisor_range[2], tol)
+    bisect(fun, divisor_range[1], divisor_range[2])
 }

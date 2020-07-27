@@ -16,13 +16,13 @@ quorum_votes = function(votes, quorum) {
     return(votes)
 }
 
-bisect = function(f, x1, x2, tol) {
+bisect = function(f, x1, x2, tol = 1e-9) {
     stopifnot(length(x1) == 1, length(x2) == 1, length(tol) == 1, x1 < x2)
     stopifnot((f(x1) <= 0 & f(x2) >= 0) | (f(x1) >= 0 & f(x2) <= 0))
 
     for(i in 1:1e9) {
         x <- (x1 + x2)/2
-        if(f(x) == 0 || (x2 - x1) / 2 < tol) {
+        if(f(x) == 0 || (x2-x1) < tol) {
             return(x)
         }
         if(sign(f(x)) == sign(f(x1))) {
