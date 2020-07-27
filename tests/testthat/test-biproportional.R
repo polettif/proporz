@@ -32,6 +32,34 @@ test_that("biproportional", {
     expect_is(act, "matrix")
 })
 
+test_that("quorum with vote counts", {
+    vm0 = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
+    for(i in 1:3) {
+        vm = vm0
+        vm[c(1,3),] <- round(runif(2, 1, 10)*vm[c(1,3),])
+        expect_equal(biprop_quorum(vm), vm)
+        q1 = biprop_quorum(vm, quorum_districts = 35)
+        check1 = all(q1[2,] == c(0,0))
+        q2 = biprop_quorum(vm, quorum_total = 45)
+        check2 = all(q2[2,] == c(0,0))
+        q3 = biprop_quorum(vm, quorum_districts = 35, quorum_total = 45)
+        check3 = identical(q2, q3)
+        expect_true(all(check1, check2, check3))
+    }
+})
+
+test_that("quorum with percentages counts", {
+    vm = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
+    p1 = biprop_quorum(vm, quorum_districts = 0.15)
+    expect_equal(p1[2,], c(0,0))
+    p2 = biprop_quorum(vm, quorum_districts = 0.09)
+    expect_true(all(p2[2,] != c(0,0)))
+    p3 = biprop_quorum(vm, quorum_total = 0.085)
+    expect_equal(p2,p3)
+    p4 = biprop_quorum(vm, quorum_total = 0.09)
+    expect_equal(p1, p4)
+})
+
 test_that("pukelsheim wrapper", {
     pklshm = data.frame(
         Liste = rep(1:3, each = 3),

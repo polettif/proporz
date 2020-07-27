@@ -27,8 +27,8 @@ district. Used as quota of total votes within a
 district if less than 1 otherwise as number of votes.}
 
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
-Used as quota of total votes within a district if less
-than 1 otherwise as number of votes.}
+Used as quota of total votes if less than 1 otherwise
+as number of votes.}
 }
 \description{
 Parties failing to reach at least one quorum have their votes set to zero.

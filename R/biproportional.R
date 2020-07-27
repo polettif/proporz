@@ -40,9 +40,9 @@ pukelsheim = function(votes_df, district_seats_df,
              " must be a data frame with 3 columns in the following
              order: party, district and votes (names can differ)")
     }
-    if(length(unique(votes_df[,2])) != nrow(district_seats_df)) {
-        stop("Not all districts have a number of seats assigned or
-             there are more assignments than districts")
+    if(length(unique(votes_df[[2]])) != nrow(district_seats_df)) {
+        stop("Not all districts have a number of seats assigned or ",
+             "there are more assignments than districts")
     }
     if(!all(district_seats_df[[1]] %in% votes_df[[2]])) {
         if(all(district_seats_df[[1]] %in% votes_df[[1]])) {
@@ -67,11 +67,13 @@ pukelsheim = function(votes_df, district_seats_df,
 
     # "deframe" to named vector
     ds_df <- district_seats_df[order(district_seats_df[[1]]),]
-    district_seats <- ds_df[,2]
-    names(district_seats) <- ds_df[,1]
+    district_seats <- ds_df[[2]]
+    names(district_seats) <- ds_df[[1]]
 
     # Biproportional Apportionment
-    m = biproportional(votes_matrix, district_seats, quorum_districts, quorum_total)
+    m = biproportional(votes_matrix, district_seats,
+                       quorum_districts = quorum_districts,
+                       quorum_total = quorum_total)
     seats_df = pivot_to_df(m, new_seats_col)
 
     stopifnot(nrow(votes_df) <= nrow(seats_df))
@@ -147,7 +149,9 @@ biproportional = function(votes_matrix,
     }
 
     # Quorum
-    votes_matrix <- biprop_quorum(votes_matrix, )
+    votes_matrix <- biprop_quorum(votes_matrix,
+                                  quorum_districts = quorum_districts,
+                                  quorum_total = quorum_total)
 
     # upper apportionment (Oberzuteilung)
     seats_party = upper_apportionment(votes_matrix, seats_per_district)
@@ -168,14 +172,27 @@ biproportional = function(votes_matrix,
 #'                         district. Used as quota of total votes within a
 #'                         district if less than 1 otherwise as number of votes.
 #' @param quorum_total Vote threshold a party must reach for all votes cast.
-#'                     Used as quota of total votes within a district if less
-#'                     than 1 otherwise as number of votes.
+#'                     Used as quota of total votes if less than 1 otherwise
+#'                     as number of votes.
 #' @export
 biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
-    q_distr = votes_matrix/colSums(votes_matrix) >= quorum_districts
-    q_total = votes_matrix/sum(votes_matrix) >= quorum_total
+    stopifnot(quorum_districts >= 0, quorum_total >= 0)
+    # district quorum
+    if(quorum_districts < 1) {
+        quorum_districts <- colSums(votes_matrix)*quorum_districts
+    }
+    passed_distr_quor = t(apply(votes_matrix, 1, function(x) x >= quorum_districts))
+    passed_any_distr_quor = rowSums(passed_distr_quor) > 0
 
-    list_missed_quorum = rowSums(q_distr | q_total) == 0
+    # total quorum
+    if(quorum_total < 1) {
+        quorum_total <- sum(votes_matrix)*quorum_total
+    }
+    passed_total_quor = rowSums(votes_matrix) >= quorum_total
+    # set votes to 0 if party misses a quorum
+    stopifnot(length(passed_any_distr_quor) == length(passed_total_quor))
+    list_missed_quorum = !passed_any_distr_quor | !passed_total_quor
+
     votes_matrix[which(list_missed_quorum),] <- 0
     return(votes_matrix)
 }
