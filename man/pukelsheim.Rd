@@ -59,6 +59,7 @@ parties of their district. The seat allocation is calculated in two steps:
 Parties failing to reach at least one aquorum have their votes set to zero.
 }
 \examples{
+# Zug 2018
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
@@ -76,6 +77,14 @@ head(seats_df)
 #> 5       5      1701       4486     1
 #> 6       6      1701      15695     3
 
+# Finland 2019
+finland19_result = pukelsheim(finland2019$votes_df,
+                             finland2019$district_seats_df,
+                             new_seats_col = "mandates")
+tail(finland19_result[order(finland19_result$mandates),])
+}
+\seealso{
+\code{\link{biproportional}}, \code{\link{divisors}}
 }
 \seealso{
 \link{biproportional}

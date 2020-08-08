@@ -34,7 +34,10 @@
 #'
 #' @seealso \link{biproportional}
 #'
+#' @seealso \code{\link{biproportional}}, \code{\link{divisors}}
+#'
 #' @examples
+#' # Zug 2018
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 #' district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 #'
@@ -52,6 +55,18 @@
 #' #> 5       5      1701       4486     1
 #' #> 6       6      1701      15695     3
 #'
+#' # Finland 2019
+#' finland19_result = pukelsheim(finland2019$votes_df,
+#'                              finland2019$district_seats_df,
+#'                              new_seats_col = "mandates")
+#' tail(finland19_result[order(finland19_result$mandates),])
+#> list_id entity_id list_votes mandates
+#>     SDP       PIR      66109        5
+#>    VIHR       UUS      73626        5
+#>    KESK       OUL      78486        6
+#>      PS       UUS      86691        6
+#>     KOK       UUS     114243        7
+#>     SDP       UUS      97107        7
 #' @export
 pukelsheim = function(votes_df, district_seats_df,
                       new_seats_col = "seats",
@@ -132,6 +147,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #'
 #' @inheritParams upper_apportionment
 #' @inheritParams biprop_quorum
+#' @seealso \code{\link{pukelsheim}}, \code{\link{divisors}}
 #'
 #' @seealso \link{pukelsheim} for usage with data frames
 #'
