@@ -8,7 +8,8 @@ biproportional(
   votes_matrix,
   district_seats,
   quorum_districts = 0,
-  quorum_total = 0
+  quorum_total = 0,
+  use_list_votes = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,10 @@ district if less than 1 otherwise as number of votes.}
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
 Used as quota of total votes if less than 1 otherwise
 as number of votes.}
+
+\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as
+many votes as there are seats in a district. Set to FALSE if
+\code{votes_matrix} shows the number of voters.}
 }
 \description{
 Method to proportionally allocate seatsamong parties (or lists) and

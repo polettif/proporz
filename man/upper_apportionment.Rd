@@ -4,7 +4,7 @@
 \alias{upper_apportionment}
 \title{Calculate upper apportionment}
 \usage{
-upper_apportionment(votes_matrix, district_seats)
+upper_apportionment(votes_matrix, district_seats, use_list_votes = TRUE)
 }
 \arguments{
 \item{votes_matrix}{Vote count matrix with votes by party in rows
@@ -15,6 +15,10 @@ Must be the same length as ncol(votes_matrix). If the number
 of seats per district should be assigned according to the
 number of votes (not the general use case), a single
 number for the total number of seats can be used.}
+
+\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as
+many votes as there are seats in a district. Set to FALSE if
+\code{votes_matrix} shows the number of voters.}
 }
 \value{
 named list with column/district seats and row/party seats

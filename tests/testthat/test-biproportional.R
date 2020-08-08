@@ -11,9 +11,9 @@ d2 = 4:6
 p2 = 4:6
 
 # https://de.wikipedia.org/wiki/Sitzzuteilungsverfahren#Biproportionales_Verfahren
-test_that("upper apportionment", {
-    expect_equal(party_seat_apportionment(M1, d1), p1)
-    expect_equal(party_seat_apportionment(M2, d2), p2)
+test_that("upper apportionment (party seats)", {
+    expect_equal(upper_apportionment(M1, d1)$party, p1)
+    expect_equal(upper_apportionment(M2, d2)$party, p2)
 })
 
 test_that("lower apportionment", {
@@ -110,17 +110,29 @@ test_that("biproportional with names", {
     expect_true(!is.null(divisors(uri20_output)))
 })
 
-test_that("expand divisor range", {
-    suomi19_votes = structure(
-        list(list_id = c("SDP", "PS", "KOK", "PS", "KOK", "SDP", "KOK", "SDP", "PS"),
-             entity_id = c("HEL", "UUS", "HAEM", "HEL", "UUS", "HAEM", "HEL", "UUS", "HAEM"),
-             list_votes = c(4000, 9000, 17000, 23000, 29500, 36000, 42500, 49000, 17999)),
-        row.names = c(NA, -9L), class = "data.frame")
-    suomi19_distr_seats = structure(
-        list(entity_id = c("HEL", "UUS", "HAEM"),
-             election_mandates = c(5, 10, 15)),
-        row.names = c(NA, -3L), class = "data.frame")
+suomi19_votes = structure(
+    list(list_id = c("SDP", "PS", "KOK", "PS", "KOK", "SDP", "KOK", "SDP", "PS"),
+         entity_id = c("HEL", "UUS", "HAEM", "HEL", "UUS", "HAEM", "HEL", "UUS", "HAEM"),
+         list_votes = c(4000, 9000, 17000, 23000, 29500, 36000, 42500, 49000, 17999)),
+    row.names = c(NA, -9L), class = "data.frame")
+suomi19_distr_seats = structure(
+    list(entity_id = c("HEL", "UUS", "HAEM"),
+         election_mandates = c(5, 10, 15)),
+    row.names = c(NA, -3L), class = "data.frame")
 
-    suomi19 = pukelsheim(suomi19_votes, suomi19_distr_seats)
-    expect_equal(sum(suomi19$seats), sum(suomi19_distr_seats$election_mandates))
+test_that("expand divisor range", {
+    suomi19_listvotes = pukelsheim(suomi19_votes, suomi19_distr_seats)
+    expect_equal(sum(suomi19_listvotes$seats), sum(suomi19_distr_seats$election_mandates))
+})
+
+test_that("use_list_votes=FALSE", {
+    # divisor round with sainte-lague
+    vm_19 = pivot_to_matrix(suomi19_votes)
+    votes_vec = rowSums(vm_19)
+    seats_vec = divisor_round(votes_vec, 30)
+
+    # compare with pukelsheim using raw voter data
+    seats_df = pukelsheim(suomi19_votes, suomi19_distr_seats, use_list_votes = FALSE)
+    seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
+    expect_equal(seats_vec, rowSums(seats_mtrx))
 })

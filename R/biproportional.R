@@ -28,6 +28,9 @@
 #'                          }
 #' @param new_seats_col name of the new column
 #' @inheritParams biprop_quorum
+#' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
+#'                       many votes as there are seats in a district. Set to FALSE if
+#'                       \code{votes_df} shows the number of voters.
 #'
 #' @seealso \link{biproportional}
 #'
@@ -53,7 +56,8 @@
 pukelsheim = function(votes_df, district_seats_df,
                       new_seats_col = "seats",
                       quorum_districts = 0,
-                      quorum_total = 0) {
+                      quorum_total = 0,
+                      use_list_votes = TRUE) {
     stopifnot(is.numeric(quorum_districts), is.numeric(quorum_total))
     stopifnot(is.character(new_seats_col))
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
@@ -94,7 +98,8 @@ pukelsheim = function(votes_df, district_seats_df,
     # Biproportional Apportionment
     m = biproportional(votes_matrix, district_seats,
                        quorum_districts = quorum_districts,
-                       quorum_total = quorum_total)
+                       quorum_total = quorum_total,
+                       use_list_votes = use_list_votes)
     seats_df = pivot_to_df(m, new_seats_col)
 
     stopifnot(nrow(votes_df) <= nrow(seats_df))
@@ -165,7 +170,8 @@ pukelsheim = function(votes_df, district_seats_df,
 biproportional = function(votes_matrix,
                           district_seats,
                           quorum_districts = 0,
-                          quorum_total = 0) {
+                          quorum_total = 0,
+                          use_list_votes = TRUE) {
     if(!is.matrix(votes_matrix)) {
         stop(deparse(substitute(votes_matrix)), " must be a matrix")
     }
@@ -189,7 +195,7 @@ biproportional = function(votes_matrix,
                                   quorum_total = quorum_total)
 
     # upper apportionment (Oberzuteilung)
-    upp_app = upper_apportionment(votes_matrix, district_seats)
+    upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes)
 
     # lower apportionment (Unterzuteilung)
     seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party)
@@ -254,36 +260,35 @@ biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
 #'                       of seats per district should be assigned according to the
 #'                       number of votes (not the general use case), a single
 #'                       number for the total number of seats can be used.
+#' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
+#'                       many votes as there are seats in a district. Set to FALSE if
+#'                       \code{votes_matrix} shows the number of voters.
 #'
 #' @seealso \link{biproportional}, \link{upper_apportionment}
 #'
 #' @return named list with column/district seats and row/party seats
 #' @export
-upper_apportionment = function(votes_matrix, district_seats) {
+upper_apportionment = function(votes_matrix, district_seats, use_list_votes = TRUE) {
+    stopifnot(is.matrix(votes_matrix), is.logical(use_list_votes))
+    # district seats
     if(length(district_seats) == 1) {
-        seats_district = district_seat_apportionment(votes_matrix, district_seats)
+        seats_district = hzv(colSums(votes_matrix), district_seats, 0.5)
     } else {
         seats_district = district_seats
     }
-    seats_party = party_seat_apportionment(votes_matrix, seats_district)
-    return(list(district = seats_district, party = seats_party))
-}
 
-# upper apportionment
-district_seat_apportionment = function(M, n_seats_total) {
-    hzv(colSums(M), n_seats_total, 0.5)
-}
+    # party seats
+    if(use_list_votes) {
+        M_seats_district = matrix(
+            rep(seats_district, nrow(votes_matrix)),
+            byrow = TRUE, ncol = length(seats_district))
 
-# upper apportionment
-party_seat_apportionment = function(M, n_seats_district) {
-    M_seats_district = matrix(
-        rep(n_seats_district, nrow(M)),
-        byrow = TRUE, ncol = length(n_seats_district))
+        votes_matrix <- votes_matrix/M_seats_district
+    }
+    seats_party = hzv(rowSums(votes_matrix), sum(seats_district), 0.5)
 
-    weighted_party_votes = rowSums(M/M_seats_district)
-    n_seats = sum(n_seats_district)
-
-    hzv(weighted_party_votes, n_seats, 0.5)
+    # return values
+    list(district = seats_district, party = seats_party)
 }
 
 #' Calculate lower apportionment
