@@ -11,11 +11,11 @@
 #'
 #' @details The following methods are available:
 #' \itemize{
-#'          \item{d'hondt, jefferson, hagenbach-bischoff, divisor_floor}
-#'          \item{sainte-lague, webster, divisor_round}
-#'          \item{adams, divisor_ceiling}
-#'          \item{dean, divisor_harmonic}
-#'          \item{huntington-hill, hill-huntington, divisor_geometric}
+#'          \item{d'hondt, jefferson, hagenbach-bischoff, floor}
+#'          \item{sainte-lague, webster, round}
+#'          \item{adams, ceiling}
+#'          \item{dean, harmonic}
+#'          \item{huntington-hill, hill-huntington, geometric}
 #'          \item{hare-niemeyer, hamilton, vinton, quota_largest_remainder}
 #' }
 #' @examples
@@ -29,31 +29,14 @@
 #'
 #'@export
 proporz = function(votes, n_seats, method, quorum = 0) {
+    m = get_apport_method(method)
     apport_methods = list(
-        "d'hondt" = divisor_floor,
-        "jefferson" = divisor_floor,
-        "sainte-lague" = divisor_round,
-        "webster" = divisor_round,
-        "adams" = divisor_ceiling,
-        "dean" = divisor_harmonic,
-        "huntington-hill" = divisor_geometric,
-        "hill-huntington" = divisor_geometric,
-        "hare-niemeyer" = quota_largest_remainder,
-        "hamilton" = quota_largest_remainder,
-        "vinton" = quota_largest_remainder,
-        "hagenbach-bischoff" = divisor_floor,
-        "divisor_ceiling" = divisor_ceiling,
-        "divisor_round" = divisor_round,
-        "divisor_floor" = divisor_floor,
-        "divisor_harmonic" = divisor_harmonic,
-        "divisor_geometric" = divisor_geometric,
+        "floor" = divisor_floor,
+        "round" = divisor_round,
+        "ceiling" = divisor_ceiling,
+        "harmonic" = divisor_harmonic,
+        "geometric" = divisor_geometric,
         "quota_largest_remainder" = quota_largest_remainder
     )
-    method <- tolower(method)
-    if(!method %in% names(apport_methods)) {
-        stop("Unknown method: ", method, ".\nAvailable: ",
-             paste0(names(apport_methods), collapse=", "))
-    }
-
-    apport_methods[[method]](votes, n_seats, quorum)
+    apport_methods[[m]](votes, n_seats, quorum)
 }

@@ -57,6 +57,8 @@ parties of their district. The seat allocation is calculated in two steps:
 }
 
 Parties failing to reach at least one aquorum have their votes set to zero.
+
+If you want to other apportion methods than Sainte-Lague use \link{biproportional}.
 }
 \examples{
 # Zug 2018
@@ -80,12 +82,17 @@ head(seats_df)
 # Finland 2019
 finland19_result = pukelsheim(finland2019$votes_df,
                              finland2019$district_seats_df,
-                             new_seats_col = "mandates")
+                             new_seats_col = "mandates",
+                             use_list_votes = FALSE)
 tail(finland19_result[order(finland19_result$mandates),])
+#> list_id entity_id list_votes mandates
+#>    VIHR       HEL      90662        5
+#>      PS       UUS      86691        5
+#>    VIHR       UUS      73626        5
+#>    KESK       OUL      78486        6
+#>     SDP       UUS      97107        6
+#>     KOK       UUS     114243        7
 }
 \seealso{
 \code{\link{biproportional}}, \code{\link{divisors}}
-}
-\seealso{
-\link{biproportional}
 }

@@ -23,11 +23,11 @@ Calculate seat apportionment for legislative bodies.
 \details{
 The following methods are available:
 \itemize{
-         \item{d'hondt, jefferson, hagenbach-bischoff, divisor_floor}
-         \item{sainte-lague, webster, divisor_round}
-         \item{adams, divisor_ceiling}
-         \item{dean, divisor_harmonic}
-         \item{huntington-hill, hill-huntington, divisor_geometric}
+         \item{d'hondt, jefferson, hagenbach-bischoff, floor}
+         \item{sainte-lague, webster, round}
+         \item{adams, ceiling}
+         \item{dean, harmonic}
+         \item{huntington-hill, hill-huntington, geometric}
          \item{hare-niemeyer, hamilton, vinton, quota_largest_remainder}
 }
 }

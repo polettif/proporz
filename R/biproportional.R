@@ -15,6 +15,8 @@
 #'
 #' Parties failing to reach at least one aquorum have their votes set to zero.
 #'
+#' If you want to other apportion methods than Sainte-Lague use \link{biproportional}.
+#'
 #' @param votes_df data.frame (long format) with 3 columns (actual colnames can differ):
 #'                 \itemize{
 #'                   \item party id/name
@@ -31,8 +33,6 @@
 #' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
 #'                       many votes as there are seats in a district. Set to FALSE if
 #'                       \code{votes_df} shows the number of voters.
-#'
-#' @seealso \link{biproportional}
 #'
 #' @seealso \code{\link{biproportional}}, \code{\link{divisors}}
 #'
@@ -58,15 +58,16 @@
 #' # Finland 2019
 #' finland19_result = pukelsheim(finland2019$votes_df,
 #'                              finland2019$district_seats_df,
-#'                              new_seats_col = "mandates")
+#'                              new_seats_col = "mandates",
+#'                              use_list_votes = FALSE)
 #' tail(finland19_result[order(finland19_result$mandates),])
-#> list_id entity_id list_votes mandates
-#>     SDP       PIR      66109        5
-#>    VIHR       UUS      73626        5
-#>    KESK       OUL      78486        6
-#>      PS       UUS      86691        6
-#>     KOK       UUS     114243        7
-#>     SDP       UUS      97107        7
+#' #> list_id entity_id list_votes mandates
+#' #>    VIHR       HEL      90662        5
+#' #>      PS       UUS      86691        5
+#' #>    VIHR       UUS      73626        5
+#' #>    KESK       OUL      78486        6
+#' #>     SDP       UUS      97107        6
+#' #>     KOK       UUS     114243        7
 #' @export
 pukelsheim = function(votes_df, district_seats_df,
                       new_seats_col = "seats",
@@ -147,9 +148,18 @@ pukelsheim = function(votes_df, district_seats_df,
 #'
 #' @inheritParams upper_apportionment
 #' @inheritParams biprop_quorum
-#' @seealso \code{\link{pukelsheim}}, \code{\link{divisors}}
+#' @param method Defines how seats in upper and lower apportionment are assigned. The
+#'               default "round" for the Sainte-Lague/Webster method is the standard
+#'               for biproportional apportionment. See \link{proporz} for a list of
+#'               available methods. For a different method for upper and lower apportionment
+#'               use a vector with two entries. It is also possible to provide a function
+#'               that works like base::round(x) (i.e. can handle a matrix).
 #'
-#' @seealso \link{pukelsheim} for usage with data frames
+#' @note The iterative process in the lower apportionment is only guaranteed to terminate
+#'       with Sainte-Laguë/Webster method.
+#'
+#' @seealso \link{pukelsheim} for usage with data frames.
+#'          \code{\link{divisors}} to access the divisors
 #'
 #' @examples
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -182,28 +192,50 @@ pukelsheim = function(votes_df, district_seats_df,
 #' #>       6    3    1    1    0    0    0    0    0    1    0    3
 #' #>       7    4    2    1    1    1    1    2    1    2    0    3
 #'
+#' # Different method for upper apportionment
+#' # and using number of voters instead of list votes
+#' f19_matrix = pivot_to_matrix(finland2019$votes_df)
+#' f19_distr_seats = setNames(
+#'     finland2019$district_seats_df$election_mandates,
+#'     finland2019$district_seats_df$entity_id)
+#'
+#' biproportional(f19_matrix, f19_distr_seats,
+#'                use_list_votes = FALSE,
+#'                method = c("floor", "round"))
+#'
+#' @importFrom stats setNames
 #' @export
 biproportional = function(votes_matrix,
                           district_seats,
                           quorum_districts = 0,
                           quorum_total = 0,
-                          use_list_votes = TRUE) {
+                          use_list_votes = TRUE,
+                          method = "round") {
     if(!is.matrix(votes_matrix)) {
         stop(deparse(substitute(votes_matrix)), " must be a matrix")
     }
     if(length(district_seats) > 1) {
+        if(is.data.frame(district_seats)) {
+            district_seats <- setNames(district_seats[[2]], district_seats[[1]])
+        }
         if(ncol(votes_matrix) != length(district_seats)) {
             stop(deparse(substitute(votes_matrix)),
                  " needs to have districts as columns and parties as rows")
         }
         if(!is.null(colnames(votes_matrix))) {
+            district_seats <- district_seats[colnames(votes_matrix)]
             if(!all(colnames(votes_matrix) == names(district_seats))) {
-                stop(deparse(substitute(seats_per_district)),
+                stop(deparse(substitute(district_seats)),
                      " needs to have the same names as the columns in ",
                      deparse(substitute(votes_matrix)))
             }
         }
     }
+    if(length(method) == 1) {
+        method = c(method, method)
+    }
+    stopifnot(length(method) == 2)
+    if(any(method == "quota_largest_remainder")) stop("Only divisor methods possible")
 
     # Quorum
     votes_matrix <- biprop_quorum(votes_matrix,
@@ -211,14 +243,18 @@ biproportional = function(votes_matrix,
                                   quorum_total = quorum_total)
 
     # upper apportionment (Oberzuteilung)
-    upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes)
+    upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes, method[1])
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party)
+    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party, method[2])
 
     class(seats_matrix) <- append(class(seats_matrix), "proporz_matrix")
     return(seats_matrix)
 }
+
+#' @inherit biproportional
+#' @export
+biproporz = biproportional
 
 #' Filter a votes_matrix
 #'
@@ -279,16 +315,19 @@ biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
 #' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
 #'                       many votes as there are seats in a district. Set to FALSE if
 #'                       \code{votes_matrix} shows the number of voters.
+#' @param method Apportion method that defines how seats are assigned, see \link{proporz}.
 #'
-#' @seealso \link{biproportional}, \link{upper_apportionment}
+#' @seealso \link{biproportional}, \link{lower_apportionment}
 #'
 #' @return named list with column/district seats and row/party seats
 #' @export
-upper_apportionment = function(votes_matrix, district_seats, use_list_votes = TRUE) {
+upper_apportionment = function(votes_matrix, district_seats,
+                               use_list_votes = TRUE,
+                               method = "round") {
     stopifnot(is.matrix(votes_matrix), is.logical(use_list_votes))
     # district seats
     if(length(district_seats) == 1) {
-        seats_district = hzv(colSums(votes_matrix), district_seats, 0.5)
+        seats_district = proporz(colSums(votes_matrix), district_seats, method)
     } else {
         seats_district = district_seats
     }
@@ -301,7 +340,7 @@ upper_apportionment = function(votes_matrix, district_seats, use_list_votes = TR
 
         votes_matrix <- votes_matrix/M_seats_district
     }
-    seats_party = hzv(rowSums(votes_matrix), sum(seats_district), 0.5)
+    seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
 
     # return values
     list(district = seats_district, party = seats_party)
@@ -338,6 +377,14 @@ upper_apportionment = function(votes_matrix, district_seats, use_list_votes = TR
 #'                   from upper_apportionment()
 #' @param seats_rows number of seats per row (parties/lists), calculated
 #'                   from upper_apportionment()
+#' @param method Apportion method that defines how seats are assigned,
+#'               see \link{proporz}. Note  that the iterative process is only
+#'               guaranteed to terminate with "round" (Sainte-Laguë/Webster method).
+#'               It's also possible to provide a function that works like base::round(x)
+#'               (i.e. can handle a matrix).
+#'
+#' @note The iterative process in the lower apportionment is only guaranteed to terminate
+#'       with Sainte-Laguë/Webster method.
 #'
 #' @return seat matrix with column and row divisors stored in attributes
 #'
@@ -347,12 +394,19 @@ upper_apportionment = function(votes_matrix, district_seats, use_list_votes = TR
 #' biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.
 #'
 #' @export
-lower_apportionment = function(M, seats_cols, seats_rows) {
+lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
     stopifnot(sum(M %% 1) == 0,
               (seats_cols %% 1) == 0,
               (seats_rows %% 1) == 0)
     stopifnot(length(seats_cols) == ncol(M))
     stopifnot(length(seats_rows) == nrow(M))
+
+    if(is.function(method)) {
+        round_func = method
+    } else {
+        round_func = get_round_function(method)
+    }
+
     # divisor parties
     dP = rep(1, nrow(M))
     dP.min = rep(0.5, nrow(M))
@@ -371,8 +425,8 @@ lower_apportionment = function(M, seats_cols, seats_rows) {
     }
 
     # convenience funtions to round and summarise
-    mc = function(.M,.d,.p) colSums(round(m.(.M,.d,.p)))
-    mr = function(.M,.d,.p) rowSums(round(m.(.M,.d,.p)))
+    mc = function(.M,.d,.p) colSums(round_func(m.(.M,.d,.p)))
+    mr = function(.M,.d,.p) rowSums(round_func(m.(.M,.d,.p)))
 
     which.min0 = function(x) {
         x[which(x == 0)] <- max(x)

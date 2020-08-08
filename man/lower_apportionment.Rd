@@ -4,7 +4,7 @@
 \alias{lower_apportionment}
 \title{Calculate lower apportionment}
 \usage{
-lower_apportionment(M, seats_cols, seats_rows)
+lower_apportionment(M, seats_cols, seats_rows, method = "round")
 }
 \arguments{
 \item{M}{vote matrix}
@@ -14,6 +14,12 @@ from upper_apportionment()}
 
 \item{seats_rows}{number of seats per row (parties/lists), calculated
 from upper_apportionment()}
+
+\item{method}{Apportion method that defines how seats are assigned,
+see \link{proporz}. Note  that the iterative process is only
+guaranteed to terminate with "round" (Sainte-Laguë/Webster method).
+It's also possible to provide a function that works like base::round(x)
+(i.e. can handle a matrix).}
 }
 \value{
 seat matrix with column and row divisors stored in attributes
@@ -43,6 +49,10 @@ The following two correction steps are executed until this objective is satisfie
   \item modify the regional divisors such that the apportionment within the region is correct
   with the chosen highest averages method.
 }
+}
+\note{
+The iterative process in the lower apportionment is only guaranteed to terminate
+      with Sainte-Laguë/Webster method.
 }
 \references{
 Oelbermann, K. F. (2016). Alternate scaling algorithm for

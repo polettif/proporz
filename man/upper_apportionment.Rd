@@ -4,7 +4,12 @@
 \alias{upper_apportionment}
 \title{Calculate upper apportionment}
 \usage{
-upper_apportionment(votes_matrix, district_seats, use_list_votes = TRUE)
+upper_apportionment(
+  votes_matrix,
+  district_seats,
+  use_list_votes = TRUE,
+  method = "round"
+)
 }
 \arguments{
 \item{votes_matrix}{Vote count matrix with votes by party in rows
@@ -19,6 +24,8 @@ number for the total number of seats can be used.}
 \item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as
 many votes as there are seats in a district. Set to FALSE if
 \code{votes_matrix} shows the number of voters.}
+
+\item{method}{Apportion method that defines how seats are assigned, see \link{proporz}.}
 }
 \value{
 named list with column/district seats and row/party seats
@@ -38,5 +45,5 @@ particular regions the party seats are allocated. Thus, after the upper apportio
 is done, the final strength of a party/region within the parliament is definite.
 }
 \seealso{
-\link{biproportional}, \link{upper_apportionment}
+\link{biproportional}, \link{lower_apportionment}
 }
