@@ -76,7 +76,7 @@ proporz(votes, 10, "hill-huntington", quorum = 0.05)
 ### Biproportional methods
 
 The package provides the `zug2018` data set with election data for the canton of 
-Zug ([source](https://wab.zug.ch/elections/kantonsratswahl-2018/data-csv)). 
+Zug ([source](https://wab.zug.ch/elections/kantonsratswahl-2018/data)). 
 We can use it to illustrate biproportional methods, first with `pukelsheim()`:
 
 ``` r
@@ -91,7 +91,7 @@ seats_df = pukelsheim(votes_df,
 head(seats_df)
 #>   list_id entity_id list_votes seats
 #> 1       2      1701       8108     2
-#> 2       1      1701       2993     1
+#> 2       1      1701       2993     0
 #> 3       3      1701      19389     3
 #> 4       4      1701      14814     2
 #> 5       5      1701       4486     1
@@ -100,13 +100,13 @@ head(seats_df)
 divisors(seats_df)
 #> $districts
 #>      1701      1702      1703      1704      1705      1706      1707      1708 
-#> 5945.3307 3520.9280 2670.8650 1625.6796  746.9692 1709.0000 1868.0921 2561.0000 
+#> 5745.5376 3586.0000 2607.0000 1435.0000  743.0312 1709.0000 1816.8750 2561.0000 
 #>      1709      1710      1711 
-#> 2342.0000  908.9769 7406.0904 
+#> 2342.0000  725.5000 7275.1719 
 #> 
 #> $parties
 #>         1         2         3         4         5         6         7 
-#> 1.0000000 0.9031467 1.0603331 1.0139094 0.9115928 1.0000000 1.0308838
+#> 1.0000000 0.8828125 1.0000000 1.0316329 0.8750000 1.0000000 1.0537109
 ```
 
 `pukelsheim` handles data.frames and is a wrapper for `biproportional` which
@@ -135,15 +135,15 @@ district_seats
 
 seats_matrix = biproportional(votes_matrix, district_seats, 0.05, 0.03)
 seats_matrix
-#>        entity_id
+#>         entity_id
 #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
-#>       1    1    0    0    0    0    0    0    0    0    0    0
+#>       1    0    0    0    0    0    0    0    0    0    0    0
 #>       2    2    1    1    0    0    0    1    2    1    0    3
-#>       3    3    3    2    1    0    2    2    2    1    1    3
-#>       4    2    2    1    1    1    1    2    1    1    1    4
+#>       3    3    3    2    1    1    2    2    2    1    1    3
+#>       4    2    2    1    1    0    1    2    1    1    1    5
 #>       5    1    1    0    0    0    0    0    0    0    0    2
 #>       6    3    1    1    0    0    0    0    0    1    0    3
-#>       7    3    2    1    1    1    1    2    1    2    0    4
+#>       7    4    2    1    1    1    1    2    1    2    0    3
 ```
 
 ## See also

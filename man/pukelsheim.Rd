@@ -65,7 +65,7 @@ seats_df = pukelsheim(votes_df,
 head(seats_df)
 #>   list_id entity_id list_votes seats
 #> 1       2      1701       8108     2
-#> 2       1      1701       2993     1
+#> 2       1      1701       2993     0
 #> 3       3      1701      19389     3
 #> 4       4      1701      14814     2
 #> 5       5      1701       4486     1
