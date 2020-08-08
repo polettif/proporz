@@ -78,3 +78,6 @@ biproportional(votes_matrix, district_seats, 0.05, 0.03)
 #>       7    3    2    1    1    1    1    2    1    2    0    4
 
 }
+\seealso{
+\link{pukelsheim} for usage with data frames
+}

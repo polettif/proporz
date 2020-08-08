@@ -72,3 +72,6 @@ head(seats_df)
 #> 6       6      1701      15695     3
 
 }
+\seealso{
+\link{biproportional}
+}

@@ -29,6 +29,8 @@
 #' @param new_seats_col name of the new column
 #' @inheritParams biprop_quorum
 #'
+#' @seealso \link{biproportional}
+#'
 #' @examples
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 #' district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
@@ -123,14 +125,10 @@ pukelsheim = function(votes_df, district_seats_df,
 #'
 #' Parties failing to reach at least one quorum cannot get seats.
 #'
-#' @param votes_matrix Vote count matrix with votes by party in rows
-#'                     and votes by district in columns
-#' @param district_seats Vector defining the number of seats per district.
-#'                       Must be the same length as ncol(votes_matrix). If the number
-#'                       of seats per district should be assigned according to the
-#'                       number of votes (not the general use case), a single
-#'                       number for the total number of seats can be used.
+#' @inheritParams upper_apportionment
 #' @inheritParams biprop_quorum
+#'
+#' @seealso \link{pukelsheim} for usage with data frames
 #'
 #' @examples
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -191,15 +189,11 @@ biproportional = function(votes_matrix,
                                   quorum_total = quorum_total)
 
     # upper apportionment (Oberzuteilung)
-    if(length(district_seats) == 1) {
-        seats_district = district_seat_apportionment(votes_matrix, district_seats)
-    } else {
-        seats_district = district_seats
-    }
-    seats_party = party_seat_apportionment(votes_matrix, seats_district)
+    upp_app = upper_apportionment(votes_matrix, district_seats)
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, seats_district, seats_party)
+    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party)
+
     class(seats_matrix) <- append(class(seats_matrix), "proporz_matrix")
     return(seats_matrix)
 }
@@ -208,7 +202,7 @@ biproportional = function(votes_matrix,
 #'
 #' Parties failing to reach at least one quorum have their votes set to zero.
 #'
-#' @param votes_matrix matrix containing votes a parties got in districts.
+#' @param votes_matrix matrix containing the number of votes parties received per district.
 #'                     Parties by row and districts by column.
 #' @param quorum_districts Vote threshold a party must reach in \emph{at least} one
 #'                         district. Used as quota of total votes within a
@@ -239,6 +233,42 @@ biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
     return(votes_matrix)
 }
 
+#' Calculate upper apportionment
+#'
+#' In the upper apportionment the seats for each party are computed with a highest
+#' averages method. This determines how many of all seats each party deserves due to
+#' the total of all their votes (that is the sum of the votes for all regional lists of
+#' that party). Analogical, the same highest averages method is used to determine how
+#' many of all seats each region deserves.
+#'
+#' @note The results from the upper apportionment are final results for the number of
+#' the seats of one party (and analogically for the number of the seats of one region)
+#' within the whole voting area, the lower apportionment will only determine in which
+#' particular regions the party seats are allocated. Thus, after the upper apportionment
+#' is done, the final strength of a party/region within the parliament is definite.
+#'
+#' @param votes_matrix Vote count matrix with votes by party in rows
+#'                     and votes by district in columns
+#' @param district_seats Vector defining the number of seats per district.
+#'                       Must be the same length as ncol(votes_matrix). If the number
+#'                       of seats per district should be assigned according to the
+#'                       number of votes (not the general use case), a single
+#'                       number for the total number of seats can be used.
+#'
+#' @seealso \link{biproportional}, \link{upper_apportionment}
+#'
+#' @return named list with column/district seats and row/party seats
+#' @export
+upper_apportionment = function(votes_matrix, district_seats) {
+    if(length(district_seats) == 1) {
+        seats_district = district_seat_apportionment(votes_matrix, district_seats)
+    } else {
+        seats_district = district_seats
+    }
+    seats_party = party_seat_apportionment(votes_matrix, seats_district)
+    return(list(district = seats_district, party = seats_party))
+}
+
 # upper apportionment
 district_seat_apportionment = function(M, n_seats_total) {
     hzv(colSums(M), n_seats_total, 0.5)
@@ -256,19 +286,60 @@ party_seat_apportionment = function(M, n_seats_district) {
     hzv(weighted_party_votes, n_seats, 0.5)
 }
 
-# Calculate lower apportionment
-lower_apportionment = function(M, seats_district, seats_party) {
+#' Calculate lower apportionment
+#'
+#' Iteratively changes column and row divisors sucht that
+#' \code{colSums(round(M/col_divisors/row_divisors)) == seats_col} and
+#' \code{rowSums(round(M/col_divisors/row_divisors)) == seats_row}
+#'
+#' The result is obtained by an iterative process. Initially, for each district a divisor is
+#' chosen using the highest averages method for the votes allocated to each regional party
+#' list in this region. For each party a party divisor is initialized with 1.
+#'
+#' Effectively, the objective of the iterative process is to modify the regional divisors and
+#' party divisors so that the number of seats in each regional party list equals the number
+#' of their votes divided by both the regional and the party divisors which is then rounded
+#' by the rounding method of the highest averages method used, and the sum of the seats of
+#' all regional party lists of one party equals the number of seats computed in the upper
+#' apportionment for that party, and the sum of the seats of all regional party lists of
+#' one region equals the number of seats computed in the upper apportionment for that region.
+#'
+#' The following two correction steps are executed until this objective is satisfied:
+#' \itemize{
+#'   \item modify the party divisors such that the apportionment within each party is correct with
+#'   the chosen highest averages method,
+#'   \item modify the regional divisors such that the apportionment within the region is correct
+#'   with the chosen highest averages method.
+#' }
+#'
+#' @param M vote matrix
+#' @param seats_cols number of seats per column (districts/regions), calculated
+#'                   from upper_apportionment()
+#' @param seats_rows number of seats per row (parties/lists), calculated
+#'                   from upper_apportionment()
+#'
+#' @return seat matrix with column and row divisors stored in attributes
+#'
+#' @seealso \link{biproportional}, \link{upper_apportionment}
+#'
+#' @references Oelbermann, K. F. (2016). Alternate scaling algorithm for
+#' biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.
+#'
+#' @export
+lower_apportionment = function(M, seats_cols, seats_rows) {
     stopifnot(sum(M %% 1) == 0,
-              (seats_district %% 1) == 0,
-              (seats_party %% 1) == 0)
+              (seats_cols %% 1) == 0,
+              (seats_rows %% 1) == 0)
+    stopifnot(length(seats_cols) == ncol(M))
+    stopifnot(length(seats_rows) == nrow(M))
     # divisor parties
     dP = rep(1, nrow(M))
     dP.min = rep(0.5, nrow(M))
     dP.max = rep(1.5, nrow(M))
     # divisor districts
-    dD = round(colSums(M)/seats_district)
-    dD.min = floor(colSums(M)/(seats_district+1) / max(dP.max))
-    dD.max = ceiling(colSums(M)/(seats_district-1) / min(dP.min))
+    dD = round(colSums(M)/seats_cols)
+    dD.min = floor(colSums(M)/(seats_cols+1) / max(dP.max))
+    dD.max = ceiling(colSums(M)/(seats_cols-1) / min(dP.min))
 
     # calculate raw seat matrix
     # acesses function environment variables div_distr and div_party
@@ -293,39 +364,39 @@ lower_apportionment = function(M, seats_district, seats_party) {
         which.max(x)
     }
 
-    while(!all(c(mc(M,dD,dP) == seats_district, mr(M,dD,dP) == seats_party))) {
+    while(!all(c(mc(M,dD,dP) == seats_cols, mr(M,dD,dP) == seats_rows))) {
         # change party divisors
-        row_decr = which.min0(mr(M,dD,dP) - seats_party)
+        row_decr = which.min0(mr(M,dD,dP) - seats_rows)
         if(length(row_decr) == 1) {
             dP[row_decr] <- find_divisor(
                 M[row_decr,]/dD,
                 dP[row_decr], dP.min[row_decr],
-                seats_party[row_decr])
+                seats_rows[row_decr])
         }
 
-        row_incr = which.max0(mr(M,dD,dP) - seats_party)
+        row_incr = which.max0(mr(M,dD,dP) - seats_rows)
         if(length(row_incr) == 1) {
             dP[row_incr] <- find_divisor(
                 M[row_incr,]/dD,
                 dP[row_incr], dP.max[row_incr],
-                seats_party[row_incr])
+                seats_rows[row_incr])
         }
 
         # change district divisors
-        col_decr = which.min0(mc(M,dD,dP) - seats_district)
+        col_decr = which.min0(mc(M,dD,dP) - seats_cols)
         if(length(col_decr) == 1) {
             dD[col_decr] <- find_divisor(
                 M[,col_decr]/dP,
                 dD[col_decr], dD.min[col_decr],
-                seats_district[col_decr])
+                seats_cols[col_decr])
         }
 
-        col_incr = which.max0(mc(M,dD,dP) - seats_district)
+        col_incr = which.max0(mc(M,dD,dP) - seats_cols)
         if(length(col_incr) == 1) {
             dD[col_incr] <- find_divisor(
                 M[,col_incr]/dP,
                 dD[col_incr], dD.max[col_incr],
-                seats_district[col_incr])
+                seats_cols[col_incr])
         }
     }
 
