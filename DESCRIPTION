@@ -1,7 +1,7 @@
 Package: proporz
 Type: Package
 Title: Proportional Apportionment
-Version: 1.0
+Version: 1.1
 Author: Flavio Poletti
 Maintainer: Flavio Poletti <flavio.poletti@hotmail.ch>
 Description: Calculate seat apportionment for legislative bodies using 
