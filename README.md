@@ -7,6 +7,14 @@ _Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren
 Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet 
 Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
 
+- [Install](https://github.com/polettif/proporz#install)
+- [Apportionment methods overview](https://github.com/polettif/proporz#apportionment-methods-overview)
+- [Divisor and quota method examples](https://github.com/polettif/proporz#divisor-and-quota-examples)
+- [Biproportional apportionment examples](https://github.com/polettif/proporz#biproportional-apportionment-examples)
+- [See also](https://github.com/polettif/proporz#see-also)
+
+<br/>
+
 ## Install
 Install the package from Github:
 
@@ -14,10 +22,11 @@ Install the package from Github:
 # install.packages("devtools")
 devtools::install_github("polettif/proporz")
 ```
+<br/>
 
-## Methods
+## Apportionment methods overview
 
-### Divisor
+### Divisor methods
 | divisor method | known as... | function |
 | :---|:---|:---|
 | [Floor](https://en.wikipedia.org/wiki/D%27Hondt_method) | D'Hondt, Jefferson, Hagenbach-Bischoff | ```divisor_floor(votes, n_seats, quorum = 0)```
@@ -26,20 +35,20 @@ devtools::install_github("polettif/proporz")
 | [Harmonic rounding](https://de.wikipedia.org/wiki/Dean-Verfahren) | Dean | ```divisor_harmonic(votes, n_seats, quorum = 0)```
 | [Geometric rounding](https://en.wikipedia.org/wiki/Huntington%E2%80%93Hill_method) | Huntington-Hill | ```divisor_geometric(votes, n_seats, quorum = 0)```
 
-### Quota
+### Quota methods
 | quota method | known as... | function |
 | :---|:---|:---|
 | [Largest remainder](https://en.wikipedia.org/wiki/Largest_remainder_method) | Hamilton, Hare-Niemeyer, Vinton | ```quota_largest_remainder(votes, n_seats, quorum = 0)```
 
-### Biproportional
+### Biproportional methods
 | biproportional method | known as... | function |
 | :---|:---|:---
 | [Generic Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) | - | ```biproportional(...)```
 | [Doppeltproportionales Zuteilungsverfahren](https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren) | Doppeltproportionale Divisormethode mit Standardrundung, Doppelproporz, "Doppelter Pukelsheim" | ```pukelsheim(...)```
 
-## Examples
+<br/>
 
-### Divisor and Quota methods
+## Divisor and Quota examples
 ``` r
 votes = c("Party A" = 690, "Party B" = 400, "Party C" = 250, "Party D" = 120)
 
@@ -73,7 +82,13 @@ proporz(votes, 10, "hill-huntington", quorum = 0.05)
 #>       6       4       0
 ```
 
-### Biproportional methods
+<br/>
+
+## Biproportional apportionment examples
+
+[finland-comparison.md](https://github.com/polettif/proporz/blob/master/finland-comparison.md) 
+contains a simple anaylsis on how different election methods impact seat distributions for the 
+2019 Finnish parliamentary election.
 
 The package provides the `zug2018` data set with election data for the canton of 
 Zug ([source](https://wab.zug.ch/elections/kantonsratswahl-2018/data)). 
@@ -145,6 +160,8 @@ seats_matrix
 #>       6    3    1    1    0    0    0    0    0    1    0    3
 #>       7    4    2    1    1    1    1    2    1    2    0    3
 ```
+
+<br/>
 
 ## See also
 
