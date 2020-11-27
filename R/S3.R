@@ -9,9 +9,7 @@ print.proporz_matrix = function(x, ...) {
 #' @inherit base::print
 #' @export
 as.matrix.proporz_matrix = function(x, ...) {
-    class(x) <- "matrix"
-    attributes(x)$divisors <- NULL
-    x
+	matrix(x, nrow = nrow(x), dimnames = dimnames(x))
 }
 
 #' Get district and party divisors

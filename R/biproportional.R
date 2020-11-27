@@ -248,7 +248,7 @@ biproportional = function(votes_matrix,
     # lower apportionment (Unterzuteilung)
     seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party, method[2])
 
-    class(seats_matrix) <- append(class(seats_matrix), "proporz_matrix")
+    class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)
 }
 
