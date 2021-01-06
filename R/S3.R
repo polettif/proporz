@@ -1,13 +1,9 @@
-#' @inherit base::print
-#' @export
 print.proporz_matrix = function(x, ...) {
     y <- as.matrix(x)
     print(y)
     invisible(x)
 }
 
-#' @inherit base::print
-#' @export
 as.matrix.proporz_matrix = function(x, ...) {
 	matrix(x, nrow = nrow(x), dimnames = dimnames(x))
 }
