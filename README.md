@@ -29,22 +29,24 @@ devtools::install_github("polettif/proporz")
 ### Divisor methods
 | divisor method | known as... | function |
 | :---|:---|:---|
-| [Floor](https://en.wikipedia.org/wiki/D%27Hondt_method) | D'Hondt, Jefferson, Hagenbach-Bischoff | ```divisor_floor(votes, n_seats, quorum = 0)```
-| [Round](https://en.wikipedia.org/wiki/Webster/Sainte-Lagu%C3%AB_method) | Sainte-Laguë, Webster | ```divisor_round(votes, n_seats, quorum = 0)```
-| [Ceiling](https://de.wikipedia.org/wiki/Adams-Verfahren) | Adams | ```divisor_ceiling(votes, n_seats, quorum = 0)```
-| [Harmonic rounding](https://de.wikipedia.org/wiki/Dean-Verfahren) | Dean | ```divisor_harmonic(votes, n_seats, quorum = 0)```
-| [Geometric rounding](https://en.wikipedia.org/wiki/Huntington%E2%80%93Hill_method) | Huntington-Hill | ```divisor_geometric(votes, n_seats, quorum = 0)```
+| [Floor](https://en.wikipedia.org/wiki/D%27Hondt_method) | D'Hondt, Jefferson, Hagenbach-Bischoff | [divisor_floor(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_floor.html)
+| [Round](https://en.wikipedia.org/wiki/Webster/Sainte-Lagu%C3%AB_method) | Sainte-Laguë, Webster | [divisor_round(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_round.html)
+| [Ceiling](https://de.wikipedia.org/wiki/Adams-Verfahren) | Adams | [divisor_ceiling(votes, n_seats, quorum = 0](https://polettif.github.io/proporz/reference/divisor_ceiling.html)
+| [Harmonic rounding](https://de.wikipedia.org/wiki/Dean-Verfahren) | Dean | [divisor_harmonic(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_harmonic.html)
+| [Geometric rounding](https://en.wikipedia.org/wiki/Huntington%E2%80%93Hill_method) | Huntington-Hill | [divisor_geometric(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_geometric.html)
 
 ### Quota methods
 | quota method | known as... | function |
 | :---|:---|:---|
-| [Largest remainder](https://en.wikipedia.org/wiki/Largest_remainder_method) | Hamilton, Hare-Niemeyer, Vinton | ```quota_largest_remainder(votes, n_seats, quorum = 0)```
+| [Largest remainder](https://en.wikipedia.org/wiki/Largest_remainder_method) | Hamilton, Hare-Niemeyer, Vinton | [quota_largest_remainder(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/quota_largest_remainder.html)
 
 ### Biproportional methods
 | biproportional method | known as... | function |
 | :---|:---|:---
-| [Generic Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) | - | ```biproportional(...)```
-| [Doppeltproportionales Zuteilungsverfahren](https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren) | Doppeltproportionale Divisormethode mit Standardrundung, Doppelproporz, "Doppelter Pukelsheim" | ```pukelsheim(...)```
+| [Generic Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) | - | [biproportional(...)](https://polettif.github.io/proporz/reference/biproportional.html)
+| [Doppeltproportionales Zuteilungsverfahren](https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren) | Doppeltproportionale Divisormethode mit Standardrundung, Doppelproporz, "Doppelter Pukelsheim" | [pukelsheim(...)](https://polettif.github.io/proporz/reference/pukelsheim.html)
+
+##### [Full function reference](https://polettif.github.io/proporz/reference/index.html)
 
 <br/>
 
