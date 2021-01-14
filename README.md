@@ -7,11 +7,11 @@ _Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren
 Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet 
 Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
 
-- [Install](https://github.com/polettif/proporz#install)
-- [Apportionment methods overview](https://github.com/polettif/proporz#apportionment-methods-overview)
-- [Divisor and quota method examples](https://github.com/polettif/proporz#divisor-and-quota-examples)
-- [Biproportional apportionment examples](https://github.com/polettif/proporz#biproportional-apportionment-examples)
-- [See also](https://github.com/polettif/proporz#see-also)
+- [Install](#install)
+- [Apportionment methods overview](#apportionment-methods-overview)
+- [Divisor and quota method examples](#divisor-and-quota-examples)
+- [Biproportional apportionment examples](#biproportional-apportionment-examples)
+- [See also](#see-also)
 
 <br/>
 
@@ -87,7 +87,7 @@ proporz(votes, 10, "hill-huntington", quorum = 0.05)
 ## Biproportional apportionment examples
 
 [finland-comparison.md](https://github.com/polettif/proporz/blob/master/finland-comparison.md) 
-contains a simple anaylsis on how different election methods impact seat distributions for the 
+contains a simple analysis on how different election methods impact seat distributions for the 
 2019 Finnish parliamentary election.
 
 The package provides the `zug2018` data set with election data for the canton of 
@@ -171,7 +171,7 @@ seats_matrix
 - [disprr](https://github.com/pierzgal/disprr) Examine Disproportionality of Apportionment Methods.
 
 #### Why another package?
-Mainly because I wanted to implement biproportional appointment in base R as an 
-exercise. I'm aware that the other packages provide more methods or better 
+Mainly because I wanted to implement biproportional apportionment in base R as 
+an exercise. I'm aware that the other packages provide more methods or better 
 analysis. However, biproprtional apportionment is missing from the other 
 pure R packages and RBazi needs rJava with an accompanying jar.
