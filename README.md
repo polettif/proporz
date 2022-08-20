@@ -11,6 +11,7 @@ Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
 - [Apportionment methods overview](#apportionment-methods-overview)
 - [Divisor and quota method examples](#divisor-and-quota-examples)
 - [Biproportional apportionment examples](#biproportional-apportionment-examples)
+- [Shiny app](#shiny-app)
 - [See also](#see-also)
 
 <br/>
@@ -165,6 +166,22 @@ seats_matrix
 
 <br/>
 
+## Shiny app
+
+The package provides a basic Shiny app where you can calculate biproportional
+apportionment on an interactive dashboard. You need have the packages `shiny` 
+and `shinyMatrix` installed.
+
+```r
+# install.packages("shiny")
+# install.packages("shinyMatrix")
+library(proporz)
+run_app()
+```
+<img src="data-raw/shinyapp-example.gif" style = "width:70%;">
+
+<br/>
+
 ## See also
 
 - [RBazi](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html): Package using rJava to access the functions of the [BAZI](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html).
@@ -175,5 +192,5 @@ seats_matrix
 #### Why another package?
 Mainly because I wanted to implement biproportional apportionment in base R as 
 an exercise. I'm aware that the other packages provide more methods or better 
-analysis. However, biproprtional apportionment is missing from the other 
+analysis. However, biproportional apportionment is missing from the other 
 pure R packages and RBazi needs rJava with an accompanying jar.
