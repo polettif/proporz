@@ -43,3 +43,11 @@ test_that("pukelsheim with zug2018 is as expected", {
 
 	expect_equal(seats_mtrx[,colnames(seats_mtrx_exp)], seats_mtrx_exp)
 })
+
+test_that("upper apportionment for districts", {
+	votes_df = unique(zug2018[c("list_id", "entity_name", "list_votes")])
+	votes_matrix = pivot_to_matrix(votes_df)
+
+	x = biproporz(votes_matrix, 80)
+	expect_equal(sum(x), 80)
+})

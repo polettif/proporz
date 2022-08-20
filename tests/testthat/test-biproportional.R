@@ -145,3 +145,17 @@ test_that("biproportional methods", {
     dhondt19 = proporz(rowSums(vm_19), 30, "d'hondt")
     expect_equal(rowSums(bip19), dhondt19)
 })
+
+test_that("almost empty vote_matrix", {
+    vm1 = matrix(c(10,0,0,0, 0,0,10,0, 0,0,0,20, 0,0,0,20), nrow = 4)
+    expect_equal(biproportional(vm1, 4), biproportional(vm1, rep(1,4)))
+
+    vm2 = matrix(0, nrow = 4, ncol = 4)
+    vm2[1,2] <- 10
+    expect_equal(sum(biproportional(vm2, 2)), 2)
+
+    expect_error(biproportional(vm2, c(1,1,0,0)), "No votes in a district with at least one seat")
+
+    vm3 = matrix(c(4,3,0,20,1,0), nrow = 2)
+    expect_error(biproporz(vm3, c(1,3,4)), "Result is undefined")
+})

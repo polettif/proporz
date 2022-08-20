@@ -339,8 +339,17 @@ upper_apportionment = function(votes_matrix, district_seats,
             byrow = TRUE, ncol = length(seats_district))
 
         votes_matrix <- votes_matrix/M_seats_district
+
+        # it's possible if district seats are proportionally assigned that
+        # a district has 0 seats, fix NaNs and Infs here
+        votes_matrix[is.nan(votes_matrix) | is.infinite(votes_matrix)] <- 0
     }
     seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
+
+    # check enough votes in districts
+    if(!identical(colSums(votes_matrix) > 0, seats_district > 0)) {
+        stop("No votes in a district with at least one seat")
+    }
 
     # return values
     list(district = seats_district, party = seats_party)
@@ -421,7 +430,10 @@ lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
     m. = function(.M, .div_distr, .div_party) {
         M_district = matrix(rep(.div_distr, nrow(.M)), byrow = TRUE, nrow = nrow(.M))
         M_party = matrix(rep(.div_party, ncol(.M)), byrow = FALSE, nrow = nrow(.M))
-        .M/M_district/M_party
+
+        x = .M/M_district/M_party
+        x[is.nan(x)] <- 0
+        return(x)
     }
 
     # convenience funtions to round and summarise
@@ -494,6 +506,10 @@ find_divisor = function(votes,
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))
+
+    if(any(is.infinite(votes)) || any(is.nan(votes))) {
+        stop("Result is undefined")
+    }
 
     # Divisors should be within votes/(seats-1) and votes/(seats+1).
     # It might be necessary to increase the search range given that
