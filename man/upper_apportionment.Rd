@@ -16,33 +16,37 @@ upper_apportionment(
 and votes by district in columns}
 
 \item{district_seats}{Vector defining the number of seats per district.
-Must be the same length as ncol(votes_matrix). If the number
-of seats per district should be assigned according to the
-number of votes (not the general use case), a single
-number for the total number of seats can be used.}
+Must be the same length as ncol(votes_matrix). If the
+number of seats per district should be assigned
+according to the number of votes (not the general use
+case), a single number for the total number of seats
+can be used.}
 
-\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as
-many votes as there are seats in a district. Set to FALSE if
-\code{votes_matrix} shows the number of voters.}
+\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a
+district has as many votes as there are seats in a
+district. Set to FALSE if \code{votes_matrix} shows the
+number of voters.}
 
-\item{method}{Apportion method that defines how seats are assigned, see \link{proporz}.}
+\item{method}{Apportion method that defines how seats are assigned,
+see \link{proporz}.}
 }
 \value{
 named list with column/district seats and row/party seats
 }
 \description{
-In the upper apportionment the seats for each party are computed with a highest
-averages method. This determines how many of all seats each party deserves due to
-the total of all their votes (that is the sum of the votes for all regional lists of
-that party). Analogical, the same highest averages method is used to determine how
-many of all seats each region deserves.
+In the upper apportionment the seats for each party are computed with a
+highest averages method. This determines how many of all seats each party
+deserves due to the total of all their votes (that is the sum of the votes
+for all regional lists of that party). Analogical, the same highest averages
+method is used to determine how many of all seats each region deserves.
 }
 \note{
-The results from the upper apportionment are final results for the number of
-the seats of one party (and analogically for the number of the seats of one region)
-within the whole voting area, the lower apportionment will only determine in which
-particular regions the party seats are allocated. Thus, after the upper apportionment
-is done, the final strength of a party/region within the parliament is definite.
+The results from the upper apportionment are final results for the
+number of the seats of one party (and analogically for the number of the
+seats of one region) within the whole voting area, the lower apportionment
+will only determine in which particular regions the party seats are
+allocated. Thus, after the upper apportionment is done, the final strength of
+a party/region within the parliament is definite.
 }
 \seealso{
 \link{biproportional}, \link{lower_apportionment}

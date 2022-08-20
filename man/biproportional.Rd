@@ -18,43 +18,49 @@ biproportional(
 and votes by district in columns}
 
 \item{district_seats}{Vector defining the number of seats per district.
-Must be the same length as ncol(votes_matrix). If the number
-of seats per district should be assigned according to the
-number of votes (not the general use case), a single
-number for the total number of seats can be used.}
+Must be the same length as ncol(votes_matrix). If the
+number of seats per district should be assigned
+according to the number of votes (not the general use
+case), a single number for the total number of seats
+can be used.}
 
-\item{quorum_districts}{Vote threshold a party must reach in \emph{at least} one
-district. Used as quota of total votes within a
+\item{quorum_districts}{Vote threshold a party must reach in \emph{at least}
+one district. Used as quota of total votes within a
 district if less than 1 otherwise as number of votes.}
 
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
 Used as quota of total votes if less than 1 otherwise
 as number of votes.}
 
-\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as
-many votes as there are seats in a district. Set to FALSE if
-\code{votes_matrix} shows the number of voters.}
+\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a
+district has as many votes as there are seats in a
+district. Set to FALSE if \code{votes_matrix} shows the
+number of voters.}
 
-\item{method}{Defines how seats in upper and lower apportionment are assigned. The
-default "round" for the Sainte-Lague/Webster method is the standard
-for biproportional apportionment. See \link{proporz} for a list of
-available methods. For a different method for upper and lower apportionment
-use a vector with two entries. It is also possible to provide a function
-that works like base::round(x) (i.e. can handle a matrix).}
+\item{method}{Defines how seats in upper and lower apportionment are
+assigned. The default "round" for the Sainte-Laguë/Webster
+method is the standard for biproportional apportionment. See
+\link{proporz} for a list of available methods. For a different
+method for upper and lower apportionment use a vector with two
+entries. It is also possible to provide a function that works
+like base::round(x) (i.e. can handle a matrix).}
 }
 \description{
 Method to proportionally allocate seatsamong parties (or lists) and
 districts (or entities, regions).
 }
 \details{
-Each party nominates a candidate list for every district. The voters vote for the
-parties of their district. The seat allocation is calculated in two steps:
+Each party nominates a candidate list for every district. The voters vote
+for the parties of their district. The seat allocation is calculated in two
+steps:
 \enumerate{
-\item In the so called \emph{upper apportionment} the number of seats for each party
-   (over all districts) is determined. Normally, the number of seats for each region
-   are defined before the election and are independent of the vote counts.
-\item In the so called \emph{lower apportionment} the seats are distributed to the
-   regional party list respecting the results from the upper apportionment.
+\item In the so called \emph{upper apportionment} the number of seats for
+   each party (over all districts) is determined. Normally, the number of
+   seats for each region are defined before the election and are independent
+   of the vote counts.
+\item In the so called \emph{lower apportionment} the seats are distributed
+   to the regional party list respecting the results from the upper
+   apportionment.
 }
 
 Parties failing to reach at least one quorum cannot get seats.

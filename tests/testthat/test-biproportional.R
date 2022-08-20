@@ -61,7 +61,7 @@ test_that("quorum with percentages counts", {
 })
 
 test_that("free apportionment for districts", {
-    # https://en.wikipedia.org/wiki/Biproportional_apportionment#Specific_Example
+    # https://en.wikipedia.org/wiki/Biproportional_apportionment#Specific_example
     input_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
     mtrx_exp = matrix(c(1,4,2,0,4,1,4,3,1), nrow = 3)
     mtrx_act = biproportional(input_matrix, 20)

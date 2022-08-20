@@ -1,3 +1,6 @@
+#' Round x up if x-floor(x) >= threshold
+#' @param x numeric value
+#' @param threshold threshold in 0..1
 ceil_at = function(x, threshold) {
 	if(any(x < 0)) {
 		stop("x cannot be negative")

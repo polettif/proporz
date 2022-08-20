@@ -10,8 +10,8 @@ as.matrix.proporz_matrix = function(x, ...) {
 
 #' Get district and party divisors
 #'
-#' Show the district and party divisors used for to assign seats. This method
-#' provides easier access to divisors stored in
+#' Show the district and party divisors used for to assign seats.
+#' This method provides easier access to divisors stored in
 #' attributes(...)$divisors
 #'
 #' @param biproportional_result a matrix created by \code{\link{biproportional}}

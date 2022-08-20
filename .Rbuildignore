@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^doc$
+^docs$
 ^Meta$
 ^data-raw$
 ^.github
+^finland-comparison.md$

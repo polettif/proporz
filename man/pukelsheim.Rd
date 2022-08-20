@@ -21,7 +21,7 @@ pukelsheim(
   \item votes
   }}
 
-\item{district_seats_df}{data.frame with 2 colums (actual colnames can differ):
+\item{district_seats_df}{data.frame with 2 columns (actual colnames can differ):
 \itemize{
   \item district id/name
   \item number of seats for a district
@@ -29,8 +29,8 @@ pukelsheim(
 
 \item{new_seats_col}{name of the new column}
 
-\item{quorum_districts}{Vote threshold a party must reach in \emph{at least} one
-district. Used as quota of total votes within a
+\item{quorum_districts}{Vote threshold a party must reach in \emph{at least}
+one district. Used as quota of total votes within a
 district if less than 1 otherwise as number of votes.}
 
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
@@ -46,19 +46,20 @@ Method to proportionally allocate seatsamong parties/lists and
 districts/regions/entities ("Doppelter Pukelsheim").
 }
 \details{
-Each party nominates a candidate list for every district. The voters vote for the
-parties of their district. The seat allocation is calculated in two steps:
+Each party nominates a candidate list for every district. The voters vote
+for the parties of their district. The seat allocation is calculated in two
+steps:
 
 \enumerate{
-  \item In the so called \emph{upper apportionment} the number of seats for each party
-  (over all districts) is determined.
-  \item In the so called \emph{lower apportionment} the seats are distributed to the
-  regional party list respecting the results from the upper apportionment.
+  \item In the so called \emph{upper apportionment} the number of seats for
+  each party (over all districts) is determined.
+  \item In the so called \emph{lower apportionment} the seats are distributed
+  to the regional party list respecting the results from the upper apportionment.
 }
 
-Parties failing to reach at least one aquorum have their votes set to zero.
+Parties failing to reach at least one quorum have their votes set to zero.
 
-If you want to other apportion methods than Sainte-Lague use \link{biproportional}.
+If you want to other apportion methods than Sainte-Laguë use \link{biproportional}.
 }
 \examples{
 # Zug 2018

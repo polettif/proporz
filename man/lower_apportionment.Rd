@@ -17,42 +17,41 @@ from upper_apportionment()}
 
 \item{method}{Apportion method that defines how seats are assigned,
 see \link{proporz}. Note  that the iterative process is only
-guaranteed to terminate with "round" (Sainte-Laguë/Webster method).
-It's also possible to provide a function that works like base::round(x)
-(i.e. can handle a matrix).}
+guaranteed to terminate with "round" (Sainte-Laguë/Webster
+method). It is also possible to provide a function that works
+like base::round(x) (i.e. can handle a matrix).}
 }
 \value{
 seat matrix with column and row divisors stored in attributes
 }
 \description{
-Iteratively changes column and row divisors sucht that
+Iterate and change column and row divisors such that
 \code{colSums(round(M/col_divisors/row_divisors)) == seats_col} and
 \code{rowSums(round(M/col_divisors/row_divisors)) == seats_row}
 }
 \details{
-The result is obtained by an iterative process. Initially, for each district a divisor is
-chosen using the highest averages method for the votes allocated to each regional party
-list in this region. For each party a party divisor is initialized with 1.
+The result is obtained by an iterative process. Initially, for each district
+a divisor is chosen using the highest averages method for the votes allocated
+to each regional party list in this region. For each party a party divisor is
+initialized with 1.
 
-Effectively, the objective of the iterative process is to modify the regional divisors and
-party divisors so that the number of seats in each regional party list equals the number
-of their votes divided by both the regional and the party divisors which is then rounded
-by the rounding method of the highest averages method used, and the sum of the seats of
-all regional party lists of one party equals the number of seats computed in the upper
-apportionment for that party, and the sum of the seats of all regional party lists of
-one region equals the number of seats computed in the upper apportionment for that region.
+Effectively, the objective of the iterative process is to modify the regional
+divisors and party divisors so that the number of seats in each regional
+party list equals the number of their votes divided by both the regional and
+the party divisors.
 
-The following two correction steps are executed until this objective is satisfied:
+The following two correction steps are executed until this objective is
+satisfied:
 \itemize{
-  \item modify the party divisors such that the apportionment within each party is correct with
-  the chosen highest averages method,
-  \item modify the regional divisors such that the apportionment within the region is correct
-  with the chosen highest averages method.
+  \item modify the party divisors such that the apportionment within each
+    party is correct with the chosen rounding method,
+  \item modify the regional divisors such that the apportionment within the
+    region is correct with the chosen rounding method.
 }
 }
 \note{
-The iterative process in the lower apportionment is only guaranteed to terminate
-      with Sainte-Laguë/Webster method.
+The iterative process in the lower apportionment is only guaranteed to
+      terminate with Sainte-Laguë/Webster method.
 }
 \references{
 Oelbermann, K. F. (2016). Alternate scaling algorithm for

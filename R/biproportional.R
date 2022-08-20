@@ -3,19 +3,20 @@
 #' Method to proportionally allocate seatsamong parties/lists and
 #' districts/regions/entities ("Doppelter Pukelsheim").
 #'
-#' Each party nominates a candidate list for every district. The voters vote for the
-#' parties of their district. The seat allocation is calculated in two steps:
+#' Each party nominates a candidate list for every district. The voters vote
+#' for the parties of their district. The seat allocation is calculated in two
+#' steps:
 #'
 #' \enumerate{
-#'   \item In the so called \emph{upper apportionment} the number of seats for each party
-#'   (over all districts) is determined.
-#'   \item In the so called \emph{lower apportionment} the seats are distributed to the
-#'   regional party list respecting the results from the upper apportionment.
+#'   \item In the so called \emph{upper apportionment} the number of seats for
+#'   each party (over all districts) is determined.
+#'   \item In the so called \emph{lower apportionment} the seats are distributed
+#'   to the regional party list respecting the results from the upper apportionment.
 #' }
 #'
-#' Parties failing to reach at least one aquorum have their votes set to zero.
+#' Parties failing to reach at least one quorum have their votes set to zero.
 #'
-#' If you want to other apportion methods than Sainte-Lague use \link{biproportional}.
+#' If you want to other apportion methods than Sainte-Laguë use \link{biproportional}.
 #'
 #' @param votes_df data.frame (long format) with 3 columns (actual colnames can differ):
 #'                 \itemize{
@@ -23,7 +24,7 @@
 #'                   \item district id/name
 #'                   \item votes
 #'                   }
-#' @param district_seats_df data.frame with 2 colums (actual colnames can differ):
+#' @param district_seats_df data.frame with 2 columns (actual colnames can differ):
 #'                          \itemize{
 #'                            \item district id/name
 #'                            \item number of seats for a district
@@ -134,26 +135,30 @@ pukelsheim = function(votes_df, district_seats_df,
 #' Method to proportionally allocate seatsamong parties (or lists) and
 #' districts (or entities, regions).
 #'
-#' Each party nominates a candidate list for every district. The voters vote for the
-#' parties of their district. The seat allocation is calculated in two steps:
+#' Each party nominates a candidate list for every district. The voters vote
+#' for the parties of their district. The seat allocation is calculated in two
+#' steps:
 #' \enumerate{
-#' \item In the so called \emph{upper apportionment} the number of seats for each party
-#'    (over all districts) is determined. Normally, the number of seats for each region
-#'    are defined before the election and are independent of the vote counts.
-#' \item In the so called \emph{lower apportionment} the seats are distributed to the
-#'    regional party list respecting the results from the upper apportionment.
+#' \item In the so called \emph{upper apportionment} the number of seats for
+#'    each party (over all districts) is determined. Normally, the number of
+#'    seats for each region are defined before the election and are independent
+#'    of the vote counts.
+#' \item In the so called \emph{lower apportionment} the seats are distributed
+#'    to the regional party list respecting the results from the upper
+#'    apportionment.
 #' }
 #'
 #' Parties failing to reach at least one quorum cannot get seats.
 #'
 #' @inheritParams upper_apportionment
 #' @inheritParams biprop_quorum
-#' @param method Defines how seats in upper and lower apportionment are assigned. The
-#'               default "round" for the Sainte-Lague/Webster method is the standard
-#'               for biproportional apportionment. See \link{proporz} for a list of
-#'               available methods. For a different method for upper and lower apportionment
-#'               use a vector with two entries. It is also possible to provide a function
-#'               that works like base::round(x) (i.e. can handle a matrix).
+#' @param method Defines how seats in upper and lower apportionment are
+#'               assigned. The default "round" for the Sainte-Laguë/Webster
+#'               method is the standard for biproportional apportionment. See
+#'               \link{proporz} for a list of available methods. For a different
+#'               method for upper and lower apportionment use a vector with two
+#'               entries. It is also possible to provide a function that works
+#'               like base::round(x) (i.e. can handle a matrix).
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'       with Sainte-Laguë/Webster method.
@@ -264,10 +269,10 @@ biproporz = biproportional
 #'
 #' Parties failing to reach at least one quorum have their votes set to zero.
 #'
-#' @param votes_matrix matrix containing the number of votes parties received per district.
-#'                     Parties by row and districts by column.
-#' @param quorum_districts Vote threshold a party must reach in \emph{at least} one
-#'                         district. Used as quota of total votes within a
+#' @param votes_matrix matrix containing the number of votes parties received
+#'                     per district. Parties by row and districts by column.
+#' @param quorum_districts Vote threshold a party must reach in \emph{at least}
+#'                         one district. Used as quota of total votes within a
 #'                         district if less than 1 otherwise as number of votes.
 #' @param quorum_total Vote threshold a party must reach for all votes cast.
 #'                     Used as quota of total votes if less than 1 otherwise
@@ -297,29 +302,33 @@ biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
 
 #' Calculate upper apportionment
 #'
-#' In the upper apportionment the seats for each party are computed with a highest
-#' averages method. This determines how many of all seats each party deserves due to
-#' the total of all their votes (that is the sum of the votes for all regional lists of
-#' that party). Analogical, the same highest averages method is used to determine how
-#' many of all seats each region deserves.
+#' In the upper apportionment the seats for each party are computed with a
+#' highest averages method. This determines how many of all seats each party
+#' deserves due to the total of all their votes (that is the sum of the votes
+#' for all regional lists of that party). Analogical, the same highest averages
+#' method is used to determine how many of all seats each region deserves.
 #'
-#' @note The results from the upper apportionment are final results for the number of
-#' the seats of one party (and analogically for the number of the seats of one region)
-#' within the whole voting area, the lower apportionment will only determine in which
-#' particular regions the party seats are allocated. Thus, after the upper apportionment
-#' is done, the final strength of a party/region within the parliament is definite.
+#' @note The results from the upper apportionment are final results for the
+#' number of the seats of one party (and analogically for the number of the
+#' seats of one region) within the whole voting area, the lower apportionment
+#' will only determine in which particular regions the party seats are
+#' allocated. Thus, after the upper apportionment is done, the final strength of
+#' a party/region within the parliament is definite.
 #'
 #' @param votes_matrix Vote count matrix with votes by party in rows
 #'                     and votes by district in columns
 #' @param district_seats Vector defining the number of seats per district.
-#'                       Must be the same length as ncol(votes_matrix). If the number
-#'                       of seats per district should be assigned according to the
-#'                       number of votes (not the general use case), a single
-#'                       number for the total number of seats can be used.
-#' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
-#'                       many votes as there are seats in a district. Set to FALSE if
-#'                       \code{votes_matrix} shows the number of voters.
-#' @param method Apportion method that defines how seats are assigned, see \link{proporz}.
+#'                       Must be the same length as ncol(votes_matrix). If the
+#'                       number of seats per district should be assigned
+#'                       according to the number of votes (not the general use
+#'                       case), a single number for the total number of seats
+#'                       can be used.
+#' @param use_list_votes By default (TRUE) it's assumed that each voter in a
+#'                       district has as many votes as there are seats in a
+#'                       district. Set to FALSE if \code{votes_matrix} shows the
+#'                       number of voters.
+#' @param method Apportion method that defines how seats are assigned,
+#'               see \link{proporz}.
 #'
 #' @seealso \link{biproportional}, \link{lower_apportionment}
 #'
@@ -361,28 +370,27 @@ upper_apportionment = function(votes_matrix, district_seats,
 
 #' Calculate lower apportionment
 #'
-#' Iteratively changes column and row divisors sucht that
+#' Iterate and change column and row divisors such that
 #' \code{colSums(round(M/col_divisors/row_divisors)) == seats_col} and
 #' \code{rowSums(round(M/col_divisors/row_divisors)) == seats_row}
 #'
-#' The result is obtained by an iterative process. Initially, for each district a divisor is
-#' chosen using the highest averages method for the votes allocated to each regional party
-#' list in this region. For each party a party divisor is initialized with 1.
+#' The result is obtained by an iterative process. Initially, for each district
+#' a divisor is chosen using the highest averages method for the votes allocated
+#' to each regional party list in this region. For each party a party divisor is
+#' initialized with 1.
 #'
-#' Effectively, the objective of the iterative process is to modify the regional divisors and
-#' party divisors so that the number of seats in each regional party list equals the number
-#' of their votes divided by both the regional and the party divisors which is then rounded
-#' by the rounding method of the highest averages method used, and the sum of the seats of
-#' all regional party lists of one party equals the number of seats computed in the upper
-#' apportionment for that party, and the sum of the seats of all regional party lists of
-#' one region equals the number of seats computed in the upper apportionment for that region.
+#' Effectively, the objective of the iterative process is to modify the regional
+#' divisors and party divisors so that the number of seats in each regional
+#' party list equals the number of their votes divided by both the regional and
+#' the party divisors.
 #'
-#' The following two correction steps are executed until this objective is satisfied:
+#' The following two correction steps are executed until this objective is
+#' satisfied:
 #' \itemize{
-#'   \item modify the party divisors such that the apportionment within each party is correct with
-#'   the chosen highest averages method,
-#'   \item modify the regional divisors such that the apportionment within the region is correct
-#'   with the chosen highest averages method.
+#'   \item modify the party divisors such that the apportionment within each
+#'     party is correct with the chosen rounding method,
+#'   \item modify the regional divisors such that the apportionment within the
+#'     region is correct with the chosen rounding method.
 #' }
 #'
 #' @param M vote matrix
@@ -392,12 +400,12 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'                   from upper_apportionment()
 #' @param method Apportion method that defines how seats are assigned,
 #'               see \link{proporz}. Note  that the iterative process is only
-#'               guaranteed to terminate with "round" (Sainte-Laguë/Webster method).
-#'               It's also possible to provide a function that works like base::round(x)
-#'               (i.e. can handle a matrix).
+#'               guaranteed to terminate with "round" (Sainte-Laguë/Webster
+#'               method). It is also possible to provide a function that works
+#'               like base::round(x) (i.e. can handle a matrix).
 #'
-#' @note The iterative process in the lower apportionment is only guaranteed to terminate
-#'       with Sainte-Laguë/Webster method.
+#' @note The iterative process in the lower apportionment is only guaranteed to
+#'       terminate with Sainte-Laguë/Webster method.
 #'
 #' @return seat matrix with column and row divisors stored in attributes
 #'
@@ -430,7 +438,7 @@ lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
     dD.max = ceiling(colSums(M)/(seats_cols-1) / min(dP.min))
 
     # calculate raw seat matrix
-    # acesses function environment variables div_distr and div_party
+    # accesses function environment variables div_distr and div_party
     m. = function(.M, .div_distr, .div_party) {
         M_district = matrix(rep(.div_distr, nrow(.M)), byrow = TRUE, nrow = nrow(.M))
         M_party = matrix(rep(.div_party, ncol(.M)), byrow = FALSE, nrow = nrow(.M))
@@ -440,7 +448,7 @@ lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
         return(x)
     }
 
-    # convenience funtions to round and summarise
+    # convenience functions to round and summarise
     mc = function(.M,.d,.p) colSums(round_func(m.(.M,.d,.p)))
     mr = function(.M,.d,.p) rowSums(round_func(m.(.M,.d,.p)))
 

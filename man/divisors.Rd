@@ -11,8 +11,8 @@ divisors(biproportional_result)
 or a data.frame created by \code{\link{pukelsheim}}}
 }
 \description{
-Show the district and party divisors used for to assign seats. This method
-provides easier access to divisors stored in
+Show the district and party divisors used for to assign seats.
+This method provides easier access to divisors stored in
 attributes(...)$divisors
 }
 \examples{

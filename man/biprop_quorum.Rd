@@ -7,11 +7,11 @@
 biprop_quorum(votes_matrix, quorum_districts = 0, quorum_total = 0)
 }
 \arguments{
-\item{votes_matrix}{matrix containing the number of votes parties received per district.
-Parties by row and districts by column.}
+\item{votes_matrix}{matrix containing the number of votes parties received
+per district. Parties by row and districts by column.}
 
-\item{quorum_districts}{Vote threshold a party must reach in \emph{at least} one
-district. Used as quota of total votes within a
+\item{quorum_districts}{Vote threshold a party must reach in \emph{at least}
+one district. Used as quota of total votes within a
 district if less than 1 otherwise as number of votes.}
 
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
