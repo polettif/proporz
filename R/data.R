@@ -3,3 +3,6 @@
 
 #' Example data from the Finnish parliamentary elections (2019)
 "finland2019"
+
+#' Prepared and cleaned vote matrices and district seats data
+"biproporz_examples"

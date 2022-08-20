@@ -237,6 +237,10 @@ biproportional = function(votes_matrix,
     stopifnot(length(method) == 2)
     if(any(method == "quota_largest_remainder")) stop("Only divisor methods possible")
 
+    # check integers
+    if(sum(votes_matrix %% 1) != 0) stop("votes_matrix must only contain integers")
+    if(sum(district_seats %% 1) != 0) stop("district_seats must be integers")
+
     # Quorum
     votes_matrix <- biprop_quorum(votes_matrix,
                                   quorum_districts = quorum_districts,
@@ -404,8 +408,8 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' @export
 lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
-    stopifnot(sum(M %% 1) == 0,
-              (seats_cols %% 1) == 0,
+    if(sum(M %% 1) != 0) stop("matrix must only contain integers")
+    stopifnot((seats_cols %% 1) == 0,
               (seats_rows %% 1) == 0)
     stopifnot(length(seats_cols) == ncol(M))
     stopifnot(length(seats_rows) == nrow(M))
