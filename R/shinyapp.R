@@ -120,8 +120,13 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 		run_biproporz = function() {
 			if(sum(input$votes_matrix) == 0) return(NULL)
 			if(sum(input$district_seats_matrix) == 0) return(NULL)
+			if(any(nchar(colnames(input$votes_matrix)) == 0)) return(NULL)
 
 			district_seats = input$district_seats_matrix
+			if(ncol(district_seats) > 1 && isTRUE(input$set_seats_per_district)) {
+				colnames(district_seats) <- colnames(input$votes_matrix)
+				shinyMatrix::updateMatrixInput(session, "district_seats_matrix", district_seats)
+			}
 			district_seats <- district_seats[1,]
 
 			bp = biproporz(input$votes_matrix, district_seats,
