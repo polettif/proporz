@@ -65,6 +65,10 @@ steps:
 
 Parties failing to reach at least one quorum cannot get seats.
 }
+\note{
+The iterative process in the lower apportionment is only guaranteed to terminate
+      with Sainte-Laguë/Webster method.
+}
 \examples{
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 votes_matrix = pivot_to_matrix(votes_df)

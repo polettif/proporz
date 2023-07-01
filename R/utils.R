@@ -7,6 +7,7 @@ check_equal_entries = function(vec, x = "value") {
 }
 
 quorum_votes = function(votes, quorum) {
+	check_votes(votes)
     stopifnot(length(quorum) == 1, is.numeric(quorum), quorum >= 0)
 
     if(quorum < 1) {
@@ -80,4 +81,28 @@ pivot_to_df = function(matrix_wide, value_colname = "values") {
     # select values by index
     new_df[[value_colname]] <- matrix_wide[values_indices]
     return(new_df)
+}
+
+check_n_seats = function(n_seats) {
+	if(length(n_seats) == 1 && !is.null(n_seats) && !is.na(n_seats) && n_seats >= 0) {
+		return()
+	}
+	stop("n_seats must be one number >= 0")
+}
+
+check_votes = function(votes) {
+	if(is.numeric(votes) && all(!is.na(votes)) && all(votes >= 0)) {
+		return()
+	}
+	stop("votes must be numeric >= 0")
+}
+
+.sample_votes = function(n_non_zero, n_zero) {
+	repeat {
+		x = round(stats::runif(n_non_zero, 10, 1000))
+		if(length(unique(x)) == n_non_zero) {
+			break
+		}
+	}
+	return(c(x, rep(0, n_zero)))
 }
