@@ -163,6 +163,10 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 
 		# seats per district option ####
 		observeEvent(input$set_seats_per_district, {
+			if(sum(input$votes_matrix) == 0) return(NULL)
+			if(sum(input$district_seats_matrix) == 0) return(NULL)
+			if(any(nchar(colnames(input$votes_matrix)) == 0)) return(NULL)
+
 			if(input$set_seats_per_district) {
 				tmp_seats = upper_apportionment(input$votes_matrix,
 												district_seats = sum(input$district_seats_matrix))
@@ -198,7 +202,6 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 			shiny::updateNumericInput(session, "quorum_districts", value = quorum_districts)
 			shiny::updateNumericInput(session, "quorum_total", value = quorum_total)
 			shiny::updateCheckboxInput(session, "set_seats_per_district", value = set_seats_per_district)
-
 		}
 	}
 
