@@ -34,7 +34,7 @@ see \link{proporz}.}
 named list with column/district seats and row/party seats
 }
 \description{
-In the upper apportionment the seats for each party are computed with a
+In the upper apportionment, the seats for each party are computed with a
 highest averages method. This determines how many of all seats each party
 deserves due to the total of all their votes (that is the sum of the votes
 for all regional lists of that party). Analogical, the same highest averages
@@ -44,7 +44,7 @@ method is used to determine how many of all seats each region deserves.
 The results from the upper apportionment are final results for the
 number of the seats of one party (and analogically for the number of the
 seats of one region) within the whole voting area, the lower apportionment
-will only determine in which particular regions the party seats are
+will only determine where (which regions) the party seats are
 allocated. Thus, after the upper apportionment is done, the final strength of
 a party/region within the parliament is definite.
 }

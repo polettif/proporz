@@ -15,9 +15,31 @@ one district. Used as quota of total votes within a
 district if less than 1 otherwise as number of votes.}
 
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
-Used as quota of total votes if less than 1 otherwise
+Used as quota of total votes if less than 1, otherwise
 as number of votes.}
 }
 \description{
 Parties failing to reach at least one quorum have their votes set to zero.
+}
+\examples{
+library(proporz)
+votes_matrix = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
+votes_matrix
+#>      [,1] [,2]
+#> [1,]   30   50
+#> [2,]   10   20
+#> [3,]   60  180
+
+biprop_quorum(votes_matrix, quorum_districts = 0.15)
+#>      [,1] [,2]
+#> [1,]   30   50
+#> [2,]    0    0
+#> [3,]   60  180
+
+biprop_quorum(votes_matrix, quorum_total = 100)
+#>      [,1] [,2]
+#> [1,]    0    0
+#> [2,]    0    0
+#> [3,]   60  180
+
 }

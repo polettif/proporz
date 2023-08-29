@@ -34,7 +34,7 @@ one district. Used as quota of total votes within a
 district if less than 1 otherwise as number of votes.}
 
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
-Used as quota of total votes if less than 1 otherwise
+Used as quota of total votes if less than 1, otherwise
 as number of votes.}
 
 \item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as

@@ -132,7 +132,7 @@ pukelsheim = function(votes_df, district_seats_df,
 
 #' Biproportional apportionment
 #'
-#' Method to proportionally allocate seatsamong parties (or lists) and
+#' Method to proportionally allocate seats among parties (or lists) and
 #' districts (or entities, regions).
 #'
 #' Each party nominates a candidate list for every district. The voters vote
@@ -275,8 +275,30 @@ biproporz = biproportional
 #'                         one district. Used as quota of total votes within a
 #'                         district if less than 1 otherwise as number of votes.
 #' @param quorum_total Vote threshold a party must reach for all votes cast.
-#'                     Used as quota of total votes if less than 1 otherwise
+#'                     Used as quota of total votes if less than 1, otherwise
 #'                     as number of votes.
+#'
+#' @examples
+#' library(proporz)
+#' votes_matrix = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
+#' votes_matrix
+#' #>      [,1] [,2]
+#' #> [1,]   30   50
+#' #> [2,]   10   20
+#' #> [3,]   60  180
+#'
+#' biprop_quorum(votes_matrix, quorum_districts = 0.15)
+#' #>      [,1] [,2]
+#' #> [1,]   30   50
+#' #> [2,]    0    0
+#' #> [3,]   60  180
+#'
+#' biprop_quorum(votes_matrix, quorum_total = 100)
+#' #>      [,1] [,2]
+#' #> [1,]    0    0
+#' #> [2,]    0    0
+#' #> [3,]   60  180
+#'
 #' @export
 biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
     stopifnot(quorum_districts >= 0, quorum_total >= 0)
@@ -302,7 +324,7 @@ biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
 
 #' Calculate upper apportionment
 #'
-#' In the upper apportionment the seats for each party are computed with a
+#' In the upper apportionment, the seats for each party are computed with a
 #' highest averages method. This determines how many of all seats each party
 #' deserves due to the total of all their votes (that is the sum of the votes
 #' for all regional lists of that party). Analogical, the same highest averages
@@ -311,7 +333,7 @@ biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
 #' @note The results from the upper apportionment are final results for the
 #' number of the seats of one party (and analogically for the number of the
 #' seats of one region) within the whole voting area, the lower apportionment
-#' will only determine in which particular regions the party seats are
+#' will only determine where (which regions) the party seats are
 #' allocated. Thus, after the upper apportionment is done, the final strength of
 #' a party/region within the parliament is definite.
 #'

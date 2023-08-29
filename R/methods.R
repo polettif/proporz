@@ -1,7 +1,31 @@
 #' List of all apportion methods
 #'
 #' Names can be used in [proporz()] or [biproportional()], the list entries
-#' denote the actual implementation
+#' denote the actual implementation.
+#'
+#' \code{list(
+#' "divisor_floor" = "floor",
+#' "d'hondt" = "floor",
+#' "jefferson" = "floor",
+#' "divisor_round" = "round",
+#' "sainte-lague" = "round",
+#' "webster" = "round",
+#' "divisor_ceiling" = "ceiling",
+#' "adams" = "ceiling",
+#' "dean" = "harmonic",
+#' "huntington-hill" = "geometric",
+#' "hill-huntington" = "geometric",
+#' "hare-niemeyer" = "quota_largest_remainder",
+#' "hamilton" = "quota_largest_remainder",
+#' "vinton" = "quota_largest_remainder",
+#' "hagenbach-bischoff" = "floor",
+#' "ceiling" = "ceiling",
+#' "round" = "round",
+#' "floor" = "floor",
+#' "harmonic" = "harmonic",
+#' "geometric" = "geometric",
+#' "quota_largest_remainder" = "quota_largest_remainder"
+#' )}
 #'
 #' @export
 apport_methods = list(
