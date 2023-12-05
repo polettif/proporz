@@ -40,3 +40,5 @@ doc/*.Rmd
 # R Environment Variables
 .Renviron
 Meta
+
+.DS_Store

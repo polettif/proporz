@@ -14,7 +14,7 @@
 #'   to the regional party list respecting the results from the upper apportionment.
 #' }
 #'
-#' Parties failing to reach at least one quorum have their votes set to zero.
+#' Parties failing to reach quorums cannot get seats.
 #'
 #' If you want to other apportion methods than Sainte-Laguë use \link{biproportional}.
 #'
@@ -29,8 +29,8 @@
 #'                            \item district id/name
 #'                            \item number of seats for a district
 #'                          }
+#' @inheritParams biproportional
 #' @param new_seats_col name of the new column
-#' @inheritParams biprop_quorum
 #' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
 #'                       many votes as there are seats in a district. Set to FALSE if
 #'                       \code{votes_df} shows the number of voters.
@@ -44,8 +44,7 @@
 #'
 #' seats_df = pukelsheim(votes_df,
 #'                       district_seats_df,
-#'                       quorum_districts = 0.05,
-#'                       quorum_total = 0.03)
+#'                       quorum_any(any_district = 0.05, total = 0.03))
 #'
 #' head(seats_df)
 #' #>   list_id entity_id list_votes seats
@@ -69,13 +68,13 @@
 #' #>    KESK       OUL      78486        6
 #' #>     SDP       UUS      97107        6
 #' #>     KOK       UUS     114243        7
+#'
+#' @md
 #' @export
 pukelsheim = function(votes_df, district_seats_df,
+                      quorum,
                       new_seats_col = "seats",
-                      quorum_districts = 0,
-                      quorum_total = 0,
                       use_list_votes = TRUE) {
-    stopifnot(is.numeric(quorum_districts), is.numeric(quorum_total))
     stopifnot(is.character(new_seats_col))
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
         stop(deparse(substitute(votes_df)),
@@ -114,8 +113,7 @@ pukelsheim = function(votes_df, district_seats_df,
 
     # Biproportional Apportionment
     m = biproportional(votes_matrix, district_seats,
-                       quorum_districts = quorum_districts,
-                       quorum_total = quorum_total,
+                       quorum = quorum,
                        use_list_votes = use_list_votes)
     seats_df = pivot_to_df(m, new_seats_col)
 
@@ -148,10 +146,16 @@ pukelsheim = function(votes_df, district_seats_df,
 #'    apportionment.
 #' }
 #'
-#' Parties failing to reach at least one quorum cannot get seats.
+#' Parties failing to reach quorums cannot get seats.
 #'
 #' @inheritParams upper_apportionment
-#' @inheritParams biprop_quorum
+#' @param quorum Optional list of functions which take the votes_matrix and
+#'               return a logical vector that denotes for each list/party
+#'               whether they reached the quorum (i.e. are elegible for seats).
+#'               The easiest way to do this is via [quorum_any()] or
+#'               [quorum_all()], see examples. Alternatively you can pass a
+#'               precalculated logical vector. No quorum is applied if parameter
+#'               is missing or NULL.
 #' @param method Defines how seats in upper and lower apportionment are
 #'               assigned. The default "round" for the Sainte-Laguë/Webster
 #'               method is the standard for biproportional apportionment. See
@@ -163,7 +167,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'       with Sainte-Laguë/Webster method.
 #'
-#' @seealso \link{pukelsheim} for usage with data frames.
+#' @seealso \code{\link{pukelsheim}} for usage with data frames.
 #'          \code{\link{divisors}} to access the divisors
 #'
 #' @examples
@@ -186,7 +190,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #' #> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #' #>   15   10    6    3    2    4    7    6    6    2   19
 #'
-#' biproportional(votes_matrix, district_seats, 0.05, 0.03)
+#' biproportional(votes_matrix, district_seats, quorum_any(0.05, 0.03))
 #' #>         entity_id
 #' #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #' #>       1    0    0    0    0    0    0    0    0    0    0    0
@@ -197,6 +201,16 @@ pukelsheim = function(votes_df, district_seats_df,
 #' #>       6    3    1    1    0    0    0    0    0    1    0    3
 #' #>       7    4    2    1    1    1    1    2    1    2    0    3
 #'
+#' # calculate quorum beforehand (leads to the same result as above)
+#' q1 = reached_quorum_any_district(votes_matrix, 0.05)
+#' q2 = reached_quorum_total(votes_matrix, 0.03)
+#' reached_quorum = q1 | q2
+#' reached_quorum
+#' #>     1     2     3     4     5     6     7
+#' #> FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+#'
+#' biproportional(votes_matrix, district_seats, reached_quorum)
+#'
 #' # Different method for upper apportionment
 #' # and using number of voters instead of list votes
 #' f19_matrix = pivot_to_matrix(finland2019$votes_df)
@@ -204,16 +218,33 @@ pukelsheim = function(votes_df, district_seats_df,
 #'     finland2019$district_seats_df$election_mandates,
 #'     finland2019$district_seats_df$entity_id)
 #'
-#' biproportional(f19_matrix, f19_distr_seats,
+#' f19_seats = biproportional(f19_matrix, f19_distr_seats,
 #'                use_list_votes = FALSE,
 #'                method = c("floor", "round"))
 #'
+#' f19_seats[rowSums(f19_seats) > 0,]
+#' #>        entity_id
+#' #> list_id HAEM HEL KAA KES LAP OUL PIR SAT SKA UUS VAA VAR
+#' #> KD      1   0   1   1   0   1   1   0   1   1   1   0
+#' #> KESK    1   1   3   2   2   6   2   1   3   2   3   2
+#' #> KOK     3   5   3   1   1   2   4   1   2   7   2   4
+#' #> Nyt     0   0   0   0   0   0   0   0   0   1   0   0
+#' #> NYT     0   1   0   0   0   0   0   0   0   0   0   0
+#' #> PIR     0   1   0   0   0   0   0   0   0   0   0   0
+#' #> PS      3   3   3   2   1   4   3   2   3   6   3   3
+#' #> RKP     0   1   0   0   0   0   0   0   0   4   3   1
+#' #> SDP     4   3   4   2   1   2   4   2   3   7   2   3
+#' #> SIN     0   0   0   0   0   0   0   0   1   1   0   0
+#' #> VAS     1   2   1   1   1   2   2   1   1   2   1   2
+#' #> VIHR    1   5   2   1   1   1   3   1   1   5   1   2
+#'
+#'
 #' @importFrom stats setNames
+#' @md
 #' @export
 biproportional = function(votes_matrix,
                           district_seats,
-                          quorum_districts = 0,
-                          quorum_total = 0,
+                          quorum,
                           use_list_votes = TRUE,
                           method = "round") {
     if(!is.matrix(votes_matrix)) {
@@ -228,12 +259,13 @@ biproportional = function(votes_matrix,
                  " needs to have districts as columns and parties as rows")
         }
         if(!is.null(colnames(votes_matrix))) {
-            district_seats <- district_seats[colnames(votes_matrix)]
-            if(!all(colnames(votes_matrix) == names(district_seats))) {
+            if(is.null(names(district_seats)) ||
+               !all(sort(colnames(votes_matrix)) == sort(names(district_seats)))) {
                 stop(deparse(substitute(district_seats)),
                      " needs to have the same names as the columns in ",
                      deparse(substitute(votes_matrix)))
             }
+            district_seats <- district_seats[colnames(votes_matrix)]
         }
     }
     if(length(method) == 1) {
@@ -246,10 +278,10 @@ biproportional = function(votes_matrix,
     if(sum(votes_matrix %% 1) != 0) stop("votes_matrix must only contain integers")
     if(sum(district_seats %% 1) != 0) stop("district_seats must be integers")
 
-    # Quorum
-    votes_matrix <- biprop_quorum(votes_matrix,
-                                  quorum_districts = quorum_districts,
-                                  quorum_total = quorum_total)
+    # quorum
+    if(!missing(quorum) && !is.null(quorum)) {
+        votes_matrix <- apply_quorum(votes_matrix, quorum)
+    }
 
     # upper apportionment (Oberzuteilung)
     upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes, method[1])
@@ -264,63 +296,6 @@ biproportional = function(votes_matrix,
 #' @inherit biproportional
 #' @export
 biproporz = biproportional
-
-#' Filter a votes_matrix
-#'
-#' Parties failing to reach at least one quorum have their votes set to zero.
-#'
-#' @param votes_matrix matrix containing the number of votes parties received
-#'                     per district. Parties by row and districts by column.
-#' @param quorum_districts Vote threshold a party must reach in \emph{at least}
-#'                         one district. Used as quota of total votes within a
-#'                         district if less than 1 otherwise as number of votes.
-#' @param quorum_total Vote threshold a party must reach for all votes cast.
-#'                     Used as quota of total votes if less than 1, otherwise
-#'                     as number of votes.
-#'
-#' @examples
-#' library(proporz)
-#' votes_matrix = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
-#' votes_matrix
-#' #>      [,1] [,2]
-#' #> [1,]   30   50
-#' #> [2,]   10   20
-#' #> [3,]   60  180
-#'
-#' biprop_quorum(votes_matrix, quorum_districts = 0.15)
-#' #>      [,1] [,2]
-#' #> [1,]   30   50
-#' #> [2,]    0    0
-#' #> [3,]   60  180
-#'
-#' biprop_quorum(votes_matrix, quorum_total = 100)
-#' #>      [,1] [,2]
-#' #> [1,]    0    0
-#' #> [2,]    0    0
-#' #> [3,]   60  180
-#'
-#' @export
-biprop_quorum = function(votes_matrix, quorum_districts = 0, quorum_total = 0) {
-    stopifnot(quorum_districts >= 0, quorum_total >= 0)
-    # district quorum
-    if(quorum_districts < 1) {
-        quorum_districts <- colSums(votes_matrix)*quorum_districts
-    }
-    passed_distr_quor = t(apply(votes_matrix, 1, function(x) x >= quorum_districts))
-    passed_any_distr_quor = rowSums(passed_distr_quor) > 0
-
-    # total quorum
-    if(quorum_total < 1) {
-        quorum_total <- sum(votes_matrix)*quorum_total
-    }
-    passed_total_quor = rowSums(votes_matrix) >= quorum_total
-    # set votes to 0 if party misses a quorum
-    stopifnot(length(passed_any_distr_quor) == length(passed_total_quor))
-    list_missed_quorum = !passed_any_distr_quor | !passed_total_quor
-
-    votes_matrix[which(list_missed_quorum),] <- 0
-    return(votes_matrix)
-}
 
 #' Calculate upper apportionment
 #'

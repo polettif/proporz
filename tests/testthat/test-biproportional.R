@@ -34,31 +34,115 @@ test_that("biproportional", {
 
 test_that("quorum with vote counts", {
     vm0 = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
-    for(i in 1:3) {
-        vm = vm0
-        vm[c(1,3),] <- round(runif(2, 1, 10)*vm[c(1,3),])
-        expect_equal(biprop_quorum(vm), vm)
-        q1 = biprop_quorum(vm, quorum_districts = 35)
-        check1 = all(q1[2,] == c(0,0))
-        q2 = biprop_quorum(vm, quorum_total = 45)
-        check2 = all(q2[2,] == c(0,0))
-        q3 = biprop_quorum(vm, quorum_districts = 35, quorum_total = 45)
-        check3 = identical(q2, q3)
-        expect_true(all(check1, check2, check3))
-    }
+    vm = vm0
+    vm[c(1,3),] <- round(c(7.97, 5.14)*vm[c(1,3),])
+
+    q1 = apply_quorum(vm, quorum_any(any_district = 35))
+    check1 = all(q1[2,] == c(0,0))
+    q2 = apply_quorum(vm, quorum_any(total = 45))
+    check2 = all(q2[2,] == c(0,0))
+    q3 = apply_quorum(vm, quorum_all(any_district = 35, total = 45))
+    check3 = identical(q2, q3)
+    expect_true(all(check1, check2, check3))
+
+    expect_equal(sum(apply_quorum(vm, c(F,F,F))), 0)
+    expect_equal(sum(apply_quorum(vm, c(F,T,F))), 30)
+    expect_error(apply_quorum(vm, "x"), "Cannot parse quorum function or vector")
 })
 
 test_that("quorum with percentages counts", {
     vm = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
-    p1 = biprop_quorum(vm, quorum_districts = 0.15)
+    p1 = apply_quorum(vm, quorum_any(any_district = 0.15))
     expect_equal(p1[2,], c(0,0))
-    p2 = biprop_quorum(vm, quorum_districts = 0.09)
+    p2 = apply_quorum(vm, quorum_any(any_district = 0.09))
     expect_true(all(p2[2,] != c(0,0)))
-    p3 = biprop_quorum(vm, quorum_total = 0.085)
+    p3 = apply_quorum(vm, quorum_any(total = 0.085))
     expect_equal(p2,p3)
-    p4 = biprop_quorum(vm, quorum_total = 0.09)
+    p4 = apply_quorum(vm, quorum_any(total = 0.09))
     expect_equal(p1, p4)
 })
+
+test_that("quorum", {
+    vm = matrix(c(90, 4, 5, 1, 104, 4, 1, 1), ncol = 2)*10
+
+    q_district = c(T,F,T,F)
+    q_total = c(T,T,F,F)
+    q_district_and_total = c(T,F,F,F)
+    q_district_or_total = c(T,T,T,F)
+
+    # reached_quorums
+    expect_equal(reached_quorums(vm, quorum_any(any_district = 0.05)),
+                 q_district)
+    expect_equal(reached_quorums(vm, quorum_all(any_district = 0.05)),
+                 q_district)
+    expect_equal(reached_quorums(vm, quorum_any(total = 0.03)),
+                 q_total)
+    expect_equal(reached_quorums(vm, quorum_all(total = 0.03)),
+                 q_total)
+    expect_equal(reached_quorums(vm, quorum_any(any_district = 0.05, total = 0.03)),
+                 q_district_or_total)
+    expect_equal(reached_quorums(vm, quorum_all(any_district = 0.05, total = 0.03)),
+                 q_district_and_total)
+    expect_equal(reached_quorums(vm, quorum_all(any_district = 0.05, total = 63)),
+                 q_district_and_total)
+    expect_error(reached_quorums(vm, reached_quorum_total), "reached_quorum_total is not a list of functions")
+    expect_error(reached_quorums(vm, list(1, 2)), ".* is not a list of functions")
+
+    # vote_matrix
+    soll_district = vm * matrix(rep(q_district, 2), ncol = 2)
+    soll_total = vm * matrix(rep(q_total, 2), ncol = 2)
+    soll_district_and_total = vm * matrix(rep(q_district_and_total, 2), ncol = 2)
+    soll_district_or_total = vm * matrix(rep(q_district_or_total, 2), ncol = 2)
+
+    # biproportional()
+    expect_equal(
+        biproportional(vm, c(100, 100), quorum_any(any_district = 0.05)) > 0,
+        soll_district > 0)
+    expect_equal(
+        biproportional(vm, c(100, 100), quorum_any(any_district = 0.05)) > 0,
+        soll_district > 0)
+
+    expect_equal(
+        biproportional(vm, c(100, 100), quorum_any(total = 0.03)) > 0,
+        soll_total > 0)
+    expect_equal(
+        biproportional(vm, c(100, 100), quorum_all(any_district = 0.05, total = 0.03)) > 0,
+        soll_district_and_total > 0)
+    expect_equal(
+        biproportional(vm, c(100, 100), quorum_any(any_district = 0.05, total = 0.03)) > 0,
+        soll_district_or_total > 0)
+
+    # with vector
+    expect_equal(
+        biproportional(vm, c(100, 100), q_district_or_total) > 0,
+        soll_district_or_total > 0)
+
+    # pukelsheim()
+    vm_df = pivot_to_df(vm)
+    wrap_pukelsheim = function(...) {
+        seats_df = data.frame(col = c(1,2), seats = c(100, 100))
+        unname(pivot_to_matrix(pukelsheim(vm_df, seats_df, ...)[c(1,2,4)]))
+    }
+
+    expect_equal(
+        wrap_pukelsheim(quorum = quorum_any(any_district = 0.05)) > 0,
+        soll_district > 0)
+    expect_equal(
+        wrap_pukelsheim(quorum = quorum_any(total = 0.03)) > 0,
+        soll_total > 0)
+    expect_equal(
+        wrap_pukelsheim(quorum = quorum_all(any_district = 0.05, total = 0.03)) > 0,
+        soll_district_and_total > 0)
+    expect_equal(
+        wrap_pukelsheim(quorum = quorum_any(any_district = 0.05, total = 0.03)) > 0,
+        soll_district_or_total > 0)
+
+    # biproportional quorum edge case
+    ec_vm = matrix(c(89,5,2,4, 96,1,1,4), ncol = 2)
+    ec_bp = biproportional(vm, c(93, 100), quorum_any(any_district = 0.05))
+    expect_is(ec_bp, "proporz_matrix")
+})
+
 
 test_that("free apportionment for districts", {
     # https://en.wikipedia.org/wiki/Biproportional_apportionment#Specific_example
@@ -82,7 +166,7 @@ test_that("pukelsheim wrapper", {
     )
     expect_error(pukelsheim(pklshm[,2:3], pklshm_seats))
     expect_error(pukelsheim(pklshm[,c(2,1,3)], pklshm_seats))
-    result = pukelsheim(pklshm, pklshm_seats, "Sitze")
+    result = pukelsheim(pklshm, pklshm_seats, new_seats_col = "Sitze")
     expect_equal(result[,1:3], pklshm)
     expect_equal(result$Sitze, c(1,2,1,1,2,2,2,1,3))
     expect_true(!is.null(divisors(result)))
@@ -158,4 +242,12 @@ test_that("almost empty vote_matrix", {
 
     vm3 = matrix(c(4,3,0,20,1,0), nrow = 2)
     expect_error(biproporz(vm3, c(1,3,4)), "Result is undefined")
+})
+
+test_that("named votes_matrix", {
+    votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+    dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
+
+    expect_error(biproportional(votes_matrix, c(50, 20)),
+                 "needs to have the same names as the columns in votes_matrix")
 })

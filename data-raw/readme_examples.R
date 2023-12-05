@@ -24,8 +24,7 @@ reprex::reprex({
 
     seats_df = pukelsheim(votes_df,
                           district_seats_df,
-                          quorum_districts = 0.05,
-                          quorum_total = 0.03)
+                          quorum = quorum(any_district = 0.05, total = 0.03))
 
     head(seats_df)
 
@@ -56,4 +55,31 @@ reprex::reprex({
 
     seats_matrix = biproportional(votes_matrix, district_seats)
     divisors(seats_matrix)
+})
+
+# quorum_all
+reprex::reprex({
+    library(proporz)
+    votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+    dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
+    seats = c(Z1 = 50, Z2 = 20)
+
+    # use as parameter in biproportional (general use case)
+    biproporz(votes_matrix, seats)
+
+    biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1))
+
+    biproporz(votes_matrix, seats, quorum = quorum_any(total = 100))
+
+    biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1, total = 100))
+
+    biproporz(votes_matrix, seats, quorum = quorum_all(any_district = 0.1, total = 100))
+})
+
+reprex::reprex({
+    library(proporz)
+    votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+
+    quorum_functions = quorum_any(any_district = 0.1, total = 100)
+    reached_quorums(votes_matrix, quorum_functions)
 })
