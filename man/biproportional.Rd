@@ -7,8 +7,7 @@
 biproportional(
   votes_matrix,
   district_seats,
-  quorum_districts = 0,
-  quorum_total = 0,
+  quorum,
   use_list_votes = TRUE,
   method = "round"
 )
@@ -24,13 +23,13 @@ according to the number of votes (not the general use
 case), a single number for the total number of seats
 can be used.}
 
-\item{quorum_districts}{Vote threshold a party must reach in \emph{at least}
-one district. Used as quota of total votes within a
-district if less than 1 otherwise as number of votes.}
-
-\item{quorum_total}{Vote threshold a party must reach for all votes cast.
-Used as quota of total votes if less than 1, otherwise
-as number of votes.}
+\item{quorum}{Optional list of functions which take the votes_matrix and
+return a logical vector that denotes for each list/party
+whether they reached the quorum (i.e. are elegible for seats).
+The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
+\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a
+precalculated logical vector. No quorum is applied if parameter
+is missing or NULL.}
 
 \item{use_list_votes}{By default (TRUE) it's assumed that each voter in a
 district has as many votes as there are seats in a
@@ -55,19 +54,19 @@ for the parties of their district. The seat allocation is calculated in two
 steps:
 \enumerate{
 \item In the so called \emph{upper apportionment} the number of seats for
-   each party (over all districts) is determined. Normally, the number of
-   seats for each region are defined before the election and are independent
-   of the vote counts.
+each party (over all districts) is determined. Normally, the number of
+seats for each region are defined before the election and are independent
+of the vote counts.
 \item In the so called \emph{lower apportionment} the seats are distributed
-   to the regional party list respecting the results from the upper
-   apportionment.
+to the regional party list respecting the results from the upper
+apportionment.
 }
 
-Parties failing to reach at least one quorum cannot get seats.
+Parties failing to reach quorums cannot get seats.
 }
 \note{
 The iterative process in the lower apportionment is only guaranteed to terminate
-      with Sainte-Laguë/Webster method.
+with Sainte-Laguë/Webster method.
 }
 \examples{
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -89,7 +88,7 @@ district_seats
 #> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #>   15   10    6    3    2    4    7    6    6    2   19
 
-biproportional(votes_matrix, district_seats, 0.05, 0.03)
+biproportional(votes_matrix, district_seats, quorum_any(0.05, 0.03))
 #>         entity_id
 #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #>       1    0    0    0    0    0    0    0    0    0    0    0
@@ -100,6 +99,16 @@ biproportional(votes_matrix, district_seats, 0.05, 0.03)
 #>       6    3    1    1    0    0    0    0    0    1    0    3
 #>       7    4    2    1    1    1    1    2    1    2    0    3
 
+# calculate quorum beforehand (leads to the same result as above)
+q1 = reached_quorum_any_district(votes_matrix, 0.05)
+q2 = reached_quorum_total(votes_matrix, 0.03)
+reached_quorum = q1 | q2
+reached_quorum
+#>     1     2     3     4     5     6     7
+#> FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+
+biproportional(votes_matrix, district_seats, reached_quorum)
+
 # Different method for upper apportionment
 # and using number of voters instead of list votes
 f19_matrix = pivot_to_matrix(finland2019$votes_df)
@@ -107,12 +116,29 @@ f19_distr_seats = setNames(
     finland2019$district_seats_df$election_mandates,
     finland2019$district_seats_df$entity_id)
 
-biproportional(f19_matrix, f19_distr_seats,
+f19_seats = biproportional(f19_matrix, f19_distr_seats,
                use_list_votes = FALSE,
                method = c("floor", "round"))
 
+f19_seats[rowSums(f19_seats) > 0,]
+#>        entity_id
+#> list_id HAEM HEL KAA KES LAP OUL PIR SAT SKA UUS VAA VAR
+#> KD      1   0   1   1   0   1   1   0   1   1   1   0
+#> KESK    1   1   3   2   2   6   2   1   3   2   3   2
+#> KOK     3   5   3   1   1   2   4   1   2   7   2   4
+#> Nyt     0   0   0   0   0   0   0   0   0   1   0   0
+#> NYT     0   1   0   0   0   0   0   0   0   0   0   0
+#> PIR     0   1   0   0   0   0   0   0   0   0   0   0
+#> PS      3   3   3   2   1   4   3   2   3   6   3   3
+#> RKP     0   1   0   0   0   0   0   0   0   4   3   1
+#> SDP     4   3   4   2   1   2   4   2   3   7   2   3
+#> SIN     0   0   0   0   0   0   0   0   1   1   0   0
+#> VAS     1   2   1   1   1   2   2   1   1   2   1   2
+#> VIHR    1   5   2   1   1   1   3   1   1   5   1   2
+
+
 }
 \seealso{
-\link{pukelsheim} for usage with data frames.
-         \code{\link{divisors}} to access the divisors
+\code{\link{pukelsheim}} for usage with data frames.
+\code{\link{divisors}} to access the divisors
 }

@@ -103,8 +103,7 @@ district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
 seats_df = pukelsheim(votes_df,
                       district_seats_df,
-                      quorum_districts = 0.05,
-                      quorum_total = 0.03)
+                      quorum_any(any_district = 0.05, total = 0.03))
 
 head(seats_df)
 #>   list_id entity_id list_votes seats
@@ -151,7 +150,7 @@ district_seats
 #> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 
 #>   15   10    6    3    2    4    7    6    6    2   19
 
-seats_matrix = biproportional(votes_matrix, district_seats, 0.05, 0.03)
+seats_matrix = biproportional(votes_matrix, district_seats, quorum_any(0.05, 0.03))
 seats_matrix
 #>         entity_id
 #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711

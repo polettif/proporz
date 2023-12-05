@@ -7,35 +7,34 @@
 pukelsheim(
   votes_df,
   district_seats_df,
+  quorum,
   new_seats_col = "seats",
-  quorum_districts = 0,
-  quorum_total = 0,
   use_list_votes = TRUE
 )
 }
 \arguments{
 \item{votes_df}{data.frame (long format) with 3 columns (actual colnames can differ):
 \itemize{
-  \item party id/name
-  \item district id/name
-  \item votes
-  }}
+\item party id/name
+\item district id/name
+\item votes
+}}
 
 \item{district_seats_df}{data.frame with 2 columns (actual colnames can differ):
 \itemize{
-  \item district id/name
-  \item number of seats for a district
+\item district id/name
+\item number of seats for a district
 }}
 
+\item{quorum}{Optional list of functions which take the votes_matrix and
+return a logical vector that denotes for each list/party
+whether they reached the quorum (i.e. are elegible for seats).
+The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
+\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a
+precalculated logical vector. No quorum is applied if parameter
+is missing or NULL.}
+
 \item{new_seats_col}{name of the new column}
-
-\item{quorum_districts}{Vote threshold a party must reach in \emph{at least}
-one district. Used as quota of total votes within a
-district if less than 1 otherwise as number of votes.}
-
-\item{quorum_total}{Vote threshold a party must reach for all votes cast.
-Used as quota of total votes if less than 1, otherwise
-as number of votes.}
 
 \item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as
 many votes as there are seats in a district. Set to FALSE if
@@ -51,13 +50,13 @@ for the parties of their district. The seat allocation is calculated in two
 steps:
 
 \enumerate{
-  \item In the so called \emph{upper apportionment} the number of seats for
-  each party (over all districts) is determined.
-  \item In the so called \emph{lower apportionment} the seats are distributed
-  to the regional party list respecting the results from the upper apportionment.
+\item In the so called \emph{upper apportionment} the number of seats for
+each party (over all districts) is determined.
+\item In the so called \emph{lower apportionment} the seats are distributed
+to the regional party list respecting the results from the upper apportionment.
 }
 
-Parties failing to reach at least one quorum have their votes set to zero.
+Parties failing to reach quorums cannot get seats.
 
 If you want to other apportion methods than Sainte-Laguë use \link{biproportional}.
 }
@@ -68,8 +67,7 @@ district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
 seats_df = pukelsheim(votes_df,
                       district_seats_df,
-                      quorum_districts = 0.05,
-                      quorum_total = 0.03)
+                      quorum_any(any_district = 0.05, total = 0.03))
 
 head(seats_df)
 #>   list_id entity_id list_votes seats
@@ -93,6 +91,7 @@ tail(finland19_result[order(finland19_result$mandates),])
 #>    KESK       OUL      78486        6
 #>     SDP       UUS      97107        6
 #>     KOK       UUS     114243        7
+
 }
 \seealso{
 \code{\link{biproportional}}, \code{\link{divisors}}

@@ -37,8 +37,8 @@ test_that("pukelsheim with zug2018 is as expected", {
 
 	seats_df = pukelsheim(votes_df,
 						  district_seats_df,
-						  quorum_districts = 0.05,
-						  quorum_total = 0.03)
+						  quorum = quorum_any(any_district = 0.05,
+						  total = 0.03))
 	seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
 
 	expect_equal(seats_mtrx[,colnames(seats_mtrx_exp)], seats_mtrx_exp)

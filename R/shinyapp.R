@@ -102,6 +102,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 				   			 tags$h4(tags$strong("Apportionment parameters"), style = "margin-bottom:1em"),
 				   			 shiny::numericInput("quorum_districts", "Quorum (districts)", 0, min = 0),
 				   			 shiny::numericInput("quorum_total", "Quorum (total)", 0, min = 0),
+				   			 shiny::checkboxInput("quorum_all", "Both quorums necessary", FALSE),
 				   			 shiny::checkboxInput("use_list_votes", "Use list votes", TRUE)
 				   )
 			)
@@ -129,10 +130,11 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 			}
 			district_seats <- district_seats[1,]
 
+			.quorum = get_quorum_function(input$quorum_districts, input$quorum_total, input$quorum_all)
+
 			bp = biproporz(input$votes_matrix, district_seats,
-						   quorum_districts = input$quorum_districts,
-						   quorum_total = input$quorum_total,
-						   use_list_votes = input$use_list_votes)
+			               quorum = .quorum,
+			               use_list_votes = input$use_list_votes)
 
 			# add seat totals
 			if(input$show_seat_totals) {
@@ -227,4 +229,20 @@ create_seats_matrix = function(votes_matrix,
 									   dimnames = list("seats", colnames(votes_matrix)))
 	}
 	return(district_seats_matrix)
+}
+
+get_quorum_function = function(q_districts, q_total, q_all) {
+    if(q_districts > 0 && q_total > 0) {
+        if(q_all) {
+            return(quorum_all(any_district = q_districts, total = q_total))
+        } else {
+            return(quorum_any(any_district = q_districts, total = q_total))
+        }
+    }
+    if(q_districts > 0) {
+        return(quorum_any(any_district = q_districts))
+    }
+    if(q_total > 0) {
+        return(quorum_any(total = q_total))
+    }
 }
