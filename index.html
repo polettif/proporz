@@ -226,8 +226,7 @@
 <span></span>
 <span><span class="va">seats_df</span> <span class="op">=</span> <span class="fu"><a href="reference/pukelsheim.html">pukelsheim</a></span><span class="op">(</span><span class="va">votes_df</span>,</span>
 <span>                      <span class="va">district_seats_df</span>,</span>
-<span>                      quorum_districts <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>                      quorum_total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span>
+<span>                      <span class="fu"><a href="reference/quorum_any.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   list_id entity_id list_votes seats</span></span>
@@ -269,7 +268,7 @@
 <span><span class="co">#&gt; 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 </span></span>
 <span><span class="co">#&gt;   15   10    6    3    2    4    7    6    6    2   19</span></span>
 <span></span>
-<span><span class="va">seats_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span></span>
+<span><span class="va">seats_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="reference/quorum_any.html">quorum_any</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">seats_matrix</span></span>
 <span><span class="co">#&gt;         entity_id</span></span>
 <span><span class="co">#&gt; list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711</span></span>

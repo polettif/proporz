@@ -16,9 +16,6 @@
     <loc>/reference/apport_methods.html</loc>
   </url>
   <url>
-    <loc>/reference/biprop_quorum.html</loc>
-  </url>
-  <url>
     <loc>/reference/biproportional.html</loc>
   </url>
   <url>
@@ -76,7 +73,22 @@
     <loc>/reference/pukelsheim.html</loc>
   </url>
   <url>
+    <loc>/reference/quorum_all.html</loc>
+  </url>
+  <url>
+    <loc>/reference/quorum_any.html</loc>
+  </url>
+  <url>
     <loc>/reference/quota_largest_remainder.html</loc>
+  </url>
+  <url>
+    <loc>/reference/reached_quorum_any_district.html</loc>
+  </url>
+  <url>
+    <loc>/reference/reached_quorum_total.html</loc>
+  </url>
+  <url>
+    <loc>/reference/reached_quorums.html</loc>
   </url>
   <url>
     <loc>/reference/run_app.html</loc>

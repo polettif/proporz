@@ -49,8 +49,7 @@ districts (or entities, regions).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">biproporz</span><span class="op">(</span></span>
 <span>  <span class="va">votes_matrix</span>,</span>
 <span>  <span class="va">district_seats</span>,</span>
-<span>  quorum_districts <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  quorum_total <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  <span class="va">quorum</span>,</span>
 <span>  use_list_votes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"round"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -72,16 +71,14 @@ case), a single number for the total number of seats
 can be used.</p></dd>
 
 
-<dt>quorum_districts</dt>
-<dd><p>Vote threshold a party must reach in <em>at least</em>
-one district. Used as quota of total votes within a
-district if less than 1 otherwise as number of votes.</p></dd>
-
-
-<dt>quorum_total</dt>
-<dd><p>Vote threshold a party must reach for all votes cast.
-Used as quota of total votes if less than 1, otherwise
-as number of votes.</p></dd>
+<dt>quorum</dt>
+<dd><p>Optional list of functions which take the votes_matrix and
+return a logical vector that denotes for each list/party
+whether they reached the quorum (i.e. are elegible for seats).
+The easiest way to do this is via <code><a href="quorum_any.html">quorum_any()</a></code> or
+<code><a href="quorum_all.html">quorum_all()</a></code>, see examples. Alternatively you can pass a
+precalculated logical vector. No quorum is applied if parameter
+is missing or NULL.</p></dd>
 
 
 <dt>use_list_votes</dt>
@@ -106,23 +103,23 @@ like base::round(x) (i.e. can handle a matrix).</p></dd>
     <p>Each party nominates a candidate list for every district. The voters vote
 for the parties of their district. The seat allocation is calculated in two
 steps:</p><ol><li><p>In the so called <em>upper apportionment</em> the number of seats for
-   each party (over all districts) is determined. Normally, the number of
-   seats for each region are defined before the election and are independent
-   of the vote counts.</p></li>
+each party (over all districts) is determined. Normally, the number of
+seats for each region are defined before the election and are independent
+of the vote counts.</p></li>
 <li><p>In the so called <em>lower apportionment</em> the seats are distributed
-   to the regional party list respecting the results from the upper
-   apportionment.</p></li>
-</ol><p>Parties failing to reach at least one quorum cannot get seats.</p>
+to the regional party list respecting the results from the upper
+apportionment.</p></li>
+</ol><p>Parties failing to reach quorums cannot get seats.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
     <p>The iterative process in the lower apportionment is only guaranteed to terminate
-      with Sainte-Laguë/Webster method.</p>
+with Sainte-Laguë/Webster method.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><a href="pukelsheim.html">pukelsheim</a> for usage with data frames.
-         <code><a href="divisors.html">divisors</a></code> to access the divisors</p></div>
+    <div class="dont-index"><p><code><a href="pukelsheim.html">pukelsheim</a></code> for usage with data frames.
+<code><a href="divisors.html">divisors</a></code> to access the divisors</p></div>
     </div>
 
     <div id="ref-examples">
@@ -157,7 +154,7 @@ steps:</p><ol><li><p>In the so called <em>upper apportionment</em> the number of
 <span class="r-in"><span><span class="co">#&gt; 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711</span></span></span>
 <span class="r-in"><span><span class="co">#&gt;   15   10    6    3    2    4    7    6    6    2   19</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="quorum_any.html">quorum_any</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        entity_id</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       1    0    0    0    0    0    0    0    0    0    0    0</span>
@@ -177,6 +174,27 @@ steps:</p><ol><li><p>In the so called <em>upper apportionment</em> the number of
 <span class="r-in"><span><span class="co">#&gt;       6    3    1    1    0    0    0    0    0    1    0    3</span></span></span>
 <span class="r-in"><span><span class="co">#&gt;       7    4    2    1    1    1    1    2    1    2    0    3</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># calculate quorum beforehand (leads to the same result as above)</span></span></span>
+<span class="r-in"><span><span class="va">q1</span> <span class="op">=</span> <span class="fu"><a href="reached_quorum_any_district.html">reached_quorum_any_district</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="fl">0.05</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">q2</span> <span class="op">=</span> <span class="fu"><a href="reached_quorum_total.html">reached_quorum_total</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="fl">0.03</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">reached_quorum</span> <span class="op">=</span> <span class="va">q1</span> <span class="op">|</span> <span class="va">q2</span></span></span>
+<span class="r-in"><span><span class="va">reached_quorum</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     1     2     3     4     5     6     7 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE </span>
+<span class="r-in"><span><span class="co">#&gt;     1     2     3     4     5     6     7</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="va">reached_quorum</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        entity_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       1    0    0    0    0    0    0    0    0    0    0    0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       2    2    1    1    0    0    0    1    2    1    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       3    3    3    2    1    1    2    2    2    1    1    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       4    2    2    1    1    0    1    2    1    1    1    5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       5    1    1    0    0    0    0    0    0    0    0    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       6    3    1    1    0    0    0    0    0    1    0    3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       7    4    2    1    1    1    1    2    1    2    0    3</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Different method for upper apportionment</span></span></span>
 <span class="r-in"><span><span class="co"># and using number of voters instead of list votes</span></span></span>
 <span class="r-in"><span><span class="va">f19_matrix</span> <span class="op">=</span> <span class="fu"><a href="pivot_to_matrix.html">pivot_to_matrix</a></span><span class="op">(</span><span class="va">finland2019</span><span class="op">$</span><span class="va">votes_df</span><span class="op">)</span></span></span>
@@ -184,55 +202,40 @@ steps:</p><ol><li><p>In the so called <em>upper apportionment</em> the number of
 <span class="r-in"><span>    <span class="va">finland2019</span><span class="op">$</span><span class="va">district_seats_df</span><span class="op">$</span><span class="va">election_mandates</span>,</span></span>
 <span class="r-in"><span>    <span class="va">finland2019</span><span class="op">$</span><span class="va">district_seats_df</span><span class="op">$</span><span class="va">entity_id</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">f19_matrix</span>, <span class="va">f19_distr_seats</span>,</span></span>
+<span class="r-in"><span><span class="va">f19_seats</span> <span class="op">=</span> <span class="fu"><a href="biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">f19_matrix</span>, <span class="va">f19_distr_seats</span>,</span></span>
 <span class="r-in"><span>               use_list_votes <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>               method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"floor"</span>, <span class="st">"round"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         entity_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> list_id  HAEM HEL KAA KES LAP OUL PIR SAT SKA UUS VAA VAR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Asyl      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E117      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E118      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E154      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E168      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E169      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E185      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E191      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E192      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E287      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E491      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E492      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   E493      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   EOP       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   FP        0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   IP        0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   KD        1   0   1   1   0   1   1   0   1   1   1   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   KESK      1   1   3   2   2   6   2   1   3   2   3   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   KOK       3   5   3   1   1   2   4   1   2   7   2   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   KP        0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   KTP       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LIBE      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LII       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LIIK      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LN        0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LNLY      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LNY       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   LNYL      0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   NYT       0   1   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Nyt       0   0   0   0   0   0   0   0   0   1   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   PEL       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   PIR       0   1   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   PS        3   3   3   2   1   4   3   2   3   6   3   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   REF       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   RKP       0   1   0   0   0   0   0   0   0   4   3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   RLI       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Reform    0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   SDP       4   3   4   2   1   2   4   2   3   7   2   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   SIN       0   0   0   0   0   0   0   0   1   1   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   SKE       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   SKP       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   STL       0   0   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   VAS       1   2   1   1   1   2   2   1   1   2   1   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   VIHR      1   5   2   1   1   1   3   1   1   5   1   2</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">f19_seats</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">f19_seats</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        entity_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> list_id HAEM HEL KAA KES LAP OUL PIR SAT SKA UUS VAA VAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    KD      1   0   1   1   0   1   1   0   1   1   1   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    KESK    1   1   3   2   2   6   2   1   3   2   3   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    KOK     3   5   3   1   1   2   4   1   2   7   2   4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    NYT     0   1   0   0   0   0   0   0   0   0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Nyt     0   0   0   0   0   0   0   0   0   1   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    PIR     0   1   0   0   0   0   0   0   0   0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    PS      3   3   3   2   1   4   3   2   3   6   3   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    RKP     0   1   0   0   0   0   0   0   0   4   3   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    SDP     4   3   4   2   1   2   4   2   3   7   2   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    SIN     0   0   0   0   0   0   0   0   1   1   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    VAS     1   2   1   1   1   2   2   1   1   2   1   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    VIHR    1   5   2   1   1   1   3   1   1   5   1   2</span>
+<span class="r-in"><span><span class="co">#&gt;        entity_id</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; list_id HAEM HEL KAA KES LAP OUL PIR SAT SKA UUS VAA VAR</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; KD      1   0   1   1   0   1   1   0   1   1   1   0</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; KESK    1   1   3   2   2   6   2   1   3   2   3   2</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; KOK     3   5   3   1   1   2   4   1   2   7   2   4</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; Nyt     0   0   0   0   0   0   0   0   0   1   0   0</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; NYT     0   1   0   0   0   0   0   0   0   0   0   0</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; PIR     0   1   0   0   0   0   0   0   0   0   0   0</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; PS      3   3   3   2   1   4   3   2   3   6   3   3</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; RKP     0   1   0   0   0   0   0   0   0   4   3   1</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; SDP     4   3   4   2   1   2   4   2   3   7   2   3</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; SIN     0   0   0   0   0   0   0   0   1   1   0   0</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; VAS     1   2   1   1   1   2   2   1   1   2   1   2</span></span></span>
+<span class="r-in"><span><span class="co">#&gt; VIHR    1   5   2   1   1   1   3   1   1   5   1   2</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -49,9 +49,8 @@ districts/regions/entities ("Doppelter Pukelsheim").</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pukelsheim</span><span class="op">(</span></span>
 <span>  <span class="va">votes_df</span>,</span>
 <span>  <span class="va">district_seats_df</span>,</span>
+<span>  <span class="va">quorum</span>,</span>
 <span>  new_seats_col <span class="op">=</span> <span class="st">"seats"</span>,</span>
-<span>  quorum_districts <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  quorum_total <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  use_list_votes <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -71,20 +70,18 @@ districts/regions/entities ("Doppelter Pukelsheim").</p>
 </ul></dd>
 
 
+<dt>quorum</dt>
+<dd><p>Optional list of functions which take the votes_matrix and
+return a logical vector that denotes for each list/party
+whether they reached the quorum (i.e. are elegible for seats).
+The easiest way to do this is via <code><a href="quorum_any.html">quorum_any()</a></code> or
+<code><a href="quorum_all.html">quorum_all()</a></code>, see examples. Alternatively you can pass a
+precalculated logical vector. No quorum is applied if parameter
+is missing or NULL.</p></dd>
+
+
 <dt>new_seats_col</dt>
 <dd><p>name of the new column</p></dd>
-
-
-<dt>quorum_districts</dt>
-<dd><p>Vote threshold a party must reach in <em>at least</em>
-one district. Used as quota of total votes within a
-district if less than 1 otherwise as number of votes.</p></dd>
-
-
-<dt>quorum_total</dt>
-<dd><p>Vote threshold a party must reach for all votes cast.
-Used as quota of total votes if less than 1, otherwise
-as number of votes.</p></dd>
 
 
 <dt>use_list_votes</dt>
@@ -99,10 +96,10 @@ many votes as there are seats in a district. Set to FALSE if
 for the parties of their district. The seat allocation is calculated in two
 steps:</p>
 <ol><li><p>In the so called <em>upper apportionment</em> the number of seats for
-  each party (over all districts) is determined.</p></li>
+each party (over all districts) is determined.</p></li>
 <li><p>In the so called <em>lower apportionment</em> the seats are distributed
-  to the regional party list respecting the results from the upper apportionment.</p></li>
-</ol><p>Parties failing to reach at least one quorum have their votes set to zero.</p>
+to the regional party list respecting the results from the upper apportionment.</p></li>
+</ol><p>Parties failing to reach quorums cannot get seats.</p>
 <p>If you want to other apportion methods than Sainte-Laguë use <a href="biproportional.html">biproportional</a>.</p>
     </div>
     <div id="see-also">
@@ -118,8 +115,7 @@ steps:</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">seats_df</span> <span class="op">=</span> <span class="fu">pukelsheim</span><span class="op">(</span><span class="va">votes_df</span>,</span></span>
 <span class="r-in"><span>                      <span class="va">district_seats_df</span>,</span></span>
-<span class="r-in"><span>                      quorum_districts <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
-<span class="r-in"><span>                      quorum_total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                      <span class="fu"><a href="quorum_any.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   list_id entity_id list_votes seats</span>
@@ -157,6 +153,7 @@ steps:</p>
 <span class="r-in"><span><span class="co">#&gt;    KESK       OUL      78486        6</span></span></span>
 <span class="r-in"><span><span class="co">#&gt;     SDP       UUS      97107        6</span></span></span>
 <span class="r-in"><span><span class="co">#&gt;     KOK       UUS     114243        7</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
