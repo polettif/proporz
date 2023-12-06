@@ -75,33 +75,9 @@ pukelsheim = function(votes_df, district_seats_df,
                       quorum,
                       new_seats_col = "seats",
                       use_list_votes = TRUE) {
-    stopifnot(is.character(new_seats_col))
-    if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
-        stop(deparse(substitute(votes_df)),
-             " must be a data frame with 3 columns in the following
-             order: party, district and votes (names can differ)")
-    }
-    if(length(unique(votes_df[[2]])) != nrow(district_seats_df)) {
-        stop("Not all districts have a number of seats assigned or ",
-             "there are more assignments than districts")
-    }
-    if(!all(district_seats_df[[1]] %in% votes_df[[2]])) {
-        if(all(district_seats_df[[1]] %in% votes_df[[1]])) {
-            stop("District ids not found in 2nd column. Are ",
-                 deparse(substitute(votes_df)),
-                 "'s columns in the correct order (party, district, votes)?")
-        }
-        stop("Not all district ids in ",
-             deparse(substitute(district_seats_df)),
-             "'s 1st column exist in ",
-             deparse(substitute(votes_df)),
-             "'s 2nd column")
-    }
-    if(!is.numeric(votes_df[[3]]) | any(votes_df[[3]] < 0)) {
-        stop("Vote values in ",
-             deparse(substitute(votes_df)),
-             "'s third column must be numbers >= 0")
-    }
+
+    check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, use_list_votes,
+                            deparse(substitute(votes_df)), deparse(substitute(district_seats_df)))
 
     # Create votes matrix
     votes_matrix = pivot_to_matrix(votes_df) # list_ids must be rows
@@ -247,36 +223,12 @@ biproportional = function(votes_matrix,
                           quorum,
                           use_list_votes = TRUE,
                           method = "round") {
-    if(!is.matrix(votes_matrix)) {
-        stop(deparse(substitute(votes_matrix)), " must be a matrix")
-    }
-    if(length(district_seats) > 1) {
-        if(is.data.frame(district_seats)) {
-            district_seats <- setNames(district_seats[[2]], district_seats[[1]])
-        }
-        if(ncol(votes_matrix) != length(district_seats)) {
-            stop(deparse(substitute(votes_matrix)),
-                 " needs to have districts as columns and parties as rows")
-        }
-        if(!is.null(colnames(votes_matrix))) {
-            if(is.null(names(district_seats)) ||
-               !all(sort(colnames(votes_matrix)) == sort(names(district_seats)))) {
-                stop(deparse(substitute(district_seats)),
-                     " needs to have the same names as the columns in ",
-                     deparse(substitute(votes_matrix)))
-            }
-            district_seats <- district_seats[colnames(votes_matrix)]
-        }
-    }
-    if(length(method) == 1) {
-        method = c(method, method)
-    }
-    stopifnot(length(method) == 2)
-    if(any(method == "quota_largest_remainder")) stop("Only divisor methods possible")
-
-    # check integers
-    if(sum(votes_matrix %% 1) != 0) stop("votes_matrix must only contain integers")
-    if(sum(district_seats %% 1) != 0) stop("district_seats must be integers")
+    # check parameters
+    .votes_matrix.name = deparse(substitute(votes_matrix))
+    .district_seats.name = deparse(substitute(district_seats))
+    votes_matrix <- prep_votes_matrix(votes_matrix, .votes_matrix.name)
+    district_seats <- prep_district_seats(district_seats, votes_matrix, .district_seats.name, .votes_matrix.name)
+    method <- prep_method(method)
 
     # quorum
     if(!missing(quorum) && !is.null(quorum)) {
@@ -358,7 +310,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # check enough votes in districts
     if(!identical(colSums(votes_matrix) > 0, seats_district > 0)) {
-        stop("No votes in a district with at least one seat")
+        stop("No votes in a district with at least one seat", call. = FALSE)
     }
 
     # return values
@@ -422,6 +374,11 @@ lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
     if(is.function(method)) {
         round_func = method
     } else {
+        method_name = get_apport_method(method)
+        if(method_name != "round") {
+            warning('Lower apportionment is only guaranteed to terminate with the default ',
+                    'Sainte-Lagu\uEB/Webster method (method = "round")', call. = FALSE)
+        }
         round_func = get_round_function(method)
     }
 
@@ -517,7 +474,7 @@ find_divisor = function(votes,
     divisor_range = sort(c(divisor_from, divisor_to))
 
     if(any(is.infinite(votes)) || any(is.nan(votes))) {
-        stop("Result is undefined")
+        stop("Result is undefined", call. = FALSE)
     }
 
     # Divisors should be within votes/(seats-1) and votes/(seats+1).

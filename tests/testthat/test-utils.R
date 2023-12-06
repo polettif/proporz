@@ -40,3 +40,8 @@ test_that("stupid pivot functions", {
     expect_equal(colnames(pivot_to_df(unname(matrix1), "val")),
                  c("row", "col", "val"))
 })
+
+test_that("print", {
+    M = biproporz(matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3), 4:6)
+    expect_equal(capture.output(print(M)), capture.output(print(as.matrix(M))))
+})
