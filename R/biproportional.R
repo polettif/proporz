@@ -1,6 +1,6 @@
 #' Biproportional apportionment with data frames
 #'
-#' Method to proportionally allocate seatsamong parties/lists and
+#' Method to proportionally allocate seats among parties/lists and
 #' districts/regions/entities ("Doppelter Pukelsheim").
 #'
 #' Each party nominates a candidate list for every district. The voters vote
@@ -106,7 +106,7 @@ pukelsheim = function(votes_df, district_seats_df,
 
 #' Biproportional apportionment
 #'
-#' Method to proportionally allocate seats among parties (or lists) and
+#' Method to proportionally allocate seats among parties (or lists) and
 #' districts (or entities, regions).
 #'
 #' Each party nominates a candidate list for every district. The voters vote
@@ -127,7 +127,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #' @inheritParams upper_apportionment
 #' @param quorum Optional list of functions which take the votes_matrix and
 #'               return a logical vector that denotes for each list/party
-#'               whether they reached the quorum (i.e. are elegible for seats).
+#'               whether they reached the quorum (i.e. are eligible for seats).
 #'               The easiest way to do this is via [quorum_any()] or
 #'               [quorum_all()], see examples. Alternatively you can pass a
 #'               precalculated logical vector. No quorum is applied if parameter
@@ -267,7 +267,7 @@ biproporz = biproportional
 #' @param votes_matrix Vote count matrix with votes by party in rows
 #'                     and votes by district in columns
 #' @param district_seats Vector defining the number of seats per district.
-#'                       Must be the same length as ncol(votes_matrix). If the
+#'                       Must be the same length as \code{ncol(votes_matrix)}. If the
 #'                       number of seats per district should be assigned
 #'                       according to the number of votes (not the general use
 #'                       case), a single number for the total number of seats

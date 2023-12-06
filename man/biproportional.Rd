@@ -17,7 +17,7 @@ biproportional(
 and votes by district in columns}
 
 \item{district_seats}{Vector defining the number of seats per district.
-Must be the same length as ncol(votes_matrix). If the
+Must be the same length as \code{ncol(votes_matrix)}. If the
 number of seats per district should be assigned
 according to the number of votes (not the general use
 case), a single number for the total number of seats
@@ -25,7 +25,7 @@ can be used.}
 
 \item{quorum}{Optional list of functions which take the votes_matrix and
 return a logical vector that denotes for each list/party
-whether they reached the quorum (i.e. are elegible for seats).
+whether they reached the quorum (i.e. are eligible for seats).
 The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a
 precalculated logical vector. No quorum is applied if parameter
@@ -45,7 +45,7 @@ entries. It is also possible to provide a function that works
 like base::round(x) (i.e. can handle a matrix).}
 }
 \description{
-Method to proportionally allocate seats among parties (or lists) and
+Method to proportionally allocate seats among parties (or lists) and
 districts (or entities, regions).
 }
 \details{
