@@ -10,7 +10,6 @@ test_that("quota_largest_remainder", {
 	expect_equal(proporz(v1, n1, "hamilton"), e1)
 	expect_equal(proporz(v1, n1, "vinton"), e1)
 
-
 	# https://en.wikipedia.org/wiki/Largest_remainder_method
 	votes2 = c(47000, 16000, 15800, 12000, 6100, 3100)
 	seats_actual2 = quota_largest_remainder(votes2, 10)

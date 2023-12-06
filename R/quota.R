@@ -25,7 +25,7 @@ quota_largest_remainder = function(votes, n_seats, throw_equal_remainder_error =
 
 	if(sum(seats_base) < n_seats) {
 		remainder = quota - seats_base
-		check_equal_entries(remainder[remainder > 0], "remainder")
+		check_equal_entries(remainder[remainder > 0])
 
 		n_seats_remaining = n_seats - sum(seats_base)
 		seats_rem <- rep(0, length(votes))

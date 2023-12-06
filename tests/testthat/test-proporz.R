@@ -19,10 +19,15 @@ test_that("proporz parameter range", {
 			for(n_seats in 0:6) {
 				for(method in method_list) {
 					votes = .sample_votes(n_parties, n_parties_zero)
-					seats = proporz(votes, n_seats, method)
 
-					expect_equal(length(seats), length(votes))
-					expect_equal(sum(seats), n_seats)
+					if(method == "harmonic" && n_seats < n_parties) {
+						expect_error(proporz(votes, n_seats, method),
+									 "With harmonic rounding there must be at least as many seats as there are parties with non-zero votes")
+					} else {
+						seats = proporz(votes, n_seats, method)
+						expect_equal(length(seats), length(votes))
+						expect_equal(sum(seats), n_seats)
+					}
 				}
 			}
 		}
@@ -46,4 +51,13 @@ test_that("all method names", {
 		x = proporz(c(10, 20, 5), 3, m)
 		expect_length(x, 3)
 	}
+})
+
+test_that("undefined result errors", {
+	expect_error(proporz(c(1, 10, 10), 1, "round"), "Result is undefined")
+	expect_equal(proporz(c(1, 10, 10), 2, "round"), c(0,1,1))
+
+	expect_error(quota_largest_remainder(c(10, 10, 0), 1),
+	             "Result is undefined: Equal remainder for two parties (position 1 & 2)",
+	             fixed = TRUE)
 })
