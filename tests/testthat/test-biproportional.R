@@ -267,6 +267,17 @@ test_that("almost empty vote_matrix", {
     expect_error(biproporz(vm3, c(1,3,4)), "Result is undefined")
 })
 
+test_that("districts with one seat", {
+    seats = c(10, 20, 1, 1)
+    set.seed(80)
+
+    votes_matrix = matrix(runif(4*10), ncol = 4) * matrix(rep(seats, 10), byrow = T, ncol = 4) * 100
+    votes_matrix <- round(votes_matrix)
+    votes_matrix[votes_matrix < 30] <- 0
+
+    expect_equal(colSums(biproportional(votes_matrix, seats)), seats)
+})
+
 test_that("named votes_matrix", {
     votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
     dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))

@@ -83,9 +83,7 @@ pukelsheim = function(votes_df, district_seats_df,
     votes_matrix = pivot_to_matrix(votes_df) # list_ids must be rows
 
     # "deframe" to named vector
-    ds_df <- district_seats_df[order(district_seats_df[[1]]),]
-    district_seats <- ds_df[[2]]
-    names(district_seats) <- ds_df[[1]]
+    district_seats = prep_district_seats_df(district_seats_df)
 
     # Biproportional Apportionment
     m = biproportional(votes_matrix, district_seats,
@@ -93,8 +91,8 @@ pukelsheim = function(votes_df, district_seats_df,
                        use_list_votes = use_list_votes)
     seats_df = pivot_to_df(m, new_seats_col)
 
+    # join with original table
     stopifnot(nrow(votes_df) <= nrow(seats_df))
-
     return_df = merge(votes_df,
                       seats_df,
                       sort = FALSE,
@@ -386,10 +384,13 @@ lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
     dP = rep(1, nrow(M))
     dP.min = rep(0.5, nrow(M))
     dP.max = rep(1.5, nrow(M))
+
     # divisor districts
     dD = round(colSums(M)/seats_cols)
     dD.min = floor(colSums(M)/(seats_cols+1) / max(dP.max))
     dD.max = ceiling(colSums(M)/(seats_cols-1) / min(dP.min))
+    # handle districts with only one seat (otherwise leads to infinite dD.max)
+    dD.max[seats_cols == 1] <- (colSums(M)+1)[seats_cols == 1]
 
     # calculate raw seat matrix
     # accesses function environment variables div_distr and div_party
