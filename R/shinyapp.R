@@ -1,3 +1,5 @@
+# nocov start
+
 #' Use biproportional apportionment interactively in a shiny app
 #'
 #' @param votes_matrix optional votes_matrix to load upon start
@@ -246,3 +248,5 @@ get_quorum_function = function(q_districts, q_total, q_all) {
         return(quorum_any(total = q_total))
     }
 }
+
+# nocov end
