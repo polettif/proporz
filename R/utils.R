@@ -39,8 +39,11 @@ quorum_votes = function(votes, quorum) {
 bisect = function(f, x1, x2, tol = 1e-9) {
     stopifnot(length(x1) == 1, length(x2) == 1, length(tol) == 1, x1 < x2)
     stopifnot((f(x1) <= 0 & f(x2) >= 0) | (f(x1) >= 0 & f(x2) <= 0))
+    stopifnot(!is.infinite(x1), !is.infinite(x2))
+    stopifnot(!is.nan(x1), !is.nan(x2))
+    stopifnot(x1 >= 0, x2 >= 0)
 
-    for(i in 1:1e9) {
+    for(i in 1:1e6) {
         x <- (x1 + x2)/2
         if(f(x) == 0 || (x2-x1) < tol) {
             return(x)
@@ -51,7 +54,7 @@ bisect = function(f, x1, x2, tol = 1e-9) {
             x2 <- x
         }
     }
-    stop("Exceeded maximum number of iterations")
+    stop("Exceeded maximum number of iterations (1e6)") # nocov
 }
 
 #' Pivot long data.frame to wide matrix
