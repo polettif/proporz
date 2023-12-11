@@ -22,7 +22,7 @@ test_that("ceil_at", {
 })
 
 test_that("ceil_at harmonic/geometric", {
-    expect_error(ceil_at(1.6, NA), "missing value where TRUE/FALSE needed")
+    expect_error(ceil_at(1.6, NA), "is.na")
     expect_error(ceil_at(1.6, -1), "Threshold argument must be in [0,1]", fixed = T)
     expect_error(ceil_at(0.5, "x"), 'Numeric value, "harmonic" or "geometric" expected for threshold argument')
 

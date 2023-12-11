@@ -475,7 +475,7 @@ find_divisor = function(votes,
     divisor_range = sort(c(divisor_from, divisor_to))
 
     if(any(is.infinite(votes)) || any(is.nan(votes))) {
-        stop("Result is undefined", call. = FALSE)
+        stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
     }
 
     # Divisors should be within votes/(seats-1) and votes/(seats+1).

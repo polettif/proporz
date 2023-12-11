@@ -264,7 +264,46 @@ test_that("almost empty vote_matrix", {
     expect_error(biproportional(vm2, c(1,1,0,0)), "No votes in a district with at least one seat")
 
     vm3 = matrix(c(4,3,0,20,1,0), nrow = 2)
-    expect_error(biproporz(vm3, c(1,3,4)), "Result is undefined")
+    expect_error(
+        biproporz(vm3, c(1,3,4)),
+        "Result is undefined, cannot assign all seats in lower apportionment")
+})
+
+test_that("undefined result biproportional", {
+    seats = c(10, 20, 1, 1)
+    set.seed(1284)
+    vm = matrix(runif(4*10), ncol = 4) * matrix(rep(seats, 10), byrow = T, ncol = 4) * 1000
+    vm <- round(vm)
+    vm[vm < 200] <- 0
+
+    expect_equal(upper_apportionment(vm, seats, use_list_votes = F)$party,
+                 proporz(rowSums(vm), sum(seats), "round"))
+
+    expect_error(upper_apportionment(vm, seats),
+                 "Result is undefined, equal quotient for parties: 4 & 6",
+                 fixed = T)
+
+    # manual fix (actual implementation depends on rules)
+    vm4 <- vm6 <- vm
+    vm4[4,1] <- vm4[4,1]+1
+    vm6[6,4] <- vm6[6,4]+1
+    ua4 = upper_apportionment(vm4, seats)
+    ua6 = upper_apportionment(vm6, seats)
+    expect_equal(ua4$party[4], ua6$party[6])
+})
+
+test_that("find_divisor", {
+    v = c(80,10,10)
+    .check = function(div) round(v/div)
+
+    d0 = find_divisor(v, 0, 100, 10)
+    expect_equal(.check(d0), .check(10))
+    # expand lower limit
+    d1 = find_divisor(v, 20, 100, 10)
+    expect_equal(.check(d1), .check(10))
+    # expand upper limit
+    d2 = find_divisor(v, 1, 5, 10)
+    expect_equal(.check(d2), .check(10))
 })
 
 test_that("districts with one seat", {

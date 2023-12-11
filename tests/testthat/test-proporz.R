@@ -54,7 +54,8 @@ test_that("all method names", {
 })
 
 test_that("undefined result errors", {
-	expect_error(proporz(c(1, 10, 10), 1, "round"), "Result is undefined")
+	expect_error(proporz(c(1, 10, 10), 1, "round"),
+	             "Result is undefined, equal quotient for parties: 2 & 3", fixed = T)
 	expect_equal(proporz(c(1, 10, 10), 2, "round"), c(0,1,1))
 
 	expect_error(quota_largest_remainder(c(10, 10, 0), 1),
