@@ -58,7 +58,7 @@
 
 
 <dt>method</dt>
-<dd><p>Apportionment method to use. Not case sensitive. See details.</p></dd>
+<dd><p>Apportionment method to use, as character. Not case sensitive. See details.</p></dd>
 
 
 <dt>quorum</dt>
@@ -69,13 +69,18 @@ of votes.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>The following methods are available:</p><ul><li><p>d'hondt, jefferson, hagenbach-bischoff, floor</p></li>
-<li><p>sainte-lague, webster, round</p></li>
-<li><p>adams, ceiling</p></li>
-<li><p>dean, harmonic</p></li>
-<li><p>huntington-hill, hill-huntington, geometric</p></li>
-<li><p>hare-niemeyer, hamilton, vinton, quota_largest_remainder</p></li>
+    <p>The following methods are available:</p><ul><li><p>d'hondt, jefferson, hagenbach-bischoff, floor (use <code><a href="divisor_floor.html">divisor_floor</a></code>)</p></li>
+<li><p>sainte-lague, webster, round (use <code><a href="divisor_round.html">divisor_round</a></code>)</p></li>
+<li><p>adams, ceiling (use <code><a href="divisor_ceiling.html">divisor_ceiling</a></code>)</p></li>
+<li><p>dean, harmonic (use <code><a href="divisor_harmonic.html">divisor_harmonic</a></code>)</p></li>
+<li><p>huntington-hill, hill-huntington, geometric (use <code><a href="divisor_geometric.html">divisor_geometric</a></code>)</p></li>
+<li><p>hare-niemeyer, hamilton, vinton, quota_largest_remainder (use <code><a href="quota_largest_remainder.html">quota_largest_remainder</a></code>)</p></li>
 </ul></div>
+    <div id="note">
+    <h2>Note</h2>
+    <p>Seats can also be apportioned among regions instead of parties. The parameter
+      <code>votes</code> is then normally used with census data (e.g. population counts).</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -84,14 +89,20 @@ of votes.</p></dd>
 <span class="r-in"><span><span class="fu">proporz</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"sainte-lague"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B Party C </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       7       3       0 </span>
+<span class="r-in"><span><span class="co">#&gt; Party A Party B Party C</span></span></span>
+<span class="r-in"><span><span class="co">#&gt;       7       3       0</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">proporz</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"hill-huntington"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B Party C </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       6       3       1 </span>
+<span class="r-in"><span><span class="co">#&gt; Party A Party B Party C</span></span></span>
+<span class="r-in"><span><span class="co">#&gt;       6       3       1</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">proporz</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"hill-huntington"</span>, quorum <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B Party C </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       6       4       0 </span>
+<span class="r-in"><span><span class="co">#&gt; Party A Party B Party C</span></span></span>
+<span class="r-in"><span><span class="co">#&gt;       6       4       0</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
