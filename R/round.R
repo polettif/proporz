@@ -2,35 +2,35 @@
 #' @param x numeric value
 #' @param threshold threshold in 0..1
 ceil_at = function(x, threshold) {
-	if(any(x < 0)) {
+	stopifnot(!is.na(threshold))
+    if(any(x < 0)) {
 		stop("x cannot be negative")
 	}
-	x_ceil = ceiling(x)
-	x_floor = floor(x)
+    values = c(x)
 
-	if(is.numeric(threshold)) {
-		if(threshold < 0 || threshold > 1) {
-			stop("Threshold argument must be in [0,1]")
-		}
+    if(is.numeric(threshold)) {
+	    if(threshold < 0 || threshold > 1) {
+	        stop("Threshold argument must be in [0,1]")
+	    }
+        threshold <- floor(values) + threshold
 	} else if(threshold == "harmonic") {
-		threshold <- (2*x_ceil*x_floor)/(x_ceil + x_floor)
+	    threshold <- threshold_harmonic(values)
 	} else if(threshold == "geometric") {
-		threshold <- sqrt(x_ceil*x_floor)
+	    threshold <- threshold_geometric(values)
 	} else {
-		stop('Numeric value, "harmonic" or "geometric" ',
-			 'expected for threshold argument')
+	    stop('Numeric value, "harmonic" or "geometric" expected for threshold argument')
 	}
-	x_ceiled = x_ceil
 
-	x_dec = x-x_floor
-	floor_index = which(x_dec < threshold)
-	x_ceiled[floor_index] <- x_floor[floor_index]
+	ceiled = ceiling(values)
+	floor_index = values < threshold
+	ceiled[floor_index] <- floor(values)[floor_index]
 
-	thr_delta = abs(threshold-x_dec)
-	eps_index = which(thr_delta < .Machine$double.eps)
-	x_ceiled[eps_index] <- x_ceil[eps_index]
-
-	x_ceiled
+	if(is.matrix(x)) {
+	    ceiled_matrix = matrix(ceiled, nrow = nrow(x), ncol = ncol(x))
+	    return(ceiled_matrix)
+	} else {
+	    return(ceiled)
+	}
 }
 
 get_round_function = function(method_name) {
@@ -44,4 +44,22 @@ get_round_function = function(method_name) {
 	)
 
 	function(x) ceil_at(x, method_thresholds[[m]])
+}
+
+threshold_harmonic = function(x) {
+    x_ceil = ceiling(x)
+    x_floor = floor(x)
+
+    harmonic = (2*x_ceil*x_floor)/(x_ceil + x_floor)
+    harmonic[x == 0] <- 0  # 0 has to be rounded to 1
+    return(harmonic)
+}
+
+threshold_geometric = function(x) {
+    x_ceil = ceiling(x)
+    x_floor = floor(x)
+
+    geometric = sqrt(x_ceil*x_floor)
+    # geometric[x == 0] <- -1  # 0 has to be rounded to 1
+    return(geometric)
 }

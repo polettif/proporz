@@ -16,7 +16,7 @@ upper_apportionment(
 and votes by district in columns}
 
 \item{district_seats}{Vector defining the number of seats per district.
-Must be the same length as ncol(votes_matrix). If the
+Must be the same length as \code{ncol(votes_matrix)}. If the
 number of seats per district should be assigned
 according to the number of votes (not the general use
 case), a single number for the total number of seats

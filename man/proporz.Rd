@@ -11,7 +11,7 @@ proporz(votes, n_seats, method, quorum = 0)
 
 \item{n_seats}{total number of seats}
 
-\item{method}{Apportionment method to use. Not case sensitive. See details.}
+\item{method}{Apportionment method to use, as character. Not case sensitive. See details.}
 
 \item{quorum}{Vote threshold a party must reach. Used as quota of total
 votes within a district if less than 1 otherwise as number
@@ -23,21 +23,31 @@ Calculate seat apportionment for legislative bodies.
 \details{
 The following methods are available:
 \itemize{
-         \item{d'hondt, jefferson, hagenbach-bischoff, floor}
-         \item{sainte-lague, webster, round}
-         \item{adams, ceiling}
-         \item{dean, harmonic}
-         \item{huntington-hill, hill-huntington, geometric}
-         \item{hare-niemeyer, hamilton, vinton, quota_largest_remainder}
+         \item{d'hondt, jefferson, hagenbach-bischoff, floor (use \code{\link{divisor_floor}})}
+         \item{sainte-lague, webster, round (use \code{\link{divisor_round}})}
+         \item{adams, ceiling (use \code{\link{divisor_ceiling}})}
+         \item{dean, harmonic (use \code{\link{divisor_harmonic}})}
+         \item{huntington-hill, hill-huntington, geometric (use \code{\link{divisor_geometric}})}
+         \item{hare-niemeyer, hamilton, vinton, quota_largest_remainder (use \code{\link{quota_largest_remainder}})}
 }
+}
+\note{
+Seats can also be apportioned among regions instead of parties. The parameter
+      \code{votes} is then normally used with census data (e.g. population counts).
 }
 \examples{
 votes = c("Party A" = 651, "Party B" = 349, "Party C" = 50)
 
 proporz(votes, 10, "sainte-lague")
+#> Party A Party B Party C
+#>       7       3       0
 
 proporz(votes, 10, "hill-huntington")
+#> Party A Party B Party C
+#>       6       3       1
 
 proporz(votes, 10, "hill-huntington", quorum = 0.05)
+#> Party A Party B Party C
+#>       6       4       0
 
 }

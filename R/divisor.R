@@ -33,9 +33,10 @@ highest_averages_method = function(party_votes, n_seats, divisors) {
     mtrx_divisors = matrix(rep(divisors, ncol(mtrx_votes)), ncol = n_parties)
 
     mtrx_quotient = mtrx_votes/mtrx_divisors
-    check_equal_entries(mtrx_quotient, "quotient")
+    check_edge_quotient(mtrx_quotient, n_seats)
 
-    mtrx_seats <- mtrx_quotient-mtrx_quotient # 0 filled matrix
+    # assign seats
+    mtrx_seats = mtrx_quotient-mtrx_quotient # 0 filled matrix
     mtrx_seats[order(mtrx_quotient, decreasing = TRUE)[1:n_seats]] <- 1
 
     vec = colSums(mtrx_seats)
@@ -102,6 +103,9 @@ divisor_ceiling = function(votes, n_seats, quorum = 0) {
 #' @export
 divisor_harmonic = function(votes, n_seats, quorum = 0) {
 	check_n_seats(n_seats)
+    if(n_seats < length(votes[votes > 0])) {
+        stop("With harmonic rounding there must be at least as many seats as there are parties with non-zero votes", call. = F)
+    }
 
     nn = seq(1, n_seats)
     divisors = 2/((1/nn)+(1/(nn-1)))
