@@ -2,7 +2,7 @@
 % Please edit documentation in R/divisor.R
 \name{divisor_ceiling}
 \alias{divisor_ceiling}
-\title{#' Divisor method rounding up}
+\title{Divisor method rounding up}
 \usage{
 divisor_ceiling(votes, n_seats, quorum = 0)
 }

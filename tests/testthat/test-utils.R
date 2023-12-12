@@ -22,8 +22,8 @@ test_that("quorum", {
 
 test_that("stupid pivot functions", {
     df0 = data.frame(id = c("a", "a", "a", "a", "b", "b"),
-                    key = c("w", "x", "y", "z", "x", "y"),
-                    value = 1:6, stringsAsFactors = F)
+                     key = c("w", "x", "y", "z", "x", "y"),
+                     value = 1:6, stringsAsFactors = F)
 
     matrix1 = pivot_to_matrix(df0)
     expect_equal(pivot_to_matrix(df0[c(2,1,3)]),

@@ -1,6 +1,6 @@
 #' Create a quorum function where \emph{all} quorums must be reached
 #'
-#' \code{quorum_any} and \code{quorum_all} are normally used in [biproportional()]
+#' `quorum_any` and `quorum_all` are normally used in [biproportional()]
 #' or [pukelsheim()]. Missing quorum parameters are ignored.
 #'
 #' @param any_district Vote threshold a party must reach in \emph{at least}
@@ -13,7 +13,7 @@
 #'              as number of votes. Must be greater than 0.
 #'              Uses [reached_quorum_total()].
 #'
-#' @seealso [quorum_any()]
+#' @seealso \code{\link{quorum_any}}
 #'
 #' @note Currently only two quorums are implemented (any_district and total).
 #' If you only use one quorum, [quorum_any()] and [quorum_all()] are identical.
@@ -71,7 +71,6 @@
 #' #> C  0  0
 #' #> D  0  0
 #'
-#' @md
 #' @export
 quorum_all = function(any_district, total) {
     create_quorum_function_list("ALL", any_district, total)
@@ -79,14 +78,14 @@ quorum_all = function(any_district, total) {
 
 #' Create a quorum function where \emph{at least one} quorum must be reached
 #'
-#' \code{quorum_any} and \code{quorum_all} are normally used in [biproportional()]
+#' `quorum_any` and `quorum_all` are normally used in [biproportional()]
 #' or [pukelsheim()]. Missing quorum parameters are ignored.
 #'
 #' @returns a function(votes_matrix) which then returns a boolean vector with
 #'          length equal to the number of lists/parties (votes_matrix rows),
 #'          denoting whether a party has reached at least one quorum.
 #'
-#' @seealso [quorum_all()]
+#' @seealso `quorum_all`
 #'
 #' @note Currently only two quorums are implemented.
 #'
@@ -126,7 +125,8 @@ create_quorum_function_list = function(type, any_district, total) {
 #'                     as number of votes. Must be greater than 0.
 #'
 #' @returns boolean vector with length equal to the number of lists/parties
-#'          (votes_matrix rows) whether they reached the quorum or not
+#'          (`votes_matrix` rows) whether they reached the quorum or not
+
 #' @examples
 #' votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
 #'
@@ -134,7 +134,6 @@ create_quorum_function_list = function(type, any_district, total) {
 #' reached_quorums(votes_matrix, quorum_functions)
 #' #> [1]  TRUE  TRUE  TRUE FALSE
 #'
-#' @md
 #' @export
 reached_quorum_total = function(votes_matrix, quorum_total) {
     stopifnot(quorum_total > 0)
@@ -157,7 +156,6 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #'                         Must be greater than 0.
 #'
 #' @inherit reached_quorum_total return
-#' @md
 #' @export
 reached_quorum_any_district = function(votes_matrix, quorum_districts) {
     stopifnot(quorum_districts > 0)
@@ -174,7 +172,7 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #'
 #' @param votes_matrix votes matrix
 #' @param quorum_funcs List of quorum functions. If list, the attribute "type"
-#'                     must be set which indicates whether "ALL" or "ANY"
+#'                     must be set which indicates whether `ALL` or `ANY`
 #'                     (i.e. at least one) quorum must be reached.
 #'
 #' @note This is a low-level implementation for quorum calculations and is

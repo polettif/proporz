@@ -14,6 +14,6 @@ Pivot long data.frame to wide matrix
 }
 \note{
 This function exists because I wanted to have no dependencies.
-      Wrangling with reshape isn't fun at all and it became glaringly
-      apparent why better tools like tidyr exist
+Wrangling with reshape isn't fun at all and it became glaringly
+apparent why better tools like tidyr exist
 }

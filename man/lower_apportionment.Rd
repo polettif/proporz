@@ -43,20 +43,20 @@ the party divisors.
 The following two correction steps are executed until this objective is
 satisfied:
 \itemize{
-  \item modify the party divisors such that the apportionment within each
-    party is correct with the chosen rounding method,
-  \item modify the regional divisors such that the apportionment within the
-    region is correct with the chosen rounding method.
+\item modify the party divisors such that the apportionment within each
+party is correct with the chosen rounding method,
+\item modify the regional divisors such that the apportionment within the
+region is correct with the chosen rounding method.
 }
 }
 \note{
 The iterative process in the lower apportionment is only guaranteed to
-      terminate with Sainte-Laguë/Webster method.
+terminate with Sainte-Laguë/Webster method.
 }
 \references{
 Oelbermann, K. F. (2016). Alternate scaling algorithm for
 biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.
 }
 \seealso{
-\link{biproportional}, \link{upper_apportionment}
+\code{\link{biproportional}}, \code{\link{lower_apportionment}}
 }

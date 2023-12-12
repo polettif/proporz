@@ -5,9 +5,9 @@ test_that("divisor_floor", {
     v1 = c(4160, 3380, 2460)
     n1 = 10
     e1 = c(4,4,2)
-	expect_equal(divisor_floor(v1, n1), e1)
-	expect_equal(proporz(v1, n1, "d'hondt"), e1)
-	expect_equal(proporz(v1, n1, "jefferson"), e1)
+    expect_equal(divisor_floor(v1, n1), e1)
+    expect_equal(proporz(v1, n1, "d'hondt"), e1)
+    expect_equal(proporz(v1, n1, "jefferson"), e1)
 })
 
 # http://www.wahlrecht.de/verfahren/stlague12.html

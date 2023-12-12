@@ -20,12 +20,12 @@ Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}}.}
 }
 \value{
 a function(votes_matrix) which then returns a boolean vector with
-         length equal to the number of lists/parties (votes_matrix rows),
-         denoting whether a party has reached at least one quorum.
+length equal to the number of lists/parties (votes_matrix rows),
+denoting whether a party has reached at least one quorum.
 }
 \description{
-\code{quorum_any} and \code{quorum_all} are normally used in [biproportional()]
-or [pukelsheim()]. Missing quorum parameters are ignored.
+\code{quorum_any} and \code{quorum_all} are normally used in \code{\link[=biproportional]{biproportional()}}
+or \code{\link[=pukelsheim]{pukelsheim()}}. Missing quorum parameters are ignored.
 }
 \note{
 Currently only two quorums are implemented.
@@ -80,5 +80,5 @@ biproporz(votes_matrix, seats, quorum = quorum_all(any_district = 0.1, total = 1
 
 }
 \seealso{
-[quorum_all()]
+\code{quorum_all}
 }

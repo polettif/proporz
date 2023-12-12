@@ -7,7 +7,7 @@ print.proporz_matrix = function(x, ...) {
 
 #' @export
 as.matrix.proporz_matrix = function(x, ...) {
-	matrix(x, nrow = nrow(x), dimnames = dimnames(x))
+    matrix(x, nrow = nrow(x), dimnames = dimnames(x))
 }
 
 #' Get district and party divisors

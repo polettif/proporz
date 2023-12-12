@@ -69,7 +69,6 @@
 #' #>     SDP       UUS      97107        6
 #' #>     KOK       UUS     114243        7
 #'
-#' @md
 #' @export
 pukelsheim = function(votes_df, district_seats_df,
                       quorum,
@@ -214,7 +213,6 @@ pukelsheim = function(votes_df, district_seats_df,
 #'
 #'
 #' @importFrom stats setNames
-#' @md
 #' @export
 biproportional = function(votes_matrix,
                           district_seats,
@@ -277,7 +275,7 @@ biproporz = biproportional
 #' @param method Apportion method that defines how seats are assigned,
 #'               see \link{proporz}.
 #'
-#' @seealso \link{biproportional}, \link{lower_apportionment}
+#' @seealso \code{\link{biproportional}}, \code{\link{lower_apportionment}}
 #'
 #' @return named list with column/district seats and row/party seats
 #' @export
@@ -356,7 +354,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' @return seat matrix with column and row divisors stored in attributes
 #'
-#' @seealso \link{biproportional}, \link{upper_apportionment}
+#' @seealso \code{\link{biproportional}}, \code{\link{lower_apportionment}}
 #'
 #' @references Oelbermann, K. F. (2016). Alternate scaling algorithm for
 #' biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.

@@ -86,7 +86,7 @@ prep_district_seats = function(district_seats, votes_matrix,
     return(district_seats)
 }
 
-prep_district_seats_df <- function(district_seats_df) {
+prep_district_seats_df = function(district_seats_df) {
     ds_df = district_seats_df[order(district_seats_df[[1]]),]
     district_seats <- ds_df[[2]]
     names(district_seats) <- ds_df[[1]]

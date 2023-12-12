@@ -11,7 +11,7 @@ An object of class \code{list} of length 21.
 apport_methods
 }
 \description{
-Names can be used in [proporz()] or [biproportional()], the list entries
+Names can be used in \code{\link[=proporz]{proporz()}} or \code{\link[=biproportional]{biproportional()}}, the list entries
 denote the actual implementation.
 }
 \details{

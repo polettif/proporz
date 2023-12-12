@@ -16,7 +16,7 @@ Must be greater than 0.}
 }
 \value{
 boolean vector with length equal to the number of lists/parties
-(votes_matrix rows) whether they reached the quorum or not
+(\code{votes_matrix} rows) whether they reached the quorum or not
 }
 \description{
 Base implementation, used by \code{\link[=quorum_any]{quorum_any()}} and \code{\link[=quorum_all]{quorum_all()}}.

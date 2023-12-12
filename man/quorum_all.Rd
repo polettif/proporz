@@ -81,5 +81,5 @@ biproporz(votes_matrix, seats, quorum = quorum_all(any_district = 0.1, total = 1
 
 }
 \seealso{
-\code{\link[=quorum_any]{quorum_any()}}
+\code{\link{quorum_any}}
 }

@@ -10,21 +10,21 @@ reached_quorums(votes_matrix, quorum_funcs)
 \item{votes_matrix}{votes matrix}
 
 \item{quorum_funcs}{List of quorum functions. If list, the attribute "type"
-must be set which indicates whether "ALL" or "ANY"
+must be set which indicates whether \code{ALL} or \code{ANY}
 (i.e. at least one) quorum must be reached.}
 }
 \value{
 boolean vector with length equal to the number of lists/parties
-(votes_matrix rows) whether they reached the quorum or not
+(\code{votes_matrix} rows) whether they reached the quorum or not
 }
 \description{
 Apply a list of quorum functions to a votes matrix
 }
 \note{
 This is a low-level implementation for quorum calculations and is
-      called within [biproportional()]. There's generally no need to call it
-      directly.
+called within \code{\link[=biproportional]{biproportional()}}. There's generally no need to call it
+directly.
 }
 \seealso{
-[quorum_all()], [quorum_any()] to create a list of quorum functions.
+\code{\link[=quorum_all]{quorum_all()}}, \code{\link[=quorum_any]{quorum_any()}} to create a list of quorum functions.
 }

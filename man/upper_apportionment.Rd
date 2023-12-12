@@ -49,5 +49,5 @@ allocated. Thus, after the upper apportionment is done, the final strength of
 a party/region within the parliament is definite.
 }
 \seealso{
-\link{biproportional}, \link{lower_apportionment}
+\code{\link{biproportional}}, \code{\link{lower_apportionment}}
 }
