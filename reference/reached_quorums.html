@@ -55,7 +55,7 @@
 
 <dt>quorum_funcs</dt>
 <dd><p>List of quorum functions. If list, the attribute "type"
-must be set which indicates whether "ALL" or "ANY"
+must be set which indicates whether <code>ALL</code> or <code>ANY</code>
 (i.e. at least one) quorum must be reached.</p></dd>
 
 </dl></div>
@@ -64,17 +64,17 @@ must be set which indicates whether "ALL" or "ANY"
     
 
 <p>boolean vector with length equal to the number of lists/parties
-(votes_matrix rows) whether they reached the quorum or not</p>
+(<code>votes_matrix</code> rows) whether they reached the quorum or not</p>
     </div>
     <div id="note">
     <h2>Note</h2>
     <p>This is a low-level implementation for quorum calculations and is
-      called within [biproportional()]. There's generally no need to call it
-      directly.</p>
+called within <code><a href="biproportional.html">biproportional()</a></code>. There's generally no need to call it
+directly.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>[quorum_all()], [quorum_any()] to create a list of quorum functions.</p></div>
+    <div class="dont-index"><p><code><a href="quorum_all.html">quorum_all()</a></code>, <code><a href="quorum_any.html">quorum_any()</a></code> to create a list of quorum functions.</p></div>
     </div>
 
   </div>
