@@ -1,5 +1,3 @@
-context("zug18")
-
 # https://www.zg.ch/behoerden/staatskanzlei/kanzlei/abstimmungen-und-wahlen/wahlen-kr
 # Gesamtergebnis der Sitzverteilung:
 # https://www.zg.ch/behoerden/staatskanzlei/kanzlei/abstimmungen-und-wahlen/wahlen-kr/archiv-2018/downloads/2018-kr-dpt-gesamtergebnis-sitzverteilung.pdf

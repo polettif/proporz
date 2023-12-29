@@ -185,7 +185,8 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #' @export
 reached_quorums = function(votes_matrix, quorum_funcs) {
     if(!is.list(quorum_funcs) || !is.function(quorum_funcs[[1]])) {
-        stop(deparse(substitute(quorum_funcs)), " is not a list of functions")
+        stop("`", deparse(substitute(quorum_funcs)),
+             "` is not a list of functions.", call. = F)
     }
 
     # list of vector whether quorum was reached for each party
@@ -196,7 +197,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
     if(length(quorum_funcs) == 1) {
         return(quorum_funcs[[1]](votes_matrix))
     } else if(is.null(attributes(quorum_funcs)$type)) {
-        stop("type must be set as list attribute")
+        stop("type must be set as list attribute.", call. = F)
     }
 
     quorum_matrix = do.call(cbind, has_reached_quorum)
@@ -205,7 +206,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
     } else if(attributes(quorum_funcs)$type == "ANY") {
         quorum_bool = apply(quorum_matrix, 1, any)
     } else {
-        stop("unknown type ", attributes(quorum_funcs)$type)
+        stop("Unknown type `", attributes(quorum_funcs)$type, "`.", call. = F)
     }
     return(quorum_bool)
 }
@@ -221,7 +222,7 @@ apply_quorum = function(votes_matrix, quorum) {
         stopifnot(length(quorum) == nrow(votes_matrix))
         quorum_bool = quorum
     } else {
-        stop("Cannot parse quorum function or vector")
+        stop("Cannot parse quorum function or vector.", call. = F)
     }
 
     if(any(!quorum_bool)) {
@@ -233,7 +234,7 @@ apply_quorum = function(votes_matrix, quorum) {
 
 # quorum for single vector for proporz() methods
 apply_quorum_vector = function(votes_vector, quorum) {
-    check_votes(votes_vector)
+    check_votes_vector(votes_vector)
     stopifnot(length(quorum) == 1, is.numeric(quorum), quorum >= 0)
 
     if(quorum < 1) {
@@ -241,7 +242,7 @@ apply_quorum_vector = function(votes_vector, quorum) {
     }
 
     if(all(votes_vector < quorum)) {
-        stop("No party reached the quorum", call. = FALSE)
+        stop("No party reached the quorum.", call. = F)
     }
 
     votes_vector[votes_vector < quorum] <- 0

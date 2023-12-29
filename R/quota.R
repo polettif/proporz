@@ -6,8 +6,8 @@
 #' @seealso \code{\link{proporz}}
 #' @export
 quota_largest_remainder = function(votes, n_seats, quorum = 0) {
-    check_n_seats(n_seats)
-    check_votes(votes)
+    check_votes_vector(votes, deparse(substitute(votes)))
+    check_seats_number(n_seats, deparse(substitute(n_seats)))
 
     if(length(votes) == 1) {
         return(n_seats)
@@ -43,6 +43,6 @@ check_equal_entries = function(remainders, ordered_remainders, n_seats_remaining
         indices = which(remainders == remainder_last_with, arr.ind = TRUE)
         parties = paste0(indices, collapse = " & ")
         stop("Result is undefined, equal remainder for parties: ", parties,
-             call. = FALSE)
+             call. = F)
     }
 }

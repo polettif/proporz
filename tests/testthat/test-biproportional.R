@@ -1,5 +1,3 @@
-context("biproportional")
-
 # https://en.wikipedia.org/wiki/Biproportional_apportionment
 M1 = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
 d1 = c(7,5,8)
@@ -9,6 +7,10 @@ p1 = c(5,11,4)
 M2 = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)
 d2 = 4:6
 p2 = 4:6
+
+expect_error_fixed = function(...) {
+    testthat::expect_error(..., fixed = TRUE)
+}
 
 # https://de.wikipedia.org/wiki/Sitzzuteilungsverfahren#Biproportionales_Verfahren
 test_that("upper apportionment (party seats)", {
@@ -55,7 +57,7 @@ test_that("quorum with vote counts", {
 
     expect_equal(sum(apply_quorum(vm, c(F,F,F))), 0)
     expect_equal(sum(apply_quorum(vm, c(F,T,F))), 30)
-    expect_error(apply_quorum(vm, "x"), "Cannot parse quorum function or vector")
+    expect_error_fixed(apply_quorum(vm, "x"), "Cannot parse quorum function or vector.")
 })
 
 test_that("quorum with percentages counts", {
@@ -93,13 +95,13 @@ test_that("quorum", {
                  q_district_and_total)
     expect_equal(reached_quorums(vm, quorum_all(any_district = 0.05, total = 63)),
                  q_district_and_total)
-    expect_error(reached_quorums(vm, reached_quorum_total), "reached_quorum_total is not a list of functions")
-    expect_error(reached_quorums(vm, list(1, 2)), ".* is not a list of functions")
+    expect_error_fixed(reached_quorums(vm, reached_quorum_total), "`reached_quorum_total` is not a list of functions.")
+    expect_error_fixed(reached_quorums(vm, list(1, 2)), "`list(1, 2)` is not a list of functions.")
 
     dummy_list = list(function(x) x > 0, function(x) x < 0)
-    expect_error(reached_quorums(vm, dummy_list), "type must be set as list attribute")
+    expect_error_fixed(reached_quorums(vm, dummy_list), "type must be set as list attribute.")
     attributes(dummy_list)$type <- "either_or"
-    expect_error(reached_quorums(vm, dummy_list), "unknown type either_or")
+    expect_error_fixed(reached_quorums(vm, dummy_list), "Unknown type `either_or`.")
 
     # vote_matrix
     soll_district = vm * matrix(rep(q_district, 2), ncol = 2)
@@ -179,15 +181,13 @@ test_that("pukelsheim wrapper", {
     )
 
     x = pklshm[,2:3]
-    expect_error(
+    expect_error_fixed(
         pukelsheim(x, pklshm_seats),
-        "x must be a data frame with 3 columns in the following order:\nparty, district and votes (names can differ)",
-        fixed = T)
+        "`x` must be a data frame with 3 columns in the following order:\nparty, district and votes (names can differ)")
 
     x = pklshm[,c(2,1,3)]
-    expect_error(pukelsheim(x, pklshm_seats),
-                 "District ids not found in 2nd column. Are x's columns in the correct order (party, district, votes)?",
-                 fixed = T)
+    expect_error_fixed(pukelsheim(x, pklshm_seats),
+                 "District ids not found in second column of `x`. Are columns in the correct order (party, district, votes)?")
 
     result = pukelsheim(pklshm, pklshm_seats, new_seats_col = "Sitze")
     expect_equal(result[,1:3], pklshm)
@@ -261,10 +261,10 @@ test_that("almost empty vote_matrix", {
     vm2[1,2] <- 10
     expect_equal(sum(biproportional(vm2, 2)), 2)
 
-    expect_error(biproportional(vm2, c(1,1,0,0)), "No votes in a district with at least one seat")
+    expect_error_fixed(biproportional(vm2, c(1,1,0,0)), "No votes in a district with at least one seat")
 
     vm3 = matrix(c(4,3,0,20,1,0), nrow = 2)
-    expect_error(
+    expect_error_fixed(
         biproporz(vm3, c(1,3,4)),
         "Result is undefined, cannot assign all seats in lower apportionment")
 })
@@ -279,9 +279,8 @@ test_that("undefined result biproportional", {
     expect_equal(upper_apportionment(vm, seats, use_list_votes = F)$party,
                  proporz(rowSums(vm), sum(seats), "round"))
 
-    expect_error(upper_apportionment(vm, seats),
-                 "Result is undefined, equal quotient for parties: 4 & 6",
-                 fixed = T)
+    expect_error_fixed(upper_apportionment(vm, seats),
+                 "Result is undefined, equal quotient for parties: 4 & 6")
 
     # manual fix (actual implementation depends on rules)
     vm4 <- vm6 <- vm
@@ -321,8 +320,8 @@ test_that("named votes_matrix", {
     votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
     dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 
-    expect_error(biproportional(votes_matrix, c(50, 20)),
-                 "needs to have the same names as the columns in votes_matrix")
+    expect_error_fixed(biproportional(votes_matrix, c(50, 20)),
+                 "needs to have the same names as the columns in votes_matrix.")
 
     seats = c("Z2" = 20, "Z1" = 50)
     expect_equal(biproporz(votes_matrix, seats), biproporz(votes_matrix, seats[2:1]))
@@ -344,51 +343,62 @@ test_that("error messages", {
 
     # unique party ids
     vdf_dupl = rbind(vdf, vdf[9:12,])
-    expect_error(pukelsheim(vdf_dupl, seats_df),
-                 "There are duplicate party-district pairs in vdf_dupl")
+    expect_error_fixed(pukelsheim(vdf_dupl, seats_df),
+                 "There are duplicate party-district pairs in `vdf_dupl`.")
 
     # unique district ids
-    expect_error(pukelsheim(vdf_dupl, rbind(seats_df, seats_df)),
-                 "District ids are not unique")
+    expect_error_fixed(pukelsheim(vdf_dupl, rbind(seats_df, seats_df)),
+                 "District ids in `rbind(seats_df, seats_df)` are not unique.")
 
     # more helpful message if columns are switched
-    expect_error(pukelsheim(vdf[,c(2,1,3)], seats_df),
-                 "District ids not found in 2nd column. Are vdf[, c(2, 1, 3)]'s columns in the correct order (party, district, votes)?",
-                 fixed = T)
+    expect_error_fixed(pukelsheim(vdf[,c(2,1,3)], seats_df),
+                 paste0("District ids not found in second column of `vdf[, c(2, 1, 3)]`. ",
+                 "Are columns in the correct order (party, district, votes)?"))
 
     # districts not in vote_districts
-    expect_error(pukelsheim(vdf134, seats_df),
-                 "Not all district ids in seats_df's 1st column exist in vdf134's 2nd column")
+    expect_error_fixed(pukelsheim(vdf134, seats_df),
+                 paste0("Not all district ids in `seats_df`s first column exist ",
+                        "in `vdf134`s second column."))
 
     # vote_districts not in districts
-    expect_error(pukelsheim(vdf, seats_df124),
-                 "Not all district ids in vdf's 2nd column exist in seats_df124's 1st column")
+    expect_error_fixed(pukelsheim(vdf, seats_df124),
+                 "Not all district ids in `vdf`s second column exist in `seats_df124`s first column")
 
     # mismatch on both ends
-    expect_error(pukelsheim(vdf134, seats_df124),
-                 "Not all district ids in seats_df124's 1st column exist in vdf134's 2nd column")
+    expect_error_fixed(pukelsheim(vdf134, seats_df124),
+                 "Not all district ids in `seats_df124`s first column exist in `vdf134`s second column")
 
     # non-numeric
     vdf_non_num = vdf
     vdf_non_num$votes <- as.character(vdf_non_num$votes)
-    expect_error(pukelsheim(vdf_non_num, seats_df),
-                 "Vote values in vdf_non_num's third column must be numbers >= 0")
+    expect_error_fixed(pukelsheim(vdf_non_num, seats_df),
+                 "Vote values in `vdf_non_num`s third column must be numbers >= 0")
 
     # negative votes
     vdf_neg = vdf
     vdf_neg$votes <- vdf_neg$votes-500
-    expect_error(pukelsheim(vdf_neg, seats_df),
-                 "Vote values in vdf_neg's third column must be numbers >= 0")
+    expect_error_fixed(pukelsheim(vdf_neg, seats_df),
+                 "Vote values in `vdf_neg`s third column must be numbers >= 0")
 
     # biproportional
-    expect_error(biproportional(vdf, c(1,2,3)), "vdf must be a matrix")
-    expect_error(biproportional(vm, c(1,2,3)), "vm needs to have districts as columns and parties as rows")
-    expect_error(biproportional(vm, seats, method = "quota_largest_remainder"), "Only divisor methods possible")
-    expect_error(biproportional(vm+0.1, seats), "votes_matrix must only contain integers")
-    expect_error(biproportional(vm, seats+0.1), "district_seats must be integers")
-    expect_error(biproportional(vm, seats, method = c("round", "floor", "ceiling")),
-                 "Only one or two methods allowed")
+    expect_error_fixed(biproportional(vdf, c(1,2,3)), "`vdf` must be a matrix.")
+    expect_error_fixed(biproportional(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows.")
+    expect_error_fixed(biproportional(vm, seats, method = "quota_largest_remainder"),
+                 'Cannot use "quota_largest_remainder" method, only divisor methods are possible in biproportional apportionment.')
+    expect_error_fixed(biproportional(vm+0.1, seats), "`vm + 0.1` must only contain integers")
+    expect_error_fixed(biproportional(vm, seats+0.1), "`seats + 0.1` must be integers.")
+    expect_error_fixed(biproportional(vm, seats, method = c("round", "floor", "ceiling")),
+                 "Only one or two methods allowed.")
 
     # lower_apportionment
-    expect_error(lower_apportionment(vm+0.1), "matrix must only contain integers")
+    expect_error_fixed(lower_apportionment(vm+0.1), "`vm + 0.1` must only contain integers.")
+
+    # votes_matrix
+    vm_names = matrix(1, 3, 2)
+    rownames(vm_names) <- c("A", "A", "B")
+    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "rownames in `x` must be unique")
+    colnames(vm_names) <- c("I", "I")
+    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "rownames in `x` must be unique")
+    rownames(vm_names) <- c("A", "C", "B")
+    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "colnames in `x` must be unique")
 })

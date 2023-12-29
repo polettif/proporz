@@ -1,5 +1,3 @@
-context("quota")
-
 # https://de.wikipedia.org/wiki/Hare-Niemeyer-Verfahren
 test_that("quota_largest_remainder", {
     v1 = c(216, 310, 22, 32)

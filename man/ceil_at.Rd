@@ -9,7 +9,8 @@ ceil_at(x, threshold)
 \arguments{
 \item{x}{numeric value}
 
-\item{threshold}{threshold in 0..1}
+\item{threshold}{threshold in 0..1 or "harmonic"/"geometric" for
+threshold series}
 }
 \description{
 Round x up if x-floor(x) >= threshold

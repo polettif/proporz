@@ -4,10 +4,10 @@
 \alias{lower_apportionment}
 \title{Calculate lower apportionment}
 \usage{
-lower_apportionment(M, seats_cols, seats_rows, method = "round")
+lower_apportionment(votes_matrix, seats_cols, seats_rows, method = "round")
 }
 \arguments{
-\item{M}{vote matrix}
+\item{votes_matrix}{votes matrix}
 
 \item{seats_cols}{number of seats per column (districts/regions), calculated
 from upper_apportionment()}

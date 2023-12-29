@@ -1,5 +1,3 @@
-context("divisor")
-
 # http://www.wahlrecht.de/verfahren/dhondt123.html
 test_that("divisor_floor", {
     v1 = c(4160, 3380, 2460)
@@ -77,4 +75,15 @@ test_that("compare", {
     expect_equal(divisor_harmonic(v, 10), c(4,3,1,1,1))
     expect_equal(divisor_round(v, 10),    c(5,3,1,1,0))
     expect_equal(divisor_floor(v, 10),    c(5,4,1,0,0))
+})
+
+test_that("check seats number after quorum", {
+    v = c(100, 1, 1)
+    expect_error(divisor_ceiling(v, 1), "at least as many seats")
+    expect_error(divisor_geometric(v, 1), "at least as many seats")
+    expect_error(divisor_harmonic(v, 1), "at least as many seats")
+
+    expect_no_error(divisor_ceiling(v, 1, 2))
+    expect_no_error(divisor_geometric(v, 1, 2))
+    expect_no_error(divisor_harmonic(v, 1, 2))
 })

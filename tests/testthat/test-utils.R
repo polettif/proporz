@@ -1,5 +1,3 @@
-context("utils")
-
 test_that("hoechstzahlverfahren", {
     expect_equal(hzv(c(5200, 1700, 3100), 15, 0.5), c(8,2,5))
     expect_equal(hzv(c(100, 80, 30, 20), 8, 1), c(4,3,1,0))

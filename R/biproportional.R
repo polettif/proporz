@@ -91,7 +91,7 @@ pukelsheim = function(votes_df, district_seats_df,
     seats_df = pivot_to_df(m, new_seats_col)
 
     # join with original table
-    stopifnot(nrow(votes_df) <= nrow(seats_df))
+    assert(nrow(votes_df) <= nrow(seats_df))
     return_df = merge(votes_df,
                       seats_df,
                       sort = FALSE,
@@ -263,8 +263,8 @@ biproporz = biproportional
 #' @param votes_matrix Vote count matrix with votes by party in rows
 #'                     and votes by district in columns
 #' @param district_seats Vector defining the number of seats per district.
-#'                       Must be the same length as \code{ncol(votes_matrix)}. If the
-#'                       number of seats per district should be assigned
+#'                       Must be the same length as \code{ncol(votes_matrix)}.
+#'                       If the number of seats per district should be assigned
 #'                       according to the number of votes (not the general use
 #'                       case), a single number for the total number of seats
 #'                       can be used.
@@ -282,11 +282,15 @@ biproporz = biproportional
 upper_apportionment = function(votes_matrix, district_seats,
                                use_list_votes = TRUE,
                                method = "round") {
-    stopifnot(is.matrix(votes_matrix), is.logical(use_list_votes))
+    votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
+    assert(is.atomic(district_seats))
+    assert(length(use_list_votes) == 1 && is.logical(use_list_votes))
+
     # district seats
     if(length(district_seats) == 1) {
         seats_district = proporz(colSums(votes_matrix), district_seats, method)
     } else {
+        assert(length(district_seats) == ncol(votes_matrix))
         seats_district = district_seats
     }
 
@@ -306,7 +310,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # check enough votes in districts
     if(!identical(colSums(votes_matrix) > 0, seats_district > 0)) {
-        stop("No votes in a district with at least one seat", call. = FALSE)
+        stop("No votes in a district with at least one seat", call. = F)
     }
 
     # return values
@@ -338,7 +342,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'     region is correct with the chosen rounding method.
 #' }
 #'
-#' @param M vote matrix
+#' @param votes_matrix votes matrix
 #' @param seats_cols number of seats per column (districts/regions), calculated
 #'                   from upper_apportionment()
 #' @param seats_rows number of seats per row (parties/lists), calculated
@@ -360,12 +364,10 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.
 #'
 #' @export
-lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
-    if(sum(M %% 1) != 0) stop("matrix must only contain integers")
-    stopifnot((seats_cols %% 1) == 0,
-              (seats_rows %% 1) == 0)
-    stopifnot(length(seats_cols) == ncol(M))
-    stopifnot(length(seats_rows) == nrow(M))
+lower_apportionment = function(votes_matrix, seats_cols, seats_rows, method = "round") {
+    M = prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
+    assert(all((seats_cols %% 1) == 0) && all((seats_rows %% 1) == 0))
+    assert(length(seats_cols) == ncol(M) && length(seats_rows) == nrow(M))
 
     if(is.function(method)) {
         round_func = method
@@ -373,7 +375,7 @@ lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
         method_name = get_apport_method(method)
         if(method_name != "round") {
             warning('Lower apportionment is only guaranteed to terminate with the default ',
-                    'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = FALSE)
+                    'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = F)
         }
         round_func = get_round_function(method)
     }
@@ -473,7 +475,7 @@ find_divisor = function(votes,
     divisor_range = sort(c(divisor_from, divisor_to))
 
     if(any(is.infinite(votes)) || any(is.nan(votes))) {
-        stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
+        stop("Result is undefined, cannot assign all seats in lower apportionment", call. = F)
     }
 
     # Divisors should be within votes/(seats-1) and votes/(seats+1).

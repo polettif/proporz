@@ -16,10 +16,10 @@
 #' @export
 run_app = function(votes_matrix = NULL, district_seats = NULL) {
     # load packages / "import" ####
-    if (!requireNamespace("shiny", quietly = TRUE)) {
+    if(!requireNamespace("shiny", quietly = TRUE)) {
         stop("Please install shiny: install.packages('shiny')")
     }
-    if (!requireNamespace("shinyMatrix", quietly = TRUE)) {
+    if(!requireNamespace("shinyMatrix", quietly = TRUE)) {
         stop("Please install shinyMatrix: install.packages('shinyMatrix')")
     }
     examples = proporz::biproporz_examples

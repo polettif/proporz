@@ -16,8 +16,8 @@
 #'
 #' @export
 highest_averages_method = function(party_votes, n_seats, divisors) {
-    check_votes(party_votes)
-    check_n_seats(n_seats)
+    check_votes_vector(party_votes, deparse(substitute(party_votes)))
+    check_seats_number(n_seats, deparse(substitute(n_seats)))
 
     if(length(party_votes) == 1) { return(n_seats) }
     stopifnot(all(!is.na(party_votes)))
@@ -67,6 +67,8 @@ hzv = function(party_votes, n_seats, divisors) {
 #'
 #' @export
 divisor_floor = function(votes, n_seats, quorum = 0) {
+    check_votes_vector(votes, deparse(substitute(votes)))
+    check_seats_number(n_seats, deparse(substitute(n_seats)))
     votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, 1)
 }
@@ -79,6 +81,8 @@ divisor_floor = function(votes, n_seats, quorum = 0) {
 #' @seealso \code{\link{proporz}}
 #' @export
 divisor_round = function(votes, n_seats, quorum = 0) {
+    check_votes_vector(votes, deparse(substitute(votes)))
+    check_seats_number(n_seats, deparse(substitute(n_seats)))
     votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, 0.5)
 }
@@ -91,12 +95,13 @@ divisor_round = function(votes, n_seats, quorum = 0) {
 #' @seealso \code{\link{proporz}}
 #' @export
 divisor_harmonic = function(votes, n_seats, quorum = 0) {
-    check_enough_seats(votes, n_seats, "harmonic")
+    check_votes_vector(votes, deparse(substitute(votes)))
+    check_seats_number(n_seats, deparse(substitute(n_seats)))
 
-    nn = seq(1, n_seats)
-    divisors = 2/((1/nn)+(1/(nn-1)))
+    divisors = seq_harmonic(seq(1, n_seats))
 
     votes <- apply_quorum_vector(votes, quorum)
+    check_enough_seats(votes, n_seats, "harmonic")
     hzv(votes, n_seats, divisors)
 }
 
@@ -108,12 +113,13 @@ divisor_harmonic = function(votes, n_seats, quorum = 0) {
 #' @seealso \code{\link{proporz}}
 #' @export
 divisor_geometric = function(votes, n_seats, quorum = 0) {
-    check_enough_seats(votes, n_seats, "geometric")
+    check_votes_vector(votes, deparse(substitute(votes)))
+    check_seats_number(n_seats, deparse(substitute(n_seats)))
 
-    nn = seq(1, n_seats)
-    divisors = sqrt((nn-1)*nn)
+    divisors = seq_geometric(seq(1, n_seats))
 
     votes <- apply_quorum_vector(votes, quorum)
+    check_enough_seats(votes, n_seats, "geometric")
     hzv(votes, n_seats, divisors)
 }
 
@@ -125,8 +131,10 @@ divisor_geometric = function(votes, n_seats, quorum = 0) {
 #' @seealso \code{\link{proporz}}
 #' @export
 divisor_ceiling = function(votes, n_seats, quorum = 0) {
-    check_enough_seats(votes, n_seats, "ceiling")
+    check_votes_vector(votes, deparse(substitute(votes)))
+    check_seats_number(n_seats, deparse(substitute(n_seats)))
 
     votes <- apply_quorum_vector(votes, quorum)
+    check_enough_seats(votes, n_seats, "ceiling")
     hzv(votes, n_seats, 0)
 }

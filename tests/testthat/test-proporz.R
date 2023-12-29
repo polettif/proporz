@@ -1,5 +1,3 @@
-context("proporz")
-
 test_that("generic proporz", {
     expect_equal(
         proporz(c(216, 310, 32), 20, "jefferson"),
@@ -34,7 +32,8 @@ test_that("proporz parameter range", {
                         expect_error(
                             proporz(votes, n_seats, method),
                             paste0("With ",  method, " rounding there must be at ",
-                                   "least as many seats as there are parties with non-zero votes"))
+                                   "least as many seats as there are parties with non-zero votes."),
+                            fixed = TRUE)
                     } else {
                         seats = proporz(votes, n_seats, method)
                         expect_equal(length(seats), length(votes))
@@ -54,12 +53,12 @@ test_that("proporz parameter range", {
     # unsupported values
     for(method in method_list) {
         for(n_seats in list(NA, NULL, -1, c(1, 1))) {
-            expect_error(proporz(c(100, 10, 5), n_seats, method), "n_seats must be one number >= 0")
+            expect_error(proporz(c(100, 10, 5), n_seats, method), "`n_seats` must be one number >= 0")
         }
     }
     for(method in method_list) {
         for(votes in list(NA, NULL, -1)) {
-            expect_error(proporz(votes, 3, method), "votes must be numeric >= 0", fixed = TRUE)
+            expect_error(proporz(votes, 3, method), "`votes` must be numeric >= 0", fixed = TRUE)
         }
     }
 })
@@ -68,7 +67,8 @@ test_that("quorum", {
     method_list = unique(unlist(apport_methods, use.names = F))
 
     for(method in method_list) {
-        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum")
+        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum.",
+                     fixed = TRUE)
     }
 })
 

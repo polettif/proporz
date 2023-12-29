@@ -1,16 +1,15 @@
 #' Round x up if x-floor(x) >= threshold
 #' @param x numeric value
-#' @param threshold threshold in 0..1
+#' @param threshold threshold in 0..1 or "harmonic"/"geometric" for
+#'                  threshold series
 ceil_at = function(x, threshold) {
-    stopifnot(!is.na(threshold))
-    if(any(x < 0)) {
-        stop("x cannot be negative")
-    }
+    assert(length(threshold) == 1 && !is.na(threshold))
+    assert(all(!is.na(x)) && all(is.numeric(x)) && all(x >= 0))
     values = c(x)
 
     if(is.numeric(threshold)) {
         if(threshold < 0 || threshold > 1) {
-            stop("Threshold argument must be in [0,1]")
+            stop("Threshold argument must be in [0,1].", call. = F)
         }
         threshold <- floor(values) + threshold
     } else if(threshold == "harmonic") {
@@ -18,7 +17,8 @@ ceil_at = function(x, threshold) {
     } else if(threshold == "geometric") {
         threshold <- threshold_geometric(values)
     } else {
-        stop('Numeric value, "harmonic" or "geometric" expected for threshold argument')
+        stop('Numeric value, "harmonic" or "geometric" expected for threshold argument.',
+             call. = F)
     }
 
     ceiled = ceiling(values)
@@ -50,15 +50,23 @@ threshold_harmonic = function(x) {
     x_ceil = ceiling(x)
     x_floor = floor(x)
 
-    harmonic = (2*x_ceil*x_floor)/(x_ceil + x_floor)
+    harmonic = seq_harmonic(x_ceil, x_floor)
     harmonic[x == 0] <- 0  # 0+eps has to be rounded to 1
     return(harmonic)
+}
+
+seq_harmonic = function(nn, nn1 = nn-1) {
+    (2*nn*(nn1))/(nn + (nn1))
 }
 
 threshold_geometric = function(x) {
     x_ceil = ceiling(x)
     x_floor = floor(x)
 
-    geometric = sqrt(x_ceil*x_floor)
+    geometric = seq_geometric(x_ceil, x_floor)
     return(geometric)
+}
+
+seq_geometric = function(nn, nn1 = nn-1) {
+    sqrt((nn1)*nn)
 }

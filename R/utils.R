@@ -1,6 +1,6 @@
 bisect = function(f, x1, x2, tol = 1e-9) {
     stopifnot(length(x1) == 1, length(x2) == 1, length(tol) == 1, x1 < x2)
-    stopifnot((f(x1) <= 0 & f(x2) >= 0) | (f(x1) >= 0 & f(x2) <= 0))
+    stopifnot((f(x1) <= 0 && f(x2) >= 0) || (f(x1) >= 0 && f(x2) <= 0))
     stopifnot(!is.infinite(x1), !is.infinite(x2))
     stopifnot(!is.nan(x1), !is.nan(x2))
     stopifnot(x1 >= 0, x2 >= 0)
@@ -65,4 +65,13 @@ pivot_to_df = function(matrix_wide, value_colname = "values") {
     # select values by index
     new_df[[value_colname]] <- matrix_wide[values_indices]
     return(new_df)
+}
+
+# simpler and marginally faster version of stopifnot
+assert = function(check) {
+    if(!all(check)) {
+        .x = deparse(substitute(check))
+        stop(.x, " is not TRUE", call. = F)
+    }
+    invisible()
 }
