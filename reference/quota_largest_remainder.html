@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">proporz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -44,7 +44,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">quota_largest_remainder</span><span class="op">(</span><span class="va">votes</span>, <span class="va">n_seats</span>, throw_equal_remainder_error <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">quota_largest_remainder</span><span class="op">(</span><span class="va">votes</span>, <span class="va">n_seats</span>, quorum <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -57,10 +57,10 @@
 <dd><p>total number of seats</p></dd>
 
 
-<dt>throw_equal_remainder_error</dt>
-<dd><p>Should an error be thrown if two parties
-have the same remainder? Default is TRUE
-since apportionment behavior is undefined.</p></dd>
+<dt>quorum</dt>
+<dd><p>Vote threshold a party must reach. Used as quota of total
+votes within a district if less than 1 otherwise as number
+of votes.</p></dd>
 
 </dl></div>
     <div id="see-also">
