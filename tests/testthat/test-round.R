@@ -37,11 +37,15 @@ test_that("ceil_at harmonic/geometric", {
     # edge cases
     expect_equal(threshold_geometric(0), 0)
     expect_equal(threshold_harmonic(0), 0)
+    expect_equal(ceil_at(0, "harmonic"), 0)
     expect_equal(ceil_at(0, "geometric"), 0)
-    expect_equal(ceil_at(0+1e-12, "geometric"), 1)
+    expect_equal(ceil_at(0, 0), 0)
     expect_equal(ceil_at(0+1e-12, "harmonic"), 1)
+    expect_equal(ceil_at(0+1e-12, "geometric"), 1)
+    expect_equal(ceil_at(0+1e-12, 0), 1) # ceiling
+})
 
-    # round matrices
+test_that("ceil_at harmonic/geometric matrix", {
     x = c(0,1,42,99)
     x_non0 = x[2:4]
     eps = 0.000001

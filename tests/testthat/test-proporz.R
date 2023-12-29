@@ -34,11 +34,17 @@ test_that("proporz parameter range", {
                         expect_error(
                             proporz(votes, n_seats, method),
                             paste0("With ",  method, " rounding there must be at ",
-                            "least as many seats as there are parties with non-zero votes"))
+                                   "least as many seats as there are parties with non-zero votes"))
                     } else {
                         seats = proporz(votes, n_seats, method)
                         expect_equal(length(seats), length(votes))
                         expect_equal(sum(seats), n_seats)
+
+                        if(n_seats > 0) {
+                            .quorum = sort(c(votes,0), decreasing = T)[2]+0.5
+                            seats_Q = proporz(votes, n_seats, method, quorum = .quorum)
+                            expect_equal(sum(seats_Q > 0), 1)
+                        }
                     }
                 }
             }
@@ -58,6 +64,14 @@ test_that("proporz parameter range", {
     }
 })
 
+test_that("quorum", {
+    method_list = unique(unlist(apport_methods, use.names = F))
+
+    for(method in method_list) {
+        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum")
+    }
+})
+
 test_that("all method names", {
     for(m in names(apport_methods)) {
         x = proporz(c(10, 20, 5), 3, m)
@@ -71,7 +85,7 @@ test_that("undefined result errors", {
     expect_equal(proporz(c(1, 10, 10), 2, "round"), c(0,1,1))
 
     expect_error(quota_largest_remainder(c(10, 10, 0), 1),
-                 "Result is undefined: Equal remainder for two parties (position 1 & 2)",
+                 "Result is undefined, equal remainder for parties: 1 & 2",
                  fixed = TRUE)
 })
 

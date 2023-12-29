@@ -239,6 +239,11 @@ apply_quorum_vector = function(votes_vector, quorum) {
     if(quorum < 1) {
         quorum = ceiling(sum(votes_vector)*quorum)
     }
-    votes_vector[which(votes_vector < quorum)] <- 0
+
+    if(all(votes_vector < quorum)) {
+        stop("No party reached the quorum", call. = FALSE)
+    }
+
+    votes_vector[votes_vector < quorum] <- 0
     return(votes_vector)
 }

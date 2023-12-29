@@ -33,7 +33,6 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col, u
         stop("Not all district ids in ", .votes_df, "'s 2nd column exist in ",
              .district_seats_df, "'s 1st column", call. = F)
     }
-
 }
 
 prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
@@ -86,9 +85,9 @@ prep_district_seats = function(district_seats, votes_matrix,
     return(district_seats)
 }
 
+# transform data.frame to named vector
 prep_district_seats_df = function(district_seats_df) {
-    ds_df = district_seats_df[order(district_seats_df[[1]]),]
-    district_seats <- ds_df[[2]]
-    names(district_seats) <- ds_df[[1]]
-    ds_df
+    district_seats <- district_seats_df[[2]]
+    names(district_seats) <- district_seats_df[[1]]
+    return(district_seats)
 }

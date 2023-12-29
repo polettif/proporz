@@ -51,7 +51,7 @@ threshold_harmonic = function(x) {
     x_floor = floor(x)
 
     harmonic = (2*x_ceil*x_floor)/(x_ceil + x_floor)
-    harmonic[x == 0] <- 0  # 0 has to be rounded to 1
+    harmonic[x == 0] <- 0  # 0+eps has to be rounded to 1
     return(harmonic)
 }
 
@@ -60,6 +60,5 @@ threshold_geometric = function(x) {
     x_floor = floor(x)
 
     geometric = sqrt(x_ceil*x_floor)
-    # geometric[x == 0] <- -1  # 0 has to be rounded to 1
     return(geometric)
 }

@@ -95,7 +95,6 @@ divisor_harmonic = function(votes, n_seats, quorum = 0) {
 
     nn = seq(1, n_seats)
     divisors = 2/((1/nn)+(1/(nn-1)))
-    divisors[0] <- 10e-12
 
     votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, divisors)
@@ -113,7 +112,6 @@ divisor_geometric = function(votes, n_seats, quorum = 0) {
 
     nn = seq(1, n_seats)
     divisors = sqrt((nn-1)*nn)
-    divisors[1] <- 10e-12
 
     votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, divisors)
@@ -130,5 +128,5 @@ divisor_ceiling = function(votes, n_seats, quorum = 0) {
     check_enough_seats(votes, n_seats, "ceiling")
 
     votes <- apply_quorum_vector(votes, quorum)
-    hzv(votes, n_seats, 10e-12)
+    hzv(votes, n_seats, 0)
 }

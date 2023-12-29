@@ -3,12 +3,9 @@
 #' Also known as:  Hamilton, Hare-Niemeyer, Vinton method
 #'
 #' @inheritParams proporz
-#' @param throw_equal_remainder_error Should an error be thrown if two parties
-#'                                    have the same remainder? Default is TRUE
-#'                                    since apportionment behavior is undefined.
 #' @seealso \code{\link{proporz}}
 #' @export
-quota_largest_remainder = function(votes, n_seats, throw_equal_remainder_error = TRUE) {
+quota_largest_remainder = function(votes, n_seats, quorum = 0) {
     check_n_seats(n_seats)
     check_votes(votes)
 
@@ -19,30 +16,33 @@ quota_largest_remainder = function(votes, n_seats, throw_equal_remainder_error =
         return(rep(0, length(votes)))
     }
 
+    votes <- apply_quorum_vector(votes, quorum)
+
+    # calculate
     quota = n_seats*votes/sum(votes)
     seats_base = floor(quota)
-    seats_rem = rep(0, length(votes))
+    seats_remainder = rep(0, length(votes))
 
     if(sum(seats_base) < n_seats) {
-        remainder = quota - seats_base
-        check_equal_entries(remainder[remainder > 0])
-
+        remainders = quota - seats_base
         n_seats_remaining = n_seats - sum(seats_base)
-        seats_rem <- rep(0, length(votes))
-        order_index = order(remainder, decreasing = TRUE)
-        seats_rem[order_index[1:n_seats_remaining]] <- 1
+        ordered_remainders = order(remainders, decreasing = TRUE)
+        check_equal_entries(remainders, ordered_remainders, n_seats_remaining)
+
+        seats_remainder[ordered_remainders[1:n_seats_remaining]] <- 1
     }
 
-    return(seats_base + seats_rem)
+    return(seats_base + seats_remainder)
 }
 
-check_equal_entries = function(vec) {
-    stopifnot(is.vector(vec))
-    if(length(unique(vec)) != length(vec)) {
-        eq_index = which(vec == names(which.max(table(vec))))
-        eq_str = paste0(eq_index, collapse = " & ")
-        stop("Result is undefined: Equal remainder for two parties (position ", eq_str ,")",
+check_equal_entries = function(remainders, ordered_remainders, n_seats_remaining) {
+    remainder_last_with = remainders[ordered_remainders[n_seats_remaining]]
+    remainder_first_without = remainders[ordered_remainders[n_seats_remaining+1]]
+
+    if(remainder_last_with == remainder_first_without) {
+        indices = which(remainders == remainder_last_with, arr.ind = TRUE)
+        parties = paste0(indices, collapse = " & ")
+        stop("Result is undefined, equal remainder for parties: ", parties,
              call. = FALSE)
     }
 }
-

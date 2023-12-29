@@ -4,16 +4,16 @@
 \alias{quota_largest_remainder}
 \title{Largest remainder method}
 \usage{
-quota_largest_remainder(votes, n_seats, throw_equal_remainder_error = TRUE)
+quota_largest_remainder(votes, n_seats, quorum = 0)
 }
 \arguments{
 \item{votes}{numeric vector with number of votes for each party}
 
 \item{n_seats}{total number of seats}
 
-\item{throw_equal_remainder_error}{Should an error be thrown if two parties
-have the same remainder? Default is TRUE
-since apportionment behavior is undefined.}
+\item{quorum}{Vote threshold a party must reach. Used as quota of total
+votes within a district if less than 1 otherwise as number
+of votes.}
 }
 \description{
 Also known as:  Hamilton, Hare-Niemeyer, Vinton method
