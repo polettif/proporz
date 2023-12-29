@@ -373,7 +373,7 @@ lower_apportionment = function(M, seats_cols, seats_rows, method = "round") {
         method_name = get_apport_method(method)
         if(method_name != "round") {
             warning('Lower apportionment is only guaranteed to terminate with the default ',
-                    'Sainte-Lagu\uEB/Webster method (method = "round")', call. = FALSE)
+                    'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = FALSE)
         }
         round_func = get_round_function(method)
     }

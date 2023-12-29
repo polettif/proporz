@@ -28,7 +28,7 @@ test_that("lower apportionment", {
 
     expect_warning(
         lower_apportionment(matrix(c(1,0,1,0), 2), c(1,1), c(2,0), method = "harmonic"),
-        'Lower apportionment is only guaranteed to terminate with the default Sainte-Lagu\uEB/Webster method (method = "round")',
+        'Lower apportionment is only guaranteed to terminate with the default Sainte-Lagu\u00EB/Webster method (method = "round")',
         fixed = TRUE)
 })
 
