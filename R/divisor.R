@@ -18,6 +18,7 @@
 highest_averages_method = function(party_votes, n_seats, divisors) {
     check_votes(party_votes)
     check_n_seats(n_seats)
+
     if(length(party_votes) == 1) { return(n_seats) }
     stopifnot(all(!is.na(party_votes)))
     if(n_seats == 0) { return(rep(0, length(party_votes))) }
@@ -66,7 +67,7 @@ hzv = function(party_votes, n_seats, divisors) {
 #'
 #' @export
 divisor_floor = function(votes, n_seats, quorum = 0) {
-    votes <- quorum_votes(votes, quorum)
+    votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, 1)
 }
 
@@ -78,20 +79,8 @@ divisor_floor = function(votes, n_seats, quorum = 0) {
 #' @seealso \code{\link{proporz}}
 #' @export
 divisor_round = function(votes, n_seats, quorum = 0) {
-    votes <- quorum_votes(votes, quorum)
+    votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, 0.5)
-}
-
-#' Divisor method rounding up
-#'
-#' Also known as: Adams method
-#'
-#' @inheritParams proporz
-#' @seealso \code{\link{proporz}}
-#' @export
-divisor_ceiling = function(votes, n_seats, quorum = 0) {
-    votes <- quorum_votes(votes, quorum)
-    hzv(votes, n_seats, 10e-12)
 }
 
 #' Divisor method harmonic rounding
@@ -102,16 +91,13 @@ divisor_ceiling = function(votes, n_seats, quorum = 0) {
 #' @seealso \code{\link{proporz}}
 #' @export
 divisor_harmonic = function(votes, n_seats, quorum = 0) {
-    check_n_seats(n_seats)
-    if(n_seats < length(votes[votes > 0])) {
-        stop("With harmonic rounding there must be at least as many seats as there are parties with non-zero votes", call. = F)
-    }
+    check_enough_seats(votes, n_seats, "harmonic")
 
     nn = seq(1, n_seats)
     divisors = 2/((1/nn)+(1/(nn-1)))
     divisors[0] <- 10e-12
-    votes <- quorum_votes(votes, quorum)
 
+    votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, divisors)
 }
 
@@ -123,12 +109,26 @@ divisor_harmonic = function(votes, n_seats, quorum = 0) {
 #' @seealso \code{\link{proporz}}
 #' @export
 divisor_geometric = function(votes, n_seats, quorum = 0) {
-    check_n_seats(n_seats)
+    check_enough_seats(votes, n_seats, "geometric")
 
     nn = seq(1, n_seats)
     divisors = sqrt((nn-1)*nn)
     divisors[1] <- 10e-12
-    votes <- quorum_votes(votes, quorum)
 
+    votes <- apply_quorum_vector(votes, quorum)
     hzv(votes, n_seats, divisors)
+}
+
+#' Divisor method rounding up
+#'
+#' Also known as: Adams method
+#'
+#' @inheritParams proporz
+#' @seealso \code{\link{proporz}}
+#' @export
+divisor_ceiling = function(votes, n_seats, quorum = 0) {
+    check_enough_seats(votes, n_seats, "ceiling")
+
+    votes <- apply_quorum_vector(votes, quorum)
+    hzv(votes, n_seats, 10e-12)
 }

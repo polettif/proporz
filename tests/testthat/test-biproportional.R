@@ -323,6 +323,11 @@ test_that("named votes_matrix", {
 
     expect_error(biproportional(votes_matrix, c(50, 20)),
                  "needs to have the same names as the columns in votes_matrix")
+
+    seats = c("Z2" = 20, "Z1" = 50)
+    expect_equal(biproporz(votes_matrix, seats), biproporz(votes_matrix, seats[2:1]))
+    expect_equal(biproporz(votes_matrix, seats)[,c("Z1", "Z2")],
+                 biproporz(votes_matrix[,2:1], seats[2:1])[,c("Z1", "Z2")])
 })
 
 test_that("error messages", {

@@ -14,10 +14,10 @@ test_that("bisect", {
 
 test_that("quorum", {
     votes = c(49, 38, 13)
-    expect_equal(quorum_votes(votes, 0), c(49, 38, 13))
-    expect_equal(quorum_votes(votes, 0.13), c(49, 38, 13))
-    expect_equal(quorum_votes(votes, 0.135), c(49, 38, 0))
-    expect_equal(quorum_votes(votes, 15), c(49, 38, 0))
+    expect_equal(apply_quorum_vector(votes, 0), c(49, 38, 13))
+    expect_equal(apply_quorum_vector(votes, 0.13), c(49, 38, 13))
+    expect_equal(apply_quorum_vector(votes, 0.135), c(49, 38, 0))
+    expect_equal(apply_quorum_vector(votes, 15), c(49, 38, 0))
 })
 
 test_that("stupid pivot functions", {

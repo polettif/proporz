@@ -35,3 +35,14 @@ quota_largest_remainder = function(votes, n_seats, throw_equal_remainder_error =
 
     return(seats_base + seats_rem)
 }
+
+check_equal_entries = function(vec) {
+    stopifnot(is.vector(vec))
+    if(length(unique(vec)) != length(vec)) {
+        eq_index = which(vec == names(which.max(table(vec))))
+        eq_str = paste0(eq_index, collapse = " & ")
+        stop("Result is undefined: Equal remainder for two parties (position ", eq_str ,")",
+             call. = FALSE)
+    }
+}
+

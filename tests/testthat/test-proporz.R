@@ -10,6 +10,16 @@ test_that("generic proporz", {
     expect_error(proporz(1,1, "unkown method"))
 })
 
+.sample_votes = function(n_non_zero, n_zero) {
+    repeat {
+        x = round(stats::runif(n_non_zero, 10, 1000))
+        if(length(unique(x)) == n_non_zero) {
+            break
+        }
+    }
+    return(c(x, rep(0, n_zero)))
+}
+
 test_that("proporz parameter range", {
     method_list = unique(unlist(apport_methods, use.names = F))
 
@@ -20,9 +30,11 @@ test_that("proporz parameter range", {
                 for(method in method_list) {
                     votes = .sample_votes(n_parties, n_parties_zero)
 
-                    if(method == "harmonic" && n_seats < n_parties) {
-                        expect_error(proporz(votes, n_seats, method),
-                                     "With harmonic rounding there must be at least as many seats as there are parties with non-zero votes")
+                    if(n_seats < n_parties && method %in% c("ceiling", "geometric", "harmonic") && n_seats > 0) {
+                        expect_error(
+                            proporz(votes, n_seats, method),
+                            paste0("With ",  method, " rounding there must be at ",
+                            "least as many seats as there are parties with non-zero votes"))
                     } else {
                         seats = proporz(votes, n_seats, method)
                         expect_equal(length(seats), length(votes))
@@ -84,4 +96,14 @@ test_that("sainte-lague", {
     stimmen2 = c(430739, 143607, 242942, 1297940, 102419, 348216, 202850, 348082,
                  2678956, 328753, 812721, 216593, 520990, 1120018, 1051198, 144464)
     expect_equal(divisor_round(stimmen2, 146), c(6,2,4,19,2,5,3,5,39,5,12,3,8,16,15,2))
+})
+
+test_that("huntington-hill and adams give at least one seat", {
+    v = c(100, 1, 0, 10, 0)
+    expect_equal(divisor_round(v, 3), c(3,0,0,0,0))
+    dc = divisor_ceiling(v, 3)
+    expect_equal(dc, c(1,1,0,1,0))
+    expect_equal(proporz(v, 3, "huntington-hill"), dc)
+    expect_equal(proporz(v, 3, "dean"), dc)
+    expect_equal(proporz(v, 3, "adams"), dc)
 })

@@ -230,3 +230,15 @@ apply_quorum = function(votes_matrix, quorum) {
 
     return(votes_matrix)
 }
+
+# quorum for single vector for proporz() methods
+apply_quorum_vector = function(votes_vector, quorum) {
+    check_votes(votes_vector)
+    stopifnot(length(quorum) == 1, is.numeric(quorum), quorum >= 0)
+
+    if(quorum < 1) {
+        quorum = ceiling(sum(votes_vector)*quorum)
+    }
+    votes_vector[which(votes_vector < quorum)] <- 0
+    return(votes_vector)
+}

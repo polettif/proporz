@@ -1,41 +1,3 @@
-# If last party with seat and first without a seat have the same matrix_quotient
-# from highest_averages_method the result is undefined as both parties could get
-# the last seat
-check_edge_quotient = function(mtrx_quotient, n_seats, return_indices = FALSE) {
-    ordered_quotients = order(mtrx_quotient, decreasing = TRUE)
-    quotient_last_with = mtrx_quotient[ordered_quotients[n_seats]]
-    quotient_first_without = mtrx_quotient[ordered_quotients[n_seats+1]]
-
-    if(is.nan(quotient_first_without)) quotient_first_without <- 0
-
-    if(quotient_last_with == quotient_first_without) {
-        indices = which(mtrx_quotient == quotient_last_with, arr.ind = TRUE)[,"col"]
-        parties = paste0(indices, collapse = " & ")
-        stop("Result is undefined, equal quotient for parties: ", parties, call. = FALSE)
-    }
-}
-
-check_equal_entries = function(vec) {
-    stopifnot(is.vector(vec))
-    if(length(unique(vec)) != length(vec)) {
-        eq_index = which(vec == names(which.max(table(vec))))
-        eq_str = paste0(eq_index, collapse = " & ")
-        stop("Result is undefined: Equal remainder for two parties (position ", eq_str ,")",
-             call. = FALSE)
-    }
-}
-
-quorum_votes = function(votes, quorum) {
-    check_votes(votes)
-    stopifnot(length(quorum) == 1, is.numeric(quorum), quorum >= 0)
-
-    if(quorum < 1) {
-        quorum = ceiling(sum(votes)*quorum)
-    }
-    votes[which(votes < quorum)] <- 0
-    return(votes)
-}
-
 bisect = function(f, x1, x2, tol = 1e-9) {
     stopifnot(length(x1) == 1, length(x2) == 1, length(tol) == 1, x1 < x2)
     stopifnot((f(x1) <= 0 & f(x2) >= 0) | (f(x1) >= 0 & f(x2) <= 0))
@@ -103,28 +65,4 @@ pivot_to_df = function(matrix_wide, value_colname = "values") {
     # select values by index
     new_df[[value_colname]] <- matrix_wide[values_indices]
     return(new_df)
-}
-
-check_n_seats = function(n_seats) {
-    if(length(n_seats) == 1 && !is.null(n_seats) && !is.na(n_seats) && n_seats >= 0) {
-        return()
-    }
-    stop("n_seats must be one number >= 0", call. = FALSE)
-}
-
-check_votes = function(votes) {
-    if(is.numeric(votes) && all(!is.na(votes)) && all(votes >= 0)) {
-        return()
-    }
-    stop("votes must be numeric >= 0", call. = FALSE)
-}
-
-.sample_votes = function(n_non_zero, n_zero) {
-    repeat {
-        x = round(stats::runif(n_non_zero, 10, 1000))
-        if(length(unique(x)) == n_non_zero) {
-            break
-        }
-    }
-    return(c(x, rep(0, n_zero)))
 }
