@@ -1,4 +1,4 @@
-# proporz
+# proporz <img src="data-raw/proporz-hexsticker.png" align="right" height="140"/>
 
 Calculate seat apportionment for legislative bodies using different established 
 methods, including biproportional apportionment.
