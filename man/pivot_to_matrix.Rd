@@ -9,6 +9,9 @@ pivot_to_matrix(df)
 \arguments{
 \item{df}{data.frame in long format with exactly 3 columns}
 }
+\value{
+a matrix
+}
 \description{
 Pivot long data.frame to wide matrix
 }

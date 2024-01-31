@@ -14,6 +14,9 @@ highest_averages_method(party_votes, n_seats, divisors)
 \item{divisors}{sequence of divisors. If it's a single number, a sequence
 is generated starting with it.}
 }
+\value{
+The number of seats per party as a vector
+}
 \description{
 Allocates seats proportionally for divisor methods.
 }

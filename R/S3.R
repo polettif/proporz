@@ -19,6 +19,8 @@ as.matrix.proporz_matrix = function(x, ...) {
 #' @param biproportional_result a matrix created by \code{\link{biproportional}}
 #'                              or a data.frame created by \code{\link{pukelsheim}}
 #'
+#' @returns The district and party divisors in a list
+#'
 #' @examples
 #' votes_matrix = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)
 #' district_seats = 4:6

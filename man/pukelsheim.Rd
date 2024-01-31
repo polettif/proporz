@@ -40,6 +40,10 @@ is missing or NULL.}
 many votes as there are seats in a district. Set to FALSE if
 \code{votes_df} shows the number of voters.}
 }
+\value{
+A data.frame (like votes_df) with a new column denoting the number
+seats per party and district
+}
 \description{
 Method to proportionally allocate seats among parties/lists and
 districts/regions/entities ("Doppelter Pukelsheim").

@@ -11,6 +11,9 @@ pivot_to_df(matrix_wide, value_colname = "values")
 
 \item{value_colname}{name for the data.frame new column}
 }
+\value{
+data.frame with 3 columns
+}
 \description{
 Pivot wide matrix to long data.frame
 }

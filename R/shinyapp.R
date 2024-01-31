@@ -4,10 +4,10 @@
 #'
 #' @param votes_matrix optional votes_matrix to load upon start
 #' @param district_seats optional district_seats to load upon start
-#'
+#' @returns Calling the function starts the shiny app
 #' @examples
 #' if(interactive()){
-#'     # You need to have shiny and shinyMatrix installed to run the app
+#'     # You need to have the packages 'shiny' and 'shinyMatrix' installed to run the app
 #'     run_app()
 #'
 #'     # It's possible to load a matrix with the app

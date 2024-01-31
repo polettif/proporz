@@ -15,6 +15,9 @@ divisor_ceiling(votes, n_seats, quorum = 0)
 votes within a district if less than 1 otherwise as number
 of votes.}
 }
+\value{
+The number of seats per party as a vector
+}
 \description{
 Also known as: Adams method
 }

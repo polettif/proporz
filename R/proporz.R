@@ -21,6 +21,8 @@
 #'          \item{huntington-hill, hill-huntington, geometric (use \code{\link{divisor_geometric}})}
 #'          \item{hare-niemeyer, hamilton, vinton, quota_largest_remainder (use \code{\link{quota_largest_remainder}})}
 #' }
+#' @returns The number of seats per party as a vector
+#'
 #' @examples
 #' votes = c("Party A" = 651, "Party B" = 349, "Party C" = 50)
 #'

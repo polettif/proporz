@@ -31,7 +31,7 @@ number of voters.}
 see \link{proporz}.}
 }
 \value{
-named list with column/district seats and row/party seats
+A named list with column/district seats and row/party seats
 }
 \description{
 In the upper apportionment, the seats for each party are computed with a

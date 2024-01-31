@@ -10,6 +10,9 @@ An object of class \code{list} of length 21.
 \usage{
 apport_methods
 }
+\value{
+Named list of methods
+}
 \description{
 Names can be used in \code{\link[=proporz]{proporz()}} or \code{\link[=biproportional]{biproportional()}}, the list entries
 denote the actual implementation.

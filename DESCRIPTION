@@ -2,10 +2,12 @@ Package: proporz
 Type: Package
 Title: Proportional Apportionment
 Version: 1.3.1
-Author: Flavio Poletti
-Maintainer: Flavio Poletti <flavio.poletti@hotmail.ch>
-Description: Calculate seat apportionment for legislative bodies using 
-    different established methods, including biproportional apportionment.
+Authors@R: c(
+    person("Flavio", "Poletti", role = c("cre", "cph"), email = "flavio.poletti@hotmail.ch"))
+Description: Calculate seat apportionments for legislative bodies with 
+    various methods. Methods inlcude divisor methods (e.g. D'Hondt, Webster or 
+    Adams), quota methods (e.g. 'largest remainder method') and biproportional 
+    apportionment.
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
@@ -17,3 +19,5 @@ Suggests:
     testthat,
     shiny,
     shinyMatrix
+URL: https://github.com/polettif/proporz
+BugReports: https://github.com/polettif/proporz/issues

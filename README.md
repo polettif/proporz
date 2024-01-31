@@ -1,7 +1,8 @@
-# proporz <img src="data-raw/proporz-hexsticker.png" align="right" height="140"/>
+# proporz <img src="man/figures/logo.png" align="right" height="138" />
 
-Calculate seat apportionment for legislative bodies using different established 
-methods, including biproportional apportionment.
+Calculate seat apportionments for legislative bodies with various methods. 
+Methods inlcude divisor methods (e.g. D'Hondt, Webster or Adams), quota methods
+(e.g. largest remainder method) and biproportional apportionment.
 
 _Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren 
 Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet 
@@ -177,7 +178,7 @@ and `shinyMatrix` installed.
 library(proporz)
 run_app()
 ```
-<img src="data-raw/shinyapp-example.gif" style = "width:70%;">
+<img src="man/figures/shinyapp-example.gif" style = "width:70%;">
 
 <br/>
 

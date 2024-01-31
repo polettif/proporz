@@ -44,6 +44,10 @@ method for upper and lower apportionment use a vector with two
 entries. It is also possible to provide a function that works
 like base::round(x) (i.e. can handle a matrix).}
 }
+\value{
+Matrix with the same dimension as \code{votes_matrix} containing
+the number of seats
+}
 \description{
 Method to proportionally allocate seats among parties (or lists) and
 districts (or entities, regions).

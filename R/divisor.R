@@ -14,6 +14,8 @@
 #' @param divisors sequence of divisors. If it's a single number, a sequence
 #'                 is generated starting with it.
 #'
+#' @inherit proporz return
+#'
 #' @export
 highest_averages_method = function(party_votes, n_seats, divisors) {
     check_votes_vector(party_votes, deparse(substitute(party_votes)))
@@ -53,6 +55,7 @@ highest_averages_method = function(party_votes, n_seats, divisors) {
 #' German equivalent "Höchstzahlverfahren".
 #'
 #' @inheritParams highest_averages_method
+#'
 #' @export
 hzv = function(party_votes, n_seats, divisors) {
     highest_averages_method(party_votes, n_seats, divisors)
@@ -64,7 +67,7 @@ hzv = function(party_votes, n_seats, divisors) {
 #'
 #' @inheritParams proporz
 #' @seealso \code{\link{proporz}}
-#'
+#' @inherit proporz return
 #' @export
 divisor_floor = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -79,6 +82,7 @@ divisor_floor = function(votes, n_seats, quorum = 0) {
 #'
 #' @inheritParams proporz
 #' @seealso \code{\link{proporz}}
+#' @inherit proporz return
 #' @export
 divisor_round = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -93,6 +97,7 @@ divisor_round = function(votes, n_seats, quorum = 0) {
 #'
 #' @inheritParams proporz
 #' @seealso \code{\link{proporz}}
+#' @inherit proporz return
 #' @export
 divisor_harmonic = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -111,6 +116,7 @@ divisor_harmonic = function(votes, n_seats, quorum = 0) {
 #'
 #' @inheritParams proporz
 #' @seealso \code{\link{proporz}}
+#' @inherit proporz return
 #' @export
 divisor_geometric = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -129,6 +135,7 @@ divisor_geometric = function(votes, n_seats, quorum = 0) {
 #'
 #' @inheritParams proporz
 #' @seealso \code{\link{proporz}}
+#' @inherit proporz return
 #' @export
 divisor_ceiling = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))

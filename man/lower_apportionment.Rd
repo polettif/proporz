@@ -22,7 +22,7 @@ method). It is also possible to provide a function that works
 like base::round(x) (i.e. can handle a matrix).}
 }
 \value{
-seat matrix with column and row divisors stored in attributes
+A seat matrix with column and row divisors stored in attributes
 }
 \description{
 Iterate and change column and row divisors such that

@@ -37,6 +37,9 @@
 #'
 #' @seealso \code{\link{biproportional}}, \code{\link{divisors}}
 #'
+#' @returns A data.frame (like votes_df) with a new column denoting the number
+#'          seats per party and district
+#'
 #' @examples
 #' # Zug 2018
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -142,6 +145,9 @@ pukelsheim = function(votes_df, district_seats_df,
 #'
 #' @seealso \code{\link{pukelsheim}} for usage with data frames.
 #'          \code{\link{divisors}} to access the divisors
+#'
+#' @returns Matrix with the same dimension as \code{votes_matrix} containing
+#'          the number of seats
 #'
 #' @examples
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -277,7 +283,7 @@ biproporz = biproportional
 #'
 #' @seealso \code{\link{biproportional}}, \code{\link{lower_apportionment}}
 #'
-#' @return named list with column/district seats and row/party seats
+#' @returns A named list with column/district seats and row/party seats
 #' @export
 upper_apportionment = function(votes_matrix, district_seats,
                                use_list_votes = TRUE,
@@ -356,7 +362,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' @note The iterative process in the lower apportionment is only guaranteed to
 #'       terminate with Sainte-Laguë/Webster method.
 #'
-#' @return seat matrix with column and row divisors stored in attributes
+#' @returns A seat matrix with column and row divisors stored in attributes
 #'
 #' @seealso \code{\link{biproportional}}, \code{\link{lower_apportionment}}
 #'

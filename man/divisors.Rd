@@ -10,6 +10,9 @@ divisors(biproportional_result)
 \item{biproportional_result}{a matrix created by \code{\link{biproportional}}
 or a data.frame created by \code{\link{pukelsheim}}}
 }
+\value{
+The district and party divisors in a list
+}
 \description{
 Show the district and party divisors used for to assign seats.
 This method provides easier access to divisors stored in

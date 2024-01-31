@@ -3,6 +3,7 @@
 #' Names can be used in [proporz()] or [biproportional()], the list entries
 #' denote the actual implementation.
 #'
+#' @details
 #' \code{list(
 #' "divisor_floor" = "floor",
 #' "d'hondt" = "floor",
@@ -27,6 +28,7 @@
 #' "quota_largest_remainder" = "quota_largest_remainder"
 #' )}
 #'
+#' @returns Named list of methods
 #' @export
 apport_methods = list(
     "divisor_floor" = "floor",

@@ -26,6 +26,7 @@ bisect = function(f, x1, x2, tol = 1e-9) {
 #' @note This function exists because I wanted to have no dependencies.
 #'       Wrangling with reshape isn't fun at all and it became glaringly
 #'       apparent why better tools like tidyr exist
+#' @returns a matrix
 #' @export
 pivot_to_matrix = function(df) {
     stopifnot(ncol(df) == 3)
@@ -39,7 +40,7 @@ pivot_to_matrix = function(df) {
 #'
 #' @param matrix_wide matrix in wide format
 #' @param value_colname name for the data.frame new column
-#'
+#' @returns data.frame with 3 columns
 #' @export
 pivot_to_df = function(matrix_wide, value_colname = "values") {
     if(is.null(dimnames(matrix_wide))) {

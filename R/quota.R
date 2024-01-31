@@ -4,6 +4,7 @@
 #'
 #' @inheritParams proporz
 #' @seealso \code{\link{proporz}}
+#' @inherit proporz return
 #' @export
 quota_largest_remainder = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
