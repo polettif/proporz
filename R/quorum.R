@@ -125,14 +125,9 @@ create_quorum_function_list = function(type, any_district, total) {
 #'
 #' @returns boolean vector with length equal to the number of lists/parties
 #'          (`votes_matrix` rows) whether they reached the quorum or not
-
 #' @examples
-#' votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
-#'
-#' quorum_functions = quorum_any(any_district = 0.1, total = 100)
-#' reached_quorums(votes_matrix, quorum_functions)
-#' #> [1]  TRUE  TRUE  TRUE FALSE
-#'
+#' vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3)
+#' reached_quorum_total(vm, 35)
 #' @export
 reached_quorum_total = function(votes_matrix, quorum_total) {
     stopifnot(quorum_total > 0)
@@ -155,6 +150,9 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #'                         Must be greater than 0.
 #'
 #' @inherit reached_quorum_total return
+#' @examples
+#' vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3)
+#' reached_quorum_any_district(vm, 25)
 #' @export
 reached_quorum_any_district = function(votes_matrix, quorum_districts) {
     stopifnot(quorum_districts > 0)
@@ -181,6 +179,11 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #' @seealso [quorum_all()], [quorum_any()] to create a list of quorum functions.
 #'
 #' @inherit reached_quorum_total return
+#' @examples
+#' votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+#'
+#' quorum_functions = quorum_any(any_district = 0.1, total = 100)
+#' reached_quorums(votes_matrix, quorum_functions)
 #' @export
 reached_quorums = function(votes_matrix, quorum_funcs) {
     if(!is.list(quorum_funcs) || !is.function(quorum_funcs[[1]])) {

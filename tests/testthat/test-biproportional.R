@@ -55,6 +55,9 @@ test_that("quorum with vote counts", {
     check3 = identical(q2, q3)
     expect_true(all(check1, check2, check3))
 
+    expect_equal(reached_quorum_any_district(vm, 35), rowSums(q1) > 0)
+    expect_equal(reached_quorum_total(vm, 45), rowSums(q2) > 0)
+
     expect_equal(sum(apply_quorum(vm, c(F,F,F))), 0)
     expect_equal(sum(apply_quorum(vm, c(F,T,F))), 30)
     expect_error_fixed(apply_quorum(vm, "x"), "Cannot parse quorum function or vector.")

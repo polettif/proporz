@@ -21,6 +21,11 @@ The number of seats per party as a vector
 \description{
 Also known as:  Hamilton, Hare-Niemeyer, Vinton method
 }
+\examples{
+votes = c(47000, 16000, 15800, 12000, 6100, 3100)
+quota_largest_remainder(votes, 10)
+
+}
 \seealso{
 \code{\link{proporz}}
 }

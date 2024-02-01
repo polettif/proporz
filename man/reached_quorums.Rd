@@ -25,6 +25,12 @@ This is a low-level implementation for quorum calculations and is
 called within \code{\link[=biproporz]{biproporz()}}. There's generally no need to call it
 directly.
 }
+\examples{
+votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+
+quorum_functions = quorum_any(any_district = 0.1, total = 100)
+reached_quorums(votes_matrix, quorum_functions)
+}
 \seealso{
 \code{\link[=quorum_all]{quorum_all()}}, \code{\link[=quorum_any]{quorum_any()}} to create a list of quorum functions.
 }

@@ -21,10 +21,6 @@ boolean vector with length equal to the number of lists/parties
 Base implementation, used by \code{\link[=quorum_any]{quorum_any()}} and \code{\link[=quorum_all]{quorum_all()}}.
 }
 \examples{
-votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
-
-quorum_functions = quorum_any(any_district = 0.1, total = 100)
-reached_quorums(votes_matrix, quorum_functions)
-#> [1]  TRUE  TRUE  TRUE FALSE
-
+vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3)
+reached_quorum_total(vm, 35)
 }
