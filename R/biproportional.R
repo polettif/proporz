@@ -35,7 +35,7 @@
 #'                       many votes as there are seats in a district. Set to FALSE if
 #'                       \code{votes_df} shows the number of voters.
 #'
-#' @seealso \code{\link{biproporz}}, \code{\link{divisors}}
+#' @seealso [biproporz()], [divisors()]
 #'
 #' @returns A data.frame (like votes_df) with a new column denoting the number
 #'          seats per party and district
@@ -139,15 +139,15 @@ pukelsheim = function(votes_df, district_seats_df,
 #'               \link{proporz} for a list of available methods. For a different
 #'               method for upper and lower apportionment use a vector with two
 #'               entries. It is also possible to provide a function that works
-#'               like base::round(x) (i.e. can handle a matrix).
+#'               like `base::round(x)` (i.e. can handle a matrix).
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'       with Sainte-Laguë/Webster method.
 #'
-#' @seealso \code{\link{pukelsheim}} for usage with data frames.
-#'          \code{\link{divisors}} to access the divisors
+#' @seealso [pukelsheim()] for usage with data frames.
+#'          [divisors()] to access the divisors
 #'
-#' @returns Matrix with the same dimension as \code{votes_matrix} containing
+#' @returns Matrix with the same dimension as `votes_matrix` containing
 #'          the number of seats
 #'
 #' @examples
@@ -222,10 +222,10 @@ pukelsheim = function(votes_df, district_seats_df,
 #' @importFrom stats setNames
 #' @export
 biproporz = function(votes_matrix,
-                          district_seats,
-                          quorum,
-                          use_list_votes = TRUE,
-                          method = "round") {
+                     district_seats,
+                     quorum,
+                     use_list_votes = TRUE,
+                     method = "round") {
     # check parameters
     .votes_matrix.name = deparse(substitute(votes_matrix))
     .district_seats.name = deparse(substitute(district_seats))
@@ -266,21 +266,26 @@ biproporz = function(votes_matrix,
 #' @param votes_matrix Vote count matrix with votes by party in rows
 #'                     and votes by district in columns
 #' @param district_seats Vector defining the number of seats per district.
-#'                       Must be the same length as \code{ncol(votes_matrix)}.
+#'                       Must be the same length as `ncol(votes_matrix)`.
 #'                       If the number of seats per district should be assigned
 #'                       according to the number of votes (not the general use
 #'                       case), a single number for the total number of seats
 #'                       can be used.
-#' @param use_list_votes By default (TRUE) it's assumed that each voter in a
+#' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a
 #'                       district has as many votes as there are seats in a
-#'                       district. Set to FALSE if \code{votes_matrix} shows the
+#'                       district. Set to FALSE if `votes_matrix` shows the
 #'                       number of voters.
 #' @param method Apportion method that defines how seats are assigned,
-#'               see \link{proporz}.
+#'               see [proporz()].
 #'
-#' @seealso \code{\link{biproporz}}, \code{\link{lower_apportionment}}
+#' @seealso [biproporz()], [lower_apportionment()]
 #'
 #' @returns A named list with column/district seats and row/party seats
+#' @examples
+#' votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
+#' district_seats = c(7,5,8)
+#'
+#' upper_apportionment(votes_matrix, district_seats)
 #' @export
 upper_apportionment = function(votes_matrix, district_seats,
                                use_list_votes = TRUE,
@@ -325,7 +330,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' @returns the weighted `votes_matrix`
 #' @examples
 #' vm = matrix(c(100,50,20,10), 2)
-#' weigh_list_votes(vm, c(10, 2))
+#' proporz:::weigh_list_votes(vm, c(10, 2))
 #' @keywords internal
 weigh_list_votes = function(votes_matrix, seats_district) {
     M_seats_district = matrix(
@@ -367,25 +372,33 @@ weigh_list_votes = function(votes_matrix, seats_district) {
 #' }
 #'
 #' @param votes_matrix votes matrix
-#' @param seats_cols number of seats per column (districts/regions), calculated
-#'                   from upper_apportionment()
+#' @param seats_cols number of seats per column (districts/regions),
+#'                   predetermined or calculated with [upper_apportionment()].
 #' @param seats_rows number of seats per row (parties/lists), calculated
-#'                   from upper_apportionment()
+#'                   with [upper_apportionment()].
 #' @param method Apportion method that defines how seats are assigned,
-#'               see \link{proporz}. Note  that the iterative process is only
+#'               see `proporz`. Note  that the iterative process is only
 #'               guaranteed to terminate with "round" (Sainte-Laguë/Webster
 #'               method). It is also possible to provide a function that works
-#'               like base::round(x) (i.e. can handle a matrix).
+#'               like `base::round(x)` (i.e. can handle a matrix).
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to
 #'       terminate with Sainte-Laguë/Webster method.
 #'
-#' @returns A seat matrix with column and row divisors stored in attributes
+#' @returns A seat matrix with district (columns) and party (rows) divisors
+#'          stored in attributes.
 #'
-#' @seealso \code{\link{biproporz}}, \code{\link{lower_apportionment}}
+#' @seealso [biproporz()], [upper_apportionment()]
 #'
 #' @references Oelbermann, K. F. (2016). Alternate scaling algorithm for
 #' biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.
+#'
+#' @examples
+#' votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
+#' district_seats = c(7,5,8)
+#' party_seats = c(5,11,4)
+#'
+#' lower_apportionment(votes_matrix, district_seats, party_seats)
 #'
 #' @export
 lower_apportionment = function(votes_matrix, seats_cols, seats_rows, method = "round") {

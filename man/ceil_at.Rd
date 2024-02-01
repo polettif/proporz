@@ -15,3 +15,9 @@ threshold series}
 \description{
 Round x up if x-floor(x) >= threshold
 }
+\examples{
+proporz:::ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
+# compare to
+round(c(0.5, 1.5, 2.49, 2.5, 2.51))
+}
+\keyword{internal}

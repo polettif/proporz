@@ -22,13 +22,13 @@ according to the number of votes (not the general use
 case), a single number for the total number of seats
 can be used.}
 
-\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a
+\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
 district has as many votes as there are seats in a
 district. Set to FALSE if \code{votes_matrix} shows the
 number of voters.}
 
 \item{method}{Apportion method that defines how seats are assigned,
-see \link{proporz}.}
+see \code{\link[=proporz]{proporz()}}.}
 }
 \value{
 A named list with column/district seats and row/party seats
@@ -48,6 +48,12 @@ will only determine where (which regions) the party seats are
 allocated. Thus, after the upper apportionment is done, the final strength of
 a party/region within the parliament is definite.
 }
+\examples{
+votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
+district_seats = c(7,5,8)
+
+upper_apportionment(votes_matrix, district_seats)
+}
 \seealso{
-\code{\link{biproporz}}, \code{\link{lower_apportionment}}
+\code{\link[=biproporz]{biproporz()}}, \code{\link[=lower_apportionment]{lower_apportionment()}}
 }

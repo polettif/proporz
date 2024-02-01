@@ -31,7 +31,7 @@ The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
 precalculated logical vector. No quorum is applied if parameter
 is missing or NULL.}
 
-\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a
+\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
 district has as many votes as there are seats in a
 district. Set to FALSE if \code{votes_matrix} shows the
 number of voters.}
@@ -42,7 +42,7 @@ method is the standard for biproportional apportionment. See
 \link{proporz} for a list of available methods. For a different
 method for upper and lower apportionment use a vector with two
 entries. It is also possible to provide a function that works
-like base::round(x) (i.e. can handle a matrix).}
+like \code{base::round(x)} (i.e. can handle a matrix).}
 }
 \value{
 Matrix with the same dimension as \code{votes_matrix} containing
@@ -143,6 +143,6 @@ f19_seats[rowSums(f19_seats) > 0,]
 
 }
 \seealso{
-\code{\link{pukelsheim}} for usage with data frames.
-\code{\link{divisors}} to access the divisors
+\code{\link[=pukelsheim]{pukelsheim()}} for usage with data frames.
+\code{\link[=divisors]{divisors()}} to access the divisors
 }

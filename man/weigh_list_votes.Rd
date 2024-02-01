@@ -20,6 +20,6 @@ of seats per district. No input checks are performed.
 }
 \examples{
 vm = matrix(c(100,50,20,10), 2)
-weigh_list_votes(vm, c(10, 2))
+proporz:::weigh_list_votes(vm, c(10, 2))
 }
 \keyword{internal}

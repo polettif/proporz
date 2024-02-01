@@ -98,5 +98,5 @@ tail(finland19_result[order(finland19_result$mandates),])
 
 }
 \seealso{
-\code{\link{biproporz}}, \code{\link{divisors}}
+\code{\link[=biproporz]{biproporz()}}, \code{\link[=divisors]{divisors()}}
 }

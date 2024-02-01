@@ -14,7 +14,7 @@ as.matrix.proporz_matrix = function(x, ...) {
 #'
 #' Show the district and party divisors used for to assign seats.
 #' This method provides easier access to divisors stored in
-#' attributes(...)$divisors
+#' `attributes(...)$divisors`
 #'
 #' @param biproporz_result a matrix created by \code{\link{biproporz}}
 #'                         or a data.frame created by \code{\link{pukelsheim}}

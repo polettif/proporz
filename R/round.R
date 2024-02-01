@@ -2,6 +2,11 @@
 #' @param x numeric value
 #' @param threshold threshold in 0..1 or "harmonic"/"geometric" for
 #'                  threshold series
+#' @examples
+#' proporz:::ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
+#' # compare to
+#' round(c(0.5, 1.5, 2.49, 2.5, 2.51))
+#' @keywords internal
 ceil_at = function(x, threshold) {
     assert(length(threshold) == 1 && !is.na(threshold))
     assert(all(!is.na(x)) && all(is.numeric(x)) && all(x >= 0))

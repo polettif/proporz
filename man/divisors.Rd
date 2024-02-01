@@ -16,7 +16,7 @@ The district and party divisors in a list
 \description{
 Show the district and party divisors used for to assign seats.
 This method provides easier access to divisors stored in
-attributes(...)$divisors
+\code{attributes(...)$divisors}
 }
 \examples{
 votes_matrix = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)
