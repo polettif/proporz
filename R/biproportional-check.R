@@ -98,6 +98,7 @@ prep_district_seats = function(district_seats, votes_matrix,
     if(sum(district_seats %% 1) != 0) {
         stop("`", .district_seats.name, "` must be integers.", call. = F)
     }
+    assert(is.atomic(district_seats))
 
     return(district_seats)
 }

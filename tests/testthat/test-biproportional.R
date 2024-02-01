@@ -402,3 +402,9 @@ test_that("error messages", {
     rownames(vm_names) <- c("A", "C", "B")
     expect_error_fixed(prep_votes_matrix(vm_names, "x"), "colnames in `x` must be unique")
 })
+
+test_that("weight_list_votes", {
+    vm = matrix(c(100,50,20,10), 2)
+    vmw = weigh_list_votes(vm, c(10, 2))
+    expect_equal(vmw, matrix(c(100/10,50/10,20/2,10/2), 2))
+})

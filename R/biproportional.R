@@ -285,8 +285,11 @@ biproporz = function(votes_matrix,
 upper_apportionment = function(votes_matrix, district_seats,
                                use_list_votes = TRUE,
                                method = "round") {
-    votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
-    assert(is.atomic(district_seats))
+    # check parameters
+    .votes_matrix.name = deparse(substitute(votes_matrix))
+    .district_seats.name = deparse(substitute(district_seats))
+    votes_matrix <- prep_votes_matrix(votes_matrix, .votes_matrix.name)
+    district_seats <- prep_district_seats(district_seats, votes_matrix, .district_seats.name, .votes_matrix.name)
     assert(length(use_list_votes) == 1 && is.logical(use_list_votes))
 
     # district seats
@@ -299,15 +302,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # party seats
     if(use_list_votes) {
-        M_seats_district = matrix(
-            rep(seats_district, nrow(votes_matrix)),
-            byrow = TRUE, ncol = length(seats_district))
-
-        votes_matrix <- votes_matrix/M_seats_district
-
-        # it's possible if district seats are proportionally assigned that
-        # a district has 0 seats, fix NaNs and Infs here
-        votes_matrix[is.nan(votes_matrix) | is.infinite(votes_matrix)] <- 0
+        votes_matrix <- weigh_list_votes(votes_matrix, seats_district)
     }
     seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
 
@@ -318,6 +313,32 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # return values
     list(district = seats_district, party = seats_party)
+}
+
+#' Create weighted votes matrix
+#'
+#' Weigh list votes by dividing the votes matrix entries by the number
+#' of seats per district. No input checks are performed.
+#'
+#' @param votes_matrix votes matrix
+#' @param seats_district seats per district (vector)
+#' @returns the weighted `votes_matrix`
+#' @examples
+#' vm = matrix(c(100,50,20,10), 2)
+#' weigh_list_votes(vm, c(10, 2))
+#' @keywords internal
+weigh_list_votes = function(votes_matrix, seats_district) {
+    M_seats_district = matrix(
+        rep(seats_district, nrow(votes_matrix)),
+        byrow = TRUE, ncol = length(seats_district))
+
+    votes_matrix <- votes_matrix/M_seats_district
+
+    # it's possible if district seats are proportionally assigned that
+    # a district has 0 seats, fix NaNs and Infs here
+    votes_matrix[is.nan(votes_matrix) | is.infinite(votes_matrix)] <- 0
+
+    return(votes_matrix)
 }
 
 #' Calculate lower apportionment
@@ -368,10 +389,12 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' @export
 lower_apportionment = function(votes_matrix, seats_cols, seats_rows, method = "round") {
+    # check parameters
     M = prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
     assert(all((seats_cols %% 1) == 0) && all((seats_rows %% 1) == 0))
     assert(length(seats_cols) == ncol(M) && length(seats_rows) == nrow(M))
 
+    # method
     if(is.function(method)) {
         round_func = method
     } else {
