@@ -28,7 +28,7 @@ reprex::reprex({
 
     head(seats_df)
 
-    divisors(seats_df)
+    get_divisors(seats_df)
 })
 
 reprex::reprex({
@@ -45,7 +45,7 @@ reprex::reprex({
     seats_matrix = biproporz(votes_matrix, district_seats, 0.05, 0.03)
     seats_matrix
 
-    divisors(seats_matrix)
+    get_divisors(seats_matrix)
 })
 
 reprex::reprex({
@@ -54,7 +54,7 @@ reprex::reprex({
     district_seats = 4:6
 
     seats_matrix = biproporz(votes_matrix, district_seats)
-    divisors(seats_matrix)
+    get_divisors(seats_matrix)
 })
 
 # quorum_all

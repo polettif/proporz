@@ -192,7 +192,7 @@ test_that("pukelsheim wrapper", {
     result = pukelsheim(pklshm, pklshm_seats, new_seats_col = "Sitze")
     expect_equal(result[,1:3], pklshm)
     expect_equal(result$Sitze, c(1,2,1,1,2,2,2,1,3))
-    expect_true(!is.null(divisors(result)))
+    expect_true(!is.null(get_divisors(result)))
 })
 
 test_that("biproportional with names", {
@@ -214,7 +214,7 @@ test_that("biproportional with names", {
     expect_equal(unname(as.matrix(uri20_output)), unname(uri20_result))
     expect_equivalent(rownames(uri20_output), rownames(uri20_result))
     expect_equivalent(colnames(uri20_output), colnames(uri20_result))
-    expect_true(!is.null(divisors(uri20_output)))
+    expect_true(!is.null(get_divisors(uri20_output)))
 })
 
 suomi19_votes = structure(

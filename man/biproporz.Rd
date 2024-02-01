@@ -144,5 +144,5 @@ f19_seats[rowSums(f19_seats) > 0,]
 }
 \seealso{
 \code{\link[=pukelsheim]{pukelsheim()}} for usage with data frames.
-\code{\link[=divisors]{divisors()}} to access the divisors
+\code{\link[=get_divisors]{get_divisors()}} to access the divisors
 }

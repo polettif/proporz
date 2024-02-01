@@ -10,7 +10,7 @@ as.matrix.proporz_matrix = function(x, ...) {
     matrix(x, nrow = nrow(x), dimnames = dimnames(x))
 }
 
-#' Get district and party divisors
+#' Get district and party divisors from [biproporz()] result
 #'
 #' Show the district and party divisors used for to assign seats.
 #' This method provides easier access to divisors stored in
@@ -26,14 +26,9 @@ as.matrix.proporz_matrix = function(x, ...) {
 #' district_seats = 4:6
 #'
 #' seats_matrix = biproporz(votes_matrix, district_seats)
-#' divisors(seats_matrix)
-#' #> $districts
-#' #> [1] 40.90625 67.06318 52.00000
-#' #>
-#' #> $parties
-#' #> [1] 0.9694748 0.9921875 1.0234375
+#' get_divisors(seats_matrix)
 #'
 #' @export
-divisors = function(biproporz_result) {
+get_divisors = function(biproporz_result) {
     attributes(biproporz_result)$divisors
 }

@@ -35,7 +35,7 @@
 #'                       many votes as there are seats in a district. Set to FALSE if
 #'                       \code{votes_df} shows the number of voters.
 #'
-#' @seealso [biproporz()], [divisors()]
+#' @seealso [biproporz()], [get_divisors()]
 #'
 #' @returns A data.frame (like votes_df) with a new column denoting the number
 #'          seats per party and district
@@ -145,7 +145,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #'       with Sainte-Laguë/Webster method.
 #'
 #' @seealso [pukelsheim()] for usage with data frames.
-#'          [divisors()] to access the divisors
+#'          [get_divisors()] to access the divisors
 #'
 #' @returns Matrix with the same dimension as `votes_matrix` containing
 #'          the number of seats
