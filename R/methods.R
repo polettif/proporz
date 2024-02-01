@@ -1,6 +1,6 @@
 #' List of all apportion methods
 #'
-#' Names can be used in [proporz()] or [biproportional()], the list entries
+#' Names can be used in [proporz()] or [biproporz()], the list entries
 #' denote the actual implementation.
 #'
 #' @details

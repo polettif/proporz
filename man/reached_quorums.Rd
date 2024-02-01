@@ -22,7 +22,7 @@ Apply a list of quorum functions to a votes matrix
 }
 \note{
 This is a low-level implementation for quorum calculations and is
-called within \code{\link[=biproportional]{biproportional()}}. There's generally no need to call it
+called within \code{\link[=biproporz]{biproporz()}}. There's generally no need to call it
 directly.
 }
 \seealso{

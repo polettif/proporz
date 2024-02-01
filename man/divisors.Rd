@@ -4,10 +4,10 @@
 \alias{divisors}
 \title{Get district and party divisors}
 \usage{
-divisors(biproportional_result)
+divisors(biproporz_result)
 }
 \arguments{
-\item{biproportional_result}{a matrix created by \code{\link{biproportional}}
+\item{biproporz_result}{a matrix created by \code{\link{biproporz}}
 or a data.frame created by \code{\link{pukelsheim}}}
 }
 \value{
@@ -22,7 +22,7 @@ attributes(...)$divisors
 votes_matrix = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)
 district_seats = 4:6
 
-seats_matrix = biproportional(votes_matrix, district_seats)
+seats_matrix = biproporz(votes_matrix, district_seats)
 divisors(seats_matrix)
 #> $districts
 #> [1] 40.90625 67.06318 52.00000

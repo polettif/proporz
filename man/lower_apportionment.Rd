@@ -58,5 +58,5 @@ Oelbermann, K. F. (2016). Alternate scaling algorithm for
 biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.
 }
 \seealso{
-\code{\link{biproportional}}, \code{\link{lower_apportionment}}
+\code{\link{biproporz}}, \code{\link{lower_apportionment}}
 }

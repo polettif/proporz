@@ -1,6 +1,6 @@
 #' Create a quorum function where \emph{all} quorums must be reached
 #'
-#' `quorum_any` and `quorum_all` are normally used in [biproportional()]
+#' `quorum_any` and `quorum_all` are normally used in [biproporz()]
 #' or [pukelsheim()]. Missing quorum parameters are ignored.
 #'
 #' @param any_district Vote threshold a party must reach in \emph{at least}
@@ -27,7 +27,7 @@
 #' dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 #' seats = c(Z1 = 50, Z2 = 20)
 #'
-#' # use as parameter in biproportional (general use case)
+#' # use as parameter in biproporz (general use case)
 #' biproporz(votes_matrix, seats)
 #' #>   Z1 Z2
 #' #> A 39 12
@@ -78,7 +78,7 @@ quorum_all = function(any_district, total) {
 
 #' Create a quorum function where \emph{at least one} quorum must be reached
 #'
-#' `quorum_any` and `quorum_all` are normally used in [biproportional()]
+#' `quorum_any` and `quorum_all` are normally used in [biproporz()]
 #' or [pukelsheim()]. Missing quorum parameters are ignored.
 #'
 #' @returns a function(votes_matrix) which then returns a boolean vector with
@@ -176,7 +176,7 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #'                     (i.e. at least one) quorum must be reached.
 #'
 #' @note This is a low-level implementation for quorum calculations and is
-#'       called within [biproportional()]. There's generally no need to call it
+#'       called within [biproporz()]. There's generally no need to call it
 #'       directly.
 #'
 #' @seealso [quorum_all()], [quorum_any()] to create a list of quorum functions.

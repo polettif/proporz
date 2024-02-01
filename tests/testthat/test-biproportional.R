@@ -1,4 +1,4 @@
-# https://en.wikipedia.org/wiki/Biproportional_apportionment
+# https://en.wikipedia.org/wiki/biproporz_apportionment
 M1 = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
 d1 = c(7,5,8)
 p1 = c(5,11,4)
@@ -34,8 +34,8 @@ test_that("lower apportionment", {
         fixed = TRUE)
 })
 
-test_that("biproportional", {
-    act = biproportional(M2, d2)
+test_that("biproporz", {
+    act = biproporz(M2, d2)
     act <- as.matrix(act)
     exp = matrix(c(1,1,2,2,2,1,1,2,3), nrow=3)
     expect_equal(act, exp)
@@ -109,27 +109,27 @@ test_that("quorum", {
     soll_district_and_total = vm * matrix(rep(q_district_and_total, 2), ncol = 2)
     soll_district_or_total = vm * matrix(rep(q_district_or_total, 2), ncol = 2)
 
-    # biproportional()
+    # biproporz()
     expect_equal(
-        biproportional(vm, c(100, 100), quorum_any(any_district = 0.05)) > 0,
+        biproporz(vm, c(100, 100), quorum_any(any_district = 0.05)) > 0,
         soll_district > 0)
     expect_equal(
-        biproportional(vm, c(100, 100), quorum_any(any_district = 0.05)) > 0,
+        biproporz(vm, c(100, 100), quorum_any(any_district = 0.05)) > 0,
         soll_district > 0)
 
     expect_equal(
-        biproportional(vm, c(100, 100), quorum_any(total = 0.03)) > 0,
+        biproporz(vm, c(100, 100), quorum_any(total = 0.03)) > 0,
         soll_total > 0)
     expect_equal(
-        biproportional(vm, c(100, 100), quorum_all(any_district = 0.05, total = 0.03)) > 0,
+        biproporz(vm, c(100, 100), quorum_all(any_district = 0.05, total = 0.03)) > 0,
         soll_district_and_total > 0)
     expect_equal(
-        biproportional(vm, c(100, 100), quorum_any(any_district = 0.05, total = 0.03)) > 0,
+        biproporz(vm, c(100, 100), quorum_any(any_district = 0.05, total = 0.03)) > 0,
         soll_district_or_total > 0)
 
     # with vector
     expect_equal(
-        biproportional(vm, c(100, 100), q_district_or_total) > 0,
+        biproporz(vm, c(100, 100), q_district_or_total) > 0,
         soll_district_or_total > 0)
 
     # pukelsheim()
@@ -154,16 +154,16 @@ test_that("quorum", {
 
     # biproportional quorum edge case
     ec_vm = matrix(c(89,5,2,4, 96,1,1,4), ncol = 2)
-    ec_bp = biproportional(vm, c(93, 100), quorum_any(any_district = 0.05))
+    ec_bp = biproporz(vm, c(93, 100), quorum_any(any_district = 0.05))
     expect_is(ec_bp, "proporz_matrix")
 })
 
 
 test_that("free apportionment for districts", {
-    # https://en.wikipedia.org/wiki/Biproportional_apportionment#Specific_example
+    # https://en.wikipedia.org/wiki/biproporz_apportionment#Specific_example
     input_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
     mtrx_exp = matrix(c(1,4,2,0,4,1,4,3,1), nrow = 3)
-    mtrx_act = biproportional(input_matrix, 20)
+    mtrx_act = biproporz(input_matrix, 20)
     mtrx_act <- as.matrix(mtrx_act)
     expect_equal(mtrx_act, mtrx_exp)
 })
@@ -210,7 +210,7 @@ test_that("biproportional with names", {
                                  c("CVP", "SPGB", "FDP", "SVP"),
                                  names(uri20_districts)))
 
-    uri20_output = biproportional(uri20_input, uri20_districts)
+    uri20_output = biproporz(uri20_input, uri20_districts)
     expect_equal(unname(as.matrix(uri20_output)), unname(uri20_result))
     expect_equivalent(rownames(uri20_output), rownames(uri20_result))
     expect_equivalent(colnames(uri20_output), colnames(uri20_result))
@@ -246,7 +246,7 @@ test_that("use_list_votes=FALSE", {
 
 test_that("biproportional methods", {
     vm_19 = pivot_to_matrix(suomi19_votes)
-    bip19 = biproportional(vm_19, suomi19_distr_seats,
+    bip19 = biproporz(vm_19, suomi19_distr_seats,
                            use_list_votes = FALSE,
                            method = c("floor", "round"))
     dhondt19 = proporz(rowSums(vm_19), 30, "d'hondt")
@@ -255,13 +255,13 @@ test_that("biproportional methods", {
 
 test_that("almost empty vote_matrix", {
     vm1 = matrix(c(10,0,0,0, 0,0,10,0, 0,0,0,20, 0,0,0,20), nrow = 4)
-    expect_equal(biproportional(vm1, 4), biproportional(vm1, rep(1,4)))
+    expect_equal(biproporz(vm1, 4), biproporz(vm1, rep(1,4)))
 
     vm2 = matrix(0, nrow = 4, ncol = 4)
     vm2[1,2] <- 10
-    expect_equal(sum(biproportional(vm2, 2)), 2)
+    expect_equal(sum(biproporz(vm2, 2)), 2)
 
-    expect_error_fixed(biproportional(vm2, c(1,1,0,0)), "No votes in a district with at least one seat")
+    expect_error_fixed(biproporz(vm2, c(1,1,0,0)), "No votes in a district with at least one seat")
 
     vm3 = matrix(c(4,3,0,20,1,0), nrow = 2)
     expect_error_fixed(
@@ -313,14 +313,14 @@ test_that("districts with one seat", {
     votes_matrix <- round(votes_matrix)
     votes_matrix[votes_matrix < 30] <- 0
 
-    expect_equal(colSums(biproportional(votes_matrix, seats)), seats)
+    expect_equal(colSums(biproporz(votes_matrix, seats)), seats)
 })
 
 test_that("named votes_matrix", {
     votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
     dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 
-    expect_error_fixed(biproportional(votes_matrix, c(50, 20)),
+    expect_error_fixed(biproporz(votes_matrix, c(50, 20)),
                  "needs to have the same names as the columns in votes_matrix.")
 
     seats = c("Z2" = 20, "Z1" = 50)
@@ -381,13 +381,13 @@ test_that("error messages", {
                  "Vote values in `vdf_neg`s third column must be numbers >= 0")
 
     # biproportional
-    expect_error_fixed(biproportional(vdf, c(1,2,3)), "`vdf` must be a matrix.")
-    expect_error_fixed(biproportional(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows.")
-    expect_error_fixed(biproportional(vm, seats, method = "quota_largest_remainder"),
+    expect_error_fixed(biproporz(vdf, c(1,2,3)), "`vdf` must be a matrix.")
+    expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows.")
+    expect_error_fixed(biproporz(vm, seats, method = "quota_largest_remainder"),
                  'Cannot use "quota_largest_remainder" method, only divisor methods are possible in biproportional apportionment.')
-    expect_error_fixed(biproportional(vm+0.1, seats), "`vm + 0.1` must only contain integers")
-    expect_error_fixed(biproportional(vm, seats+0.1), "`seats + 0.1` must be integers.")
-    expect_error_fixed(biproportional(vm, seats, method = c("round", "floor", "ceiling")),
+    expect_error_fixed(biproporz(vm+0.1, seats), "`vm + 0.1` must only contain integers")
+    expect_error_fixed(biproporz(vm, seats+0.1), "`seats + 0.1` must be integers.")
+    expect_error_fixed(biproporz(vm, seats, method = c("round", "floor", "ceiling")),
                  "Only one or two methods allowed.")
 
     # lower_apportionment

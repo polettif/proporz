@@ -24,7 +24,7 @@ length equal to the number of lists/parties (votes_matrix rows),
 denoting whether a party has reached both quorums.
 }
 \description{
-\code{quorum_any} and \code{quorum_all} are normally used in \code{\link[=biproportional]{biproportional()}}
+\code{quorum_any} and \code{quorum_all} are normally used in \code{\link[=biproporz]{biproporz()}}
 or \code{\link[=pukelsheim]{pukelsheim()}}. Missing quorum parameters are ignored.
 }
 \note{
@@ -36,7 +36,7 @@ votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
 dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 seats = c(Z1 = 50, Z2 = 20)
 
-# use as parameter in biproportional (general use case)
+# use as parameter in biproporz (general use case)
 biproporz(votes_matrix, seats)
 #>   Z1 Z2
 #> A 39 12

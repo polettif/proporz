@@ -16,8 +16,8 @@ as.matrix.proporz_matrix = function(x, ...) {
 #' This method provides easier access to divisors stored in
 #' attributes(...)$divisors
 #'
-#' @param biproportional_result a matrix created by \code{\link{biproportional}}
-#'                              or a data.frame created by \code{\link{pukelsheim}}
+#' @param biproporz_result a matrix created by \code{\link{biproporz}}
+#'                         or a data.frame created by \code{\link{pukelsheim}}
 #'
 #' @returns The district and party divisors in a list
 #'
@@ -25,7 +25,7 @@ as.matrix.proporz_matrix = function(x, ...) {
 #' votes_matrix = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)
 #' district_seats = 4:6
 #'
-#' seats_matrix = biproportional(votes_matrix, district_seats)
+#' seats_matrix = biproporz(votes_matrix, district_seats)
 #' divisors(seats_matrix)
 #' #> $districts
 #' #> [1] 40.90625 67.06318 52.00000
@@ -34,6 +34,6 @@ as.matrix.proporz_matrix = function(x, ...) {
 #' #> [1] 0.9694748 0.9921875 1.0234375
 #'
 #' @export
-divisors = function(biproportional_result) {
-    attributes(biproportional_result)$divisors
+divisors = function(biproporz_result) {
+    attributes(biproporz_result)$divisors
 }

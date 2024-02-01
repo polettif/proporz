@@ -45,7 +45,7 @@ devtools::install_github("polettif/proporz")
 ### Biproportional methods
 | biproportional method | known as... | function |
 | :---|:---|:---
-| [Generic Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) | - | [biproportional(...)](https://polettif.github.io/proporz/reference/biproportional.html)
+| [Generic Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) | - | [biproporz(...)](https://polettif.github.io/proporz/reference/biproporz.html)
 | [Doppeltproportionales Zuteilungsverfahren](https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren) | Doppeltproportionale Divisormethode mit Standardrundung, Doppelproporz, "Doppelter Pukelsheim" | [pukelsheim(...)](https://polettif.github.io/proporz/reference/pukelsheim.html)
 
 ##### [Full function reference](https://polettif.github.io/proporz/reference/index.html)
@@ -151,7 +151,7 @@ district_seats
 #> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 
 #>   15   10    6    3    2    4    7    6    6    2   19
 
-seats_matrix = biproportional(votes_matrix, district_seats, quorum_any(0.05, 0.03))
+seats_matrix = biproporz(votes_matrix, district_seats, quorum_any(0.05, 0.03))
 seats_matrix
 #>         entity_id
 #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711

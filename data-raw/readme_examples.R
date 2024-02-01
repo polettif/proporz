@@ -42,7 +42,7 @@ reprex::reprex({
     district_seats = setNames(distr_df$election_mandates, distr_df$entity_id)
     district_seats
 
-    seats_matrix = biproportional(votes_matrix, district_seats, 0.05, 0.03)
+    seats_matrix = biproporz(votes_matrix, district_seats, 0.05, 0.03)
     seats_matrix
 
     divisors(seats_matrix)
@@ -53,7 +53,7 @@ reprex::reprex({
     votes_matrix = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)
     district_seats = 4:6
 
-    seats_matrix = biproportional(votes_matrix, district_seats)
+    seats_matrix = biproporz(votes_matrix, district_seats)
     divisors(seats_matrix)
 })
 

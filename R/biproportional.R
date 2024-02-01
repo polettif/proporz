@@ -16,7 +16,7 @@
 #'
 #' Parties failing to reach quorums cannot get seats.
 #'
-#' If you want to other apportion methods than Sainte-Laguë use \link{biproportional}.
+#' If you want to other apportion methods than Sainte-Laguë use \link{biproporz}.
 #'
 #' @param votes_df data.frame (long format) with 3 columns (actual colnames can differ):
 #'                 \itemize{
@@ -29,13 +29,13 @@
 #'                            \item district id/name
 #'                            \item number of seats for a district
 #'                          }
-#' @inheritParams biproportional
+#' @inheritParams biproporz
 #' @param new_seats_col name of the new column
 #' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
 #'                       many votes as there are seats in a district. Set to FALSE if
 #'                       \code{votes_df} shows the number of voters.
 #'
-#' @seealso \code{\link{biproportional}}, \code{\link{divisors}}
+#' @seealso \code{\link{biproporz}}, \code{\link{divisors}}
 #'
 #' @returns A data.frame (like votes_df) with a new column denoting the number
 #'          seats per party and district
@@ -88,7 +88,7 @@ pukelsheim = function(votes_df, district_seats_df,
     district_seats = prep_district_seats_df(district_seats_df)
 
     # Biproportional Apportionment
-    m = biproportional(votes_matrix, district_seats,
+    m = biproporz(votes_matrix, district_seats,
                        quorum = quorum,
                        use_list_votes = use_list_votes)
     seats_df = pivot_to_df(m, new_seats_col)
@@ -107,8 +107,9 @@ pukelsheim = function(votes_df, district_seats_df,
 #' Biproportional apportionment
 #'
 #' Method to proportionally allocate seats among parties (or lists) and
-#' districts (or entities, regions).
+#' districts (or entities, regions), thus bi-proportional.
 #'
+#' @details
 #' Each party nominates a candidate list for every district. The voters vote
 #' for the parties of their district. The seat allocation is calculated in two
 #' steps:
@@ -169,7 +170,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #' #> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #' #>   15   10    6    3    2    4    7    6    6    2   19
 #'
-#' biproportional(votes_matrix, district_seats, quorum_any(0.05, 0.03))
+#' biproporz(votes_matrix, district_seats, quorum_any(0.05, 0.03))
 #' #>         entity_id
 #' #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #' #>       1    0    0    0    0    0    0    0    0    0    0    0
@@ -188,7 +189,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #' #>     1     2     3     4     5     6     7
 #' #> FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
 #'
-#' biproportional(votes_matrix, district_seats, reached_quorum)
+#' biproporz(votes_matrix, district_seats, reached_quorum)
 #'
 #' # Different method for upper apportionment
 #' # and using number of voters instead of list votes
@@ -197,7 +198,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #'     finland2019$district_seats_df$election_mandates,
 #'     finland2019$district_seats_df$entity_id)
 #'
-#' f19_seats = biproportional(f19_matrix, f19_distr_seats,
+#' f19_seats = biproporz(f19_matrix, f19_distr_seats,
 #'                use_list_votes = FALSE,
 #'                method = c("floor", "round"))
 #'
@@ -220,7 +221,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #'
 #' @importFrom stats setNames
 #' @export
-biproportional = function(votes_matrix,
+biproporz = function(votes_matrix,
                           district_seats,
                           quorum,
                           use_list_votes = TRUE,
@@ -246,10 +247,6 @@ biproportional = function(votes_matrix,
     class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)
 }
-
-#' @inherit biproportional
-#' @export
-biproporz = biproportional
 
 #' Calculate upper apportionment
 #'
@@ -281,7 +278,7 @@ biproporz = biproportional
 #' @param method Apportion method that defines how seats are assigned,
 #'               see \link{proporz}.
 #'
-#' @seealso \code{\link{biproportional}}, \code{\link{lower_apportionment}}
+#' @seealso \code{\link{biproporz}}, \code{\link{lower_apportionment}}
 #'
 #' @returns A named list with column/district seats and row/party seats
 #' @export
@@ -364,7 +361,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' @returns A seat matrix with column and row divisors stored in attributes
 #'
-#' @seealso \code{\link{biproportional}}, \code{\link{lower_apportionment}}
+#' @seealso \code{\link{biproporz}}, \code{\link{lower_apportionment}}
 #'
 #' @references Oelbermann, K. F. (2016). Alternate scaling algorithm for
 #' biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.

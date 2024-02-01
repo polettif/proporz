@@ -14,7 +14,7 @@ apport_methods
 Named list of methods
 }
 \description{
-Names can be used in \code{\link[=proporz]{proporz()}} or \code{\link[=biproportional]{biproportional()}}, the list entries
+Names can be used in \code{\link[=proporz]{proporz()}} or \code{\link[=biproporz]{biproporz()}}, the list entries
 denote the actual implementation.
 }
 \details{

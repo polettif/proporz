@@ -62,7 +62,7 @@ to the regional party list respecting the results from the upper apportionment.
 
 Parties failing to reach quorums cannot get seats.
 
-If you want to other apportion methods than Sainte-Laguë use \link{biproportional}.
+If you want to other apportion methods than Sainte-Laguë use \link{biproporz}.
 }
 \examples{
 # Zug 2018
@@ -98,5 +98,5 @@ tail(finland19_result[order(finland19_result$mandates),])
 
 }
 \seealso{
-\code{\link{biproportional}}, \code{\link{divisors}}
+\code{\link{biproporz}}, \code{\link{divisors}}
 }

@@ -50,7 +50,7 @@ the number of seats
 }
 \description{
 Method to proportionally allocate seats among parties (or lists) and
-districts (or entities, regions).
+districts (or entities, regions), thus bi-proportional.
 }
 \details{
 Each party nominates a candidate list for every district. The voters vote
@@ -92,7 +92,7 @@ district_seats
 #> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #>   15   10    6    3    2    4    7    6    6    2   19
 
-biproportional(votes_matrix, district_seats, quorum_any(0.05, 0.03))
+biproporz(votes_matrix, district_seats, quorum_any(0.05, 0.03))
 #>         entity_id
 #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #>       1    0    0    0    0    0    0    0    0    0    0    0
@@ -111,7 +111,7 @@ reached_quorum
 #>     1     2     3     4     5     6     7
 #> FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
 
-biproportional(votes_matrix, district_seats, reached_quorum)
+biproporz(votes_matrix, district_seats, reached_quorum)
 
 # Different method for upper apportionment
 # and using number of voters instead of list votes
@@ -120,7 +120,7 @@ f19_distr_seats = setNames(
     finland2019$district_seats_df$election_mandates,
     finland2019$district_seats_df$entity_id)
 
-f19_seats = biproportional(f19_matrix, f19_distr_seats,
+f19_seats = biproporz(f19_matrix, f19_distr_seats,
                use_list_votes = FALSE,
                method = c("floor", "round"))
 
