@@ -56,19 +56,6 @@ highest_averages_method = function(votes, n_seats, divisors) {
     return(vec)
 }
 
-#' Highest averages method
-#'
-#' Alias for \code{\link{highest_averages_method}}. Named after its
-#' German equivalent "Höchstzahlverfahren".
-#'
-#' @inheritParams highest_averages_method
-#' @inherit proporz return
-#' @export
-hzv = function(votes, n_seats, divisors) {
-    highest_averages_method(votes, n_seats, divisors)
-}
-
-
 #' Divisor methods
 #'
 #' Functions to directly apply divisor apportionment methods instead
