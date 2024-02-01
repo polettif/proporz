@@ -28,7 +28,9 @@ denoting whether a party has reached at least one quorum.
 or \code{\link[=pukelsheim]{pukelsheim()}}. Missing quorum parameters are ignored.
 }
 \note{
-Currently only two quorums are implemented.
+Currently only two quorums are implemented (\code{any_district} and \code{total}).
+Also, if you only use one quorum, \code{quorum_any()} and \code{quorum_all()} are
+identical.
 }
 \examples{
 votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
@@ -80,5 +82,5 @@ biproporz(votes_matrix, seats, quorum = quorum_all(any_district = 0.1, total = 1
 
 }
 \seealso{
-\code{quorum_all}
+\code{\link[=quorum_all]{quorum_all()}}
 }

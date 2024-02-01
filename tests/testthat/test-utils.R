@@ -1,6 +1,9 @@
 test_that("hoechstzahlverfahren", {
-    expect_equal(hzv(c(5200, 1700, 3100), 15, 0.5), c(8,2,5))
-    expect_equal(hzv(c(100, 80, 30, 20), 8, 1), c(4,3,1,0))
+    expect_equal(highest_averages_method(c(5200, 1700, 3100), 15, 0.5), c(8,2,5))
+    expect_equal(highest_averages_method(c(100, 80, 30, 20), 8, 1), c(4,3,1,0))
+
+    expect_error(highest_averages_method(c(100, 80, 30, 20), 3, c(0.5, 1.5)),
+                 "Number of divisors is not equal to the number of seats")
 })
 
 test_that("bisect", {

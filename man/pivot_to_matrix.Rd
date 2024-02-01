@@ -16,7 +16,16 @@ a matrix
 Pivot long data.frame to wide matrix
 }
 \note{
-This function exists because I wanted to have no dependencies.
-Wrangling with reshape isn't fun at all and it became glaringly
-apparent why better tools like tidyr exist
+This function exists because reshape is hard to handle and the package
+should have no dependencies.
+}
+\examples{
+df = data.frame(party = c("A", "A", "A", "B", "B", "B"),
+                region = c("III", "II", "I", "I", "II", "III"),
+                seats = c(5L, 3L, 1L, 2L, 4L, 6L))
+pivot_to_matrix(df)
+
+}
+\seealso{
+\code{\link[=pivot_to_df]{pivot_to_df()}}
 }

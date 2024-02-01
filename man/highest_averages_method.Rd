@@ -4,15 +4,16 @@
 \alias{highest_averages_method}
 \title{Highest averages method}
 \usage{
-highest_averages_method(party_votes, n_seats, divisors)
+highest_averages_method(votes, n_seats, divisors)
 }
 \arguments{
-\item{party_votes}{vector with votes for each party}
+\item{votes}{vector with votes for each party}
 
 \item{n_seats}{total number of seats}
 
-\item{divisors}{sequence of divisors. If it's a single number, a sequence
-is generated starting with it.}
+\item{divisors}{sequence of divisors (length equal to the number of seats).
+If it's a single number (e.g. 0.5), a sequence is generated
+starting with it.}
 }
 \value{
 The number of seats per party as a vector
@@ -27,4 +28,10 @@ quotients, or averages, with a row for each divisor and a column for each
 party. The nth seat is allocated to the party whose column contains the nth
 largest entry in this table, up to the total number of seats available.
 (\href{https://en.wikipedia.org/wiki/Highest_averages_method}{Wikipedia})
+}
+\examples{
+highest_averages_method(c(5200, 1700, 3100), 15, 0.5)
+
+highest_averages_method(votes = c(50, 0, 30), n_seats = 3,
+                        divisors = c(0, 1.3333, 2.4))
 }

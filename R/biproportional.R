@@ -401,7 +401,8 @@ weigh_list_votes = function(votes_matrix, seats_district) {
 #' lower_apportionment(votes_matrix, district_seats, party_seats)
 #'
 #' @export
-lower_apportionment = function(votes_matrix, seats_cols, seats_rows, method = "round") {
+lower_apportionment = function(votes_matrix, seats_cols,
+                               seats_rows, method = "round") {
     # check parameters
     M = prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
     assert(all((seats_cols %% 1) == 0) && all((seats_rows %% 1) == 0))

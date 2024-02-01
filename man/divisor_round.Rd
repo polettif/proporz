@@ -2,9 +2,21 @@
 % Please edit documentation in R/divisor.R
 \name{divisor_round}
 \alias{divisor_round}
-\title{Divisor method standard rounding}
+\alias{divisor_floor}
+\alias{divisor_harmonic}
+\alias{divisor_geometric}
+\alias{divisor_ceiling}
+\title{Divisor methods}
 \usage{
 divisor_round(votes, n_seats, quorum = 0)
+
+divisor_floor(votes, n_seats, quorum = 0)
+
+divisor_harmonic(votes, n_seats, quorum = 0)
+
+divisor_geometric(votes, n_seats, quorum = 0)
+
+divisor_ceiling(votes, n_seats, quorum = 0)
 }
 \arguments{
 \item{votes}{numeric vector with number of votes for each party}
@@ -19,8 +31,25 @@ of votes.}
 The number of seats per party as a vector
 }
 \description{
-Also known as: Sainte-Laguë, Webster method
+Functions to directly apply divisor apportionment methods instead
+of calling \code{\link[=proporz]{proporz()}}.
+}
+\examples{
+votes = c("Party A" = 690, "Party B" = 400,
+          "Party C" = 250, "Party D" = 120)
+
+divisor_round(votes, 10)
+
+divisor_floor(votes, 10)
+
+divisor_ceiling(votes, 10)
+
+divisor_ceiling(votes, 5)
+
+divisor_geometric(votes, 10, quorum = 0.05)
+
+divisor_harmonic(votes, 10)
 }
 \seealso{
-\code{\link{proporz}}
+\code{\link[=proporz]{proporz()}}
 }

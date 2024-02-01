@@ -23,10 +23,17 @@ bisect = function(f, x1, x2, tol = 1e-9) {
 #'
 #' @param df data.frame in long format with exactly 3 columns
 #'
-#' @note This function exists because I wanted to have no dependencies.
-#'       Wrangling with reshape isn't fun at all and it became glaringly
-#'       apparent why better tools like tidyr exist
+#' @note This function exists because reshape is hard to handle and the package
+#'       should have no dependencies.
+#' @seealso [pivot_to_df()]
+#'
 #' @returns a matrix
+#' @examples
+#' df = data.frame(party = c("A", "A", "A", "B", "B", "B"),
+#'                 region = c("III", "II", "I", "I", "II", "III"),
+#'                 seats = c(5L, 3L, 1L, 2L, 4L, 6L))
+#' pivot_to_matrix(df)
+#'
 #' @export
 pivot_to_matrix = function(df) {
     stopifnot(ncol(df) == 3)
@@ -40,7 +47,15 @@ pivot_to_matrix = function(df) {
 #'
 #' @param matrix_wide matrix in wide format
 #' @param value_colname name for the data.frame new column
+#' @seealso [pivot_to_matrix()]
 #' @returns data.frame with 3 columns
+#' @examples
+#' mtrx = matrix(1:6, nrow = 2)
+#' pivot_to_df(mtrx)
+#'
+#' dimnames(mtrx) <- list(party = c("A", "B"), region = c("I", "II", "III"))
+#' pivot_to_df(mtrx, "seats")
+#'
 #' @export
 pivot_to_df = function(matrix_wide, value_colname = "values") {
     if(is.null(dimnames(matrix_wide))) {

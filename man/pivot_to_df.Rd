@@ -17,3 +17,14 @@ data.frame with 3 columns
 \description{
 Pivot wide matrix to long data.frame
 }
+\examples{
+mtrx = matrix(1:6, nrow = 2)
+pivot_to_df(mtrx)
+
+dimnames(mtrx) <- list(party = c("A", "B"), region = c("I", "II", "III"))
+pivot_to_df(mtrx, "seats")
+
+}
+\seealso{
+\code{\link[=pivot_to_matrix]{pivot_to_matrix()}}
+}

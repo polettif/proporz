@@ -42,15 +42,11 @@ Seats can also be apportioned among regions instead of parties. The parameter
 votes = c("Party A" = 651, "Party B" = 349, "Party C" = 50)
 
 proporz(votes, 10, "sainte-lague")
-#> Party A Party B Party C
-#>       7       3       0
 
 proporz(votes, 10, "hill-huntington")
-#> Party A Party B Party C
-#>       6       3       1
 
 proporz(votes, 10, "hill-huntington", quorum = 0.05)
-#> Party A Party B Party C
-#>       6       4       0
+
+proporz(votes, 10, "jefferson", quorum = 70)
 
 }

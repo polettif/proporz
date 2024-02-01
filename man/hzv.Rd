@@ -4,15 +4,19 @@
 \alias{hzv}
 \title{Highest averages method}
 \usage{
-hzv(party_votes, n_seats, divisors)
+hzv(votes, n_seats, divisors)
 }
 \arguments{
-\item{party_votes}{vector with votes for each party}
+\item{votes}{vector with votes for each party}
 
 \item{n_seats}{total number of seats}
 
-\item{divisors}{sequence of divisors. If it's a single number, a sequence
-is generated starting with it.}
+\item{divisors}{sequence of divisors (length equal to the number of seats).
+If it's a single number (e.g. 0.5), a sequence is generated
+starting with it.}
+}
+\value{
+The number of seats per party as a vector
 }
 \description{
 Alias for \code{\link{highest_averages_method}}. Named after its

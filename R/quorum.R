@@ -13,10 +13,11 @@
 #'              as number of votes. Must be greater than 0.
 #'              Uses [reached_quorum_total()].
 #'
-#' @seealso \code{\link{quorum_any}}
+#' @seealso [quorum_any()]
 #'
-#' @note Currently only two quorums are implemented (any_district and total).
-#' If you only use one quorum, [quorum_any()] and [quorum_all()] are identical.
+#' @note Currently only two quorums are implemented (`any_district` and `total`).
+#' Also, if you only use one quorum, `quorum_any()` and `quorum_all()` are
+#' identical.
 #'
 #' @returns a function(votes_matrix) which then returns a boolean vector with
 #'          length equal to the number of lists/parties (votes_matrix rows),
@@ -85,11 +86,9 @@ quorum_all = function(any_district, total) {
 #'          length equal to the number of lists/parties (votes_matrix rows),
 #'          denoting whether a party has reached at least one quorum.
 #'
-#' @seealso `quorum_all`
+#' @seealso [quorum_all()]
 #'
-#' @note Currently only two quorums are implemented.
-#'
-#' @inherit quorum_all params examples
+#' @inherit quorum_all params examples note
 #' @export
 quorum_any = function(any_district, total) {
     create_quorum_function_list("ANY", any_district, total)
