@@ -30,47 +30,17 @@
 #'
 #' # use as parameter in biproporz (general use case)
 #' biproporz(votes_matrix, seats)
-#' #>   Z1 Z2
-#' #> A 39 12
-#' #> B  5  8
-#' #> C  5  0
-#' #> D  1  0
 #'
 #' # quorum_any and quorum_all are identical if you only use one criterion
 #' biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1))
-#' #>   Z1 Z2
-#' #> A 40 12
-#' #> B  5  8
-#' #> C  5  0
-#' #> D  0  0
 #'
 #' biproporz(votes_matrix, seats, quorum = quorum_any(total = 100))
-#' #>   Z1 Z2
-#' #> A 44 12
-#' #> B  6  8
-#' #> C  0  0
-#' #> D  0  0
 #'
 #' biproporz(votes_matrix, seats, quorum = quorum_any(total = 0.5))
-#' #>   Z1 Z2
-#' #> A 50 20
-#' #> B  0  0
-#' #> C  0  0
-#' #> D  0  0
-
+#'
 #' biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1, total = 100))
-#' #>   Z1 Z2
-#' #> A 40 12
-#' #> B  5  8
-#' #> C  5  0
-#' #> D  0  0
 #'
 #' biproporz(votes_matrix, seats, quorum = quorum_all(any_district = 0.1, total = 100))
-#' #>   Z1 Z2
-#' #> A 44 12
-#' #> B  6  8
-#' #> C  0  0
-#' #> D  0  0
 #'
 #' @export
 quorum_all = function(any_district, total) {

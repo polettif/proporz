@@ -75,41 +75,16 @@ with Sainte-Laguë/Webster method.
 \examples{
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 votes_matrix = pivot_to_matrix(votes_df)
-votes_matrix
-#>        entity_id
-#> list_id  1701 1702 1703 1704 1705 1706 1707 1708 1709 1710  1711
-#>       1  2993    0    0    0    0    0    0    0    0    0     0
-#>       2  8108 4687 1584  531  279  477 2363 3860 1481   91 22023
-#>       3 19389 9334 4807 1946  396 2844 3523 4702 3310  812 21343
-#>       4 14814 6691 4005  826  379 1654 2842 2624 2713  461 33789
-#>       5  4486 2270  621  198    0  361  728  465  925    0 10131
-#>       6 15695 4705 1750   84    0   51  627 1106 1563  302 21794
-#>       7 21298 8178 2875 1336  399 1450 3715 2610 4063  344 26798
 
 distr_df = unique(zug2018[c("entity_id", "election_mandates")])
 district_seats = setNames(distr_df$election_mandates, distr_df$entity_id)
-district_seats
-#> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
-#>   15   10    6    3    2    4    7    6    6    2   19
 
 biproporz(votes_matrix, district_seats, quorum_any(0.05, 0.03))
-#>         entity_id
-#> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
-#>       1    0    0    0    0    0    0    0    0    0    0    0
-#>       2    2    1    1    0    0    0    1    2    1    0    3
-#>       3    3    3    2    1    1    2    2    2    1    1    3
-#>       4    2    2    1    1    0    1    2    1    1    1    5
-#>       5    1    1    0    0    0    0    0    0    0    0    2
-#>       6    3    1    1    0    0    0    0    0    1    0    3
-#>       7    4    2    1    1    1    1    2    1    2    0    3
 
 # calculate quorum beforehand (leads to the same result as above)
 q1 = reached_quorum_any_district(votes_matrix, 0.05)
 q2 = reached_quorum_total(votes_matrix, 0.03)
 reached_quorum = q1 | q2
-reached_quorum
-#>     1     2     3     4     5     6     7
-#> FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
 
 biproporz(votes_matrix, district_seats, reached_quorum)
 
@@ -125,21 +100,6 @@ f19_seats = biproporz(f19_matrix, f19_distr_seats,
                method = c("floor", "round"))
 
 f19_seats[rowSums(f19_seats) > 0,]
-#>        entity_id
-#> list_id HAEM HEL KAA KES LAP OUL PIR SAT SKA UUS VAA VAR
-#> KD      1   0   1   1   0   1   1   0   1   1   1   0
-#> KESK    1   1   3   2   2   6   2   1   3   2   3   2
-#> KOK     3   5   3   1   1   2   4   1   2   7   2   4
-#> Nyt     0   0   0   0   0   0   0   0   0   1   0   0
-#> NYT     0   1   0   0   0   0   0   0   0   0   0   0
-#> PIR     0   1   0   0   0   0   0   0   0   0   0   0
-#> PS      3   3   3   2   1   4   3   2   3   6   3   3
-#> RKP     0   1   0   0   0   0   0   0   0   4   3   1
-#> SDP     4   3   4   2   1   2   4   2   3   7   2   3
-#> SIN     0   0   0   0   0   0   0   0   1   1   0   0
-#> VAS     1   2   1   1   1   2   2   1   1   2   1   2
-#> VIHR    1   5   2   1   1   1   3   1   1   5   1   2
-
 
 }
 \seealso{

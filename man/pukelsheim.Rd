@@ -74,13 +74,6 @@ seats_df = pukelsheim(votes_df,
                       quorum_any(any_district = 0.05, total = 0.03))
 
 head(seats_df)
-#>   list_id entity_id list_votes seats
-#> 1       2      1701       8108     2
-#> 2       1      1701       2993     0
-#> 3       3      1701      19389     3
-#> 4       4      1701      14814     2
-#> 5       5      1701       4486     1
-#> 6       6      1701      15695     3
 
 # Finland 2019
 finland19_result = pukelsheim(finland2019$votes_df,
@@ -88,13 +81,6 @@ finland19_result = pukelsheim(finland2019$votes_df,
                              new_seats_col = "mandates",
                              use_list_votes = FALSE)
 tail(finland19_result[order(finland19_result$mandates),])
-#> list_id entity_id list_votes mandates
-#>    VIHR       HEL      90662        5
-#>      PS       UUS      86691        5
-#>    VIHR       UUS      73626        5
-#>    KESK       OUL      78486        6
-#>     SDP       UUS      97107        6
-#>     KOK       UUS     114243        7
 
 }
 \seealso{
