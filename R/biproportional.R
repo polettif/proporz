@@ -31,9 +31,10 @@
 #'                          }
 #' @inheritParams biproporz
 #' @param new_seats_col name of the new column
-#' @param use_list_votes By default (TRUE) it's assumed that each voter in a district has as
-#'                       many votes as there are seats in a district. Set to FALSE if
-#'                       \code{votes_df} shows the number of voters.
+#' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a
+#'                       district has as many votes as there are seats in a
+#'                       district. Set to `FALSE` if `votes_df` shows the number
+#'                       of voters.
 #'
 #' @seealso [biproporz()], [get_divisors()]
 #'
@@ -127,11 +128,16 @@ pukelsheim = function(votes_df, district_seats_df,
 #'               entries. It is also possible to provide a function that works
 #'               like `base::round(x)` (i.e. can handle a matrix).
 #'
-#' @note The iterative process in the lower apportionment is only guaranteed to terminate
-#'       with Sainte-Laguë/Webster method.
+#' @note The iterative process in the lower apportionment is only guaranteed
+#'       to terminate with the Sainte-Laguë/Webster method.
 #'
 #' @seealso [pukelsheim()] for usage with data frames.
 #'          [get_divisors()] to access the divisors
+#'
+#' @references Gaffke, Norbert; Pukelsheim, Friedrich (2008): Divisor methods
+#'             for proportional representation systems: An optimization approach
+#'             to vector and matrix apportionment problems. Mathematical Social
+#'             Sciences, 56 (2), 166–184.
 #'
 #' @returns Matrix with the same dimension as `votes_matrix` containing
 #'          the number of seats
@@ -294,14 +300,15 @@ weigh_list_votes = function(votes_matrix, seats_district) {
 
 #' Calculate lower apportionment
 #'
-#' Iterate and change column and row divisors such that
-#' \code{colSums(round(M/col_divisors/row_divisors)) == seats_col} and
-#' \code{rowSums(round(M/col_divisors/row_divisors)) == seats_row}
+#' Iterate and change column and row divisors such that the row and column sums
+#' of the seats matrix satisfies the constraints given by the upper
+#' apportionment.
 #'
-#' The result is obtained by an iterative process. Initially, for each district
-#' a divisor is chosen using the highest averages method for the votes allocated
-#' to each regional party list in this region. For each party a party divisor is
-#' initialized with 1.
+#' The result is obtained by an iterative process ('Alternate Scaling
+#' Algorithm', see Reference). Initially, for each district a divisor is chosen
+#' using the highest averages method for the votes allocated to each regional
+#' party list in this region. For each party a party divisor is initialized
+#' with 1.
 #'
 #' Effectively, the objective of the iterative process is to modify the regional
 #' divisors and party divisors so that the number of seats in each regional
@@ -323,13 +330,10 @@ weigh_list_votes = function(votes_matrix, seats_district) {
 #' @param seats_rows number of seats per row (parties/lists), calculated
 #'                   with [upper_apportionment()].
 #' @param method Apportion method that defines how seats are assigned,
-#'               see `proporz`. Note  that the iterative process is only
+#'               see `proporz`. Note that the iterative process is only
 #'               guaranteed to terminate with "round" (Sainte-Laguë/Webster
 #'               method). It is also possible to provide a function that works
 #'               like `base::round(x)` (i.e. can handle a matrix).
-#'
-#' @note The iterative process in the lower apportionment is only guaranteed to
-#'       terminate with Sainte-Laguë/Webster method.
 #'
 #' @returns A seat matrix with district (columns) and party (rows) divisors
 #'          stored in attributes.

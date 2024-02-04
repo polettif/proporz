@@ -69,8 +69,8 @@ apportionment.
 Parties failing to reach quorums cannot get seats.
 }
 \note{
-The iterative process in the lower apportionment is only guaranteed to terminate
-with Sainte-Laguë/Webster method.
+The iterative process in the lower apportionment is only guaranteed
+to terminate with the Sainte-Laguë/Webster method.
 }
 \examples{
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -101,6 +101,12 @@ f19_seats = biproporz(f19_matrix, f19_distr_seats,
 
 f19_seats[rowSums(f19_seats) > 0,]
 
+}
+\references{
+Gaffke, Norbert; Pukelsheim, Friedrich (2008): Divisor methods
+for proportional representation systems: An optimization approach
+to vector and matrix apportionment problems. Mathematical Social
+Sciences, 56 (2), 166–184.
 }
 \seealso{
 \code{\link[=pukelsheim]{pukelsheim()}} for usage with data frames.

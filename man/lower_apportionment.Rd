@@ -16,7 +16,7 @@ predetermined or calculated with \code{\link[=upper_apportionment]{upper_apporti
 with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
 \item{method}{Apportion method that defines how seats are assigned,
-see \code{proporz}. Note  that the iterative process is only
+see \code{proporz}. Note that the iterative process is only
 guaranteed to terminate with "round" (Sainte-Laguë/Webster
 method). It is also possible to provide a function that works
 like \code{base::round(x)} (i.e. can handle a matrix).}
@@ -26,15 +26,16 @@ A seat matrix with district (columns) and party (rows) divisors
 stored in attributes.
 }
 \description{
-Iterate and change column and row divisors such that
-\code{colSums(round(M/col_divisors/row_divisors)) == seats_col} and
-\code{rowSums(round(M/col_divisors/row_divisors)) == seats_row}
+Iterate and change column and row divisors such that the row and column sums
+of the seats matrix satisfies the constraints given by the upper
+apportionment.
 }
 \details{
-The result is obtained by an iterative process. Initially, for each district
-a divisor is chosen using the highest averages method for the votes allocated
-to each regional party list in this region. For each party a party divisor is
-initialized with 1.
+The result is obtained by an iterative process ('Alternate Scaling
+Algorithm', see Reference). Initially, for each district a divisor is chosen
+using the highest averages method for the votes allocated to each regional
+party list in this region. For each party a party divisor is initialized
+with 1.
 
 Effectively, the objective of the iterative process is to modify the regional
 divisors and party divisors so that the number of seats in each regional
@@ -49,10 +50,6 @@ party is correct with the chosen rounding method,
 \item modify the regional divisors such that the apportionment within the
 region is correct with the chosen rounding method.
 }
-}
-\note{
-The iterative process in the lower apportionment is only guaranteed to
-terminate with Sainte-Laguë/Webster method.
 }
 \examples{
 votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)

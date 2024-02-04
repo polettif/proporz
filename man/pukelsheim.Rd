@@ -36,9 +36,10 @@ is missing or NULL.}
 
 \item{new_seats_col}{name of the new column}
 
-\item{use_list_votes}{By default (TRUE) it's assumed that each voter in a district has as
-many votes as there are seats in a district. Set to FALSE if
-\code{votes_df} shows the number of voters.}
+\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
+district has as many votes as there are seats in a
+district. Set to \code{FALSE} if \code{votes_df} shows the number
+of voters.}
 }
 \value{
 A data.frame (like votes_df) with a new column denoting the number
