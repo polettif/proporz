@@ -72,7 +72,35 @@
 
 <p>data.frame with 3 columns</p>
     </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="pivot_to_matrix.html">pivot_to_matrix()</a></code></p></div>
+    </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mtrx</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pivot_to_df</span><span class="op">(</span><span class="va">mtrx</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   row col values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   1   1      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1   2      3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   1   3      5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   2   1      2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   2   2      4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   2   3      6</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">mtrx</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>party <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"I"</span>, <span class="st">"II"</span>, <span class="st">"III"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pivot_to_df</span><span class="op">(</span><span class="va">mtrx</span>, <span class="st">"seats"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   party region seats</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     A      I     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     A     II     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     A    III     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     B      I     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     B     II     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     B    III     6</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

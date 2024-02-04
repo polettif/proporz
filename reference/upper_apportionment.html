@@ -86,7 +86,7 @@ can be used.</p></dd>
 
 
 <dt>use_list_votes</dt>
-<dd><p>By default (TRUE) it's assumed that each voter in a
+<dd><p>By default (<code>TRUE</code>) it's assumed that each voter in a
 district has as many votes as there are seats in a
 district. Set to FALSE if <code>votes_matrix</code> shows the
 number of voters.</p></dd>
@@ -94,7 +94,7 @@ number of voters.</p></dd>
 
 <dt>method</dt>
 <dd><p>Apportion method that defines how seats are assigned,
-see <a href="proporz.html">proporz</a>.</p></dd>
+see <code><a href="proporz.html">proporz()</a></code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -114,9 +114,23 @@ a party/region within the parliament is definite.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="biproportional.html">biproportional</a></code>, <code><a href="lower_apportionment.html">lower_apportionment</a></code></p></div>
+    <div class="dont-index"><p><code><a href="biproporz.html">biproporz()</a></code>, <code><a href="lower_apportionment.html">lower_apportionment()</a></code></p></div>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">votes_matrix</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">123</span>,<span class="fl">912</span>,<span class="fl">312</span>,<span class="fl">45</span>,<span class="fl">714</span>,<span class="fl">255</span>,<span class="fl">815</span>,<span class="fl">414</span>,<span class="fl">215</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">district_seats</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">5</span>,<span class="fl">8</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">upper_apportionment</span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $district</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 7 5 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $party</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  5 11  4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

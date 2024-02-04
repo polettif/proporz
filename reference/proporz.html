@@ -84,11 +84,11 @@ of votes.</p></dd>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>The following methods are available:</p><ul><li><p>d'hondt, jefferson, hagenbach-bischoff, floor (use <code><a href="divisor_floor.html">divisor_floor</a></code>)</p></li>
+    <p>The following methods are available:</p><ul><li><p>d'hondt, jefferson, hagenbach-bischoff, floor (use <code><a href="divisor_round.html">divisor_floor</a></code>)</p></li>
 <li><p>sainte-lague, webster, round (use <code><a href="divisor_round.html">divisor_round</a></code>)</p></li>
-<li><p>adams, ceiling (use <code><a href="divisor_ceiling.html">divisor_ceiling</a></code>)</p></li>
-<li><p>dean, harmonic (use <code><a href="divisor_harmonic.html">divisor_harmonic</a></code>)</p></li>
-<li><p>huntington-hill, hill-huntington, geometric (use <code><a href="divisor_geometric.html">divisor_geometric</a></code>)</p></li>
+<li><p>adams, ceiling (use <code><a href="divisor_round.html">divisor_ceiling</a></code>)</p></li>
+<li><p>dean, harmonic (use <code><a href="divisor_round.html">divisor_harmonic</a></code>)</p></li>
+<li><p>huntington-hill, hill-huntington, geometric (use <code><a href="divisor_round.html">divisor_geometric</a></code>)</p></li>
 <li><p>hare-niemeyer, hamilton, vinton, quota_largest_remainder (use <code><a href="quota_largest_remainder.html">quota_largest_remainder</a></code>)</p></li>
 </ul></div>
     <div id="note">
@@ -104,20 +104,18 @@ of votes.</p></dd>
 <span class="r-in"><span><span class="fu">proporz</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"sainte-lague"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B Party C </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       7       3       0 </span>
-<span class="r-in"><span><span class="co">#&gt; Party A Party B Party C</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;       7       3       0</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">proporz</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"hill-huntington"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B Party C </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       6       3       1 </span>
-<span class="r-in"><span><span class="co">#&gt; Party A Party B Party C</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;       6       3       1</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">proporz</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"hill-huntington"</span>, quorum <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B Party C </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       6       4       0 </span>
-<span class="r-in"><span><span class="co">#&gt; Party A Party B Party C</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;       6       4       0</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">proporz</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"jefferson"</span>, quorum <span class="op">=</span> <span class="fl">70</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B Party C </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       7       3       0 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

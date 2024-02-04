@@ -53,12 +53,12 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">highest_averages_method</span><span class="op">(</span><span class="va">party_votes</span>, <span class="va">n_seats</span>, <span class="va">divisors</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">highest_averages_method</span><span class="op">(</span><span class="va">votes</span>, <span class="va">n_seats</span>, <span class="va">divisors</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>party_votes</dt>
+    <dl><dt>votes</dt>
 <dd><p>vector with votes for each party</p></dd>
 
 
@@ -67,8 +67,9 @@
 
 
 <dt>divisors</dt>
-<dd><p>sequence of divisors. If it's a single number, a sequence
-is generated starting with it.</p></dd>
+<dd><p>sequence of divisors (length equal to the number of seats).
+If it's a single number (e.g. 0.5), a sequence is generated
+starting with it.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -87,6 +88,16 @@ largest entry in this table, up to the total number of seats available.
 (<a href="https://en.wikipedia.org/wiki/Highest_averages_method" class="external-link">Wikipedia</a>)</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">highest_averages_method</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5200</span>, <span class="fl">1700</span>, <span class="fl">3100</span><span class="op">)</span>, <span class="fl">15</span>, <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 8 2 5</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">highest_averages_method</span><span class="op">(</span>votes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">0</span>, <span class="fl">30</span><span class="op">)</span>, n_seats <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>                        divisors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.3333</span>, <span class="fl">2.4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2 0 1</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

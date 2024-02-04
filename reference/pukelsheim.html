@@ -94,9 +94,10 @@ is missing or NULL.</p></dd>
 
 
 <dt>use_list_votes</dt>
-<dd><p>By default (TRUE) it's assumed that each voter in a district has as
-many votes as there are seats in a district. Set to FALSE if
-<code>votes_df</code> shows the number of voters.</p></dd>
+<dd><p>By default (<code>TRUE</code>) it's assumed that each voter in a
+district has as many votes as there are seats in a
+district. Set to <code>FALSE</code> if <code>votes_df</code> shows the number
+of voters.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -116,11 +117,11 @@ each party (over all districts) is determined.</p></li>
 <li><p>In the so called <em>lower apportionment</em> the seats are distributed
 to the regional party list respecting the results from the upper apportionment.</p></li>
 </ol><p>Parties failing to reach quorums cannot get seats.</p>
-<p>If you want to other apportion methods than Sainte-Laguë use <a href="biproportional.html">biproportional</a>.</p>
+<p>If you want to other apportion methods than Sainte-Laguë use <a href="biproporz.html">biproporz</a>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="biproportional.html">biproportional</a></code>, <code><a href="divisors.html">divisors</a></code></p></div>
+    <div class="dont-index"><p><code><a href="biproporz.html">biproporz()</a></code>, <code><a href="get_divisors.html">get_divisors()</a></code></p></div>
     </div>
 
     <div id="ref-examples">
@@ -141,13 +142,6 @@ to the regional party list respecting the results from the upper apportionment.<
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4       4      1701      14814     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5       5      1701       4486     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6       6      1701      15695     3</span>
-<span class="r-in"><span><span class="co">#&gt;   list_id entity_id list_votes seats</span></span></span>
-<span class="r-in"><span><span class="co">#&gt; 1       2      1701       8108     2</span></span></span>
-<span class="r-in"><span><span class="co">#&gt; 2       1      1701       2993     0</span></span></span>
-<span class="r-in"><span><span class="co">#&gt; 3       3      1701      19389     3</span></span></span>
-<span class="r-in"><span><span class="co">#&gt; 4       4      1701      14814     2</span></span></span>
-<span class="r-in"><span><span class="co">#&gt; 5       5      1701       4486     1</span></span></span>
-<span class="r-in"><span><span class="co">#&gt; 6       6      1701      15695     3</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Finland 2019</span></span></span>
 <span class="r-in"><span><span class="va">finland19_result</span> <span class="op">=</span> <span class="fu">pukelsheim</span><span class="op">(</span><span class="va">finland2019</span><span class="op">$</span><span class="va">votes_df</span>,</span></span>
@@ -162,13 +156,6 @@ to the regional party list respecting the results from the upper apportionment.<
 <span class="r-out co"><span class="r-pr">#&gt;</span> 226    KESK       OUL      78486        6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 414     SDP       UUS      97107        6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 405     KOK       UUS     114243        7</span>
-<span class="r-in"><span><span class="co">#&gt; list_id entity_id list_votes mandates</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;    VIHR       HEL      90662        5</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;      PS       UUS      86691        5</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;    VIHR       UUS      73626        5</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;    KESK       OUL      78486        6</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;     SDP       UUS      97107        6</span></span></span>
-<span class="r-in"><span><span class="co">#&gt;     KOK       UUS     114243        7</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

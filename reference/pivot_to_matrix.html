@@ -70,11 +70,27 @@
     </div>
     <div id="note">
     <h2>Note</h2>
-    <p>This function exists because I wanted to have no dependencies.
-Wrangling with reshape isn't fun at all and it became glaringly
-apparent why better tools like tidyr exist</p>
+    <p>This function exists because reshape is hard to handle and the package
+should have no dependencies.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><code><a href="pivot_to_df.html">pivot_to_df()</a></code></p></div>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>party <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"B"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"III"</span>, <span class="st">"II"</span>, <span class="st">"I"</span>, <span class="st">"I"</span>, <span class="st">"II"</span>, <span class="st">"III"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                seats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5L</span>, <span class="fl">3L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">4L</span>, <span class="fl">6L</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pivot_to_matrix</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      region</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> party I II III</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A 1  3   5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     B 2  4   6</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

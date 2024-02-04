@@ -183,7 +183,7 @@
 <tr class="odd">
 <td align="left"><a href="https://en.wikipedia.org/wiki/Biproportional_apportionment" class="external-link">Generic Biproportional apportionment</a></td>
 <td align="left">-</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/biproportional.html" class="external-link">biproportional(…)</a></td>
+<td align="left"><a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link">biproporz(…)</a></td>
 </tr>
 <tr class="even">
 <td align="left"><a href="https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren" class="external-link">Doppeltproportionales Zuteilungsverfahren</a></td>
@@ -210,7 +210,7 @@
 <span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
 <span><span class="co">#&gt;       4       3       2       1</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/divisor_floor.html">divisor_floor</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/divisor_round.html">divisor_floor</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
 <span><span class="co">#&gt;       5       3       2       0</span></span>
 <span></span>
@@ -256,7 +256,7 @@
 <span><span class="co">#&gt; 5       5      1701       4486     1</span></span>
 <span><span class="co">#&gt; 6       6      1701      15695     3</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/divisors.html">divisors</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/get_divisors.html">get_divisors</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $districts</span></span>
 <span><span class="co">#&gt;      1701      1702      1703      1704      1705      1706      1707      1708 </span></span>
 <span><span class="co">#&gt; 5745.5376 3586.0000 2607.0000 1435.0000  743.0312 1709.0000 1816.8750 2561.0000 </span></span>
@@ -287,7 +287,7 @@
 <span><span class="co">#&gt; 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 </span></span>
 <span><span class="co">#&gt;   15   10    6    3    2    4    7    6    6    2   19</span></span>
 <span></span>
-<span><span class="va">seats_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/biproportional.html">biproportional</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="reference/quorum_any.html">quorum_any</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">seats_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="reference/quorum_any.html">quorum_any</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">seats_matrix</span></span>
 <span><span class="co">#&gt;         entity_id</span></span>
 <span><span class="co">#&gt; list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711</span></span>

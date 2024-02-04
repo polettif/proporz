@@ -19,9 +19,6 @@
     <loc>/reference/apport_methods.html</loc>
   </url>
   <url>
-    <loc>/reference/biproportional.html</loc>
-  </url>
-  <url>
     <loc>/reference/biproporz.html</loc>
   </url>
   <url>
@@ -31,31 +28,16 @@
     <loc>/reference/ceil_at.html</loc>
   </url>
   <url>
-    <loc>/reference/divisor_ceiling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/divisor_floor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/divisor_geometric.html</loc>
-  </url>
-  <url>
-    <loc>/reference/divisor_harmonic.html</loc>
-  </url>
-  <url>
     <loc>/reference/divisor_round.html</loc>
-  </url>
-  <url>
-    <loc>/reference/divisors.html</loc>
   </url>
   <url>
     <loc>/reference/finland2019.html</loc>
   </url>
   <url>
-    <loc>/reference/highest_averages_method.html</loc>
+    <loc>/reference/get_divisors.html</loc>
   </url>
   <url>
-    <loc>/reference/hzv.html</loc>
+    <loc>/reference/highest_averages_method.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
@@ -98,6 +80,9 @@
   </url>
   <url>
     <loc>/reference/upper_apportionment.html</loc>
+  </url>
+  <url>
+    <loc>/reference/weigh_list_votes.html</loc>
   </url>
   <url>
     <loc>/reference/zug2018.html</loc>
