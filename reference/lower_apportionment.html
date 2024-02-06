@@ -77,11 +77,12 @@ with <code><a href="upper_apportionment.html">upper_apportionment()</a></code>.<
 
 
 <dt>method</dt>
-<dd><p>Apportion method that defines how seats are assigned,
-see <code>proporz</code>. Note that the iterative process is only
-guaranteed to terminate with "round" (Sainte-Laguë/Webster
-method). It is also possible to provide a function that works
-like <code>base::round(x)</code> (i.e. can handle a matrix).</p></dd>
+<dd><p>Apportion method that defines how seats are assigned. The
+default "round" for the Sainte-Laguë/Webster method is the
+standard for biproportional apportionment and the only method
+guaranteed to terminate.  See <code><a href="proporz.html">proporz()</a></code> for other methods.
+It is also possible to provide a function that round a vector
+or matrix.</p></dd>
 
 </dl></div>
     <div id="value">

@@ -87,7 +87,7 @@ whether they reached the quorum (i.e. are eligible for seats).
 The easiest way to do this is via <code><a href="quorum_any.html">quorum_any()</a></code> or
 <code><a href="quorum_all.html">quorum_all()</a></code>, see examples. Alternatively you can pass a
 precalculated logical vector. No quorum is applied if parameter
-is missing or NULL.</p></dd>
+is missing or <code>NULL</code>.</p></dd>
 
 
 <dt>use_list_votes</dt>
@@ -98,13 +98,12 @@ number of voters.</p></dd>
 
 
 <dt>method</dt>
-<dd><p>Defines how seats in upper and lower apportionment are
-assigned. The default "round" for the Sainte-Laguë/Webster
-method is the standard for biproportional apportionment. See
-<a href="proporz.html">proporz</a> for a list of available methods. For a different
-method for upper and lower apportionment use a vector with two
-entries. It is also possible to provide a function that works
-like <code>base::round(x)</code> (i.e. can handle a matrix).</p></dd>
+<dd><p>Defines the method how seats in upper and lower apportionment
+are assigned. For a different method for upper and lower
+apportionment use a vector with two entries. The default
+"round" for the Sainte-Laguë/Webster method is the standard for
+biproportional apportionment and the only method guaranteed to
+terminate. See <code><a href="proporz.html">proporz()</a></code> for other methods.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -112,7 +111,8 @@ like <code>base::round(x)</code> (i.e. can handle a matrix).</p></dd>
     
 
 <p>Matrix with the same dimension as <code>votes_matrix</code> containing
-the number of seats</p>
+the number of seats with the row and column divisors stored in
+attributes (hidden from print, see <code><a href="get_divisors.html">get_divisors()</a></code>).</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -130,7 +130,7 @@ apportionment.</p></li>
     <div id="note">
     <h2>Note</h2>
     <p>The iterative process in the lower apportionment is only guaranteed
-to terminate with the Sainte-Laguë/Webster method.</p>
+to terminate with the default Sainte-Laguë/Webster method.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -141,8 +141,7 @@ Sciences, 56 (2), 166–184.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="pukelsheim.html">pukelsheim()</a></code> for usage with data frames.
-<code><a href="get_divisors.html">get_divisors()</a></code> to access the divisors</p></div>
+    <div class="dont-index"><p><code><a href="pukelsheim.html">pukelsheim()</a></code> for usage with data frames.</p></div>
     </div>
 
     <div id="ref-examples">

@@ -16,9 +16,6 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/apport_methods.html</loc>
-  </url>
-  <url>
     <loc>/reference/biproporz.html</loc>
   </url>
   <url>
@@ -28,7 +25,7 @@
     <loc>/reference/ceil_at.html</loc>
   </url>
   <url>
-    <loc>/reference/divisor_round.html</loc>
+    <loc>/reference/divisor_methods.html</loc>
   </url>
   <url>
     <loc>/reference/finland2019.html</loc>
@@ -46,13 +43,13 @@
     <loc>/reference/lower_apportionment.html</loc>
   </url>
   <url>
-    <loc>/reference/pivot_to_df.html</loc>
-  </url>
-  <url>
     <loc>/reference/pivot_to_matrix.html</loc>
   </url>
   <url>
     <loc>/reference/proporz.html</loc>
+  </url>
+  <url>
+    <loc>/reference/proporz_methods.html</loc>
   </url>
   <url>
     <loc>/reference/pukelsheim.html</loc>
