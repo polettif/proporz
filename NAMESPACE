@@ -2,7 +2,6 @@
 
 S3method(as.matrix,proporz_matrix)
 S3method(print,proporz_matrix)
-export(apport_methods)
 export(biproporz)
 export(divisor_ceiling)
 export(divisor_floor)

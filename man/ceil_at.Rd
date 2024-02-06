@@ -2,18 +2,20 @@
 % Please edit documentation in R/round.R
 \name{ceil_at}
 \alias{ceil_at}
-\title{Round x up if x-floor(x) >= threshold}
+\title{Round with predefined thresholds
+Round x up if \code{x-floor(x) >= threshold}}
 \usage{
 ceil_at(x, threshold)
 }
 \arguments{
 \item{x}{numeric value}
 
-\item{threshold}{threshold in 0..1 or "harmonic"/"geometric" for
+\item{threshold}{threshold in [0,1] or "harmonic"/"geometric" for
 threshold series}
 }
 \description{
-Round x up if x-floor(x) >= threshold
+Round with predefined thresholds
+Round x up if \code{x-floor(x) >= threshold}
 }
 \examples{
 proporz:::ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)

@@ -15,11 +15,12 @@ predetermined or calculated with \code{\link[=upper_apportionment]{upper_apporti
 \item{seats_rows}{number of seats per row (parties/lists), calculated
 with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
-\item{method}{Apportion method that defines how seats are assigned,
-see \code{proporz}. Note that the iterative process is only
-guaranteed to terminate with "round" (Sainte-Laguë/Webster
-method). It is also possible to provide a function that works
-like \code{base::round(x)} (i.e. can handle a matrix).}
+\item{method}{Apportion method that defines how seats are assigned. The
+default "round" for the Sainte-Laguë/Webster method is the
+standard for biproportional apportionment and the only method
+guaranteed to terminate.  See \code{\link[=proporz]{proporz()}} for other methods.
+It is also possible to provide a function that round a vector
+or matrix.}
 }
 \value{
 A seat matrix with district (columns) and party (rows) divisors

@@ -19,29 +19,32 @@ test_that("generic proporz", {
 }
 
 test_that("proporz parameter range", {
-    method_list = unique(unlist(apport_methods, use.names = F))
+    method_list = unique(unlist(proporz_methods, use.names = F))
 
     set.seed(0)
     for(n_parties in 1:2) {
         for(n_parties_zero in 0:2) {
             for(n_seats in 0:6) {
-                for(method in method_list) {
+                for(method_impl in method_list) {
                     votes = .sample_votes(n_parties, n_parties_zero)
 
-                    if(n_seats < n_parties && method %in% c("ceiling", "geometric", "harmonic") && n_seats > 0) {
+                    if(n_seats < n_parties &&
+                       method_impl %in% c("divisor_ceiling", "divisor_geometric", "divisor_harmonic") &&
+                       n_seats > 0) {
+                        .method_impl = gsub("divisor_", "", method_impl)
                         expect_error(
-                            proporz(votes, n_seats, method),
-                            paste0("With ",  method, " rounding there must be at ",
+                            proporz(votes, n_seats, method_impl),
+                            paste0("With ",  .method_impl, " rounding there must be at ",
                                    "least as many seats as there are parties with non-zero votes."),
                             fixed = TRUE)
                     } else {
-                        seats = proporz(votes, n_seats, method)
+                        seats = proporz(votes, n_seats, method_impl)
                         expect_equal(length(seats), length(votes))
                         expect_equal(sum(seats), n_seats)
 
                         if(n_seats > 0) {
                             .quorum = sort(c(votes,0), decreasing = T)[2]+0.5
-                            seats_Q = proporz(votes, n_seats, method, quorum = .quorum)
+                            seats_Q = proporz(votes, n_seats, method_impl, quorum = .quorum)
                             expect_equal(sum(seats_Q > 0), 1)
                         }
                     }
@@ -51,20 +54,20 @@ test_that("proporz parameter range", {
     }
 
     # unsupported values
-    for(method in method_list) {
+    for(method_impl in method_list) {
         for(n_seats in list(NA, NULL, -1, c(1, 1))) {
-            expect_error(proporz(c(100, 10, 5), n_seats, method), "`n_seats` must be one number >= 0")
+            expect_error(proporz(c(100, 10, 5), n_seats, method_impl), "`n_seats` must be one number >= 0")
         }
     }
-    for(method in method_list) {
+    for(method_impl in method_list) {
         for(votes in list(NA, NULL, -1)) {
-            expect_error(proporz(votes, 3, method), "`votes` must be numeric >= 0", fixed = TRUE)
+            expect_error(proporz(votes, 3, method_impl), "`votes` must be numeric >= 0", fixed = TRUE)
         }
     }
 })
 
 test_that("quorum", {
-    method_list = unique(unlist(apport_methods, use.names = F))
+    method_list = unique(unlist(proporz_methods, use.names = F))
 
     for(method in method_list) {
         expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum.",
@@ -73,7 +76,7 @@ test_that("quorum", {
 })
 
 test_that("all method names", {
-    for(m in names(apport_methods)) {
+    for(m in names(proporz_methods)) {
         x = proporz(c(10, 20, 5), 3, m)
         expect_length(x, 3)
     }

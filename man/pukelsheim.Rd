@@ -32,7 +32,7 @@ whether they reached the quorum (i.e. are eligible for seats).
 The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a
 precalculated logical vector. No quorum is applied if parameter
-is missing or NULL.}
+is missing or \code{NULL}.}
 
 \item{new_seats_col}{name of the new column}
 

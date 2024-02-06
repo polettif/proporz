@@ -41,7 +41,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
         base_district_seats_mtrx = create_seats_matrix(base_votes_matrix, district_seats)
     }
 
-    apport_methods_choices = unique(unname(unlist(apport_methods)))[c(2,1,3:6)]
+    apport_methods_choices = unique(unname(unlist(proporz_methods)))[c(2,1,3:6)]
 
     # UI ####
     ui = shiny::fluidPage(

@@ -9,19 +9,13 @@
 #'               votes within a district if less than 1 otherwise as number
 #'               of votes.
 #'
-#' @note Seats can also be apportioned among regions instead of parties. The parameter
-#'       \code{votes} is then normally used with census data (e.g. population counts).
+#' @details The following methods are available:`r .doc_proporz_methods()`
 #'
-#' @details The following methods are available:
-#' \itemize{
-#'          \item{d'hondt, jefferson, hagenbach-bischoff, floor (use \code{\link{divisor_floor}})}
-#'          \item{sainte-lague, webster, round (use \code{\link{divisor_round}})}
-#'          \item{adams, ceiling (use \code{\link{divisor_ceiling}})}
-#'          \item{dean, harmonic (use \code{\link{divisor_harmonic}})}
-#'          \item{huntington-hill, hill-huntington, geometric (use \code{\link{divisor_geometric}})}
-#'          \item{hare-niemeyer, hamilton, vinton, quota_largest_remainder (use \code{\link{quota_largest_remainder}})}
-#' }
 #' @returns The number of seats per party as a vector
+#'
+#' @note Seats can also be apportioned among regions instead of parties. The
+#'       parameter `votes` is then normally used with census data (e.g.
+#'       population counts).
 #'
 #' @examples
 #' votes = c("Party A" = 651, "Party B" = 349, "Party C" = 50)
@@ -36,14 +30,62 @@
 #'
 #'@export
 proporz = function(votes, n_seats, method, quorum = 0) {
-    m = get_apport_method(method)
-    apport_methods = list(
-        "floor" = divisor_floor,
-        "round" = divisor_round,
-        "ceiling" = divisor_ceiling,
-        "harmonic" = divisor_harmonic,
-        "geometric" = divisor_geometric,
-        "quota_largest_remainder" = quota_largest_remainder
-    )
-    apport_methods[[m]](votes, n_seats, quorum)
+    proporz_method = get_method_implementation(method)
+    proporz_func = match.fun(proporz_method)
+    proporz_func(votes, n_seats, quorum)
+}
+
+#' List of method names and their implementation
+#'
+#' Names can be used in [proporz()] or [biproporz()], the list entries
+#' denote the name of the implementation function.
+#' @returns Named list of methods
+#' @keywords internal
+proporz_methods = list(
+    "d'hondt" = "divisor_floor",
+    "jefferson" = "divisor_floor",
+    "hagenbach-bischoff" = "divisor_floor",
+    "sainte-lague" = "divisor_round",
+    "webster" = "divisor_round",
+    "adams" = "divisor_ceiling",
+    "dean" = "divisor_harmonic",
+    "huntington-hill" = "divisor_geometric",
+    "hill-huntington" = "divisor_geometric",
+    "hare-niemeyer" = "quota_largest_remainder",
+    "hamilton" = "quota_largest_remainder",
+    "vinton" = "quota_largest_remainder",
+    "floor" = "divisor_floor",
+    "round" = "divisor_round",
+    "ceiling" = "divisor_ceiling",
+    "harmonic" = "divisor_harmonic",
+    "geometric" = "divisor_geometric",
+    "quota_largest_remainder" = "quota_largest_remainder",
+    "divisor_floor" = "divisor_floor",
+    "divisor_round" = "divisor_round",
+    "divisor_ceiling" = "divisor_ceiling",
+    "divisor_harmonic" = "divisor_harmonic",
+    "divisor_geometric" = "divisor_geometric"
+)
+
+get_method_implementation = function(method_name) {
+    method_name <- tolower(method_name)
+    if(!method_name %in% names(proporz_methods)) {
+        stop("Unknown apportion method: ", method_name, ".\nAvailable: ",
+             paste0(names(proporz_methods), collapse=", "), call. = F)
+    }
+    return(proporz_methods[[method_name]])
+}
+
+# function to create the list of method names for the proporz documentation
+.doc_proporz_methods = function() {
+    doc = c("\\itemize{")
+    for(implementation in unique(unlist(proporz_methods))) {
+        method_names = names(proporz_methods[proporz_methods == implementation])
+        method_names <- method_names[!grepl("divisor_", method_names)]
+        method_names = paste0(method_names, collapse = ", ")
+        doc[length(doc)+1] <- paste0("    \\item{", method_names,
+                                     ": use [", implementation, "()]}")
+    }
+    doc[length(doc)+1] <- "}"
+    return(paste(doc, collapse = "\n"))
 }

@@ -119,17 +119,16 @@ pukelsheim = function(votes_df, district_seats_df,
 #'               The easiest way to do this is via [quorum_any()] or
 #'               [quorum_all()], see examples. Alternatively you can pass a
 #'               precalculated logical vector. No quorum is applied if parameter
-#'               is missing or NULL.
-#' @param method Defines how seats in upper and lower apportionment are
-#'               assigned. The default "round" for the Sainte-Laguë/Webster
-#'               method is the standard for biproportional apportionment. See
-#'               \link{proporz} for a list of available methods. For a different
-#'               method for upper and lower apportionment use a vector with two
-#'               entries. It is also possible to provide a function that works
-#'               like `base::round(x)` (i.e. can handle a matrix).
+#'               is missing or `NULL`.
+#' @param method Defines the method how seats in upper and lower apportionment
+#'               are assigned. For a different method for upper and lower
+#'               apportionment use a vector with two entries. The default
+#'               "round" for the Sainte-Laguë/Webster method is the standard for
+#'               biproportional apportionment and the only method guaranteed to
+#'               terminate. See [proporz()] for other methods.
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed
-#'       to terminate with the Sainte-Laguë/Webster method.
+#'       to terminate with the default Sainte-Laguë/Webster method.
 #'
 #' @seealso [pukelsheim()] for usage with data frames.
 #'          [get_divisors()] to access the divisors
@@ -329,11 +328,12 @@ weigh_list_votes = function(votes_matrix, seats_district) {
 #'                   predetermined or calculated with [upper_apportionment()].
 #' @param seats_rows number of seats per row (parties/lists), calculated
 #'                   with [upper_apportionment()].
-#' @param method Apportion method that defines how seats are assigned,
-#'               see `proporz`. Note that the iterative process is only
-#'               guaranteed to terminate with "round" (Sainte-Laguë/Webster
-#'               method). It is also possible to provide a function that works
-#'               like `base::round(x)` (i.e. can handle a matrix).
+#' @param method Apportion method that defines how seats are assigned. The
+#'               default "round" for the Sainte-Laguë/Webster method is the
+#'               standard for biproportional apportionment and the only method
+#'               guaranteed to terminate.  See [proporz()] for other methods.
+#'               It is also possible to provide a function that round a vector
+#'               or matrix.
 #'
 #' @returns A seat matrix with district (columns) and party (rows) divisors
 #'          stored in attributes.
@@ -362,12 +362,12 @@ lower_apportionment = function(votes_matrix, seats_cols,
     if(is.function(method)) {
         round_func = method
     } else {
-        method_name = get_apport_method(method)
-        if(method_name != "round") {
+        method_impl <- get_method_implementation(method)
+        if(method_impl != "divisor_round") {
             warning('Lower apportionment is only guaranteed to terminate with the default ',
                     'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = F)
         }
-        round_func = get_round_function(method)
+        round_func = get_round_function(method_impl)
     }
 
     # divisor parties

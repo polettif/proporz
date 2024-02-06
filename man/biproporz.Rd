@@ -29,20 +29,19 @@ whether they reached the quorum (i.e. are eligible for seats).
 The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a
 precalculated logical vector. No quorum is applied if parameter
-is missing or NULL.}
+is missing or \code{NULL}.}
 
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
 district has as many votes as there are seats in a
 district. Set to FALSE if \code{votes_matrix} shows the
 number of voters.}
 
-\item{method}{Defines how seats in upper and lower apportionment are
-assigned. The default "round" for the Sainte-Laguë/Webster
-method is the standard for biproportional apportionment. See
-\link{proporz} for a list of available methods. For a different
-method for upper and lower apportionment use a vector with two
-entries. It is also possible to provide a function that works
-like \code{base::round(x)} (i.e. can handle a matrix).}
+\item{method}{Defines the method how seats in upper and lower apportionment
+are assigned. For a different method for upper and lower
+apportionment use a vector with two entries. The default
+"round" for the Sainte-Laguë/Webster method is the standard for
+biproportional apportionment and the only method guaranteed to
+terminate. See \code{\link[=proporz]{proporz()}} for other methods.}
 }
 \value{
 Matrix with the same dimension as \code{votes_matrix} containing
@@ -70,7 +69,7 @@ Parties failing to reach quorums cannot get seats.
 }
 \note{
 The iterative process in the lower apportionment is only guaranteed
-to terminate with the Sainte-Laguë/Webster method.
+to terminate with the default Sainte-Laguë/Webster method.
 }
 \examples{
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])

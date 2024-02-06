@@ -1,6 +1,7 @@
-#' Round x up if x-floor(x) >= threshold
+#' Round with predefined thresholds
+#' Round x up if `x-floor(x) >= threshold`
 #' @param x numeric value
-#' @param threshold threshold in 0..1 or "harmonic"/"geometric" for
+#' @param threshold threshold in \[0,1\] or "harmonic"/"geometric" for
 #'                  threshold series
 #' @examples
 #' proporz:::ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
@@ -39,17 +40,17 @@ ceil_at = function(x, threshold) {
 }
 
 get_round_function = function(method_name) {
-    m = get_apport_method(method_name)
     method_thresholds = list(
-        "ceiling" = 0,
-        "round" = 0.5,
-        "floor" = 1,
-        "harmonic" = "harmonic",
-        "geometric" = "geometric"
+        "divisor_ceiling" = 0,
+        "divisor_round" = 0.5,
+        "divisor_floor" = 1,
+        "divisor_harmonic" = "harmonic",
+        "divisor_geometric" = "geometric"
     )
 
-    function(x) ceil_at(x, method_thresholds[[m]])
+    function(x) ceil_at(x, method_thresholds[[method_name]])
 }
+
 
 threshold_harmonic = function(x) {
     x_ceil = ceiling(x)
