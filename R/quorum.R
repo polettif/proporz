@@ -142,9 +142,9 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #'                     must be set which indicates whether `ALL` or `ANY`
 #'                     (i.e. at least one) quorum must be reached.
 #'
-#' @note This is a low-level implementation for quorum calculations and is
-#'       called within [biproporz()]. There's generally no need to call it
-#'       directly.
+#' This is a low-level implementation for quorum calculations and is
+#' called within [biproporz()]. There's generally no need to call it
+#' directly.
 #'
 #' @seealso [quorum_all()], [quorum_any()] to create a list of quorum functions.
 #'

@@ -79,6 +79,10 @@ highest_averages_method = function(votes, n_seats, divisors) {
 #' divisor_geometric(votes, 10, quorum = 0.05)
 #'
 #' divisor_harmonic(votes, 10)
+#' @name divisor_methods
+NULL
+
+#' @rdname divisor_methods
 #' @export
 divisor_round = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -87,7 +91,7 @@ divisor_round = function(votes, n_seats, quorum = 0) {
     highest_averages_method(votes, n_seats, 0.5)
 }
 
-#' @rdname divisor_round
+#' @rdname divisor_methods
 #' @export
 divisor_floor = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -96,7 +100,7 @@ divisor_floor = function(votes, n_seats, quorum = 0) {
     highest_averages_method(votes, n_seats, 1)
 }
 
-#' @rdname divisor_round
+#' @rdname divisor_methods
 #' @export
 divisor_harmonic = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -109,7 +113,7 @@ divisor_harmonic = function(votes, n_seats, quorum = 0) {
     highest_averages_method(votes, n_seats, divisors)
 }
 
-#' @rdname divisor_round
+#' @rdname divisor_methods
 #' @export
 divisor_geometric = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
@@ -122,7 +126,7 @@ divisor_geometric = function(votes, n_seats, quorum = 0) {
     highest_averages_method(votes, n_seats, divisors)
 }
 
-#' @rdname divisor_round
+#' @rdname divisor_methods
 #' @export
 divisor_ceiling = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))

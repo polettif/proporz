@@ -7,14 +7,14 @@
 get_divisors(biproporz_result)
 }
 \arguments{
-\item{biproporz_result}{a matrix created by \code{\link{biproporz}}
-or a data.frame created by \code{\link{pukelsheim}}}
+\item{biproporz_result}{a matrix created by \code{\link[=biproporz]{biproporz()}}
+or a data.frame created by \code{\link[=pukelsheim]{pukelsheim()}}}
 }
 \value{
-The district and party divisors in a list
+The district and party divisors in a list, each as vectors
 }
 \description{
-Show the district and party divisors used for to assign seats.
+Show the district and party divisors used to assign seats.
 This method provides easier access to divisors stored in
 \code{attributes(...)$divisors}
 }

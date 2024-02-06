@@ -12,14 +12,14 @@ as.matrix.proporz_matrix = function(x, ...) {
 
 #' Get district and party divisors from [biproporz()] result
 #'
-#' Show the district and party divisors used for to assign seats.
+#' Show the district and party divisors used to assign seats.
 #' This method provides easier access to divisors stored in
 #' `attributes(...)$divisors`
 #'
-#' @param biproporz_result a matrix created by \code{\link{biproporz}}
-#'                         or a data.frame created by \code{\link{pukelsheim}}
+#' @param biproporz_result a matrix created by [biproporz()]
+#'                         or a data.frame created by [pukelsheim()]
 #'
-#' @returns The district and party divisors in a list
+#' @returns The district and party divisors in a list, each as vectors
 #'
 #' @examples
 #' votes_matrix = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)

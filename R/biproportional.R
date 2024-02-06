@@ -131,7 +131,6 @@ pukelsheim = function(votes_df, district_seats_df,
 #'       to terminate with the default Sainte-Laguë/Webster method.
 #'
 #' @seealso [pukelsheim()] for usage with data frames.
-#'          [get_divisors()] to access the divisors
 #'
 #' @references Gaffke, Norbert; Pukelsheim, Friedrich (2008): Divisor methods
 #'             for proportional representation systems: An optimization approach
@@ -139,7 +138,8 @@ pukelsheim = function(votes_df, district_seats_df,
 #'             Sciences, 56 (2), 166–184.
 #'
 #' @returns Matrix with the same dimension as `votes_matrix` containing
-#'          the number of seats
+#'          the number of seats with the row and column divisors stored in
+#'          attributes (hidden from print, see [get_divisors()]).
 #'
 #' @examples
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])

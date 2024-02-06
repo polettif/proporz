@@ -2,30 +2,53 @@
 % Please edit documentation in R/utils.R
 \name{pivot_to_matrix}
 \alias{pivot_to_matrix}
-\title{Pivot long data.frame to wide matrix}
+\alias{pivot_to_df}
+\title{Pivot long data.frame to wide matrix and vice versa}
 \usage{
 pivot_to_matrix(df)
+
+pivot_to_df(matrix_wide, value_colname = "values")
 }
 \arguments{
 \item{df}{data.frame in long format with exactly 3 columns}
+
+\item{matrix_wide}{matrix in wide format}
+
+\item{value_colname}{name for the new value column in the
+resulting data.frame}
 }
 \value{
-a matrix
+A data.frame with 3 columns or a matrix or . Note that the results are
+sorted by the first and second column (data.frame) or row/column
+name (matrix).
 }
 \description{
-Pivot long data.frame to wide matrix
+Create a matrix in 'wide' format from a data.frame with 3 columns with
+\code{\link[=pivot_to_matrix]{pivot_to_matrix()}} or create a data.frame in long format from a matrix with
+\code{\link[=pivot_to_df]{pivot_to_df()}}.
 }
-\note{
-This function exists because reshape is hard to handle and the package
-should have no dependencies.
+\details{
+These pivot functions are used to prepare data for \code{\link[=biproporz]{biproporz()}} in
+\code{\link[=pukelsheim]{pukelsheim()}}. They are not supposed to cover general use cases or provide
+customization. They mainly exist because reshape is hard to handle and the
+package should have no dependencies.
 }
 \examples{
+# From data.frame to matrix
 df = data.frame(party = c("A", "A", "A", "B", "B", "B"),
                 region = c("III", "II", "I", "I", "II", "III"),
                 seats = c(5L, 3L, 1L, 2L, 4L, 6L))
 pivot_to_matrix(df)
 
-}
-\seealso{
-\code{\link[=pivot_to_df]{pivot_to_df()}}
+# from matrix to data.frame
+mtrx = matrix(1:6, nrow = 2)
+pivot_to_df(mtrx)
+
+# from matrix to data.frame using dimnames
+dimnames(mtrx) <- list(party = c("A", "B"), region = c("I", "II", "III"))
+pivot_to_df(mtrx, "seats")
+
+# Note that pivot results are sorted
+pivot_to_df(pivot_to_matrix(df)) == df[order(df[[1]], df[[2]]),]
+
 }

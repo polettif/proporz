@@ -11,7 +11,11 @@ reached_quorums(votes_matrix, quorum_funcs)
 
 \item{quorum_funcs}{List of quorum functions. If list, the attribute "type"
 must be set which indicates whether \code{ALL} or \code{ANY}
-(i.e. at least one) quorum must be reached.}
+(i.e. at least one) quorum must be reached.
+
+This is a low-level implementation for quorum calculations and is
+called within \code{\link[=biproporz]{biproporz()}}. There's generally no need to call it
+directly.}
 }
 \value{
 boolean vector with length equal to the number of lists/parties
@@ -19,11 +23,6 @@ boolean vector with length equal to the number of lists/parties
 }
 \description{
 Apply a list of quorum functions to a votes matrix
-}
-\note{
-This is a low-level implementation for quorum calculations and is
-called within \code{\link[=biproporz]{biproporz()}}. There's generally no need to call it
-directly.
 }
 \examples{
 votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)

@@ -19,20 +19,43 @@ bisect = function(f, x1, x2, tol = 1e-9) {
     stop("Exceeded maximum number of iterations (1e6)") # nocov
 }
 
-#' Pivot long data.frame to wide matrix
+#' Pivot long data.frame to wide matrix and vice versa
 #'
+#' Create a matrix in 'wide' format from a data.frame with 3 columns with
+#' [pivot_to_matrix()] or create a data.frame in long format from a matrix with
+#' [pivot_to_df()].
+#'
+#' These pivot functions are used to prepare data for [biproporz()] in
+#' [pukelsheim()]. They are not supposed to cover general use cases or provide
+#' customization. They mainly exist because reshape is hard to handle and the
+#' package should have no dependencies.
+#
 #' @param df data.frame in long format with exactly 3 columns
+#' @param matrix_wide matrix in wide format
+#' @param value_colname name for the new value column in the
+#'                      resulting data.frame
 #'
-#' @note This function exists because reshape is hard to handle and the package
-#'       should have no dependencies.
-#' @seealso [pivot_to_df()]
+#' @returns A data.frame with 3 columns or a matrix or . Note that the results are
+#'          sorted by the first and second column (data.frame) or row/column
+#'          name (matrix).
 #'
-#' @returns a matrix
 #' @examples
+#' # From data.frame to matrix
 #' df = data.frame(party = c("A", "A", "A", "B", "B", "B"),
 #'                 region = c("III", "II", "I", "I", "II", "III"),
 #'                 seats = c(5L, 3L, 1L, 2L, 4L, 6L))
 #' pivot_to_matrix(df)
+#'
+#' # from matrix to data.frame
+#' mtrx = matrix(1:6, nrow = 2)
+#' pivot_to_df(mtrx)
+#'
+#' # from matrix to data.frame using dimnames
+#' dimnames(mtrx) <- list(party = c("A", "B"), region = c("I", "II", "III"))
+#' pivot_to_df(mtrx, "seats")
+#'
+#' # Note that pivot results are sorted
+#' pivot_to_df(pivot_to_matrix(df)) == df[order(df[[1]], df[[2]]),]
 #'
 #' @export
 pivot_to_matrix = function(df) {
@@ -43,19 +66,7 @@ pivot_to_matrix = function(df) {
     apply(tbl, c(1,2), function(x) sum(as.numeric(names(x))*unname(x)))
 }
 
-#' Pivot wide matrix to long data.frame
-#'
-#' @param matrix_wide matrix in wide format
-#' @param value_colname name for the data.frame new column
-#' @seealso [pivot_to_matrix()]
-#' @returns data.frame with 3 columns
-#' @examples
-#' mtrx = matrix(1:6, nrow = 2)
-#' pivot_to_df(mtrx)
-#'
-#' dimnames(mtrx) <- list(party = c("A", "B"), region = c("I", "II", "III"))
-#' pivot_to_df(mtrx, "seats")
-#'
+#' @rdname pivot_to_matrix
 #' @export
 pivot_to_df = function(matrix_wide, value_colname = "values") {
     if(is.null(dimnames(matrix_wide))) {

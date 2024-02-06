@@ -45,7 +45,8 @@ terminate. See \code{\link[=proporz]{proporz()}} for other methods.}
 }
 \value{
 Matrix with the same dimension as \code{votes_matrix} containing
-the number of seats
+the number of seats with the row and column divisors stored in
+attributes (hidden from print, see \code{\link[=get_divisors]{get_divisors()}}).
 }
 \description{
 Method to proportionally allocate seats among parties (or lists) and
@@ -109,5 +110,4 @@ Sciences, 56 (2), 166–184.
 }
 \seealso{
 \code{\link[=pukelsheim]{pukelsheim()}} for usage with data frames.
-\code{\link[=get_divisors]{get_divisors()}} to access the divisors
 }
