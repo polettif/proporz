@@ -2,7 +2,7 @@
 % Please edit documentation in R/proporz.R
 \name{proporz}
 \alias{proporz}
-\title{Proportional Apportionment}
+\title{Proportional apportionment}
 \usage{
 proporz(votes, n_seats, method, quorum = 0)
 }

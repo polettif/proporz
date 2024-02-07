@@ -24,8 +24,8 @@ name (matrix).
 }
 \description{
 Create a matrix in 'wide' format from a data.frame with 3 columns with
-\code{\link[=pivot_to_matrix]{pivot_to_matrix()}} or create a data.frame in long format from a matrix with
-\code{\link[=pivot_to_df]{pivot_to_df()}}.
+\code{pivot_to_matrix} or create a data.frame in long format from a matrix with
+\code{pivot_to_df.}
 }
 \details{
 These pivot functions are used to prepare data for \code{\link[=biproporz]{biproporz()}} in

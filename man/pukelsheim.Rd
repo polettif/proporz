@@ -39,15 +39,15 @@ is missing or \code{NULL}.}
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
 district has as many votes as there are seats in a
 district. Set to \code{FALSE} if \code{votes_df} shows the number
-of voters.}
+of voters (e.g. they can only vote for one party).}
 }
 \value{
-A data.frame (like votes_df) with a new column denoting the number
+A data.frame like \code{votes_df} with a new column denoting the number
 seats per party and district
 }
 \description{
 Method to proportionally allocate seats among parties/lists and
-districts/regions/entities ("Doppelter Pukelsheim").
+districts/regions/entities ('Doppelter Pukelsheim').
 }
 \details{
 Each party nominates a candidate list for every district. The voters vote
@@ -55,15 +55,17 @@ for the parties of their district. The seat allocation is calculated in two
 steps:
 
 \enumerate{
-\item In the so called \emph{upper apportionment} the number of seats for
-each party (over all districts) is determined.
-\item In the so called \emph{lower apportionment} the seats are distributed
-to the regional party list respecting the results from the upper apportionment.
+\item In the so called \code{\link[=upper_apportionment]{upper apportionment}}
+the number of seats for each party (over all districts) is determined.
+\item In the so called \code{\link[=lower_apportionment]{lower apportionment}}
+the seats are distributed to the regional party list respecting the results
+from the upper apportionment.
 }
 
-Parties failing to reach quorums cannot get seats.
+Parties failing to reach quorums cannot get seats. This function does not
+handle seat assignment to candidates.
 
-If you want to other apportion methods than Sainte-Laguë use \link{biproporz}.
+If you want to use other apportion methods than Sainte-Laguë use \code{\link[=biproporz]{biproporz()}}.
 }
 \examples{
 # Zug 2018

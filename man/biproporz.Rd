@@ -33,8 +33,9 @@ is missing or \code{NULL}.}
 
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
 district has as many votes as there are seats in a
-district. Set to FALSE if \code{votes_matrix} shows the
-number of voters.}
+district. Set to \code{FALSE} if \code{votes_matrix} shows the
+number of voters (e.g. they can only vote for one
+party).}
 
 \item{method}{Defines the method how seats in upper and lower apportionment
 are assigned. For a different method for upper and lower
@@ -57,16 +58,17 @@ Each party nominates a candidate list for every district. The voters vote
 for the parties of their district. The seat allocation is calculated in two
 steps:
 \enumerate{
-\item In the so called \emph{upper apportionment} the number of seats for
-each party (over all districts) is determined. Normally, the number of
-seats for each region are defined before the election and are independent
-of the vote counts.
-\item In the so called \emph{lower apportionment} the seats are distributed
-to the regional party list respecting the results from the upper
-apportionment.
+\item In the so called \code{\link[=upper_apportionment]{upper apportionment}}
+the number of seats for each party (over all districts) is determined.
+Normally, the number of seats for each region are defined before the
+election and are independent of the vote counts.
+\item In the so called \code{\link[=lower_apportionment]{lower apportionment}}
+the seats are distributed to the regional party list respecting the
+results from the upper apportionment.
 }
 
-Parties failing to reach quorums cannot get seats.
+Parties failing to reach quorums cannot get seats. This function does not
+handle seat assignment to candidates.
 }
 \note{
 The iterative process in the lower apportionment is only guaranteed

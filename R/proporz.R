@@ -1,4 +1,4 @@
-#' Proportional Apportionment
+#' Proportional apportionment
 #'
 #' Calculate seat apportionment for legislative bodies.
 #'
@@ -77,7 +77,7 @@ get_method_implementation = function(method_name) {
 }
 
 # function to create the list of method names for the proporz documentation
-.doc_proporz_methods = function() {
+.doc_proporz_methods = function() { # nocov start
     doc = c("\\itemize{")
     for(implementation in unique(unlist(proporz_methods))) {
         method_names = names(proporz_methods[proporz_methods == implementation])
@@ -88,4 +88,4 @@ get_method_implementation = function(method_name) {
     }
     doc[length(doc)+1] <- "}"
     return(paste(doc, collapse = "\n"))
-}
+} # nocov end

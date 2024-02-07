@@ -18,8 +18,8 @@ with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 \item{method}{Apportion method that defines how seats are assigned. The
 default "round" for the Sainte-Laguë/Webster method is the
 standard for biproportional apportionment and the only method
-guaranteed to terminate.  See \code{\link[=proporz]{proporz()}} for other methods.
-It is also possible to provide a function that round a vector
+guaranteed to terminate. See \code{\link[=proporz]{proporz()}} for other methods.
+It is also possible to provide a function that rounds a vector
 or matrix.}
 }
 \value{

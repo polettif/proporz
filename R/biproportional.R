@@ -1,22 +1,24 @@
 #' Biproportional apportionment with data frames
 #'
 #' Method to proportionally allocate seats among parties/lists and
-#' districts/regions/entities ("Doppelter Pukelsheim").
+#' districts/regions/entities ('Doppelter Pukelsheim').
 #'
 #' Each party nominates a candidate list for every district. The voters vote
 #' for the parties of their district. The seat allocation is calculated in two
 #' steps:
 #'
 #' \enumerate{
-#'   \item In the so called \emph{upper apportionment} the number of seats for
-#'   each party (over all districts) is determined.
-#'   \item In the so called \emph{lower apportionment} the seats are distributed
-#'   to the regional party list respecting the results from the upper apportionment.
+#'   \item In the so called \code{\link[=upper_apportionment]{upper apportionment}}
+#'   the number of seats for each party (over all districts) is determined.
+#'   \item In the so called \code{\link[=lower_apportionment]{lower apportionment}}
+#'   the seats are distributed to the regional party list respecting the results
+#'   from the upper apportionment.
 #' }
 #'
-#' Parties failing to reach quorums cannot get seats.
+#' Parties failing to reach quorums cannot get seats. This function does not
+#' handle seat assignment to candidates.
 #'
-#' If you want to other apportion methods than Sainte-Laguë use \link{biproporz}.
+#' If you want to use other apportion methods than Sainte-Laguë use [biproporz()].
 #'
 #' @param votes_df data.frame (long format) with 3 columns (actual colnames can differ):
 #'                 \itemize{
@@ -34,11 +36,11 @@
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a
 #'                       district has as many votes as there are seats in a
 #'                       district. Set to `FALSE` if `votes_df` shows the number
-#'                       of voters.
+#'                       of voters (e.g. they can only vote for one party).
 #'
 #' @seealso [biproporz()], [get_divisors()]
 #'
-#' @returns A data.frame (like votes_df) with a new column denoting the number
+#' @returns A data.frame like `votes_df` with a new column denoting the number
 #'          seats per party and district
 #'
 #' @examples
@@ -101,16 +103,17 @@ pukelsheim = function(votes_df, district_seats_df,
 #' for the parties of their district. The seat allocation is calculated in two
 #' steps:
 #' \enumerate{
-#' \item In the so called \emph{upper apportionment} the number of seats for
-#'    each party (over all districts) is determined. Normally, the number of
-#'    seats for each region are defined before the election and are independent
-#'    of the vote counts.
-#' \item In the so called \emph{lower apportionment} the seats are distributed
-#'    to the regional party list respecting the results from the upper
-#'    apportionment.
+#' \item In the so called \code{\link[=upper_apportionment]{upper apportionment}}
+#'    the number of seats for each party (over all districts) is determined.
+#'    Normally, the number of seats for each region are defined before the
+#'    election and are independent of the vote counts.
+#' \item In the so called \code{\link[=lower_apportionment]{lower apportionment}}
+#'    the seats are distributed to the regional party list respecting the
+#'    results from the upper apportionment.
 #' }
 #'
-#' Parties failing to reach quorums cannot get seats.
+#' Parties failing to reach quorums cannot get seats. This function does not
+#' handle seat assignment to candidates.
 #'
 #' @inheritParams upper_apportionment
 #' @param quorum Optional list of functions which take the votes_matrix and
@@ -224,8 +227,9 @@ biproporz = function(votes_matrix,
 #'                       can be used.
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a
 #'                       district has as many votes as there are seats in a
-#'                       district. Set to FALSE if `votes_matrix` shows the
-#'                       number of voters.
+#'                       district. Set to `FALSE` if `votes_matrix` shows the
+#'                       number of voters (e.g. they can only vote for one
+#'                       party).
 #' @param method Apportion method that defines how seats are assigned,
 #'               see [proporz()].
 #'
@@ -331,8 +335,8 @@ weigh_list_votes = function(votes_matrix, seats_district) {
 #' @param method Apportion method that defines how seats are assigned. The
 #'               default "round" for the Sainte-Laguë/Webster method is the
 #'               standard for biproportional apportionment and the only method
-#'               guaranteed to terminate.  See [proporz()] for other methods.
-#'               It is also possible to provide a function that round a vector
+#'               guaranteed to terminate. See [proporz()] for other methods.
+#'               It is also possible to provide a function that rounds a vector
 #'               or matrix.
 #'
 #' @returns A seat matrix with district (columns) and party (rows) divisors

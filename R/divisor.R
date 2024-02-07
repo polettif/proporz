@@ -1,21 +1,21 @@
 #' Highest averages method
 #'
-#' Allocates seats proportionally for divisor methods.
+#' Allocate seats proportionally for \code{\link[=divisor_methods]{divisor methods}}.
 #'
 #' The highest averages method requires the number of votes for each party to
 #' be divided successively by a series of divisors. This produces a table of
 #' quotients, or averages, with a row for each divisor and a column for each
 #' party. The nth seat is allocated to the party whose column contains the nth
-#' largest entry in this table, up to the total number of seats available.
-#' (\href{https://en.wikipedia.org/wiki/Highest_averages_method}{Wikipedia})
+#' largest entry in this table, up to the total number of seats
+#' available. (\href{https://en.wikipedia.org/wiki/Highest_averages_method}{Wikipedia})
 #'
-#' @param votes vector with votes for each party
-#' @param n_seats total number of seats
+#' @inheritParams proporz
 #' @param divisors sequence of divisors (length equal to the number of seats).
-#'                 If it's a single number (e.g. 0.5), a sequence is generated
+#'                 If it is a single number (e.g. 0.5), a sequence is generated
 #'                 starting with it.
 #'
 #' @inherit proporz return
+#'
 #' @examples
 #' highest_averages_method(c(5200, 1700, 3100), 15, 0.5)
 #'

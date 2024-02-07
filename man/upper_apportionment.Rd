@@ -24,8 +24,9 @@ can be used.}
 
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
 district has as many votes as there are seats in a
-district. Set to FALSE if \code{votes_matrix} shows the
-number of voters.}
+district. Set to \code{FALSE} if \code{votes_matrix} shows the
+number of voters (e.g. they can only vote for one
+party).}
 
 \item{method}{Apportion method that defines how seats are assigned,
 see \code{\link[=proporz]{proporz()}}.}

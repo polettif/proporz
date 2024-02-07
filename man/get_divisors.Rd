@@ -2,7 +2,7 @@
 % Please edit documentation in R/S3.R
 \name{get_divisors}
 \alias{get_divisors}
-\title{Get district and party divisors from \code{\link[=biproporz]{biproporz()}} result}
+\title{Get district and party divisors from biproporz result}
 \usage{
 get_divisors(biproporz_result)
 }
@@ -11,7 +11,7 @@ get_divisors(biproporz_result)
 or a data.frame created by \code{\link[=pukelsheim]{pukelsheim()}}}
 }
 \value{
-The district and party divisors in a list, each as vectors
+The district and party divisors in a list, each as a vector
 }
 \description{
 Show the district and party divisors used to assign seats.

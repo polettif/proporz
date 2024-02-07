@@ -22,8 +22,8 @@ bisect = function(f, x1, x2, tol = 1e-9) {
 #' Pivot long data.frame to wide matrix and vice versa
 #'
 #' Create a matrix in 'wide' format from a data.frame with 3 columns with
-#' [pivot_to_matrix()] or create a data.frame in long format from a matrix with
-#' [pivot_to_df()].
+#' `pivot_to_matrix` or create a data.frame in long format from a matrix with
+#' `pivot_to_df.`
 #'
 #' These pivot functions are used to prepare data for [biproporz()] in
 #' [pukelsheim()]. They are not supposed to cover general use cases or provide
