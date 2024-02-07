@@ -93,8 +93,9 @@ is missing or <code>NULL</code>.</p></dd>
 <dt>use_list_votes</dt>
 <dd><p>By default (<code>TRUE</code>) it's assumed that each voter in a
 district has as many votes as there are seats in a
-district. Set to FALSE if <code>votes_matrix</code> shows the
-number of voters.</p></dd>
+district. Set to <code>FALSE</code> if <code>votes_matrix</code> shows the
+number of voters (e.g. they can only vote for one
+party).</p></dd>
 
 
 <dt>method</dt>
@@ -118,14 +119,15 @@ attributes (hidden from print, see <code><a href="get_divisors.html">get_divisor
     <h2>Details</h2>
     <p>Each party nominates a candidate list for every district. The voters vote
 for the parties of their district. The seat allocation is calculated in two
-steps:</p><ol><li><p>In the so called <em>upper apportionment</em> the number of seats for
-each party (over all districts) is determined. Normally, the number of
-seats for each region are defined before the election and are independent
-of the vote counts.</p></li>
-<li><p>In the so called <em>lower apportionment</em> the seats are distributed
-to the regional party list respecting the results from the upper
-apportionment.</p></li>
-</ol><p>Parties failing to reach quorums cannot get seats.</p>
+steps:</p><ol><li><p>In the so called <code><a href="upper_apportionment.html">upper apportionment</a></code>
+the number of seats for each party (over all districts) is determined.
+Normally, the number of seats for each region are defined before the
+election and are independent of the vote counts.</p></li>
+<li><p>In the so called <code><a href="lower_apportionment.html">lower apportionment</a></code>
+the seats are distributed to the regional party list respecting the
+results from the upper apportionment.</p></li>
+</ol><p>Parties failing to reach quorums cannot get seats. This function does not
+handle seat assignment to candidates.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
