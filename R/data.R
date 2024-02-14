@@ -1,4 +1,11 @@
-#' Example election data from Zug Switzerland (2018)
+#' Election Data for the Cantonal Council of Zug (2018)
+#'
+#' Example election data from the 2018 election for cantonal council of Zug in
+#' Switzerland.
+#'
+#' @source Kanton Zug (01.07.2022, 10:27:58). Kantonsratswahl 2018 (CSV).
+#'         \url{https://wab.zug.ch/elections/kantonsratswahl-2018/data-csv}
+#' @keywords data
 "zug2018"
 
 #' Finnish Parliamentary Elections Data (2019)

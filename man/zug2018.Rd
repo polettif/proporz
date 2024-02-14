@@ -3,14 +3,19 @@
 \docType{data}
 \name{zug2018}
 \alias{zug2018}
-\title{Example election data from Zug Switzerland (2018)}
+\title{Election Data for the Cantonal Council of Zug (2018)}
 \format{
 An object of class \code{data.frame} with 267 rows and 49 columns.
+}
+\source{
+Kanton Zug (01.07.2022, 10:27:58). Kantonsratswahl 2018 (CSV).
+\url{https://wab.zug.ch/elections/kantonsratswahl-2018/data-csv}
 }
 \usage{
 zug2018
 }
 \description{
-Example election data from Zug Switzerland (2018)
+Example election data from the 2018 election for cantonal council of Zug in
+Switzerland.
 }
-\keyword{datasets}
+\keyword{data}
