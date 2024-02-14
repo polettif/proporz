@@ -19,9 +19,6 @@
     <loc>/reference/biproporz.html</loc>
   </url>
   <url>
-    <loc>/reference/biproporz_examples.html</loc>
-  </url>
-  <url>
     <loc>/reference/ceil_at.html</loc>
   </url>
   <url>
@@ -77,6 +74,9 @@
   </url>
   <url>
     <loc>/reference/upper_apportionment.html</loc>
+  </url>
+  <url>
+    <loc>/reference/uri2020.html</loc>
   </url>
   <url>
     <loc>/reference/weigh_list_votes.html</loc>

@@ -185,28 +185,28 @@ Sciences, 56 (2), 166–184.</p>
 <span class="r-in"><span><span class="co"># and using number of voters instead of list votes</span></span></span>
 <span class="r-in"><span><span class="va">f19_matrix</span> <span class="op">=</span> <span class="fu"><a href="pivot_to_matrix.html">pivot_to_matrix</a></span><span class="op">(</span><span class="va">finland2019</span><span class="op">$</span><span class="va">votes_df</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">f19_distr_seats</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    <span class="va">finland2019</span><span class="op">$</span><span class="va">district_seats_df</span><span class="op">$</span><span class="va">election_mandates</span>,</span></span>
-<span class="r-in"><span>    <span class="va">finland2019</span><span class="op">$</span><span class="va">district_seats_df</span><span class="op">$</span><span class="va">entity_id</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="va">finland2019</span><span class="op">$</span><span class="va">district_seats_df</span><span class="op">$</span><span class="va">seats</span>,</span></span>
+<span class="r-in"><span>    <span class="va">finland2019</span><span class="op">$</span><span class="va">district_seats_df</span><span class="op">$</span><span class="va">district_name</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f19_seats</span> <span class="op">=</span> <span class="fu">biproporz</span><span class="op">(</span><span class="va">f19_matrix</span>, <span class="va">f19_distr_seats</span>,</span></span>
 <span class="r-in"><span>               use_list_votes <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>               method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"floor"</span>, <span class="st">"round"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">f19_seats</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">f19_seats</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        entity_id</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> list_id HAEM HEL KAA KES LAP OUL PIR SAT SKA UUS VAA VAR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    KD      1   0   1   1   0   1   1   0   1   1   1   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    KESK    1   1   3   2   2   6   2   1   3   2   3   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    KOK     3   5   3   1   1   2   4   1   2   7   2   4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    NYT     0   1   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Nyt     0   0   0   0   0   0   0   0   0   1   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    PIR     0   1   0   0   0   0   0   0   0   0   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    PS      3   3   3   2   1   4   3   2   3   6   3   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    RKP     0   1   0   0   0   0   0   0   0   4   3   1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    SDP     4   3   4   2   1   2   4   2   3   7   2   3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    SIN     0   0   0   0   0   0   0   0   1   1   0   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    VAS     1   2   1   1   1   2   2   1   1   2   1   2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    VIHR    1   5   2   1   1   1   3   1   1   5   1   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           district_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> party_name HEL HÄM KAA KES LAP OUL PIR SAT SKA UUS VAA VAR</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       KD     0   1   1   1   0   1   1   0   1   1   1   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       KESK   1   1   3   2   2   6   2   1   3   2   3   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       KOK    5   3   3   1   1   2   4   1   2   7   2   4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       NYT    1   0   0   0   0   0   0   0   0   0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       Nyt    0   0   0   0   0   0   0   0   0   1   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       PIR    1   0   0   0   0   0   0   0   0   0   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       PS     3   3   3   2   1   4   3   2   3   6   3   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       RKP    1   0   0   0   0   0   0   0   0   4   3   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       SDP    3   4   4   2   1   2   4   2   3   7   2   3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       SIN    0   0   0   0   0   0   0   0   1   1   0   0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       VAS    2   1   1   1   1   2   2   1   1   2   1   2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       VIHR   5   1   2   1   1   1   3   1   1   5   1   2</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
