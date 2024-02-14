@@ -164,8 +164,8 @@ pukelsheim = function(votes_df, district_seats_df,
 #' # and using number of voters instead of list votes
 #' f19_matrix = pivot_to_matrix(finland2019$votes_df)
 #' f19_distr_seats = setNames(
-#'     finland2019$district_seats_df$election_mandates,
-#'     finland2019$district_seats_df$entity_id)
+#'     finland2019$district_seats_df$seats,
+#'     finland2019$district_seats_df$district_name)
 #'
 #' f19_seats = biproporz(f19_matrix, f19_distr_seats,
 #'                use_list_votes = FALSE,

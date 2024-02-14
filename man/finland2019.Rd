@@ -3,14 +3,29 @@
 \docType{data}
 \name{finland2019}
 \alias{finland2019}
-\title{Example data from the Finnish parliamentary elections (2019)}
+\title{Finnish Parliamentary Elections Data (2019)}
 \format{
-An object of class \code{list} of length 2.
+List containing two data.frames:
+\itemize{
+\item{\code{votes_df} containing the number of votes for each party and district.
+229 rows, 3 columns (\code{party_name}, \code{district_name}, \code{votes})}
+\item{\code{district_seats_df} with the number of seats per district.
+12 rows, 2 columns (\code{district_name}, \code{seats})}
+}
+}
+\source{
+\url{https://tulospalvelu.vaalit.fi/EKV-2019/en/ladattavat_tiedostot.html}
 }
 \usage{
 finland2019
 }
 \description{
-Example data from the Finnish parliamentary elections (2019)
+Example data from the 2019 Finnish parliamentary elections. The data has been
+cleaned up and only contains information relevant for this package.
 }
-\keyword{datasets}
+\examples{
+finland2019$seats_df
+
+head(finland2019$votes_df)
+}
+\keyword{data}
