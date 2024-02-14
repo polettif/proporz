@@ -23,6 +23,6 @@ if(interactive()){
     run_app()
 
     # It's possible to load a matrix with the app
-    run_app(biproporz_examples$uri_2020$votes, biproporz_examples$uri_2020$seats)
+    run_app(proporz:::shinyapp_examples$uri_2020$votes, proporz:::shinyapp_examples$uri_2020$seats)
 }
 }

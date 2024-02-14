@@ -28,6 +28,3 @@
 #' head(finland2019$votes_df)
 #' @keywords data
 "finland2019"
-
-#' Prepared and cleaned vote matrices and district seats data
-"biproporz_examples"

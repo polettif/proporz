@@ -11,7 +11,7 @@
 #'     run_app()
 #'
 #'     # It's possible to load a matrix with the app
-#'     run_app(biproporz_examples$uri_2020$votes, biproporz_examples$uri_2020$seats)
+#'     run_app(proporz:::shinyapp_examples$uri_2020$votes, proporz:::shinyapp_examples$uri_2020$seats)
 #' }
 #' @export
 run_app = function(votes_matrix = NULL, district_seats = NULL) {
@@ -22,7 +22,6 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
     if(!requireNamespace("shinyMatrix", quietly = TRUE)) {
         stop("Please install shinyMatrix: install.packages('shinyMatrix')")
     }
-    examples = proporz::biproporz_examples
     tags = shiny::tags
     fluidRow = shiny::fluidRow
     column = shiny::column
@@ -186,16 +185,16 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
         observeEvent(input$load_example, {
             if(input$load_example == "Zug 2018") {
                 set_inputs(quorum_districts = 0.05, quorum_total = 0.03)
-                update_input_matrices(examples$zug_2018$votes, examples$zug_2018$seats)
+                update_input_matrices(shinyapp_examples$zug_2018$votes, shinyapp_examples$zug_2018$seats)
             } else if(input$load_example == "Uri 2020") {
                 set_inputs()
-                update_input_matrices(examples$uri_2020$votes, examples$uri_2020$seats)
+                update_input_matrices(shinyapp_examples$uri_2020$votes, shinyapp_examples$uri_2020$seats)
             } else if(input$load_example == "Wikipedia EN") {
                 set_inputs(use_list_votes = FALSE, set_seats_per_district = FALSE)
-                update_input_matrices(examples$wikipedia_en$votes, examples$wikipedia_en$seats)
+                update_input_matrices(shinyapp_examples$wikipedia_en$votes, shinyapp_examples$wikipedia_en$seats)
             } else if(input$load_example == "Wikipedia DE") {
                 set_inputs()
-                update_input_matrices(examples$wikipedia_de$votes, examples$wikipedia_de$seats)
+                update_input_matrices(shinyapp_examples$wikipedia_de$votes, shinyapp_examples$wikipedia_de$seats)
             } else {
                 return()
             }
