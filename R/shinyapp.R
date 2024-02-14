@@ -11,7 +11,7 @@
 #'     run_app()
 #'
 #'     # It's possible to load a matrix with the app
-#'     run_app(proporz:::shinyapp_examples$uri_2020$votes, proporz:::shinyapp_examples$uri_2020$seats)
+#'     run_app(uri2020$votes_matrix, uri2020$seats_vector)
 #' }
 #' @export
 run_app = function(votes_matrix = NULL, district_seats = NULL) {

@@ -15,7 +15,7 @@ Kanton Zug (01.07.2022, 10:27:58). Kantonsratswahl 2018 (CSV).
 zug2018
 }
 \description{
-Example election data from the 2018 election for cantonal council of Zug in
-Switzerland.
+Example election data from the 2018 election for the cantonal council
+of Zug (Kantonsrat) in Switzerland.
 }
 \keyword{data}
