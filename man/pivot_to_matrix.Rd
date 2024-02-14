@@ -5,12 +5,12 @@
 \alias{pivot_to_df}
 \title{Pivot long data.frame to wide matrix and vice versa}
 \usage{
-pivot_to_matrix(df)
+pivot_to_matrix(df_long)
 
 pivot_to_df(matrix_wide, value_colname = "values")
 }
 \arguments{
-\item{df}{data.frame in long format with exactly 3 columns}
+\item{df_long}{data.frame in long format with exactly 3 columns}
 
 \item{matrix_wide}{matrix in wide format}
 
@@ -18,9 +18,9 @@ pivot_to_df(matrix_wide, value_colname = "values")
 resulting data.frame}
 }
 \value{
-A data.frame with 3 columns or a matrix or . Note that the results are
+A data.frame with 3 columns or a matrix. Note that the results are
 sorted by the first and second column (data.frame) or row/column
-name (matrix).
+names (matrix).
 }
 \description{
 Create a matrix in 'wide' format from a data.frame with 3 columns with

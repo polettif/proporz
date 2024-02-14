@@ -30,14 +30,14 @@ bisect = function(f, x1, x2, tol = 1e-9) {
 #' customization. They mainly exist because reshape is hard to handle and the
 #' package should have no dependencies.
 #
-#' @param df data.frame in long format with exactly 3 columns
+#' @param df_long data.frame in long format with exactly 3 columns
 #' @param matrix_wide matrix in wide format
 #' @param value_colname name for the new value column in the
 #'                      resulting data.frame
 #'
-#' @returns A data.frame with 3 columns or a matrix or . Note that the results are
+#' @returns A data.frame with 3 columns or a matrix. Note that the results are
 #'          sorted by the first and second column (data.frame) or row/column
-#'          name (matrix).
+#'          names (matrix).
 #'
 #' @examples
 #' # From data.frame to matrix
@@ -58,10 +58,10 @@ bisect = function(f, x1, x2, tol = 1e-9) {
 #' pivot_to_df(pivot_to_matrix(df)) == df[order(df[[1]], df[[2]]),]
 #'
 #' @export
-pivot_to_matrix = function(df) {
-    stopifnot(ncol(df) == 3)
-    stopifnot(nrow(df) == nrow(unique(df[1:2])))
-    tbl = table(df)
+pivot_to_matrix = function(df_long) {
+    stopifnot(ncol(df_long) == 3)
+    stopifnot(nrow(df_long) == nrow(unique(df_long[1:2])))
+    tbl = table(df_long)
     stopifnot(max(tbl) == 1)
     apply(tbl, c(1,2), function(x) sum(as.numeric(names(x))*unname(x)))
 }

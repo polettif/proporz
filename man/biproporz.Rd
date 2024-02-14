@@ -13,50 +13,43 @@ biproporz(
 )
 }
 \arguments{
-\item{votes_matrix}{Vote count matrix with votes by party in rows
-and votes by district in columns}
+\item{votes_matrix}{Vote count matrix with votes by party in rows and votes by district
+in columns}
 
-\item{district_seats}{Vector defining the number of seats per district.
-Must be the same length as \code{ncol(votes_matrix)}.
-If the number of seats per district should be assigned
-according to the number of votes (not the general use
-case), a single number for the total number of seats
-can be used.}
+\item{district_seats}{Vector defining the number of seats per district. Must be the same
+length as \code{ncol(votes_matrix)}. Values are name-matched to \code{votes_matrix} if both are
+named. If the number of seats per district should be assigned according to the number
+of votes (not the general use case), a single number for the total number of seats can
+be used.}
 
-\item{quorum}{Optional list of functions which take the votes_matrix and
-return a logical vector that denotes for each list/party
-whether they reached the quorum (i.e. are eligible for seats).
-The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
-\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a
-precalculated logical vector. No quorum is applied if parameter
-is missing or \code{NULL}.}
+\item{quorum}{Optional list of functions which take the votes_matrix and return a logical
+vector that denotes for each list/party whether they reached the quorum (i.e. are
+eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
+\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
+vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
-\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
-district has as many votes as there are seats in a
-district. Set to \code{FALSE} if \code{votes_matrix} shows the
-number of voters (e.g. they can only vote for one
-party).}
+\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
+as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_matrix} shows
+the number of voters (e.g. they can only vote for one party).}
 
-\item{method}{Defines the method how seats in upper and lower apportionment
-are assigned. For a different method for upper and lower
-apportionment use a vector with two entries. The default
-"round" for the Sainte-Laguë/Webster method is the standard for
-biproportional apportionment and the only method guaranteed to
-terminate. See \code{\link[=proporz]{proporz()}} for other methods.}
+\item{method}{Defines the method how seats in upper and lower apportionment are assigned.
+For a different method for upper and lower apportionment use a vector with two entries.
+The default "round" for the Sainte-Laguë/Webster method is the standard for
+biproportional apportionment and the only method guaranteed to terminate. See
+\code{\link[=proporz]{proporz()}} for other methods.}
 }
 \value{
-Matrix with the same dimension as \code{votes_matrix} containing
-the number of seats with the row and column divisors stored in
-attributes (hidden from print, see \code{\link[=get_divisors]{get_divisors()}}).
+Matrix with the same dimension as \code{votes_matrix} containing the number of seats
+with the row and column divisors stored in attributes (hidden from print, see
+\code{\link[=get_divisors]{get_divisors()}}).
 }
 \description{
-Method to proportionally allocate seats among parties (or lists) and
-districts (or entities, regions), thus bi-proportional.
+Method to proportionally allocate seats among parties (or lists) and districts (or
+entities, regions), thus bi-proportional.
 }
 \details{
-Each party nominates a candidate list for every district. The voters vote
-for the parties of their district. The seat allocation is calculated in two
-steps:
+Each party nominates a candidate list for every district. The voters vote for
+the parties of their district. The seat allocation is calculated in two steps:
 \enumerate{
 \item In the so called \code{\link[=upper_apportionment]{upper apportionment}}
 the number of seats for each party (over all districts) is determined.
@@ -67,12 +60,12 @@ the seats are distributed to the regional party list respecting the
 results from the upper apportionment.
 }
 
-Parties failing to reach quorums cannot get seats. This function does not
-handle seat assignment to candidates.
+Parties failing to reach quorums cannot get seats. This function does not handle seat
+assignment to candidates.
 }
 \note{
-The iterative process in the lower apportionment is only guaranteed
-to terminate with the default Sainte-Laguë/Webster method.
+The iterative process in the lower apportionment is only guaranteed to terminate
+with the default Sainte-Laguë/Webster method.
 }
 \examples{
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -90,8 +83,8 @@ reached_quorum = q1 | q2
 
 biproporz(votes_matrix, district_seats, reached_quorum)
 
-# Different method for upper apportionment
-# and using number of voters instead of list votes
+# Different method for upper apportionment and
+# using number of voters instead of list votes for finland2019 dataset
 f19_matrix = pivot_to_matrix(finland2019$votes_df)
 f19_distr_seats = setNames(
     finland2019$district_seats_df$seats,
@@ -105,11 +98,10 @@ f19_seats[rowSums(f19_seats) > 0,]
 
 }
 \references{
-Gaffke, Norbert; Pukelsheim, Friedrich (2008): Divisor methods
-for proportional representation systems: An optimization approach
-to vector and matrix apportionment problems. Mathematical Social
-Sciences, 56 (2), 166–184.
+Gaffke, Norbert; Pukelsheim, Friedrich (2008): Divisor methods for
+proportional representation systems: An optimization approach to vector and matrix
+apportionment problems. Mathematical Social Sciences, 56 (2), 166–184.
 }
 \seealso{
-\code{\link[=pukelsheim]{pukelsheim()}} for usage with data frames.
+\code{\link[=pukelsheim]{pukelsheim()}} for biproportional apportionment with \code{data.frames} as inputs.
 }

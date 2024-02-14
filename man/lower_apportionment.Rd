@@ -9,42 +9,36 @@ lower_apportionment(votes_matrix, seats_cols, seats_rows, method = "round")
 \arguments{
 \item{votes_matrix}{votes matrix}
 
-\item{seats_cols}{number of seats per column (districts/regions),
-predetermined or calculated with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
+\item{seats_cols}{number of seats per column (districts/regions), predetermined or
+calculated with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
-\item{seats_rows}{number of seats per row (parties/lists), calculated
-with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
+\item{seats_rows}{number of seats per row (parties/lists), calculated with
+\code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
-\item{method}{Apportion method that defines how seats are assigned. The
-default "round" for the Sainte-Laguë/Webster method is the
-standard for biproportional apportionment and the only method
-guaranteed to terminate. See \code{\link[=proporz]{proporz()}} for other methods.
-It is also possible to provide a function that rounds a vector
-or matrix.}
+\item{method}{Apportion method that defines how seats are assigned. The default "round"
+for the Sainte-Laguë/Webster method is the standard for biproportional apportionment
+and the only method guaranteed to terminate. See \code{\link[=proporz]{proporz()}} for other methods. It is
+also possible to provide a function that rounds a vector or matrix.}
 }
 \value{
-A seat matrix with district (columns) and party (rows) divisors
-stored in attributes.
+A seat matrix with district (columns) and party (rows) divisors stored in
+attributes.
 }
 \description{
-Iterate and change column and row divisors such that the row and column sums
-of the seats matrix satisfies the constraints given by the upper
-apportionment.
+Iterate and change column and row divisors such that the row and column sums of the seats
+matrix satisfies the constraints given by the upper apportionment.
 }
 \details{
-The result is obtained by an iterative process ('Alternate Scaling
-Algorithm', see Reference). Initially, for each district a divisor is chosen
-using the highest averages method for the votes allocated to each regional
-party list in this region. For each party a party divisor is initialized
-with 1.
+The result is obtained by an iterative process ('Alternate Scaling Algorithm', see
+Reference). Initially, for each district a divisor is chosen using the highest averages
+method for the votes allocated to each regional party list in this region. For each party
+a party divisor is initialized with 1.
 
-Effectively, the objective of the iterative process is to modify the regional
-divisors and party divisors so that the number of seats in each regional
-party list equals the number of their votes divided by both the regional and
-the party divisors.
+Effectively, the objective of the iterative process is to modify the regional divisors
+and party divisors so that the number of seats in each regional party list equals the
+number of their votes divided by both the regional and the party divisors.
 
-The following two correction steps are executed until this objective is
-satisfied:
+The following two correction steps are executed until this objective is satisfied:
 \itemize{
 \item modify the party divisors such that the apportionment within each
 party is correct with the chosen rounding method,
@@ -61,8 +55,8 @@ lower_apportionment(votes_matrix, district_seats, party_seats)
 
 }
 \references{
-Oelbermann, K. F. (2016). Alternate scaling algorithm for
-biproportional divisor methods. Mathematical Social Sciences, 80, 25-32.
+Oelbermann, K. F. (2016). Alternate scaling algorithm for biproportional
+divisor methods. Mathematical Social Sciences, 80, 25-32.
 }
 \seealso{
 \code{\link[=biproporz]{biproporz()}}, \code{\link[=upper_apportionment]{upper_apportionment()}}

@@ -24,7 +24,7 @@ Example data from the 2019 Finnish parliamentary elections. The data has been
 cleaned up and only contains information relevant for this package.
 }
 \examples{
-finland2019$seats_df
+finland2019$district_seats_df
 
 head(finland2019$votes_df)
 }

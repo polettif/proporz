@@ -26,33 +26,30 @@ pukelsheim(
 \item number of seats for a district
 }}
 
-\item{quorum}{Optional list of functions which take the votes_matrix and
-return a logical vector that denotes for each list/party
-whether they reached the quorum (i.e. are eligible for seats).
-The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
-\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a
-precalculated logical vector. No quorum is applied if parameter
-is missing or \code{NULL}.}
+\item{quorum}{Optional list of functions which take the votes_matrix and return a logical
+vector that denotes for each list/party whether they reached the quorum (i.e. are
+eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
+\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
+vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
 \item{new_seats_col}{name of the new column}
 
-\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a
-district has as many votes as there are seats in a
-district. Set to \code{FALSE} if \code{votes_df} shows the number
-of voters (e.g. they can only vote for one party).}
+\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
+as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_df} shows the
+number of voters (e.g. they can only vote for one party).}
 }
 \value{
-A data.frame like \code{votes_df} with a new column denoting the number
-seats per party and district
+A data.frame like \code{votes_df} with a new column denoting the number seats per
+party and district. Party and district divisors stored in attributes in attributes
+(hidden from print, see \code{\link[=get_divisors]{get_divisors()}}).
 }
 \description{
 Method to proportionally allocate seats among parties/lists and
 districts/regions/entities ('Doppelter Pukelsheim').
 }
 \details{
-Each party nominates a candidate list for every district. The voters vote
-for the parties of their district. The seat allocation is calculated in two
-steps:
+Each party nominates a candidate list for every district. The voters vote for the parties
+of their district. The seat allocation is calculated in two steps:
 
 \enumerate{
 \item In the so called \code{\link[=upper_apportionment]{upper apportionment}}
@@ -62,8 +59,8 @@ the seats are distributed to the regional party list respecting the results
 from the upper apportionment.
 }
 
-Parties failing to reach quorums cannot get seats. This function does not
-handle seat assignment to candidates.
+Parties failing to reach quorums cannot get seats. This function does not handle seat
+assignment to candidates.
 
 If you want to use other apportion methods than Sainte-Laguë use \code{\link[=biproporz]{biproporz()}}.
 }
@@ -87,5 +84,5 @@ tail(finland19_result[order(finland19_result$mandates),])
 
 }
 \seealso{
-\code{\link[=biproporz]{biproporz()}}, \code{\link[=get_divisors]{get_divisors()}}
+This function calls after preparing the input data \code{\link[=biproporz]{biproporz()}}.
 }

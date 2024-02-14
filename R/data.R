@@ -41,7 +41,7 @@
 #'
 #' @source \url{https://tulospalvelu.vaalit.fi/EKV-2019/en/ladattavat_tiedostot.html}
 #' @examples
-#' finland2019$seats_df
+#' finland2019$district_seats_df
 #'
 #' head(finland2019$votes_df)
 #' @keywords data
