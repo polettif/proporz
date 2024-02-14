@@ -29,10 +29,12 @@ check_enough_seats = function(votes, n_seats, method) {
 }
 
 check_seats_number = function(n_seats, n_seats.name) {
-    if(length(n_seats) == 1 && !is.null(n_seats) && !is.na(n_seats) && n_seats >= 0) {
+    if(length(n_seats) == 1 && !is.null(n_seats) && !is.na(n_seats) &&
+       (n_seats %% 1 == 0) &&
+       n_seats >= 0) {
         return()
     }
-    stop("`", n_seats.name, "` must be one number >= 0", call. = F)
+    stop("`", n_seats.name, "` must be an integer >= 0", call. = F)
 }
 
 check_votes_vector = function(votes, votes.name) {

@@ -30,7 +30,7 @@ The following methods are available:\itemize{
 \item{adams, ceiling: use \code{\link[=divisor_ceiling]{divisor_ceiling()}}}
 \item{dean, harmonic: use \code{\link[=divisor_harmonic]{divisor_harmonic()}}}
 \item{huntington-hill, hill-huntington, geometric: use \code{\link[=divisor_geometric]{divisor_geometric()}}}
-\item{hare-niemeyer, hamilton, vinton, quota_largest_remainder: use \code{\link[=quota_largest_remainder]{quota_largest_remainder()}}}
+\item{hare-niemeyer, hamilton, vinton, largest_remainder_method: use \code{\link[=largest_remainder_method]{largest_remainder_method()}}}
 }
 }
 \note{

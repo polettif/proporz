@@ -4,7 +4,7 @@ reprex::reprex({
 
     divisor_round(votes, 10)
     divisor_floor(votes, 10)
-    quota_largest_remainder(votes, 10)
+    largest_remainder_method(votes, 10)
 })
 
 reprex::reprex({

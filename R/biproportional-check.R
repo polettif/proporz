@@ -66,8 +66,8 @@ prep_method = function(method) {
     if(length(method) == 1) {
         method <- c(method, method)
     }
-    if(any(method == "quota_largest_remainder")) {
-        stop('Cannot use "quota_largest_remainder" method, only divisor methods ',
+    if(any(method == "largest_remainder_method")) {
+        stop('Cannot use "largest_remainder_method", only divisor methods ',
              'are possible in biproportional apportionment.', call. = F)
     }
 

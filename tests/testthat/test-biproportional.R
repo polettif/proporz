@@ -386,8 +386,8 @@ test_that("error messages", {
     # biproportional
     expect_error_fixed(biproporz(vdf, c(1,2,3)), "`vdf` must be a matrix.")
     expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows.")
-    expect_error_fixed(biproporz(vm, seats, method = "quota_largest_remainder"),
-                 'Cannot use "quota_largest_remainder" method, only divisor methods are possible in biproportional apportionment.')
+    expect_error_fixed(biproporz(vm, seats, method = "largest_remainder_method"),
+                 'Cannot use "largest_remainder_method", only divisor methods are possible in biproportional apportionment.')
     expect_error_fixed(biproporz(vm+0.1, seats), "`vm + 0.1` must only contain integers")
     expect_error_fixed(biproporz(vm, seats+0.1), "`seats + 0.1` must be integers.")
     expect_error_fixed(biproporz(vm, seats, method = c("round", "floor", "ceiling")),

@@ -55,8 +55,8 @@ test_that("proporz parameter range", {
 
     # unsupported values
     for(method_impl in method_list) {
-        for(n_seats in list(NA, NULL, -1, c(1, 1))) {
-            expect_error(proporz(c(100, 10, 5), n_seats, method_impl), "`n_seats` must be one number >= 0")
+        for(n_seats in list(NA, NULL, -1, 1.1, c(1, 1))) {
+            expect_error(proporz(c(100, 10, 5), n_seats, method_impl), "`n_seats` must be an integer >= 0")
         }
     }
     for(method_impl in method_list) {
@@ -87,7 +87,7 @@ test_that("undefined result errors", {
                  "Result is undefined, equal quotient for parties: 2 & 3", fixed = T)
     expect_equal(proporz(c(1, 10, 10), 2, "round"), c(0,1,1))
 
-    expect_error(quota_largest_remainder(c(10, 10, 0), 1),
+    expect_error(largest_remainder_method(c(10, 10, 0), 1),
                  "Result is undefined, equal remainder for parties: 1 & 2",
                  fixed = TRUE)
 })
