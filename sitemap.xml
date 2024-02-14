@@ -37,6 +37,9 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/largest_remainder_method.html</loc>
+  </url>
+  <url>
     <loc>/reference/lower_apportionment.html</loc>
   </url>
   <url>
@@ -56,9 +59,6 @@
   </url>
   <url>
     <loc>/reference/quorum_any.html</loc>
-  </url>
-  <url>
-    <loc>/reference/quota_largest_remainder.html</loc>
   </url>
   <url>
     <loc>/reference/reached_quorum_any_district.html</loc>
