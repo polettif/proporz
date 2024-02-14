@@ -57,14 +57,14 @@ pivot_to_df."><meta property="og:image" content="/logo.png"><!-- mathjax --><scr
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pivot_to_matrix</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pivot_to_matrix</span><span class="op">(</span><span class="va">df_long</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">pivot_to_df</span><span class="op">(</span><span class="va">matrix_wide</span>, value_colname <span class="op">=</span> <span class="st">"values"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>df</dt>
+    <dl><dt>df_long</dt>
 <dd><p>data.frame in long format with exactly 3 columns</p></dd>
 
 
@@ -81,9 +81,9 @@ resulting data.frame</p></dd>
     <h2>Value</h2>
     
 
-<p>A data.frame with 3 columns or a matrix or . Note that the results are
+<p>A data.frame with 3 columns or a matrix. Note that the results are
 sorted by the first and second column (data.frame) or row/column
-name (matrix).</p>
+names (matrix).</p>
     </div>
     <div id="details">
     <h2>Details</h2>
