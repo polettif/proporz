@@ -1,0 +1,264 @@
+---
+title: "Apportionment scenarios"
+date: 2024-02-22
+author: "Flavio Poletti"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Apportionment scenarios}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## 1) Introduction
+This vignette explores the implementation of different seat apportionment 
+scenarios. There are generally two ways to assign seats of a parliament: Either
+you distribute seats within each district independently or you distribute seats
+according to the vote share for the whole election region (e.g. on a national 
+level). We will focus on the difference in seat shares compared to vote shares
+these two approaches can produce.
+
+<br/>
+
+## 2) Setup data 
+We'll mainly use the data set for the 2019 Finnish parliamentary elections. 
+The `finland2019` data set contains two data.frames: One with the number of votes
+for each party, the other data.frame tells us how many seats (`election_mandates`) 
+each district has.
+
+```{r library}
+library(proporz)
+str(finland2019)
+```
+
+To make comparisons easier, we'll use matrices instead of data.frames. We create
+a `votes_matrix` from the given data.frame.
+
+```{r prepare_votes_matrix}
+votes_matrix = pivot_to_matrix(finland2019$votes_df)
+dim(votes_matrix)
+
+# Let's look at all parties with at least 10k votes
+knitr::kable(votes_matrix[rowSums(votes_matrix) > 10000,])
+```
+
+We also create a named vector that defines how many seats each district has 
+(`district_seats`). Note that the order of district names in `district_seats` 
+and columns in `votes_matrix` differ. However, this does not affect the analysis 
+as we access districts by name (as does `biproporz()` by the way).
+
+```{r prepare_district_seats}
+district_seats = finland2019$district_seats_df$seats
+names(district_seats) <- finland2019$district_seats_df$district_name
+district_seats
+```
+<br/>
+
+## 3) Distribute seats in every district independently
+
+### 3.1) Function to distribute seats in districts
+
+In Finland and many other jurisdictions, seats are assigned for each district 
+independently. There is no biproportional apportionment among all districts. The 
+following function, `apply_proporz`, calculates the seat distribution for each 
+district and returns the number of seats per party and district as a matrix. 
+The user can specify the apportionment method and a quorum threshold.
+
+```{r apply_proporz}
+apply_proporz = function(votes_matrix, district_seats, method, quorum = 0) {
+    seats_matrix = votes_matrix
+    seats_matrix[] <- NA
+    
+    # calculate proportional apportionment for each district (matrix column)
+    for(district in names(district_seats)) {
+        seats_matrix[,district] <- proporz(votes_matrix[,district],
+                                           district_seats[district],
+                                           quorum = quorum,
+                                           method = method)
+    }
+    return(seats_matrix)
+}
+```
+
+
+### 3.2) Actual distribution method (D'Hondt)
+
+The Finnish election system uses the _D'Hondt_ method. We'll calculate the seat
+distribution as a baseline to compare it with other methods.
+
+```{r}
+bydistrict_v0 = apply_proporz(votes_matrix, district_seats, "d'hondt")
+
+bydistrict_v0[rowSums(bydistrict_v0) > 0,]
+```
+
+### 3.3) Alternative methods
+
+We'll now look at alternative apportionment methods. The _Sainte-Laguë_ method 
+(standard rounding) for example is impartial to party size. On the other hand, 
+the _Huntington–Hill_ method favors small parties. Generally, Huntington-Hill 
+is used with a quorum, otherwise all parties with more than zero votes get at 
+least one seat. In this example, the quorum is 3% of votes in a district.
+
+```{r}
+bydistrict_v1 = apply_proporz(votes_matrix, district_seats,
+                                      method = "sainte-lague")
+
+bydistrict_v2 = apply_proporz(votes_matrix, district_seats,
+                                      method = "huntington-hill", 
+                                      quorum = 0.03)
+```
+
+Let's compare the seat distributions for these three methods. We get the number 
+of party seats on the national level with `rowSums`.
+
+```{r compare}
+df_bydistrict = data.frame(
+    D.Hondt = rowSums(bydistrict_v0),
+    Sainte.Lague = rowSums(bydistrict_v1),
+    Huntington.Hill = rowSums(bydistrict_v2)
+)
+
+# sort table by D'Hondt seats
+df_bydistrict <- df_bydistrict[order(df_bydistrict[[1]], decreasing = T),] 
+
+# print parties with at least one seat
+knitr::kable(df_bydistrict[rowSums(df_bydistrict) > 0,])
+```
+
+The actual political analysis is better left for people familiar with the party
+system. However, it is fair to say that the election system within districts has
+a significant impact on the number of seats in parliament. For example, the 
+party with the most seats changes with Sainte-Laguë or Huntington-Hill.
+
+### 3.4) Compare seat share with vote share
+
+Let's now compare the vote shares on the national level with the seat share in 
+parliament. Since every entry in `votes_matrix` is only one voter, we can simply 
+use the row sums to get the vote shares. Otherwise, we'd have to weigh votes in 
+each district according to the number of seats. Since disproportionality 
+analysis is not the focus of this package, we'll simply look at the difference 
+in shares for the actual distribution method.
+
+```{r seat_vote_share}
+vote_shares = rowSums(votes_matrix)/sum(votes_matrix)
+
+shares = data.frame(
+    seats = rowSums(bydistrict_v0)/sum(district_seats),
+    votes = vote_shares 
+)
+shares$difference <- shares$seats-shares$votes
+shares <- round(shares, 4)
+
+# Only look at parties with at least 0.5 % of votes
+shares <- shares[shares$votes > 0.005,]
+shares <- shares[order(shares$difference),]
+
+shares
+```
+
+The difference between seat and vote share varies among parties from -1.5 to
++2.3 percentage points.
+
+<br/>
+
+## 4) Biproportional method
+
+### 4.1) Biproportional party seats
+We'll now look at biproportional apportionment and whether it better matches the
+seat share with the national vote share. Keep in mind that simply using existing 
+data sets with `biproporz` is not really suitable from a modeling perspective. 
+Vote distributions are likely to be different if, for example, people know their 
+vote also counts on a national level or if smaller parties choose to run in more 
+districts.
+
+With that being said, let's assume our data set is properly modeled already. We 
+need to consider that voters in Finland can only vote for _one_ person in each 
+district. They can't distribute as many votes as there are seats in their 
+district among candidates/parties. Thus we need to use `use_list_votes=FALSE` 
+as a parameter in `biproporz`.
+
+```{r biprop, results="hide"}
+seats_biproportional = biproporz(votes_matrix, 
+                                 district_seats, 
+                                 use_list_votes = FALSE)
+
+# show only parties with seats
+seats_biproportional[rowSums(seats_biproportional) > 0,]
+```
+```{r biprop.knit, echo = F}
+knitr::kable(seats_biproportional[rowSums(seats_biproportional) > 0,])
+```
+
+Let's now look at the difference between vote and seat share.
+
+```{r compare_vote_seat_shares}
+vote_shares = rowSums(votes_matrix)/sum(votes_matrix)
+seat_shares = rowSums(seats_biproportional)/sum(seats_biproportional)
+
+range(vote_shares - seat_shares)
+```
+
+As we can see, the difference between vote and seat share ranges from -0.5 to
++0.2 percentage point. Biproportional apportionment matches the national vote 
+share better than apportionment by district. This is expected however, since
+biproportional apportionment actually considers the national vote share. 
+Discussing the pros and cons of a regional representation compared to a 
+priority on national vote shares is not within the scope of this vignette. The
+following chunk shows the differen
+
+```{r compare_matrices}
+seat_changes = seats_biproportional-bydistrict_v0
+
+knitr::kable(seat_changes[rowSums(abs(seat_changes)) > 0,colSums(abs(seat_changes))>0])
+```
+### 4.2) Distribute seats among districts as well
+Normally the number of seats per district is defined before an election, based
+on census data. However, you *could* also assign the number of seats per 
+district, based on the actual votes cast in every district. This way, each 
+districts seat share is proportional to its vote share. To do this, we use the
+total number of seats for the `district_seats` parameter.
+
+```{r biprop_seats}
+full_biproportional = biproporz(votes_matrix, 
+                                district_seats = sum(district_seats),
+                                use_list_votes = F)
+
+# party seat distribution has not changed
+rowSums(full_biproportional) - rowSums(seats_biproportional)
+
+# district seat distribution is different
+colSums(full_biproportional) - colSums(seats_biproportional)
+```
+
+As we can see, the number of party seats does not change. However, districts 
+where more people voted get a higher share of the seats. 2 districts gain seats,
+4 districts lose a seat.
+
+<br/>
+
+## 5) Effect of a system change on seat distribution
+
+As a last example, we'll look at the changes in seat distribution biproportional
+apportionment had in the 2020 parliament election in the Swiss canton of Uri.
+In Uri, 2020 was the first year the cantonal parliament was elected with 
+biproportional apportionment for some municipalities. Previously, these four 
+municipalities used the _Hagenbach-Bischoff_ method. We'll ignore 
+all other municipalities which use a majoritarian electoral system.
+
+```{r uri}
+seats_old_system = apply_proporz(uri2020$votes_matrix, uri2020$seats_vector, "hagenbach-bischoff")
+
+seats_new_system = biproporz(uri2020$votes_matrix, uri2020$seats_vector)
+
+seats_new_system-seats_old_system
+```
+
+Compared to the previous election system there was a change of one seat (out of
+37).

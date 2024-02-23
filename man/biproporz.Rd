@@ -30,7 +30,7 @@ vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_matrix} shows
-the number of voters (e.g. they can only vote for one party).}
+the number of voters (e.g. they can only vote for one party), see \code{\link[=vignette]{vignette()}}}
 
 \item{method}{Defines the method how seats in upper and lower apportionment are assigned.
 For a different method for upper and lower apportionment use a vector with two entries.
@@ -68,33 +68,14 @@ The iterative process in the lower apportionment is only guaranteed to terminate
 with the default Sainte-Laguë/Webster method.
 }
 \examples{
-votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
-votes_matrix = pivot_to_matrix(votes_df)
+votes_matrix = uri2020$votes_matrix
+district_seats = uri2020$seats_vector
 
-distr_df = unique(zug2018[c("entity_id", "election_mandates")])
-district_seats = setNames(distr_df$election_mandates, distr_df$entity_id)
+biproporz(votes_matrix, district_seats)
 
-biproporz(votes_matrix, district_seats, quorum_any(0.05, 0.03))
-
-# calculate quorum beforehand (leads to the same result as above)
-q1 = reached_quorum_any_district(votes_matrix, 0.05)
-q2 = reached_quorum_total(votes_matrix, 0.03)
-reached_quorum = q1 | q2
-
-biproporz(votes_matrix, district_seats, reached_quorum)
-
-# Different method for upper apportionment and
-# using number of voters instead of list votes for finland2019 dataset
-f19_matrix = pivot_to_matrix(finland2019$votes_df)
-f19_distr_seats = setNames(
-    finland2019$district_seats_df$seats,
-    finland2019$district_seats_df$district_name)
-
-f19_seats = biproporz(f19_matrix, f19_distr_seats,
-               use_list_votes = FALSE,
-               method = c("floor", "round"))
-
-f19_seats[rowSums(f19_seats) > 0,]
+# apply quorum (high values for illustrative purposes)
+biproporz(votes_matrix, district_seats,
+          quorum_all(any_district = 0.1, total = 0.25))
 
 }
 \references{

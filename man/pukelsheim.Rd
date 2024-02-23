@@ -84,5 +84,5 @@ tail(finland19_result[order(finland19_result$mandates),])
 
 }
 \seealso{
-This function calls after preparing the input data \code{\link[=biproporz]{biproporz()}}.
+This function calls \code{\link[=biproporz]{biproporz()}} after preparing the input data.
 }

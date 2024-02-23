@@ -1,34 +1,38 @@
 reprex::reprex({
     library(proporz)
-    votes = c("Party A" = 690, "Party B" = 400, "Party C" = 250, "Party D" = 120)
-
-    divisor_round(votes, 10)
-    divisor_floor(votes, 10)
-    largest_remainder_method(votes, 10)
-})
-
-reprex::reprex({
-    library(proporz)
     votes = c("Party A" = 651, "Party B" = 349, "Party C" = 50)
 
-    proporz(votes, 10, "sainte-lague")
-    proporz(votes, 10, "hill-huntington", quorum = 0.01)
+    proporz(votes, n_seats = 10, method = "sainte-lague")
+
     proporz(votes, 10, "hill-huntington", quorum = 0.05)
 })
 
 reprex::reprex({
     library(proporz)
+    votes = c("Party A" = 690, "Party B" = 370, "Party C" = 210, "Party D" = 10)
 
-    votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
-    district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
+    # D'Hondt, Jefferson or Hagenbach-Bischoff method
+    divisor_floor(votes, 10)
 
-    seats_df = pukelsheim(votes_df,
-                          district_seats_df,
-                          quorum = quorum(any_district = 0.05, total = 0.03))
+    # Sainte-Laguë or Webster method
+    divisor_round(votes, 10)
 
-    head(seats_df)
+    # Adams method
+    divisor_ceiling(votes, 10)
 
-    get_divisors(seats_df)
+    # Dean method
+    divisor_harmonic(votes, 10)
+
+    # Huntington-Hill method
+    divisor_geometric(votes, 10)
+})
+
+reprex::reprex({
+    library(proporz)
+    votes = c("I" = 16200, "II" = 47000, "III" = 12700)
+
+    # Hamilton, Hare-Niemeyer or Vinton method
+    largest_remainder_method(votes, 20)
 })
 
 reprex::reprex({
@@ -42,10 +46,20 @@ reprex::reprex({
     district_seats = setNames(distr_df$election_mandates, distr_df$entity_id)
     district_seats
 
-    seats_matrix = biproporz(votes_matrix, district_seats, 0.05, 0.03)
-    seats_matrix
+    biproporz(votes_matrix, district_seats, quorum_any(any_district = 0.05, total = 0.03))
+})
 
-    get_divisors(seats_matrix)
+reprex::reprex({
+    library(proporz)
+
+    votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
+    district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
+
+    seats_df = pukelsheim(votes_df,
+                          district_seats_df,
+                          quorum = quorum_any(any_district = 0.05, total = 0.03))
+
+    head(seats_df)
 })
 
 reprex::reprex({

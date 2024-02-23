@@ -23,6 +23,11 @@ test_that("largest_remainder_method", {
 
     # lr
     expect_error(lr_quota(c(100,200), 2, "test"), "Unknown quota method 'test'")
+
+    # names
+    v4 = v1
+    names(v4) <- c("A", "B", "C", "D")
+    expect_equal(names(largest_remainder_method(v4, 10)), names(v4))
 })
 
 test_that("equal remainder not on threshold", {

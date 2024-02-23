@@ -1,0 +1,43 @@
+reference:
+- title: "Proportional Apportionment"
+  desc: >
+    Proportional apportionment distributes seats for a vector of votes.
+    With *proporz()*, all divisor or largest remainder methods can be accessed.
+  contents:
+  - proporz
+- subtitle: "Divisor Methods"
+  contents:
+  - highest_averages_method
+  - divisor_methods
+- subtitle: "Largest Remainder Method"
+  contents:
+  - largest_remainder_method
+- title: "Biproportional Apportionment"
+  desc: >
+    Biproportional apportionment distributes seats for a matrix of votes among
+    parties and districts.
+  contents:
+  - biproporz
+  - pukelsheim
+- subtitle: "Algorithm implementations"
+  contents:
+  - upper_apportionment
+  - lower_apportionment
+- subtitle: "Quorum calculations"
+  contents:
+  - quorum_functions
+  - reached_quorum_any_district
+  - reached_quorum_total
+- title: "Shiny App"
+  contents:
+  - run_app
+- title: "Example Datasets"
+  contents:
+  - zug2018
+  - uri2020
+  - finland2019
+- title: "Helpers"
+  contents:
+  - get_divisors
+  - pivot_to_matrix
+  - pivot_to_df

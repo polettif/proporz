@@ -16,8 +16,11 @@ Roxygen: list(markdown = TRUE)
 Depends: 
     R (>= 3.6.0)
 Suggests:
-    testthat,
     shiny,
-    shinyMatrix
+    shinyMatrix,
+    testthat,
+    knitr,
+    rmarkdown
 URL: https://github.com/polettif/proporz
 BugReports: https://github.com/polettif/proporz/issues
+VignetteBuilder: knitr
