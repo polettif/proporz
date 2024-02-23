@@ -36,7 +36,7 @@
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_df` shows the
 #'   number of voters (e.g. they can only vote for one party).
 #'
-#' @seealso This function calls after preparing the input data [biproporz()].
+#' @seealso This function calls [biproporz()] after preparing the input data.
 #'
 #' @returns A data.frame like `votes_df` with a new column denoting the number seats per
 #'   party and district. Party and district divisors stored in attributes in attributes
@@ -138,33 +138,14 @@ pukelsheim = function(votes_df, district_seats_df,
 #'   [get_divisors()]).
 #'
 #' @examples
-#' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
-#' votes_matrix = pivot_to_matrix(votes_df)
+#' votes_matrix = uri2020$votes_matrix
+#' district_seats = uri2020$seats_vector
 #'
-#' distr_df = unique(zug2018[c("entity_id", "election_mandates")])
-#' district_seats = setNames(distr_df$election_mandates, distr_df$entity_id)
+#' biproporz(votes_matrix, district_seats)
 #'
-#' biproporz(votes_matrix, district_seats, quorum_any(0.05, 0.03))
-#'
-#' # calculate quorum beforehand (leads to the same result as above)
-#' q1 = reached_quorum_any_district(votes_matrix, 0.05)
-#' q2 = reached_quorum_total(votes_matrix, 0.03)
-#' reached_quorum = q1 | q2
-#'
-#' biproporz(votes_matrix, district_seats, reached_quorum)
-#'
-#' # Different method for upper apportionment and
-#' # using number of voters instead of list votes for finland2019 dataset
-#' f19_matrix = pivot_to_matrix(finland2019$votes_df)
-#' f19_distr_seats = setNames(
-#'     finland2019$district_seats_df$seats,
-#'     finland2019$district_seats_df$district_name)
-#'
-#' f19_seats = biproporz(f19_matrix, f19_distr_seats,
-#'                use_list_votes = FALSE,
-#'                method = c("floor", "round"))
-#'
-#' f19_seats[rowSums(f19_seats) > 0,]
+#' # apply quorum (high values for illustrative purposes)
+#' biproporz(votes_matrix, district_seats,
+#'           quorum_all(any_district = 0.1, total = 0.25))
 #'
 #' @importFrom stats setNames
 #' @export
@@ -212,7 +193,7 @@ biproporz = function(votes_matrix,
 #'   be used.
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_matrix` shows
-#'   the number of voters (e.g. they can only vote for one party).
+#'   the number of voters (e.g. they can only vote for one party), see [vignette()]
 #' @param method Apportion method that defines how seats are assigned, see [proporz()].
 #'
 #' @seealso [biproporz()], [lower_apportionment()]
@@ -231,6 +212,7 @@ biproporz = function(votes_matrix,
 #' district_seats = c(7,5,8)
 #'
 #' upper_apportionment(votes_matrix, district_seats)
+#'
 #' @export
 upper_apportionment = function(votes_matrix, district_seats,
                                use_list_votes = TRUE,
