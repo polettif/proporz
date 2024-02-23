@@ -52,6 +52,10 @@ largest_remainder_method = function(votes, n_seats, quorum = 0) {
 
     seats = as.integer(seats_base + seats_remainder)
 
+    if(!is.null(names(votes))) {
+        names(seats) <- names(votes)
+    }
+
     return(seats)
 }
 
