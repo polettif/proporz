@@ -1,14 +1,15 @@
 # proporz <img src="man/figures/logo.png" align="right" height="138" />
 
-Calculate seat apportionments for legislative bodies with various methods. 
-Methods inlcude divisor methods (e.g. D'Hondt, Webster or Adams), quota methods
-(e.g. largest remainder method) and biproportional apportionment.
+Calculate seat apportionment for legislative bodies with various methods. These
+methods include divisor methods (e.g. D'Hondt, Webster or Adams), largest 
+remainder methods and biproportional apportionment.
 
 _Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren 
 Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet 
 Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
 
 <br/>
+
 ## Installation
 Install the package from CRAN:
 
@@ -16,6 +17,7 @@ Install the package from CRAN:
 install.packages("proporz")
 ```
 <br/>
+
 ## Apportionment methods overview
 
 ### Proportional Apportionment
@@ -45,6 +47,7 @@ proporz(votes, 10, "huntington-hill", quorum = 0.05)
 #>       6       4       0
 ```
 <br/>
+
 ### Biproportional Apportionment
 
 [Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) 
@@ -112,10 +115,11 @@ head(seats_df)
 #> 6       6      1701      15695     3
 ```
 
-The [**apportionment scenarios vignette**](https://polettif.github.io/proporz/docs/articles/apportionment_scenarios.html) 
+The [**apportionment scenarios vignette**](https://polettif.github.io/proporz/articles/apportionment_scenarios.html) 
 contains more examples.
 
 <br/>
+
 ## Shiny app
 
 The package provides a basic Shiny app where you can calculate biproportional
@@ -170,6 +174,7 @@ divisor_geometric(votes, 10)
 ```
 
 <br/>
+
 #### Largest remainder method
 
 The largest remainder method is also accessible directly.
@@ -184,6 +189,7 @@ largest_remainder_method(votes, 20)
 ```
 
 <br/>
+
 ## See also
 There are other R packages available that provide apportionment functions, some with
 more focus on analysis. However, biproportional apportionment is missing from the 

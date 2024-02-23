@@ -4,9 +4,9 @@ Title: Proportional Apportionment
 Version: 1.3.1.9000
 Authors@R: c(
     person("Flavio", "Poletti", role = c("cre", "cph"), email = "flavio.poletti@hotmail.ch"))
-Description: Calculate seat apportionments for legislative bodies with 
-    various methods. Methods inlcude divisor methods (e.g. D'Hondt, Webster or 
-    Adams), quota methods (e.g. 'largest remainder method') and biproportional 
+Description: Calculate seat apportionment for legislative bodies with 
+    various methods. These methods include divisor methods (e.g. D'Hondt, 
+    Webster or Adams), largest remainder methods and biproportional 
     apportionment.
 License: GPL (>=3)
 Encoding: UTF-8
