@@ -19,10 +19,7 @@ This method provides easier access to divisors stored in
 \code{attributes(...)$divisors}
 }
 \examples{
-votes_matrix = matrix(c(51,60,63,98,100,102,45,120,144), nrow = 3)
-district_seats = 4:6
-
-seats_matrix = biproporz(votes_matrix, district_seats)
+seats_matrix = biproporz(uri2020$votes_matrix, uri2020$seats_vector)
 get_divisors(seats_matrix)
 
 }

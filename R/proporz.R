@@ -9,7 +9,7 @@
 #'               votes within a district if less than 1 otherwise as number
 #'               of votes.
 #'
-#' @details The following methods are available:`r .doc_proporz_methods()`
+#' @details The following methods are available: `r .doc_proporz_methods()`
 #'
 #' @returns The number of seats per party as a vector
 #'
@@ -77,11 +77,18 @@ get_method_implementation = function(method_name) {
 }
 
 # function to create the list of method names for the proporz documentation
-.doc_proporz_methods = function() { # nocov start
+.doc_proporz_methods = function(only_divisor_methods = FALSE) { # nocov start
     doc = c("\\itemize{")
-    for(implementation in unique(unlist(proporz_methods))) {
+    implementation_list = unique(unlist(proporz_methods))
+    if(only_divisor_methods) {
+        implementation_list <- implementation_list[grepl("divisor_", implementation_list)]
+    }
+    for(implementation in implementation_list) {
         method_names = names(proporz_methods[proporz_methods == implementation])
         method_names <- method_names[!grepl("divisor_", method_names)]
+        if(only_divisor_methods) {
+            method_names <- method_names[!method_names %in% c("floor", "geometric", "harmonic", "round", "ceiling")]
+        }
         method_names = paste0(method_names, collapse = ", ")
         doc[length(doc)+1] <- paste0("    \\item{", method_names,
                                      ": use [", implementation, "()]}")

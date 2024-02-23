@@ -33,7 +33,20 @@ The number of seats per party as a vector
 }
 \description{
 Functions to directly apply divisor apportionment methods instead
-of calling \code{\link[=proporz]{proporz()}}.
+of calling \code{\link[=proporz]{proporz()}} with a method parameter.
+}
+\details{
+Divisor methods are known under different names:
+\itemize{
+\item{d'hondt, jefferson, hagenbach-bischoff: use \code{\link[=divisor_floor]{divisor_floor()}}}
+\item{sainte-lague, webster: use \code{\link[=divisor_round]{divisor_round()}}}
+\item{adams: use \code{\link[=divisor_ceiling]{divisor_ceiling()}}}
+\item{dean: use \code{\link[=divisor_harmonic]{divisor_harmonic()}}}
+\item{huntington-hill, hill-huntington: use \code{\link[=divisor_geometric]{divisor_geometric()}}}
+}
+
+All divisor functions call \code{\link[=highest_averages_method]{highest_averages_method()}} with a different sequence of
+divisors.
 }
 \examples{
 votes = c("Party A" = 690, "Party B" = 400,

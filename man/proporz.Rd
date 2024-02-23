@@ -24,7 +24,7 @@ The number of seats per party as a vector
 Calculate seat apportionment for legislative bodies.
 }
 \details{
-The following methods are available:\itemize{
+The following methods are available: \itemize{
 \item{d'hondt, jefferson, hagenbach-bischoff, floor: use \code{\link[=divisor_floor]{divisor_floor()}}}
 \item{sainte-lague, webster, round: use \code{\link[=divisor_round]{divisor_round()}}}
 \item{adams, ceiling: use \code{\link[=divisor_ceiling]{divisor_ceiling()}}}

@@ -59,7 +59,13 @@ highest_averages_method = function(votes, n_seats, divisors) {
 #' Divisor methods
 #'
 #' Functions to directly apply divisor apportionment methods instead
-#' of calling [proporz()].
+#' of calling [proporz()] with a method parameter.
+#'
+#' Divisor methods are known under different names:
+#' `r .doc_proporz_methods(TRUE)`
+#'
+#' All divisor functions call [highest_averages_method()] with a different sequence of
+#' divisors.
 #'
 #' @inheritParams proporz
 #' @seealso [proporz()]
