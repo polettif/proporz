@@ -25,6 +25,16 @@
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/apportionment_scenarios.html">Apportionment scenarios</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -47,57 +57,65 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="all-functions">All functions <a href="#all-functions" class="anchor" aria-hidden="true"></a></h2>
+          <h2 id="proportional-apportionment">Proportional Apportionment <a href="#proportional-apportionment" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Proportional apportionment distributes seats for a vector of votes. With <em>proporz()</em>, all divisor or largest remainder methods can be accessed.</p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="proporz.html">proporz()</a></code> </p>
+        </td>
+        <td><p>Proportional apportionment</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="divisor-methods">Divisor Methods <a href="#divisor-methods" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="highest_averages_method.html">highest_averages_method()</a></code> </p>
+        </td>
+        <td><p>Highest averages method</p></td>
+      </tr><tr><td>
+          <p><code><a href="divisor_methods.html">divisor_round()</a></code> <code><a href="divisor_methods.html">divisor_floor()</a></code> <code><a href="divisor_methods.html">divisor_harmonic()</a></code> <code><a href="divisor_methods.html">divisor_geometric()</a></code> <code><a href="divisor_methods.html">divisor_ceiling()</a></code> </p>
+        </td>
+        <td><p>Divisor methods</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="largest-remainder-method">Largest Remainder Method <a href="#largest-remainder-method" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="largest_remainder_method.html">largest_remainder_method()</a></code> </p>
+        </td>
+        <td><p>Largest remainder method</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="biproportional-apportionment">Biproportional Apportionment <a href="#biproportional-apportionment" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Biproportional apportionment distributes seats for a matrix of votes among parties and districts.</p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="biproporz.html">biproporz()</a></code> </p>
         </td>
         <td><p>Biproportional apportionment</p></td>
       </tr><tr><td>
-          <p><code><a href="divisor_methods.html">divisor_round()</a></code> <code><a href="divisor_methods.html">divisor_floor()</a></code> <code><a href="divisor_methods.html">divisor_harmonic()</a></code> <code><a href="divisor_methods.html">divisor_geometric()</a></code> <code><a href="divisor_methods.html">divisor_ceiling()</a></code> </p>
+          <p><code><a href="pukelsheim.html">pukelsheim()</a></code> </p>
         </td>
-        <td><p>Divisor methods</p></td>
-      </tr><tr><td>
-          <p><code><a href="finland2019.html">finland2019</a></code> </p>
+        <td><p>Biproportional apportionment with data frames</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="algorithm-implementations">Algorithm implementations <a href="#algorithm-implementations" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="upper_apportionment.html">upper_apportionment()</a></code> </p>
         </td>
-        <td><p>Finnish Parliamentary Elections Data (2019)</p></td>
-      </tr><tr><td>
-          <p><code><a href="get_divisors.html">get_divisors()</a></code> </p>
-        </td>
-        <td><p>Get district and party divisors from biproporz result</p></td>
-      </tr><tr><td>
-          <p><code><a href="highest_averages_method.html">highest_averages_method()</a></code> </p>
-        </td>
-        <td><p>Highest averages method</p></td>
-      </tr><tr><td>
-          <p><code><a href="largest_remainder_method.html">largest_remainder_method()</a></code> </p>
-        </td>
-        <td><p>Largest remainder method</p></td>
+        <td><p>Calculate upper apportionment</p></td>
       </tr><tr><td>
           <p><code><a href="lower_apportionment.html">lower_apportionment()</a></code> </p>
         </td>
         <td><p>Calculate lower apportionment</p></td>
-      </tr><tr><td>
-          <p><code><a href="pivot_to_matrix.html">pivot_to_matrix()</a></code> <code><a href="pivot_to_matrix.html">pivot_to_df()</a></code> </p>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="quorum-calculations">Quorum calculations <a href="#quorum-calculations" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="quorum_functions.html">quorum_all()</a></code> <code><a href="quorum_functions.html">quorum_any()</a></code> </p>
         </td>
-        <td><p>Pivot long data.frame to wide matrix and vice versa</p></td>
-      </tr><tr><td>
-          <p><code><a href="proporz.html">proporz()</a></code> </p>
-        </td>
-        <td><p>Proportional apportionment</p></td>
-      </tr><tr><td>
-          <p><code><a href="pukelsheim.html">pukelsheim()</a></code> </p>
-        </td>
-        <td><p>Biproportional apportionment with data frames</p></td>
-      </tr><tr><td>
-          <p><code><a href="quorum_all.html">quorum_all()</a></code> </p>
-        </td>
-        <td><p>Create a quorum function where <em>all</em> quorums must be reached</p></td>
-      </tr><tr><td>
-          <p><code><a href="quorum_any.html">quorum_any()</a></code> </p>
-        </td>
-        <td><p>Create a quorum function where <em>at least one</em> quorum must be reached</p></td>
+        <td><p>Create quorum functions for biproportional apportionment</p></td>
       </tr><tr><td>
           <p><code><a href="reached_quorum_any_district.html">reached_quorum_any_district()</a></code> </p>
         </td>
@@ -106,22 +124,42 @@
           <p><code><a href="reached_quorum_total.html">reached_quorum_total()</a></code> </p>
         </td>
         <td><p>Check if lists/parties have reached the quorum for all votes</p></td>
-      </tr><tr><td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="shiny-app">Shiny App <a href="#shiny-app" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
           <p><code><a href="run_app.html">run_app()</a></code> </p>
         </td>
         <td><p>Use biproportional apportionment interactively in a shiny app</p></td>
-      </tr><tr><td>
-          <p><code><a href="upper_apportionment.html">upper_apportionment()</a></code> </p>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="example-datasets">Example Datasets <a href="#example-datasets" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="zug2018.html">zug2018</a></code> </p>
         </td>
-        <td><p>Calculate upper apportionment</p></td>
+        <td><p>Election Data for the Cantonal Council of Zug (2018)</p></td>
       </tr><tr><td>
           <p><code><a href="uri2020.html">uri2020</a></code> </p>
         </td>
         <td><p>Election Data for the Cantonal Council of Uri (2020)</p></td>
       </tr><tr><td>
-          <p><code><a href="zug2018.html">zug2018</a></code> </p>
+          <p><code><a href="finland2019.html">finland2019</a></code> </p>
         </td>
-        <td><p>Election Data for the Cantonal Council of Zug (2018)</p></td>
+        <td><p>Finnish Parliamentary Elections Data (2019)</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="helpers">Helpers <a href="#helpers" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="get_divisors.html">get_divisors()</a></code> </p>
+        </td>
+        <td><p>Get district and party divisors from biproporz result</p></td>
+      </tr><tr><td>
+          <p><code><a href="pivot_to_matrix.html">pivot_to_matrix()</a></code> <code><a href="pivot_to_matrix.html">pivot_to_df()</a></code> </p>
+        </td>
+        <td><p>Pivot long data.frame to wide matrix and vice versa</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

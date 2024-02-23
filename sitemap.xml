@@ -4,10 +4,13 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>/articles/apportionment_scenarios.html</loc>
   </url>
   <url>
-    <loc>/finland-comparison.html</loc>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/authors.html</loc>
   </url>
   <url>
     <loc>/index.html</loc>
@@ -55,10 +58,7 @@
     <loc>/reference/pukelsheim.html</loc>
   </url>
   <url>
-    <loc>/reference/quorum_all.html</loc>
-  </url>
-  <url>
-    <loc>/reference/quorum_any.html</loc>
+    <loc>/reference/quorum_functions.html</loc>
   </url>
   <url>
     <loc>/reference/reached_quorum_any_district.html</loc>

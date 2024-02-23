@@ -26,6 +26,16 @@ districts/regions/entities ('Doppelter Pukelsheim')."><meta property="og:image" 
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/apportionment_scenarios.html">Apportionment scenarios</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -82,8 +92,8 @@ districts/regions/entities ('Doppelter Pukelsheim').</p>
 <dt>quorum</dt>
 <dd><p>Optional list of functions which take the votes_matrix and return a logical
 vector that denotes for each list/party whether they reached the quorum (i.e. are
-eligible for seats). The easiest way to do this is via <code><a href="quorum_any.html">quorum_any()</a></code> or
-<code><a href="quorum_all.html">quorum_all()</a></code>, see examples. Alternatively you can pass a precalculated logical
+eligible for seats). The easiest way to do this is via <code><a href="quorum_functions.html">quorum_any()</a></code> or
+<code><a href="quorum_functions.html">quorum_all()</a></code>, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if parameter is missing or <code>NULL</code>.</p></dd>
 
 
@@ -120,7 +130,7 @@ assignment to candidates.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>This function calls after preparing the input data <code><a href="biproporz.html">biproporz()</a></code>.</p></div>
+    <div class="dont-index"><p>This function calls <code><a href="biproporz.html">biproporz()</a></code> after preparing the input data.</p></div>
     </div>
 
     <div id="ref-examples">
@@ -131,7 +141,7 @@ assignment to candidates.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">seats_df</span> <span class="op">=</span> <span class="fu">pukelsheim</span><span class="op">(</span><span class="va">votes_df</span>,</span></span>
 <span class="r-in"><span>                      <span class="va">district_seats_df</span>,</span></span>
-<span class="r-in"><span>                      <span class="fu"><a href="quorum_any.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                      <span class="fu"><a href="quorum_functions.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   list_id entity_id list_votes seats</span>

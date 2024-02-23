@@ -52,6 +52,18 @@
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/apportionment_scenarios.html">Apportionment scenarios</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
@@ -80,194 +92,47 @@
 </h1></div>
 <p>Calculate seat apportionments for legislative bodies with various methods. Methods inlcude divisor methods (e.g. D’Hondt, Webster or Adams), quota methods (e.g. largest remainder method) and biproportional apportionment.</p>
 <p><em>Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet Quoten-, Divisor- und biproportionale Verfahren (“Doppelter Pukelsheim”).</em></p>
-<ul>
-<li><a href="#install">Install</a></li>
-<li><a href="#apportionment-methods-overview">Apportionment methods overview</a></li>
-<li><a href="#divisor-and-quota-examples">Divisor and quota method examples</a></li>
-<li><a href="#biproportional-apportionment-examples">Biproportional apportionment examples</a></li>
-<li><a href="#shiny-app">Shiny app</a></li>
-<li><a href="#see-also">See also</a></li>
-</ul>
-<p><br></p>
-<div class="section level2">
-<h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
-</h2>
-<p>Install the package from Github:</p>
+<p><br> ## Installation Install the package from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"polettif/proporz"</span><span class="op">)</span></span></code></pre></div>
-<p><br></p>
-</div>
-<div class="section level2">
-<h2 id="apportionment-methods-overview">Apportionment methods overview<a class="anchor" aria-label="anchor" href="#apportionment-methods-overview"></a>
-</h2>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"proporz"</span><span class="op">)</span></span></code></pre></div>
+<p><br> ## Apportionment methods overview</p>
 <div class="section level3">
-<h3 id="divisor-methods">Divisor methods<a class="anchor" aria-label="anchor" href="#divisor-methods"></a>
+<h3 id="proportional-apportionment">Proportional Apportionment<a class="anchor" aria-label="anchor" href="#proportional-apportionment"></a>
 </h3>
-<table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">divisor method</th>
-<th align="left">known as…</th>
-<th align="left">function</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left"><a href="https://en.wikipedia.org/wiki/D%27Hondt_method" class="external-link">Floor</a></td>
-<td align="left">D’Hondt, Jefferson, Hagenbach-Bischoff</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/divisor_floor.html" class="external-link">divisor_floor(votes, n_seats, quorum = 0)</a></td>
-</tr>
-<tr class="even">
-<td align="left"><a href="https://en.wikipedia.org/wiki/Webster/Sainte-Lagu%C3%AB_method" class="external-link">Round</a></td>
-<td align="left">Sainte-Laguë, Webster</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/divisor_round.html" class="external-link">divisor_round(votes, n_seats, quorum = 0)</a></td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="https://de.wikipedia.org/wiki/Adams-Verfahren" class="external-link">Ceiling</a></td>
-<td align="left">Adams</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/divisor_ceiling.html" class="external-link">divisor_ceiling(votes, n_seats, quorum = 0</a></td>
-</tr>
-<tr class="even">
-<td align="left"><a href="https://de.wikipedia.org/wiki/Dean-Verfahren" class="external-link">Harmonic rounding</a></td>
-<td align="left">Dean</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/divisor_harmonic.html" class="external-link">divisor_harmonic(votes, n_seats, quorum = 0)</a></td>
-</tr>
-<tr class="odd">
-<td align="left"><a href="https://en.wikipedia.org/wiki/Huntington%E2%80%93Hill_method" class="external-link">Geometric rounding</a></td>
-<td align="left">Huntington-Hill</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/divisor_geometric.html" class="external-link">divisor_geometric(votes, n_seats, quorum = 0)</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="quota-methods">Quota methods<a class="anchor" aria-label="anchor" href="#quota-methods"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">quota method</th>
-<th align="left">known as…</th>
-<th align="left">function</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="left"><a href="https://en.wikipedia.org/wiki/Largest_remainder_method" class="external-link">Largest remainder</a></td>
-<td align="left">Hamilton, Hare-Niemeyer, Vinton</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/quota_largest_remainder.html" class="external-link">quota_largest_remainder(votes, n_seats, quorum = 0)</a></td>
-</tr></tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="biproportional-methods">Biproportional methods<a class="anchor" aria-label="anchor" href="#biproportional-methods"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="33%">
-<col width="33%">
-<col width="33%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">biproportional method</th>
-<th align="left">known as…</th>
-<th align="left">function</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left"><a href="https://en.wikipedia.org/wiki/Biproportional_apportionment" class="external-link">Generic Biproportional apportionment</a></td>
-<td align="left">-</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link">biproporz(…)</a></td>
-</tr>
-<tr class="even">
-<td align="left"><a href="https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren" class="external-link">Doppeltproportionales Zuteilungsverfahren</a></td>
-<td align="left">Doppeltproportionale Divisormethode mit Standardrundung, Doppelproporz, “Doppelter Pukelsheim”</td>
-<td align="left"><a href="https://polettif.github.io/proporz/reference/pukelsheim.html" class="external-link">pukelsheim(…)</a></td>
-</tr>
-</tbody>
-</table>
-<div class="section level5">
-<h5 id="full-function-reference">
-<a href="https://polettif.github.io/proporz/reference/index.html" class="external-link">Full function reference</a><a class="anchor" aria-label="anchor" href="#full-function-reference"></a>
-</h5>
-<p><br></p>
-</div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="divisor-and-quota-examples">Divisor and Quota examples<a class="anchor" aria-label="anchor" href="#divisor-and-quota-examples"></a>
-</h2>
+<p><a href="https://polettif.github.io/proporz/reference/proporz.html" class="external-link"><code>proporz()</code></a> distributes seats proportionally for a vector of votes according to the following methods:</p>
+<ul>
+<li>
+<strong>Divisor methods</strong> (<a href="https://en.wikipedia.org/wiki/Highest_averages_method" class="external-link">Wikipedia</a>)
+<ul>
+<li>D’Hondt, Jefferson, Hagenbach-Bischoff</li>
+<li>Sainte-Laguë, Webster</li>
+<li>Adams</li>
+<li>Dean</li>
+<li>Huntington-Hill</li>
+</ul>
+</li>
+<li>
+<strong>Largest Remainder Method</strong> (<a href="https://en.wikipedia.org/wiki/Largest_remainder_method" class="external-link">Wikipedia</a>)
+<ul>
+<li>Hare-Niemeyer, Hamilton, Vinton</li>
+</ul>
+</li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party A"</span> <span class="op">=</span> <span class="fl">690</span>, <span class="st">"Party B"</span> <span class="op">=</span> <span class="fl">400</span>, <span class="st">"Party C"</span> <span class="op">=</span> <span class="fl">250</span>, <span class="st">"Party D"</span> <span class="op">=</span> <span class="fl">120</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/polettif/proporz" class="external-link">proporz</a></span><span class="op">)</span></span>
+<span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party A"</span> <span class="op">=</span> <span class="fl">651</span>, <span class="st">"Party B"</span> <span class="op">=</span> <span class="fl">349</span>, <span class="st">"Party C"</span> <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/divisor_methods.html">divisor_round</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
-<span><span class="co">#&gt;       4       3       2       1</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/divisor_methods.html">divisor_floor</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
-<span><span class="co">#&gt;       5       3       2       0</span></span>
-<span></span>
-<span><span class="fu">quota_largest_remainder</span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
-<span><span class="co">#&gt;       5       3       1       1</span></span></code></pre></div>
-<p>All methods are also accessible by their names with <code><a href="reference/proporz.html">proporz()</a></code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party A"</span> <span class="op">=</span> <span class="fl">651</span>, <span class="st">"Party B"</span> <span class="op">=</span> <span class="fl">349</span>, <span class="st">"Party C"</span> <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"sainte-lague"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes</span>, n_seats <span class="op">=</span> <span class="fl">10</span>, method <span class="op">=</span> <span class="st">"sainte-lague"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Party A Party B Party C </span></span>
 <span><span class="co">#&gt;       7       3       0</span></span>
 <span></span>
-<span><span class="fu"><a href="reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"hill-huntington"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Party A Party B Party C </span></span>
-<span><span class="co">#&gt;       6       3       1</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"hill-huntington"</span>, quorum <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"huntington-hill"</span>, quorum <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Party A Party B Party C </span></span>
 <span><span class="co">#&gt;       6       4       0</span></span></code></pre></div>
-<p><br></p>
-</div>
-<div class="section level2">
-<h2 id="biproportional-apportionment-examples">Biproportional apportionment examples<a class="anchor" aria-label="anchor" href="#biproportional-apportionment-examples"></a>
-</h2>
-<p><a href="https://github.com/polettif/proporz/blob/master/finland-comparison.md" class="external-link">finland-comparison.md</a> contains a simple analysis on how different election methods impact seat distributions for the 2019 Finnish parliamentary election.</p>
-<p>The package provides the <code>zug2018</code> data set with election data for the canton of Zug (<a href="https://wab.zug.ch/elections/kantonsratswahl-2018/data" class="external-link">source</a>). We can use it to illustrate biproportional methods, first with <code><a href="reference/pukelsheim.html">pukelsheim()</a></code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">district_seats_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"entity_id"</span>, <span class="st">"election_mandates"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">seats_df</span> <span class="op">=</span> <span class="fu"><a href="reference/pukelsheim.html">pukelsheim</a></span><span class="op">(</span><span class="va">votes_df</span>,</span>
-<span>                      <span class="va">district_seats_df</span>,</span>
-<span>                      <span class="fu"><a href="reference/quorum_any.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   list_id entity_id list_votes seats</span></span>
-<span><span class="co">#&gt; 1       2      1701       8108     2</span></span>
-<span><span class="co">#&gt; 2       1      1701       2993     0</span></span>
-<span><span class="co">#&gt; 3       3      1701      19389     3</span></span>
-<span><span class="co">#&gt; 4       4      1701      14814     2</span></span>
-<span><span class="co">#&gt; 5       5      1701       4486     1</span></span>
-<span><span class="co">#&gt; 6       6      1701      15695     3</span></span>
-<span></span>
-<span><span class="fu"><a href="reference/get_divisors.html">get_divisors</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $districts</span></span>
-<span><span class="co">#&gt;      1701      1702      1703      1704      1705      1706      1707      1708 </span></span>
-<span><span class="co">#&gt; 5745.5376 3586.0000 2607.0000 1435.0000  743.0312 1709.0000 1816.8750 2561.0000 </span></span>
-<span><span class="co">#&gt;      1709      1710      1711 </span></span>
-<span><span class="co">#&gt; 2342.0000  725.5000 7275.1719 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $parties</span></span>
-<span><span class="co">#&gt;         1         2         3         4         5         6         7 </span></span>
-<span><span class="co">#&gt; 1.0000000 0.8828125 1.0000000 1.0316329 0.8750000 1.0000000 1.0537109</span></span></code></pre></div>
-<p><code>pukelsheim</code> handles data.frames and is a wrapper for <code>biproportional</code> which uses a vote matrix and district seats (vector) as input and returns a seat matrix.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p><br> ### Biproportional Apportionment</p>
+<p><a href="https://en.wikipedia.org/wiki/Biproportional_apportionment" class="external-link">Biproportional apportionment</a> is a method to proportionally allocate seats among parties and districts.</p>
+<p>We can use the <code>zug2018</code> data set to illustrate biproportional apportionment with <a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link"><code>biproporz()</code></a>. You need a ‘votes matrix’ as input which shows the number of votes for each party in rows and district in columns. In this data set, parties are called ‘lists’ and districts ‘entities’.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">votes_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/pivot_to_matrix.html">pivot_to_matrix</a></span><span class="op">(</span><span class="va">votes_df</span><span class="op">)</span></span>
 <span><span class="va">votes_matrix</span></span>
@@ -285,11 +150,10 @@
 <span><span class="va">district_seats</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="va">distr_df</span><span class="op">$</span><span class="va">election_mandates</span>, <span class="va">distr_df</span><span class="op">$</span><span class="va">entity_id</span><span class="op">)</span></span>
 <span><span class="va">district_seats</span></span>
 <span><span class="co">#&gt; 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 </span></span>
-<span><span class="co">#&gt;   15   10    6    3    2    4    7    6    6    2   19</span></span>
-<span></span>
-<span><span class="va">seats_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="reference/quorum_any.html">quorum_any</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">seats_matrix</span></span>
-<span><span class="co">#&gt;         entity_id</span></span>
+<span><span class="co">#&gt;   15   10    6    3    2    4    7    6    6    2   19</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        entity_id</span></span>
 <span><span class="co">#&gt; list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711</span></span>
 <span><span class="co">#&gt;       1    0    0    0    0    0    0    0    0    0    0    0</span></span>
 <span><span class="co">#&gt;       2    2    1    1    0    0    0    1    2    1    0    3</span></span>
@@ -298,11 +162,25 @@
 <span><span class="co">#&gt;       5    1    1    0    0    0    0    0    0    0    0    2</span></span>
 <span><span class="co">#&gt;       6    3    1    1    0    0    0    0    0    1    0    3</span></span>
 <span><span class="co">#&gt;       7    4    2    1    1    1    1    2    1    2    0    3</span></span></code></pre></div>
-<p><br></p>
-</div>
-<div class="section level2">
-<h2 id="shiny-app">Shiny app<a class="anchor" aria-label="anchor" href="#shiny-app"></a>
-</h2>
+<p>You can use <a href="https://polettif.github.io/proporz/reference/pukelsheim.html" class="external-link"><code>pukelsheim()</code></a> for data.frames in long format as input data. It is a wrapper for <code>biproportional()</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">district_seats_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"entity_id"</span>, <span class="st">"election_mandates"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">seats_df</span> <span class="op">=</span> <span class="fu"><a href="reference/pukelsheim.html">pukelsheim</a></span><span class="op">(</span><span class="va">votes_df</span>,</span>
+<span>                      <span class="va">district_seats_df</span>,</span>
+<span>                      quorum <span class="op">=</span> <span class="fu"><a href="reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   list_id entity_id list_votes seats</span></span>
+<span><span class="co">#&gt; 1       2      1701       8108     2</span></span>
+<span><span class="co">#&gt; 2       1      1701       2993     0</span></span>
+<span><span class="co">#&gt; 3       3      1701      19389     3</span></span>
+<span><span class="co">#&gt; 4       4      1701      14814     2</span></span>
+<span><span class="co">#&gt; 5       5      1701       4486     1</span></span>
+<span><span class="co">#&gt; 6       6      1701      15695     3</span></span></code></pre></div>
+<p>The <a href="https://polettif.github.io/proporz/docs/articles/apportionment_scenarios.html" class="external-link"><strong>apportionment scenarios vignette</strong></a> contains more examples.</p>
+<p><br> ## Shiny app</p>
 <p>The package provides a basic Shiny app where you can calculate biproportional apportionment on an interactive dashboard. You need have the packages <code>shiny</code> and <code>shinyMatrix</code> installed.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("shiny")</span></span>
@@ -313,8 +191,50 @@
 <p><br></p>
 </div>
 <div class="section level2">
-<h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a>
+<h2 id="function-details">Function details<a class="anchor" aria-label="anchor" href="#function-details"></a>
 </h2>
+<p><a href="https://polettif.github.io/proporz/reference/index.html" class="external-link"><strong>Full function reference</strong></a></p>
+<div class="section level4">
+<h4 id="divisor-methods">Divisor methods<a class="anchor" aria-label="anchor" href="#divisor-methods"></a>
+</h4>
+<p>You can use divisor methods directly:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party A"</span> <span class="op">=</span> <span class="fl">690</span>, <span class="st">"Party B"</span> <span class="op">=</span> <span class="fl">370</span>, <span class="st">"Party C"</span> <span class="op">=</span> <span class="fl">210</span>, <span class="st">"Party D"</span> <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># D'Hondt, Jefferson or Hagenbach-Bischoff method</span></span>
+<span><span class="fu"><a href="reference/divisor_methods.html">divisor_floor</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
+<span><span class="co">#&gt;       6       3       1       0</span></span>
+<span></span>
+<span><span class="co"># Sainte-Laguë or Webster method</span></span>
+<span><span class="fu"><a href="reference/divisor_methods.html">divisor_round</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
+<span><span class="co">#&gt;       5       3       2       0</span></span>
+<span></span>
+<span><span class="co"># Adams method</span></span>
+<span><span class="fu"><a href="reference/divisor_methods.html">divisor_ceiling</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
+<span><span class="co">#&gt;       4       3       2       1</span></span>
+<span></span>
+<span><span class="co"># Dean method</span></span>
+<span><span class="fu"><a href="reference/divisor_methods.html">divisor_harmonic</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
+<span><span class="co">#&gt;       5       2       2       1</span></span>
+<span></span>
+<span><span class="co"># Huntington-Hill method</span></span>
+<span><span class="fu"><a href="reference/divisor_methods.html">divisor_geometric</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
+<span><span class="co">#&gt;       5       3       1       1</span></span></code></pre></div>
+<p><br> #### Largest remainder method</p>
+<p>The largest remainder method is also accessible directly.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"I"</span> <span class="op">=</span> <span class="fl">16200</span>, <span class="st">"II"</span> <span class="op">=</span> <span class="fl">47000</span>, <span class="st">"III"</span> <span class="op">=</span> <span class="fl">12700</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Hamilton, Hare-Niemeyer or Vinton method</span></span>
+<span><span class="fu"><a href="reference/largest_remainder_method.html">largest_remainder_method</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   I  II III </span></span>
+<span><span class="co">#&gt;   4  13   3</span></span></code></pre></div>
+<p><br> ## See also There are other R packages available that provide apportionment functions, some with more focus on analysis. However, biproportional apportionment is missing from the pure R packages and RBazi needs rJava with an accompanying jar.</p>
 <ul>
 <li>
 <a href="https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html" class="external-link">RBazi</a>: Package using rJava to access the functions of the <a href="https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html" class="external-link">BAZI</a>.</li>
@@ -325,10 +245,11 @@
 <li>
 <a href="https://github.com/pierzgal/disprr" class="external-link">disprr</a> Examine Disproportionality of Apportionment Methods.</li>
 </ul>
-<div class="section level4">
-<h4 id="why-another-package">Why another package?<a class="anchor" aria-label="anchor" href="#why-another-package"></a>
-</h4>
-<p>Mainly because I wanted to implement biproportional apportionment in base R as an exercise. I’m aware that the other packages provide more methods or better analysis. However, biproportional apportionment is missing from the other pure R packages and RBazi needs rJava with an accompanying jar.</p>
+</div>
+<div class="section level3">
+<h3 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h3>
+<p>Please feel free to issue a pull request or <a href="https://github.com/polettif/proporz/issues/new" class="external-link">open an issue</a>.</p>
 </div>
 </div>
 </div>

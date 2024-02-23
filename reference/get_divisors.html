@@ -27,6 +27,16 @@ attributes(...)$divisors"><meta property="og:image" content="/logo.png"><!-- mat
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/apportionment_scenarios.html">Apportionment scenarios</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -76,16 +86,15 @@ or a data.frame created by <code><a href="pukelsheim.html">pukelsheim()</a></cod
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">votes_matrix</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">51</span>,<span class="fl">60</span>,<span class="fl">63</span>,<span class="fl">98</span>,<span class="fl">100</span>,<span class="fl">102</span>,<span class="fl">45</span>,<span class="fl">120</span>,<span class="fl">144</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">district_seats</span> <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">6</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">seats_matrix</span> <span class="op">=</span> <span class="fu"><a href="biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">seats_matrix</span> <span class="op">=</span> <span class="fu"><a href="biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span>, <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">get_divisors</span><span class="op">(</span><span class="va">seats_matrix</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $districts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 40.22656 66.28418 52.00000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Altdorf    Bürglen   Erstfeld Schattdorf </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2690.000   1193.875   1089.000   1539.000 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $parties</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.87500 1.00000 1.03125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       CVP      SPGB       FDP       SVP </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.9462891 1.0000000 1.0000000 0.9687500 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
