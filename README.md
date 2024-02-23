@@ -8,128 +8,53 @@ _Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren
 Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet 
 Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
 
-- [Install](#install)
-- [Apportionment methods overview](#apportionment-methods-overview)
-- [Divisor and quota method examples](#divisor-and-quota-examples)
-- [Biproportional apportionment examples](#biproportional-apportionment-examples)
-- [Shiny app](#shiny-app)
-- [See also](#see-also)
-
 <br/>
-
-## Install
-Install the package from Github:
+## Installation
+Install the package from CRAN:
 
 ```r
-# install.packages("devtools")
-devtools::install_github("polettif/proporz")
+install.packages("proporz")
 ```
 <br/>
-
 ## Apportionment methods overview
 
-### Divisor methods
-| divisor method | known as... | function |
-| :---|:---|:---|
-| [Floor](https://en.wikipedia.org/wiki/D%27Hondt_method) | D'Hondt, Jefferson, Hagenbach-Bischoff | [divisor_floor(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_floor.html)
-| [Round](https://en.wikipedia.org/wiki/Webster/Sainte-Lagu%C3%AB_method) | Sainte-Laguë, Webster | [divisor_round(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_round.html)
-| [Ceiling](https://de.wikipedia.org/wiki/Adams-Verfahren) | Adams | [divisor_ceiling(votes, n_seats, quorum = 0](https://polettif.github.io/proporz/reference/divisor_ceiling.html)
-| [Harmonic rounding](https://de.wikipedia.org/wiki/Dean-Verfahren) | Dean | [divisor_harmonic(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_harmonic.html)
-| [Geometric rounding](https://en.wikipedia.org/wiki/Huntington%E2%80%93Hill_method) | Huntington-Hill | [divisor_geometric(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/divisor_geometric.html)
+### Proportional Apportionment
 
-### Quota methods
-| quota method | known as... | function |
-| :---|:---|:---|
-| [Largest remainder](https://en.wikipedia.org/wiki/Largest_remainder_method) | Hamilton, Hare-Niemeyer, Vinton | [quota_largest_remainder(votes, n_seats, quorum = 0)](https://polettif.github.io/proporz/reference/quota_largest_remainder.html)
+[`proporz()`](https://polettif.github.io/proporz/reference/proporz.html) distributes 
+seats proportionally for a vector of votes according to the following methods:
 
-### Biproportional methods
-| biproportional method | known as... | function |
-| :---|:---|:---
-| [Generic Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) | - | [biproporz(...)](https://polettif.github.io/proporz/reference/biproporz.html)
-| [Doppeltproportionales Zuteilungsverfahren](https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren) | Doppeltproportionale Divisormethode mit Standardrundung, Doppelproporz, "Doppelter Pukelsheim" | [pukelsheim(...)](https://polettif.github.io/proporz/reference/pukelsheim.html)
+- **Divisor methods** ([Wikipedia](https://en.wikipedia.org/wiki/Highest_averages_method))
+    - D'Hondt, Jefferson, Hagenbach-Bischoff
+    - Sainte-Laguë, Webster
+    - Adams
+    - Dean
+    - Huntington-Hill
+- **Largest Remainder Method** ([Wikipedia](https://en.wikipedia.org/wiki/Largest_remainder_method))
+    - Hare-Niemeyer, Hamilton, Vinton
 
-##### [Full function reference](https://polettif.github.io/proporz/reference/index.html)
-
-<br/>
-
-## Divisor and Quota examples
 ``` r
-votes = c("Party A" = 690, "Party B" = 400, "Party C" = 250, "Party D" = 120)
-
-divisor_round(votes, 10)
-#> Party A Party B Party C Party D 
-#>       4       3       2       1
-
-divisor_floor(votes, 10)
-#> Party A Party B Party C Party D 
-#>       5       3       2       0
-
-quota_largest_remainder(votes, 10)
-#> Party A Party B Party C Party D 
-#>       5       3       1       1
-```
-
-All methods are also accessible by their names with `proporz()`:
-``` r
+library(proporz)
 votes = c("Party A" = 651, "Party B" = 349, "Party C" = 50)
 
-proporz(votes, 10, "sainte-lague")
+proporz(votes, n_seats = 10, method = "sainte-lague")
 #> Party A Party B Party C 
 #>       7       3       0
 
-proporz(votes, 10, "hill-huntington")
-#> Party A Party B Party C 
-#>       6       3       1
-
-proporz(votes, 10, "hill-huntington", quorum = 0.05)
+proporz(votes, 10, "huntington-hill", quorum = 0.05)
 #> Party A Party B Party C 
 #>       6       4       0
 ```
-
 <br/>
+### Biproportional Apportionment
 
-## Biproportional apportionment examples
+[Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) 
+is a method to proportionally allocate seats among parties and districts.
 
-[finland-comparison.md](https://github.com/polettif/proporz/blob/master/finland-comparison.md) 
-contains a simple analysis on how different election methods impact seat distributions for the 
-2019 Finnish parliamentary election.
-
-The package provides the `zug2018` data set with election data for the canton of 
-Zug ([source](https://wab.zug.ch/elections/kantonsratswahl-2018/data)). 
-We can use it to illustrate biproportional methods, first with `pukelsheim()`:
-
-``` r
-votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
-district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
-
-seats_df = pukelsheim(votes_df,
-                      district_seats_df,
-                      quorum_any(any_district = 0.05, total = 0.03))
-
-head(seats_df)
-#>   list_id entity_id list_votes seats
-#> 1       2      1701       8108     2
-#> 2       1      1701       2993     0
-#> 3       3      1701      19389     3
-#> 4       4      1701      14814     2
-#> 5       5      1701       4486     1
-#> 6       6      1701      15695     3
-
-get_divisors(seats_df)
-#> $districts
-#>      1701      1702      1703      1704      1705      1706      1707      1708 
-#> 5745.5376 3586.0000 2607.0000 1435.0000  743.0312 1709.0000 1816.8750 2561.0000 
-#>      1709      1710      1711 
-#> 2342.0000  725.5000 7275.1719 
-#> 
-#> $parties
-#>         1         2         3         4         5         6         7 
-#> 1.0000000 0.8828125 1.0000000 1.0316329 0.8750000 1.0000000 1.0537109
-```
-
-`pukelsheim` handles data.frames and is a wrapper for `biproportional` which
-uses a vote matrix and district seats (vector) as input and returns a 
-seat matrix.
+We can use the `zug2018` data set to illustrate biproportional apportionment 
+with [`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.html).
+You need a 'votes matrix' as input which shows the number of votes for each party
+in rows and district in columns. In this data set, parties are called 'lists' and 
+districts 'entities'.
 
 ``` r
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -150,10 +75,11 @@ district_seats = setNames(distr_df$election_mandates, distr_df$entity_id)
 district_seats
 #> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 
 #>   15   10    6    3    2    4    7    6    6    2   19
+```
 
-seats_matrix = biproporz(votes_matrix, district_seats, quorum_any(0.05, 0.03))
-seats_matrix
-#>         entity_id
+``` r
+biproporz(votes_matrix, district_seats, quorum_any(any_district = 0.05, total = 0.03))
+#>        entity_id
 #> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
 #>       1    0    0    0    0    0    0    0    0    0    0    0
 #>       2    2    1    1    0    0    0    1    2    1    0    3
@@ -164,8 +90,32 @@ seats_matrix
 #>       7    4    2    1    1    1    1    2    1    2    0    3
 ```
 
-<br/>
+You can use [`pukelsheim()`](https://polettif.github.io/proporz/reference/pukelsheim.html) 
+for data.frames in long format as input data. It is a wrapper for 
+`biproportional()`.
 
+``` r
+votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
+district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
+
+seats_df = pukelsheim(votes_df,
+                      district_seats_df,
+                      quorum = quorum_any(any_district = 0.05, total = 0.03))
+
+head(seats_df)
+#>   list_id entity_id list_votes seats
+#> 1       2      1701       8108     2
+#> 2       1      1701       2993     0
+#> 3       3      1701      19389     3
+#> 4       4      1701      14814     2
+#> 5       5      1701       4486     1
+#> 6       6      1701      15695     3
+```
+
+The [**apportionment scenarios vignette**](https://polettif.github.io/proporz/docs/articles/apportionment_scenarios.html) 
+contains more examples.
+
+<br/>
 ## Shiny app
 
 The package provides a basic Shiny app where you can calculate biproportional
@@ -182,15 +132,68 @@ run_app()
 
 <br/>
 
+## Function details
+
+[**Full function reference**](https://polettif.github.io/proporz/reference/index.html)
+
+#### Divisor methods
+
+You can use divisor methods directly:
+
+``` r
+votes = c("Party A" = 690, "Party B" = 370, "Party C" = 210, "Party D" = 10)
+
+# D'Hondt, Jefferson or Hagenbach-Bischoff method
+divisor_floor(votes, 10)
+#> Party A Party B Party C Party D 
+#>       6       3       1       0
+
+# Sainte-Laguë or Webster method
+divisor_round(votes, 10)
+#> Party A Party B Party C Party D 
+#>       5       3       2       0
+
+# Adams method
+divisor_ceiling(votes, 10)
+#> Party A Party B Party C Party D 
+#>       4       3       2       1
+
+# Dean method
+divisor_harmonic(votes, 10)
+#> Party A Party B Party C Party D 
+#>       5       2       2       1
+
+# Huntington-Hill method
+divisor_geometric(votes, 10)
+#> Party A Party B Party C Party D 
+#>       5       3       1       1
+```
+
+<br/>
+#### Largest remainder method
+
+The largest remainder method is also accessible directly.
+
+``` r
+votes = c("I" = 16200, "II" = 47000, "III" = 12700)
+
+# Hamilton, Hare-Niemeyer or Vinton method
+largest_remainder_method(votes, 20)
+#>   I  II III 
+#>   4  13   3
+```
+
+<br/>
 ## See also
+There are other R packages available that provide apportionment functions, some with
+more focus on analysis. However, biproportional apportionment is missing from the 
+pure R packages and RBazi needs rJava with an accompanying jar.
 
 - [RBazi](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html): Package using rJava to access the functions of the [BAZI](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html).
 - [seatdist](https://github.com/jmedzihorsky/seatdist) package for seat apportionment and disproportionality measurement.
 - [apportR](https://github.com/jalapic/apportR): Package containing various apportionment methods, with particular relevance for the problem of apportioning seats in the House of Representatives.
 - [disprr](https://github.com/pierzgal/disprr) Examine Disproportionality of Apportionment Methods.
 
-#### Why another package?
-Mainly because I wanted to implement biproportional apportionment in base R as 
-an exercise. I'm aware that the other packages provide more methods or better 
-analysis. However, biproportional apportionment is missing from the other 
-pure R packages and RBazi needs rJava with an accompanying jar.
+### Contributing
+
+Please feel free to issue a pull request or [open an issue](https://github.com/polettif/proporz/issues/new).
