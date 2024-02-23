@@ -4,4 +4,4 @@
 ^Meta$
 ^data-raw$
 ^.github
-^finland-comparison.md$
+^_pkgdown.yml
