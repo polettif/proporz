@@ -8,15 +8,12 @@ _Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren
 Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet 
 Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
 
-<br/>
-
 ## Installation
 Install the package from CRAN:
 
 ```r
 install.packages("proporz")
 ```
-<br/>
 
 ## Apportionment methods overview
 
@@ -46,7 +43,6 @@ proporz(votes, 10, "huntington-hill", quorum = 0.05)
 #> Party A Party B Party C 
 #>       6       4       0
 ```
-<br/>
 
 ### Biproportional Apportionment
 
@@ -118,8 +114,6 @@ head(seats_df)
 The [**apportionment scenarios vignette**](https://polettif.github.io/proporz/articles/apportionment_scenarios.html) 
 contains more examples.
 
-<br/>
-
 ## Shiny app
 
 The package provides a basic Shiny app where you can calculate biproportional
@@ -134,7 +128,6 @@ run_app()
 ```
 <img src="man/figures/shinyapp-example.gif" style = "width:70%;">
 
-<br/>
 
 ## Function details
 
@@ -173,8 +166,6 @@ divisor_geometric(votes, 10)
 #>       5       3       1       1
 ```
 
-<br/>
-
 #### Largest remainder method
 
 The largest remainder method is also accessible directly.
@@ -187,8 +178,6 @@ largest_remainder_method(votes, 20)
 #>   I  II III 
 #>   4  13   3
 ```
-
-<br/>
 
 ## See also
 There are other R packages available that provide apportionment functions, some with

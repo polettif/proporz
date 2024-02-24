@@ -4,4 +4,8 @@
 ^Meta$
 ^data-raw$
 ^.github
-^_pkgdown.yml
+^_pkgdown.yml$
+^cran-comments\.md$
+^LICENSE$
+^doc$
+^CRAN-SUBMISSION$

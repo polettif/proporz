@@ -81,7 +81,7 @@ biproporz(votes_matrix, district_seats,
 \references{
 Gaffke, Norbert; Pukelsheim, Friedrich (2008): Divisor methods for
 proportional representation systems: An optimization approach to vector and matrix
-apportionment problems. Mathematical Social Sciences, 56 (2), 166–184.
+apportionment problems. Mathematical Social Sciences, 56 (2), 166-184.
 }
 \seealso{
 \code{\link[=pukelsheim]{pukelsheim()}} for biproportional apportionment with \code{data.frames} as inputs.
