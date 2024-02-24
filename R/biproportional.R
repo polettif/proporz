@@ -163,7 +163,7 @@ biproporz = function(votes_matrix,
 
     # quorum
     if(!missing(quorum) && !is.null(quorum)) {
-        votes_matrix <- apply_quorum(votes_matrix, quorum)
+        votes_matrix <- apply_quorum_matrix(votes_matrix, quorum)
     }
 
     # upper apportionment (Oberzuteilung)

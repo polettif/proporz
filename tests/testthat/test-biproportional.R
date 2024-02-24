@@ -47,31 +47,31 @@ test_that("quorum with vote counts", {
     vm = vm0
     vm[c(1,3),] <- round(c(7.97, 5.14)*vm[c(1,3),])
 
-    q1 = apply_quorum(vm, quorum_any(any_district = 35))
+    q1 = apply_quorum_matrix(vm, quorum_any(any_district = 35))
     check1 = all(q1[2,] == c(0,0))
-    q2 = apply_quorum(vm, quorum_any(total = 45))
+    q2 = apply_quorum_matrix(vm, quorum_any(total = 45))
     check2 = all(q2[2,] == c(0,0))
-    q3 = apply_quorum(vm, quorum_all(any_district = 35, total = 45))
+    q3 = apply_quorum_matrix(vm, quorum_all(any_district = 35, total = 45))
     check3 = identical(q2, q3)
     expect_true(all(check1, check2, check3))
 
     expect_equal(reached_quorum_any_district(vm, 35), rowSums(q1) > 0)
     expect_equal(reached_quorum_total(vm, 45), rowSums(q2) > 0)
 
-    expect_equal(sum(apply_quorum(vm, c(F,F,F))), 0)
-    expect_equal(sum(apply_quorum(vm, c(F,T,F))), 30)
-    expect_error_fixed(apply_quorum(vm, "x"), "Cannot parse quorum function or vector.")
+    expect_equal(sum(apply_quorum_matrix(vm, c(F,F,F))), 0)
+    expect_equal(sum(apply_quorum_matrix(vm, c(F,T,F))), 30)
+    expect_error_fixed(apply_quorum_matrix(vm, "x"), "Cannot parse quorum function or vector.")
 })
 
 test_that("quorum with percentages counts", {
     vm = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
-    p1 = apply_quorum(vm, quorum_any(any_district = 0.15))
+    p1 = apply_quorum_matrix(vm, quorum_any(any_district = 0.15))
     expect_equal(p1[2,], c(0,0))
-    p2 = apply_quorum(vm, quorum_any(any_district = 0.09))
+    p2 = apply_quorum_matrix(vm, quorum_any(any_district = 0.09))
     expect_true(all(p2[2,] != c(0,0)))
-    p3 = apply_quorum(vm, quorum_any(total = 0.085))
+    p3 = apply_quorum_matrix(vm, quorum_any(total = 0.085))
     expect_equal(p2,p3)
-    p4 = apply_quorum(vm, quorum_any(total = 0.09))
+    p4 = apply_quorum_matrix(vm, quorum_any(total = 0.09))
     expect_equal(p1, p4)
 })
 

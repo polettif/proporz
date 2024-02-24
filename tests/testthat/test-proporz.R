@@ -61,7 +61,7 @@ test_that("proporz parameter range", {
     }
     for(method_impl in method_list) {
         for(votes in list(NA, NULL, -1)) {
-            expect_error(proporz(votes, 3, method_impl), "`votes` must be numeric >= 0", fixed = TRUE)
+            expect_error(proporz(votes, 3, method_impl), "`votes` must be a numeric vector >= 0", fixed = TRUE)
         }
     }
 })

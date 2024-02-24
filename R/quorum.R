@@ -152,6 +152,7 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #' proporz:::reached_quorums(votes_matrix, quorum_functions)
 #' @keywords internal
 reached_quorums = function(votes_matrix, quorum_funcs) {
+    assert(is.matrix(votes_matrix))
     if(!is.list(quorum_funcs) || !is.function(quorum_funcs[[1]])) {
         stop("`", deparse(substitute(quorum_funcs)),
              "` is not a list of functions.", call. = F)
@@ -183,7 +184,8 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 # functions like reached_any_district need the threshold as parameter which
 # won't work with only votes_matrix. So it's easier to simply restrict params
 # and hopefully reduce misunderstandings
-apply_quorum = function(votes_matrix, quorum) {
+apply_quorum_matrix = function(votes_matrix, quorum) {
+    assert(is.matrix(votes_matrix))
     if(is.list(quorum)) {
         quorum_bool = reached_quorums(votes_matrix, quorum)
     } else if(is.vector(quorum) && is.logical(quorum)) {
