@@ -19,9 +19,9 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Proportional Apportionment">
 <meta property="og:description" content="Calculate seat apportionment for legislative bodies with 
-    various methods. These methods include divisor methods (e.g. D'Hondt, 
-    Webster or Adams), largest remainder methods and biproportional 
-    apportionment.">
+    various methods. The algorithms include divisor or highest averages methods
+    (e.g. Jefferson, Webster or Adams), largest remainder methods and 
+    biproportional apportionment.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">proporz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0</span>
       </span>
     </div>
 
@@ -92,14 +92,12 @@
 </h1></div>
 <p>Calculate seat apportionment for legislative bodies with various methods. These methods include divisor methods (e.g. D’Hondt, Webster or Adams), largest remainder methods and biproportional apportionment.</p>
 <p><em>Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet Quoten-, Divisor- und biproportionale Verfahren (“Doppelter Pukelsheim”).</em></p>
-<p><br></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>Install the package from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"proporz"</span><span class="op">)</span></span></code></pre></div>
-<p><br></p>
 </div>
 <div class="section level2">
 <h2 id="apportionment-methods-overview">Apportionment methods overview<a class="anchor" aria-label="anchor" href="#apportionment-methods-overview"></a>
@@ -137,7 +135,6 @@
 <span><span class="fu"><a href="reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span>, <span class="st">"huntington-hill"</span>, quorum <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Party A Party B Party C </span></span>
 <span><span class="co">#&gt;       6       4       0</span></span></code></pre></div>
-<p><br></p>
 </div>
 <div class="section level3">
 <h3 id="biproportional-apportionment">Biproportional Apportionment<a class="anchor" aria-label="anchor" href="#biproportional-apportionment"></a>
@@ -192,7 +189,6 @@
 <span><span class="co">#&gt; 5       5      1701       4486     1</span></span>
 <span><span class="co">#&gt; 6       6      1701      15695     3</span></span></code></pre></div>
 <p>The <a href="https://polettif.github.io/proporz/articles/apportionment_scenarios.html" class="external-link"><strong>apportionment scenarios vignette</strong></a> contains more examples.</p>
-<p><br></p>
 </div>
 </div>
 <div class="section level2">
@@ -205,7 +201,6 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/polettif/proporz" class="external-link">proporz</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/shinyapp-example.gif" style="width:70%;"></p>
-<p><br></p>
 </div>
 <div class="section level2">
 <h2 id="function-details">Function details<a class="anchor" aria-label="anchor" href="#function-details"></a>
@@ -242,7 +237,6 @@
 <span><span class="fu"><a href="reference/divisor_methods.html">divisor_geometric</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Party A Party B Party C Party D </span></span>
 <span><span class="co">#&gt;       5       3       1       1</span></span></code></pre></div>
-<p><br></p>
 </div>
 <div class="section level4">
 <h4 id="largest-remainder-method">Largest remainder method<a class="anchor" aria-label="anchor" href="#largest-remainder-method"></a>
@@ -255,7 +249,6 @@
 <span><span class="fu"><a href="reference/largest_remainder_method.html">largest_remainder_method</a></span><span class="op">(</span><span class="va">votes</span>, <span class="fl">20</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   I  II III </span></span>
 <span><span class="co">#&gt;   4  13   3</span></span></code></pre></div>
-<p><br></p>
 </div>
 </div>
 <div class="section level2">
@@ -293,7 +286,7 @@
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li>GPL (&gt;=3)</li>
+<li>GPL (&gt;= 3)</li>
 </ul>
 </div>
 
@@ -308,7 +301,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Flavio Poletti <br><small class="roles"> Maintainer, copyright holder </small>  </li>
+<li>Flavio Poletti <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
 </ul>
 </div>
 
