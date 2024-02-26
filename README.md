@@ -9,10 +9,17 @@ Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet
 Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
 
 ## Installation
-Install the package from CRAN:
+Install the package from CRAN (pending submission):
 
 ```r
 install.packages("proporz")
+```
+
+Alternatively, install the development version from Github:
+
+```r
+# install.packages("remotes")
+remotes::install_github("polettif/proporz")
 ```
 
 ## Apportionment methods overview
