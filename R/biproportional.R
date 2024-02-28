@@ -415,7 +415,20 @@ lower_apportionment = function(votes_matrix, seats_cols,
         }
     }
 
-    output = round_func(m.(M, dD, dP))
+    # prettier divisors
+    expected = round_func(m.(M, dD, dP))
+    for(k in seq_len(15)) {
+        .dD = round(dD, k)
+        .dP = round(dP, k)
+        if(identical(round_func(m.(M, .dD, .dP)), expected)) {
+            dD <- .dD
+            dP <- .dP
+            break
+        }
+    }
+
+    # create output
+    output = round(m.(M, dD, dP))
     dimnames(output) <- dimnames(M)
     attributes(output)$divisors <- list()
     attributes(output)$divisors$districts <- dD
