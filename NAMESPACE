@@ -3,6 +3,7 @@
 S3method(as.matrix,proporz_matrix)
 S3method(print,proporz_matrix)
 export(biproporz)
+export(ceil_at)
 export(divisor_ceiling)
 export(divisor_floor)
 export(divisor_geometric)
