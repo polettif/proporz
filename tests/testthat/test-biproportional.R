@@ -298,13 +298,13 @@ test_that("find_divisor", {
     v = c(80,10,10)
     .check = function(div) round(v/div)
 
-    d0 = find_divisor(v, 0, 100, 10)
+    d0 = find_divisor(v, 0, 100, 10, function(x) ceil_at(x, 0.5))
     expect_equal(.check(d0), .check(10))
     # expand lower limit
-    d1 = find_divisor(v, 20, 100, 10)
+    d1 = find_divisor(v, 20, 100, 10, function(x) ceil_at(x, 0.5))
     expect_equal(.check(d1), .check(10))
     # expand upper limit
-    d2 = find_divisor(v, 1, 5, 10)
+    d2 = find_divisor(v, 1, 5, 10, function(x) ceil_at(x, 0.5))
     expect_equal(.check(d2), .check(10))
 })
 

@@ -347,6 +347,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
 
     # divisor districts
     dD = round(colSums(M)/seats_cols)
+    dD[is.nan(dD)] <- 0
     dD.min = floor(colSums(M)/(seats_cols+1) / max(dP.max))
     dD.max = ceiling(colSums(M)/(seats_cols-1) / min(dP.min))
     # handle districts with only one seat (otherwise leads to infinite dD.max)
@@ -385,7 +386,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
             dP[row_decr] <- find_divisor(
                 M[row_decr,]/dD,
                 dP[row_decr], dP.min[row_decr],
-                seats_rows[row_decr])
+                seats_rows[row_decr], round_func)
         }
 
         row_incr = which.max0(mr(M,dD,dP) - seats_rows)
@@ -393,7 +394,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
             dP[row_incr] <- find_divisor(
                 M[row_incr,]/dD,
                 dP[row_incr], dP.max[row_incr],
-                seats_rows[row_incr])
+                seats_rows[row_incr], round_func)
         }
 
         # change district divisors
@@ -402,7 +403,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
             dD[col_decr] <- find_divisor(
                 M[,col_decr]/dP,
                 dD[col_decr], dD.min[col_decr],
-                seats_cols[col_decr])
+                seats_cols[col_decr], round_func)
         }
 
         col_incr = which.max0(mc(M,dD,dP) - seats_cols)
@@ -410,11 +411,12 @@ lower_apportionment = function(votes_matrix, seats_cols,
             dD[col_incr] <- find_divisor(
                 M[,col_incr]/dP,
                 dD[col_incr], dD.max[col_incr],
-                seats_cols[col_incr])
+                seats_cols[col_incr], round_func)
         }
     }
 
-    output = round(m.(M, dD, dP))
+    output = round_func(m.(M, dD, dP))
+    dimnames(output) <- dimnames(M)
     attributes(output)$divisors <- list()
     attributes(output)$divisors$districts <- dD
     names(attributes(output)$divisors$districts) <- colnames(M)
@@ -425,11 +427,11 @@ lower_apportionment = function(votes_matrix, seats_cols,
 
 find_divisor = function(votes,
                         divisor_from, divisor_to,
-                        target_seats) {
+                        target_seats, round_func) {
     stopifnot(length(target_seats) == 1)
 
     fun = function(divisor) {
-        target_seats - sum(round(votes/divisor))
+        target_seats - sum(round_func(votes/divisor))
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))
