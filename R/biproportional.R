@@ -192,8 +192,10 @@ biproporz = function(votes_matrix,
 #'   of votes (not the general use case), a single number for the total number of seats can
 #'   be used.
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a district has
-#'   as many votes as there are seats in a district. Set to `FALSE` if `votes_matrix` shows
-#'   the number of voters (e.g. they can only vote for one party), see [vignette()]
+#'   as many votes as there are seats in a district. Thus, votes are weighted according to
+#'   the number of available district seats with [weight_list_votes()]. Set to `FALSE` if
+#'   `votes_matrix` shows the number of voters (e.g. they can only cast one vote for one
+#'   party).
 #' @param method Apportion method that defines how seats are assigned, see [proporz()].
 #'
 #' @seealso [biproporz()], [lower_apportionment()]
@@ -234,7 +236,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # party seats
     if(use_list_votes) {
-        votes_matrix <- weigh_list_votes(votes_matrix, seats_district)
+        votes_matrix <- weight_list_votes(votes_matrix, seats_district)
     }
     seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
 
@@ -250,16 +252,20 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' Create weighted votes matrix
 #'
 #' Weigh list votes by dividing the votes matrix entries by the number
-#' of seats per district. No input checks are performed.
+#' of seats per district. This method is used in [upper_apportionment()] if
+#' `use_list_votes` is `TRUE` (default).
 #'
 #' @param votes_matrix votes matrix
-#' @param seats_district seats per district (vector)
+#' @param seats_district seats per district, vector with same length
+#'   as `ncol(votes_matrix)`)
+#'
 #' @returns the weighted `votes_matrix`
+#'
 #' @examples
-#' vm = matrix(c(100,50,20,10), 2)
-#' proporz:::weigh_list_votes(vm, c(10, 2))
-#' @keywords internal
-weigh_list_votes = function(votes_matrix, seats_district) {
+#' weight_list_votes(uri2020$votes_matrix, uri2020$seats_vector)
+#'
+#' @export
+weight_list_votes = function(votes_matrix, seats_district) {
     M_seats_district = matrix(
         rep(seats_district, nrow(votes_matrix)),
         byrow = TRUE, ncol = length(seats_district))

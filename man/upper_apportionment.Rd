@@ -22,8 +22,10 @@ of votes (not the general use case), a single number for the total number of sea
 be used.}
 
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
-as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_matrix} shows
-the number of voters (e.g. they can only vote for one party), see \code{\link[=vignette]{vignette()}}}
+as many votes as there are seats in a district. Thus, votes are weighted according to
+the number of available district seats with \code{\link[=weight_list_votes]{weight_list_votes()}}. Set to \code{FALSE} if
+\code{votes_matrix} shows the number of voters (e.g. they can only cast one vote for one
+party).}
 
 \item{method}{Apportion method that defines how seats are assigned, see \code{\link[=proporz]{proporz()}}.}
 }

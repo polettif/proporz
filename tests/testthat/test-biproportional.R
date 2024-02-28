@@ -408,6 +408,6 @@ test_that("error messages", {
 
 test_that("weight_list_votes", {
     vm = matrix(c(100,50,20,10), 2)
-    vmw = weigh_list_votes(vm, c(10, 2))
+    vmw = weight_list_votes(vm, c(10, 2))
     expect_equal(vmw, matrix(c(100/10,50/10,20/2,10/2), 2))
 })
