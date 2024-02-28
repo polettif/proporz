@@ -314,7 +314,7 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #' @returns A seat matrix with district (columns) and party (rows) divisors stored in
 #'   attributes.
 #'
-#' @references Oelbermann, K. F. (2016). Alternate scaling algorithm for biproportional
+#' @references Oelbermann, K. F. (2016): Alternate scaling algorithm for biproportional
 #'   divisor methods. Mathematical Social Sciences, 80, 25-32.
 #'
 #' @seealso [biproporz()], [upper_apportionment()]
