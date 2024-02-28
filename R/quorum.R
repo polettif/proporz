@@ -145,11 +145,6 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #' @seealso [quorum_all()], [quorum_any()] to create a list of quorum functions.
 #'
 #' @inherit reached_quorum_total return
-#' @examples
-#' votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
-#'
-#' quorum_functions = quorum_any(any_district = 0.1, total = 100)
-#' proporz:::reached_quorums(votes_matrix, quorum_functions)
 #' @keywords internal
 reached_quorums = function(votes_matrix, quorum_funcs) {
     assert(is.matrix(votes_matrix))
