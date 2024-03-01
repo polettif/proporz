@@ -12,6 +12,9 @@ ceil_at(x, threshold)
 \item{threshold}{threshold in [0,1] or "harmonic"/"geometric" to use
 harmonic or geometric mean thresholds}
 }
+\value{
+the rounded vector
+}
 \description{
 Round \code{x} up if \code{x-floor(x) >= threshold}, otherwise round down.
 }

@@ -6,6 +6,8 @@
 #' @param threshold threshold in \[0,1\] or "harmonic"/"geometric" to use
 #'   harmonic or geometric mean thresholds
 #'
+#' @returns the rounded vector
+#'
 #' @examples
 #' ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
 #' # compare to
