@@ -211,7 +211,7 @@ share better than apportionment by district. This is expected however, since
 biproportional apportionment actually considers the national vote share. 
 Discussing the pros and cons of a regional representation compared to a 
 priority on national vote shares is not within the scope of this vignette. The
-following chunk shows the differen
+following chunk shows the seat changes.
 
 ```{r compare_matrices}
 seat_changes = seats_biproportional-bydistrict_v0

@@ -6,10 +6,11 @@ remainder methods and biproportional apportionment.
 
 _Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren 
 Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet 
-Quoten-, Divisor- und biproportionale Verfahren ("Doppelter Pukelsheim")._
+Quoten-, Divisor- und biproportionale Verfahren (Doppelproporz oder 
+"Doppelter Pukelsheim")._
 
 ## Installation
-Install the package from CRAN (pending submission):
+Install the package from CRAN:
 
 ```r
 install.packages("proporz")
@@ -35,7 +36,7 @@ seats proportionally for a vector of votes according to the following methods:
     - Adams
     - Dean
     - Huntington-Hill
-- **Largest Remainder Method** ([Wikipedia](https://en.wikipedia.org/wiki/Largest_remainder_method))
+- **Largest remainder method** ([Wikipedia](https://en.wikipedia.org/wiki/Largest_remainder_method))
     - Hare-Niemeyer, Hamilton, Vinton
 
 ``` r
@@ -53,13 +54,13 @@ proporz(votes, 10, "huntington-hill", quorum = 0.05)
 
 ### Biproportional Apportionment
 
-[Biproportional apportionment](https://en.wikipedia.org/wiki/Biproportional_apportionment) 
+Biproportional apportionment ([Wikipedia](https://en.wikipedia.org/wiki/Biproportional_apportionment)) 
 is a method to proportionally allocate seats among parties and districts.
 
-We can use the `zug2018` data set to illustrate biproportional apportionment 
+We can use the provided `zug2018` data set to illustrate biproportional apportionment 
 with [`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.html).
 You need a 'votes matrix' as input which shows the number of votes for each party
-in rows and district in columns. In this data set, parties are called 'lists' and 
+(rows) and district (columns). In this data set, parties are called 'lists' and 
 districts 'entities'.
 
 ``` r
@@ -98,7 +99,7 @@ biproporz(votes_matrix, district_seats, quorum_any(any_district = 0.05, total = 
 
 You can use [`pukelsheim()`](https://polettif.github.io/proporz/reference/pukelsheim.html) 
 for data.frames in long format as input data. It is a wrapper for 
-`biproportional()`.
+`biproporz()`.
 
 ``` r
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -124,7 +125,7 @@ contains more examples.
 ## Shiny app
 
 The package provides a basic Shiny app where you can calculate biproportional
-apportionment on an interactive dashboard. You need have the packages `shiny` 
+apportionment on an interactive dashboard. You need to have the packages `shiny` 
 and `shinyMatrix` installed.
 
 ```r
@@ -175,7 +176,7 @@ divisor_geometric(votes, 10)
 
 #### Largest remainder method
 
-The largest remainder method is also accessible directly.
+The largest remainder method is also accessible directly:
 
 ``` r
 votes = c("I" = 16200, "II" = 47000, "III" = 12700)
@@ -191,10 +192,11 @@ There are other R packages available that provide apportionment functions, some 
 more focus on analysis. However, biproportional apportionment is missing from the 
 pure R packages and RBazi needs rJava with an accompanying jar.
 
-- [RBazi](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html): Package using rJava to access the functions of the [BAZI](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html).
+- [RBazi](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html): Package using rJava to access the functions of [BAZI](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html).
 - [seatdist](https://github.com/jmedzihorsky/seatdist) package for seat apportionment and disproportionality measurement.
-- [apportR](https://github.com/jalapic/apportR): Package containing various apportionment methods, with particular relevance for the problem of apportioning seats in the House of Representatives.
 - [disprr](https://github.com/pierzgal/disprr) Examine Disproportionality of Apportionment Methods.
+- [apportR](https://github.com/jalapic/apportR): Package containing various apportionment methods, with particular relevance for the problem of apportioning seats in the House of Representatives.
+- [apportion](https://github.com/christopherkenny/apportion) Convert populations into integer number of seats for legislative bodies, focusing on the United States.
 
 ### Contributing
 
