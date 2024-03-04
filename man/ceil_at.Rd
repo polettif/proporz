@@ -2,24 +2,27 @@
 % Please edit documentation in R/round.R
 \name{ceil_at}
 \alias{ceil_at}
-\title{Round with predefined thresholds
-Round x up if \code{x-floor(x) >= threshold}}
+\title{Rounding with predefined thresholds}
 \usage{
 ceil_at(x, threshold)
 }
 \arguments{
-\item{x}{numeric value}
+\item{x}{numeric vector >= 0 (\code{NaN} is not supported)}
 
-\item{threshold}{threshold in [0,1] or "harmonic"/"geometric" for
-threshold series}
+\item{threshold}{threshold in [0,1] or "harmonic"/"geometric" to use
+harmonic or geometric mean thresholds}
+}
+\value{
+the rounded vector
 }
 \description{
-Round with predefined thresholds
-Round x up if \code{x-floor(x) >= threshold}
+Round \code{x} up if \code{x-floor(x) >= threshold}, otherwise round down.
 }
 \examples{
-proporz:::ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
+ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
 # compare to
 round(c(0.5, 1.5, 2.49, 2.5, 2.51))
+
+ceil_at(c(1.45, 2.45, 3.45), 0) # like floor()
+ceil_at(c(1.45, 2.45, 3.45, 0.2), "geometric")
 }
-\keyword{internal}

@@ -55,7 +55,7 @@ lower_apportionment(votes_matrix, district_seats, party_seats)
 
 }
 \references{
-Oelbermann, K. F. (2016). Alternate scaling algorithm for biproportional
+Oelbermann, K. F. (2016): Alternate scaling algorithm for biproportional
 divisor methods. Mathematical Social Sciences, 80, 25-32.
 }
 \seealso{

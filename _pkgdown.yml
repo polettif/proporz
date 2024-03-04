@@ -41,3 +41,5 @@ reference:
   - get_divisors
   - pivot_to_matrix
   - pivot_to_df
+  - ceil_at
+  - weight_list_votes

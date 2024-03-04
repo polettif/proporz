@@ -1,13 +1,21 @@
-#' Round with predefined thresholds
-#' Round x up if `x-floor(x) >= threshold`
-#' @param x numeric value
-#' @param threshold threshold in \[0,1\] or "harmonic"/"geometric" for
-#'                  threshold series
+#' Rounding with predefined thresholds
+#'
+#' Round `x` up if `x-floor(x) >= threshold`, otherwise round down.
+#'
+#' @param x numeric vector >= 0 (`NaN` is not supported)
+#' @param threshold threshold in \[0,1\] or "harmonic"/"geometric" to use
+#'   harmonic or geometric mean thresholds
+#'
+#' @returns the rounded vector
+#'
 #' @examples
-#' proporz:::ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
+#' ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
 #' # compare to
 #' round(c(0.5, 1.5, 2.49, 2.5, 2.51))
-#' @keywords internal
+#'
+#' ceil_at(c(1.45, 2.45, 3.45), 0) # like floor()
+#' ceil_at(c(1.45, 2.45, 3.45, 0.2), "geometric")
+#' @export
 ceil_at = function(x, threshold) {
     assert(length(threshold) == 1 && !is.na(threshold))
     assert(all(!is.na(x)) && all(is.numeric(x)) && all(x >= 0))
