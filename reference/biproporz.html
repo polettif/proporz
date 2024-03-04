@@ -99,8 +99,10 @@ vector. No quorum is applied if parameter is missing or <code>NULL</code>.</p></
 
 <dt>use_list_votes</dt>
 <dd><p>By default (<code>TRUE</code>) it's assumed that each voter in a district has
-as many votes as there are seats in a district. Set to <code>FALSE</code> if <code>votes_matrix</code> shows
-the number of voters (e.g. they can only vote for one party), see <code><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette()</a></code></p></dd>
+as many votes as there are seats in a district. Thus, votes are weighted according to
+the number of available district seats with <code><a href="weight_list_votes.html">weight_list_votes()</a></code>. Set to <code>FALSE</code> if
+<code>votes_matrix</code> shows the number of voters (e.g. they can only cast one vote for one
+party).</p></dd>
 
 
 <dt>method</dt>

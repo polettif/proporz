@@ -21,7 +21,9 @@
 <meta property="og:description" content="Calculate seat apportionment for legislative bodies with 
     various methods. The algorithms include divisor or highest averages methods
     (e.g. Jefferson, Webster or Adams), largest remainder methods and 
-    biproportional apportionment.">
+    biproportional apportionment.
+    Gaffke, N. &amp; Pukelsheim, F. (2008) &lt;doi:10.1016/j.mathsocsci.2008.01.004&gt;
+    Oelbermann, K. F. (2016) &lt;doi:10.1016/j.mathsocsci.2016.02.003&gt;.">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -91,11 +93,11 @@
 <div class="page-header"><h1 id="proporz-">proporz <img src="reference/figures/logo.png" align="right" height="138"><a class="anchor" aria-label="anchor" href="#proporz-"></a>
 </h1></div>
 <p>Calculate seat apportionment for legislative bodies with various methods. These methods include divisor methods (e.g. D’Hondt, Webster or Adams), largest remainder methods and biproportional apportionment.</p>
-<p><em>Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet Quoten-, Divisor- und biproportionale Verfahren (“Doppelter Pukelsheim”).</em></p>
+<p><em>Mit diesem R-Package können mittels verschiedener Sitzzuteilungsverfahren Wählerstimmen in Abgeordnetensitze umgerechnet werden. Das Package beinhaltet Quoten-, Divisor- und biproportionale Verfahren (Doppelproporz oder “Doppelter Pukelsheim”).</em></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Install the package from CRAN (pending submission):</p>
+<p>Install the package from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"proporz"</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively, install the development version from Github:</p>
@@ -122,7 +124,7 @@
 </ul>
 </li>
 <li>
-<strong>Largest Remainder Method</strong> (<a href="https://en.wikipedia.org/wiki/Largest_remainder_method" class="external-link">Wikipedia</a>)
+<strong>Largest remainder method</strong> (<a href="https://en.wikipedia.org/wiki/Largest_remainder_method" class="external-link">Wikipedia</a>)
 <ul>
 <li>Hare-Niemeyer, Hamilton, Vinton</li>
 </ul>
@@ -143,8 +145,8 @@
 <div class="section level3">
 <h3 id="biproportional-apportionment">Biproportional Apportionment<a class="anchor" aria-label="anchor" href="#biproportional-apportionment"></a>
 </h3>
-<p><a href="https://en.wikipedia.org/wiki/Biproportional_apportionment" class="external-link">Biproportional apportionment</a> is a method to proportionally allocate seats among parties and districts.</p>
-<p>We can use the <code>zug2018</code> data set to illustrate biproportional apportionment with <a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link"><code>biproporz()</code></a>. You need a ‘votes matrix’ as input which shows the number of votes for each party in rows and district in columns. In this data set, parties are called ‘lists’ and districts ‘entities’.</p>
+<p>Biproportional apportionment (<a href="https://en.wikipedia.org/wiki/Biproportional_apportionment" class="external-link">Wikipedia</a>) is a method to proportionally allocate seats among parties and districts.</p>
+<p>We can use the provided <code>zug2018</code> data set to illustrate biproportional apportionment with <a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link"><code>biproporz()</code></a>. You need a ‘votes matrix’ as input which shows the number of votes for each party (rows) and district (columns). In this data set, parties are called ‘lists’ and districts ‘entities’.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">votes_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/pivot_to_matrix.html">pivot_to_matrix</a></span><span class="op">(</span><span class="va">votes_df</span><span class="op">)</span></span>
@@ -175,7 +177,7 @@
 <span><span class="co">#&gt;       5    1    1    0    0    0    0    0    0    0    0    2</span></span>
 <span><span class="co">#&gt;       6    3    1    1    0    0    0    0    0    1    0    3</span></span>
 <span><span class="co">#&gt;       7    4    2    1    1    1    1    2    1    2    0    3</span></span></code></pre></div>
-<p>You can use <a href="https://polettif.github.io/proporz/reference/pukelsheim.html" class="external-link"><code>pukelsheim()</code></a> for data.frames in long format as input data. It is a wrapper for <code>biproportional()</code>.</p>
+<p>You can use <a href="https://polettif.github.io/proporz/reference/pukelsheim.html" class="external-link"><code>pukelsheim()</code></a> for data.frames in long format as input data. It is a wrapper for <code><a href="reference/biproporz.html">biproporz()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">district_seats_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"entity_id"</span>, <span class="st">"election_mandates"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
@@ -198,7 +200,7 @@
 <div class="section level2">
 <h2 id="shiny-app">Shiny app<a class="anchor" aria-label="anchor" href="#shiny-app"></a>
 </h2>
-<p>The package provides a basic Shiny app where you can calculate biproportional apportionment on an interactive dashboard. You need have the packages <code>shiny</code> and <code>shinyMatrix</code> installed.</p>
+<p>The package provides a basic Shiny app where you can calculate biproportional apportionment on an interactive dashboard. You need to have the packages <code>shiny</code> and <code>shinyMatrix</code> installed.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("shiny")</span></span>
 <span><span class="co"># install.packages("shinyMatrix")</span></span>
@@ -245,7 +247,7 @@
 <div class="section level4">
 <h4 id="largest-remainder-method">Largest remainder method<a class="anchor" aria-label="anchor" href="#largest-remainder-method"></a>
 </h4>
-<p>The largest remainder method is also accessible directly.</p>
+<p>The largest remainder method is also accessible directly:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"I"</span> <span class="op">=</span> <span class="fl">16200</span>, <span class="st">"II"</span> <span class="op">=</span> <span class="fl">47000</span>, <span class="st">"III"</span> <span class="op">=</span> <span class="fl">12700</span><span class="op">)</span></span>
 <span></span>
@@ -261,13 +263,15 @@
 <p>There are other R packages available that provide apportionment functions, some with more focus on analysis. However, biproportional apportionment is missing from the pure R packages and RBazi needs rJava with an accompanying jar.</p>
 <ul>
 <li>
-<a href="https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html" class="external-link">RBazi</a>: Package using rJava to access the functions of the <a href="https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html" class="external-link">BAZI</a>.</li>
+<a href="https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html" class="external-link">RBazi</a>: Package using rJava to access the functions of <a href="https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html" class="external-link">BAZI</a>.</li>
 <li>
 <a href="https://github.com/jmedzihorsky/seatdist" class="external-link">seatdist</a> package for seat apportionment and disproportionality measurement.</li>
 <li>
+<a href="https://github.com/pierzgal/disprr" class="external-link">disprr</a> Examine Disproportionality of Apportionment Methods.</li>
+<li>
 <a href="https://github.com/jalapic/apportR" class="external-link">apportR</a>: Package containing various apportionment methods, with particular relevance for the problem of apportioning seats in the House of Representatives.</li>
 <li>
-<a href="https://github.com/pierzgal/disprr" class="external-link">disprr</a> Examine Disproportionality of Apportionment Methods.</li>
+<a href="https://github.com/christopherkenny/apportion" class="external-link">apportion</a> Convert populations into integer number of seats for legislative bodies, focusing on the United States.</li>
 </ul>
 <div class="section level3">
 <h3 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
@@ -282,6 +286,7 @@
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=proporz" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/polettif/proporz/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/polettif/proporz/issues" class="external-link">Report a bug</a></li>
 </ul>
