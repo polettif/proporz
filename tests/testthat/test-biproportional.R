@@ -32,6 +32,11 @@ test_that("lower apportionment", {
         lower_apportionment(matrix(c(1,0,1,0), 2), c(1,1), c(2,0), method = "harmonic"),
         'Lower apportionment is only guaranteed to terminate with the default Sainte-Lagu\u00EB/Webster method (method = "round")',
         fixed = TRUE)
+
+    # exact 0.5 seats edge case
+    vm0.5 = matrix(c(10, 10, 20, 10), 2, 2)
+    sm0.5 = lower_apportionment(vm0.5, c(1, 1), c(1,1))
+    expect_equal(sum(sm0.5), 2)
 })
 
 test_that("biproporz", {

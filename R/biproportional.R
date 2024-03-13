@@ -434,7 +434,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
     }
 
     # create output
-    output = round(m.(M, dD, dP))
+    output = round_func(m.(M, dD, dP))
     dimnames(output) <- dimnames(M)
     attributes(output)$divisors <- list()
     attributes(output)$divisors$districts <- dD
