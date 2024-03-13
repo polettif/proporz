@@ -17,10 +17,10 @@
 run_app = function(votes_matrix = NULL, district_seats = NULL) {
     # load packages / "import" ####
     if(!requireNamespace("shiny", quietly = TRUE)) {
-        stop("Please install shiny: install.packages('shiny')", call. = F)
+        stop("Please install shiny: install.packages('shiny')", call. = FALSE)
     }
     if(!requireNamespace("shinyMatrix", quietly = TRUE)) {
-        stop("Please install shinyMatrix: install.packages('shinyMatrix')", call. = F)
+        stop("Please install shinyMatrix: install.packages('shinyMatrix')", call. = FALSE)
     }
     tags = shiny::tags
     fluidRow = shiny::fluidRow

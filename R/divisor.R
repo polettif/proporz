@@ -34,7 +34,7 @@ highest_averages_method = function(votes, n_seats, divisors) {
     if(length(divisors) == 1) {
         divisors <- seq(from = divisors, by = 1, length.out = n_seats)
     } else if(length(divisors) != n_seats) {
-        stop("Number of divisors is not equal to the number of seats", call. = F)
+        stop("Number of divisors is not equal to the number of seats", call. = FALSE)
     }
     n_parties = length(votes)
 

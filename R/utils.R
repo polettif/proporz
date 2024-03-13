@@ -98,7 +98,7 @@ pivot_to_df = function(matrix_wide, value_colname = "values") {
 assert = function(check) {
     if(!all(check)) {
         .x = deparse(substitute(check))
-        stop(.x, " is not TRUE", call. = F)
+        stop(.x, " is not TRUE", call. = FALSE)
     }
     invisible()
 }

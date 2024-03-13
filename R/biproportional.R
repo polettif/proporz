@@ -242,7 +242,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # check enough votes in districts
     if(!identical(colSums(votes_matrix) > 0, seats_district > 0)) {
-        stop("No votes in a district with at least one seat", call. = F)
+        stop("No votes in a district with at least one seat", call. = FALSE)
     }
 
     # return values
@@ -341,7 +341,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
         method_impl <- get_method_implementation(method)
         if(method_impl != "divisor_round") {
             warning('Lower apportionment is only guaranteed to terminate with the default ',
-                    'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = F)
+                    'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = FALSE)
         }
         round_func = get_round_function(method_impl)
     }
@@ -456,7 +456,7 @@ find_divisor = function(votes,
     divisor_range = sort(c(divisor_from, divisor_to))
 
     if(any(is.infinite(votes)) || any(is.nan(votes))) {
-        stop("Result is undefined, cannot assign all seats in lower apportionment", call. = F)
+        stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
     }
 
     # Divisors should be within votes/(seats-1) and votes/(seats+1).

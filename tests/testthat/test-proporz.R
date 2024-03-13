@@ -19,7 +19,7 @@ test_that("generic proporz", {
 }
 
 test_that("proporz parameter range", {
-    method_list = unique(unlist(proporz_methods, use.names = F))
+    method_list = unique(unlist(proporz_methods, use.names = FALSE))
 
     set.seed(0)
     for(n_parties in 1:2) {
@@ -43,7 +43,7 @@ test_that("proporz parameter range", {
                         expect_equal(sum(seats), n_seats)
 
                         if(n_seats > 0) {
-                            .quorum = sort(c(votes,0), decreasing = T)[2]+0.5
+                            .quorum = sort(c(votes,0), decreasing = TRUE)[2]+0.5
                             seats_Q = proporz(votes, n_seats, method_impl, quorum = .quorum)
                             expect_equal(sum(seats_Q > 0), 1)
                         }
@@ -67,7 +67,7 @@ test_that("proporz parameter range", {
 })
 
 test_that("quorum", {
-    method_list = unique(unlist(proporz_methods, use.names = F))
+    method_list = unique(unlist(proporz_methods, use.names = FALSE))
 
     for(method in method_list) {
         expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum.",
@@ -84,7 +84,7 @@ test_that("all method names", {
 
 test_that("undefined result errors", {
     expect_error(proporz(c(1, 10, 10), 1, "round"),
-                 "Result is undefined, equal quotient for parties: 2 & 3", fixed = T)
+                 "Result is undefined, equal quotient for parties: 2 & 3", fixed = TRUE)
     expect_equal(proporz(c(1, 10, 10), 2, "round"), c(0,1,1))
 
     expect_error(largest_remainder_method(c(10, 10, 0), 1),

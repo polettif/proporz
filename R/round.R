@@ -23,7 +23,7 @@ ceil_at = function(x, threshold) {
 
     if(is.numeric(threshold)) {
         if(threshold < 0 || threshold > 1) {
-            stop("Threshold argument must be in [0,1].", call. = F)
+            stop("Threshold argument must be in [0,1].", call. = FALSE)
         }
         threshold <- floor(values) + threshold
     } else if(threshold == "harmonic") {
@@ -32,7 +32,7 @@ ceil_at = function(x, threshold) {
         threshold <- threshold_geometric(values)
     } else {
         stop('Numeric value, "harmonic" or "geometric" expected for threshold argument.',
-             call. = F)
+             call. = FALSE)
     }
 
     ceiled = ceiling(values)

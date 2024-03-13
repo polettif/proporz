@@ -58,8 +58,8 @@ test_that("quorum with vote counts", {
     expect_equal(reached_quorum_any_district(vm, 35), rowSums(q1) > 0)
     expect_equal(reached_quorum_total(vm, 45), rowSums(q2) > 0)
 
-    expect_equal(sum(apply_quorum_matrix(vm, c(F,F,F))), 0)
-    expect_equal(sum(apply_quorum_matrix(vm, c(F,T,F))), 30)
+    expect_equal(sum(apply_quorum_matrix(vm, c(FALSE,FALSE,FALSE))), 0)
+    expect_equal(sum(apply_quorum_matrix(vm, c(FALSE,TRUE,FALSE))), 30)
     expect_error_fixed(apply_quorum_matrix(vm, "x"), "Cannot parse quorum function or vector.")
 })
 
@@ -78,10 +78,10 @@ test_that("quorum with percentages counts", {
 test_that("quorum", {
     vm = matrix(c(90, 4, 5, 1, 104, 4, 1, 1), ncol = 2)*10
 
-    q_district = c(T,F,T,F)
-    q_total = c(T,T,F,F)
-    q_district_and_total = c(T,F,F,F)
-    q_district_or_total = c(T,T,T,F)
+    q_district = c(TRUE,FALSE,TRUE,FALSE)
+    q_total = c(TRUE,TRUE,FALSE,FALSE)
+    q_district_and_total = c(TRUE,FALSE,FALSE,FALSE)
+    q_district_or_total = c(TRUE,TRUE,TRUE,FALSE)
 
     # reached_quorums
     expect_equal(reached_quorums(vm, quorum_any(any_district = 0.05)),
@@ -275,11 +275,11 @@ test_that("almost empty vote_matrix", {
 test_that("undefined result biproportional", {
     seats = c(10, 20, 1, 1)
     set.seed(1284)
-    vm = matrix(runif(4*10), ncol = 4) * matrix(rep(seats, 10), byrow = T, ncol = 4) * 1000
+    vm = matrix(runif(4*10), ncol = 4) * matrix(rep(seats, 10), byrow = TRUE, ncol = 4) * 1000
     vm <- round(vm)
     vm[vm < 200] <- 0
 
-    expect_equal(upper_apportionment(vm, seats, use_list_votes = F)$party,
+    expect_equal(upper_apportionment(vm, seats, use_list_votes = FALSE)$party,
                  proporz(rowSums(vm), sum(seats), "round"))
 
     expect_error_fixed(upper_apportionment(vm, seats),
@@ -312,7 +312,7 @@ test_that("districts with one seat", {
     seats = c(10, 20, 1, 1)
     set.seed(80)
 
-    votes_matrix = matrix(runif(4*10), ncol = 4) * matrix(rep(seats, 10), byrow = T, ncol = 4) * 100
+    votes_matrix = matrix(runif(4*10), ncol = 4) * matrix(rep(seats, 10), byrow = TRUE, ncol = 4) * 100
     votes_matrix <- round(votes_matrix)
     votes_matrix[votes_matrix < 30] <- 0
 

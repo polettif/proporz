@@ -11,7 +11,7 @@ zip::unzip(zipfile, exdir = "finland_2019")
 
 # Load data ####
 suomi19.csv = data.table::fread("finland_2019/ekv-2019_tpat_maa.csv",
-                                header = F,
+                                header = FALSE,
                                 encoding = "Latin-1")
 
 suomi19 <- suomi19.csv |>

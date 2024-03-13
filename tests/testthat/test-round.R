@@ -18,7 +18,7 @@ test_that("ceil_at", {
 
     expect_error(proporz(1,1, "unkown method"))
     expect_error(ceil_at(1.6, NA), "is.na")
-    expect_error(ceil_at(1.6, -1), "Threshold argument must be in [0,1]", fixed = T)
+    expect_error(ceil_at(1.6, -1), "Threshold argument must be in [0,1]", fixed = TRUE)
     expect_error(ceil_at(0.5, "x"), 'Numeric value, "harmonic" or "geometric" expected for threshold argument')
     expect_error(ceil_at(-1, 0))
     expect_error(ceil_at(NA, 0))
@@ -70,15 +70,15 @@ test_that("ceil_at harmonic/geometric matrix", {
                  0.000, 1.333333+eps, 42.494118+eps, 99.497487+eps, # harmonic
                  0.000, 1.414214+eps, 42.497059+eps, 99.498744+eps, # geometric
                  0.500, 1.500000, 42.500000, 99.500000, # round
-                 x+1), nrow = 5, byrow = T)
+                 x+1), nrow = 5, byrow = TRUE)
 
-    R_0.5 = matrix(c(x,x,x,x+1,x+1), nrow = 5, byrow = T)
+    R_0.5 = matrix(c(x,x,x,x+1,x+1), nrow = 5, byrow = TRUE)
     expect_equal(ceil_at(M, 0.5), R_0.5)
 
-    R_geometric = matrix(c(x, x, c(0,x_non0+1), x+1, x+1), nrow = 5, byrow = T)
+    R_geometric = matrix(c(x, x, c(0,x_non0+1), x+1, x+1), nrow = 5, byrow = TRUE)
     expect_equal(ceil_at(M, "geometric"), R_geometric)
 
-    R_harmonic = matrix(c(x, c(0,x_non0+1), c(0,x_non0+1), x+1, x+1), nrow = 5, byrow = T)
+    R_harmonic = matrix(c(x, c(0,x_non0+1), c(0,x_non0+1), x+1, x+1), nrow = 5, byrow = TRUE)
     expect_equal(ceil_at(M, "harmonic"), R_harmonic)
 
     expect_equal(threshold_geometric(18.4), threshold_geometric(18.5))

@@ -11,7 +11,7 @@ check_edge_quotient = function(mtrx_quotient, n_seats, return_indices = FALSE) {
     if(quotient_last_with == quotient_first_without) {
         indices = which(mtrx_quotient == quotient_last_with, arr.ind = TRUE)[,"col"]
         parties = paste0(indices, collapse = " & ")
-        stop("Result is undefined, equal quotient for parties: ", parties, call. = F)
+        stop("Result is undefined, equal quotient for parties: ", parties, call. = FALSE)
     }
 }
 
@@ -25,7 +25,7 @@ check_enough_seats = function(votes, n_seats, method) {
         return()
     }
     stop("With ", method," rounding there must be at least as many seats as ",
-         "there are parties with non-zero votes.", call. = F)
+         "there are parties with non-zero votes.", call. = FALSE)
 }
 
 check_seats_number = function(n_seats, n_seats.name) {
@@ -34,7 +34,7 @@ check_seats_number = function(n_seats, n_seats.name) {
        n_seats >= 0) {
         return()
     }
-    stop("`", n_seats.name, "` must be an integer >= 0", call. = F)
+    stop("`", n_seats.name, "` must be an integer >= 0", call. = FALSE)
 }
 
 check_votes_vector = function(votes, votes.name) {
@@ -42,5 +42,5 @@ check_votes_vector = function(votes, votes.name) {
        all(votes >= 0) && is.vector(votes)) {
         return()
     }
-    stop("`", votes.name, "` must be a numeric vector >= 0", call. = F)
+    stop("`", votes.name, "` must be a numeric vector >= 0", call. = FALSE)
 }

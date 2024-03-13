@@ -150,7 +150,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
     assert(is.matrix(votes_matrix))
     if(!is.list(quorum_funcs) || !is.function(quorum_funcs[[1]])) {
         stop("`", deparse(substitute(quorum_funcs)),
-             "` is not a list of functions.", call. = F)
+             "` is not a list of functions.", call. = FALSE)
     }
 
     # list of vector whether quorum was reached for each party
@@ -161,7 +161,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
     if(length(quorum_funcs) == 1) {
         return(quorum_funcs[[1]](votes_matrix))
     } else if(is.null(attributes(quorum_funcs)$type)) {
-        stop("type must be set as list attribute.", call. = F)
+        stop("type must be set as list attribute.", call. = FALSE)
     }
 
     quorum_matrix = do.call(cbind, has_reached_quorum)
@@ -170,7 +170,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
     } else if(attributes(quorum_funcs)$type == "ANY") {
         quorum_bool = apply(quorum_matrix, 1, any)
     } else {
-        stop("Unknown type `", attributes(quorum_funcs)$type, "`.", call. = F)
+        stop("Unknown type `", attributes(quorum_funcs)$type, "`.", call. = FALSE)
     }
     return(quorum_bool)
 }
@@ -187,7 +187,7 @@ apply_quorum_matrix = function(votes_matrix, quorum) {
         stopifnot(length(quorum) == nrow(votes_matrix))
         quorum_bool = quorum
     } else {
-        stop("Cannot parse quorum function or vector.", call. = F)
+        stop("Cannot parse quorum function or vector.", call. = FALSE)
     }
 
     if(any(!quorum_bool)) {
@@ -207,7 +207,7 @@ apply_quorum_vector = function(votes_vector, quorum) {
     }
 
     if(all(votes_vector < quorum)) {
-        stop("No party reached the quorum.", call. = F)
+        stop("No party reached the quorum.", call. = FALSE)
     }
 
     votes_vector[votes_vector < quorum] <- 0

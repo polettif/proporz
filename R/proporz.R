@@ -71,7 +71,7 @@ get_method_implementation = function(method_name) {
     method_name <- tolower(method_name)
     if(!method_name %in% names(proporz_methods)) {
         stop("Unknown apportion method: ", method_name, ".\nAvailable: ",
-             paste0(names(proporz_methods), collapse=", "), call. = F)
+             paste0(names(proporz_methods), collapse=", "), call. = FALSE)
     }
     return(proporz_methods[[method_name]])
 }

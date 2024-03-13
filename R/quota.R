@@ -63,7 +63,7 @@ lr_quota = function(votes, n_seats, method = "hare") {
     if(method %in% c("hare", "hare-niemeyer", "vinton", "simple")) {
         quota = sum(votes)/n_seats
     } else {
-        stop("Unknown quota method '", method, "'", call. = F)
+        stop("Unknown quota method '", method, "'", call. = FALSE)
     }
     return(quota)
 }
@@ -76,6 +76,6 @@ check_equal_entries = function(remainders, ordered_remainders, n_seats_remaining
         indices = which(remainders == remainder_last_with, arr.ind = TRUE)
         parties = paste0(indices, collapse = " & ")
         stop("Result is undefined, equal remainder for parties: ", parties,
-             call. = F)
+             call. = FALSE)
     }
 }
