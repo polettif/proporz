@@ -1,3 +1,5 @@
+# proporz (development version)
+
 # proporz 1.4.0
 
 * first CRAN release
