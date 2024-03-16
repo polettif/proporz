@@ -18,8 +18,18 @@ get_divisors = function(biproporz_result) {
     attributes(biproporz_result)$divisors
 }
 
+prettier_divisors = function(votes_matrix, divisors, round_func) {
+    dD <- divisors$col
+    dP <- divisors$row
+
+    dP <- round_matrix_divisors(dP, \(x) round_func(divide_votes_matrix(votes_matrix, dD, x)))
+    dD <- round_matrix_divisors(dD, \(x) round_func(divide_votes_matrix(votes_matrix, x, dP)))
+
+    return(list(col = dD, row = dP))
+}
+
 # round divisors to as few digits as possible
-prettier_divisors = function(divisors, round_matrix_func) {
+round_matrix_divisors = function(divisors, round_matrix_func) {
     expected = round_matrix_func(divisors)
 
     # start with divisors with the most digits

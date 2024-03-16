@@ -59,7 +59,6 @@ get_round_function = function(method_name) {
     function(x) ceil_at(x, method_thresholds[[method_name]])
 }
 
-
 threshold_harmonic = function(x) {
     x_ceil = ceiling(x)
     x_floor = floor(x)

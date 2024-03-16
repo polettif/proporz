@@ -334,7 +334,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
     assert(all((seats_cols %% 1) == 0) && all((seats_rows %% 1) == 0))
     assert(length(seats_cols) == ncol(M) && length(seats_rows) == nrow(M))
 
-    # method
+    # rounding function from method
     if(is.function(method)) {
         round_func = method
     } else {
@@ -346,18 +346,57 @@ lower_apportionment = function(votes_matrix, seats_cols,
         round_func = get_round_function(method_impl)
     }
 
+    # alternate scaling algorithm to find divisors
+    divisors = find_lower_apport_divisors(votes_matrix, seats_cols, seats_rows, round_func)
+
+    # prettier divisors
+    divisors <- prettier_divisors(votes_matrix, divisors, round_func)
+
+    # create output
+    dD = divisors$col; dP = divisors$row
+    output = round_func(divide_votes_matrix(M, dD, dP))
+    dimnames(output) <- dimnames(M)
+    attributes(output)$divisors <- list(districts = dD, parties = dP)
+    names(attributes(output)$divisors$districts) <- colnames(M)
+    names(attributes(output)$divisors$parties) <- rownames(M)
+    return(output)
+}
+
+# calculate raw seat matrix
+# accesses function environment variables div_distr and div_party
+divide_votes_matrix = function(.M, .div_distr, .div_party) {
+    M_district = matrix(rep(.div_distr, nrow(.M)), byrow = TRUE, nrow = nrow(.M))
+    M_party = matrix(rep(.div_party, ncol(.M)), byrow = FALSE, nrow = nrow(.M))
+
+    x = .M/M_district/M_party
+    x[is.nan(x)] <- 0
+    return(x)
+}
+
+#' Find divisors for a matrix with alternate scaling
+#'
+#' @param M votes_matrix
+#' @param seats_cols target seats for each column
+#' @param seats_rows target seats for each row
+#' @param round_func rounding function, called like
+#'   `round_func(M/row_divisors/col_divisors)`
+#'
+#' @return list of divisors
+#' @keywords internal
+find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
     # divisor parties
-    dP = rep(1, nrow(M))
-    dP.min = rep(0.5, nrow(M))
-    dP.max = rep(1.5, nrow(M))
+    dR = rep(1, nrow(M))
+    dR.min = rep(0.5, nrow(M))
+    dR.max = rep(1.5, nrow(M))
 
     # divisor districts
-    dD = round(colSums(M)/seats_cols)
-    dD[is.nan(dD)] <- 0
-    dD.min = floor(colSums(M)/(seats_cols+1) / max(dP.max))
-    dD.max = ceiling(colSums(M)/(seats_cols-1) / min(dP.min))
-    # handle districts with only one seat (otherwise leads to infinite dD.max)
-    dD.max[seats_cols == 1] <- (colSums(M)+1)[seats_cols == 1]
+    dC = round(colSums(M)/seats_cols)
+    dC[is.nan(dC)] <- 0
+    dC.min = floor(colSums(M)/(seats_cols+1) / max(dR.max))
+    dC.max = ceiling(colSums(M)/(seats_cols-1) / min(dR.min))
+
+    # handle districts with only one seat (otherwise leads to infinite dC.max)
+    dC.max[seats_cols == 1] <- (colSums(M)+1)[seats_cols == 1]
 
     # convenience functions to round and summarise
     m. = divide_votes_matrix
@@ -375,74 +414,63 @@ lower_apportionment = function(votes_matrix, seats_cols,
         which.max(x)
     }
 
-    while(!all(c(mc(M,dD,dP) == seats_cols, mr(M,dD,dP) == seats_rows))) {
+    while(!all(c(mc(M,dC,dR) == seats_cols, mr(M,dC,dR) == seats_rows))) {
         # change party divisors
-        row_decr = which.min0(mr(M,dD,dP) - seats_rows)
+        row_decr = which.min0(mr(M,dC,dR) - seats_rows)
         if(length(row_decr) == 1) {
-            dP[row_decr] <- find_divisor(
-                M[row_decr,]/dD,
-                dP[row_decr], dP.min[row_decr],
+            dR[row_decr] <- find_divisor(
+                M[row_decr,]/dC,
+                dR[row_decr], dR.min[row_decr],
                 seats_rows[row_decr], round_func)
         }
 
-        row_incr = which.max0(mr(M,dD,dP) - seats_rows)
+        row_incr = which.max0(mr(M,dC,dR) - seats_rows)
         if(length(row_incr) == 1) {
-            dP[row_incr] <- find_divisor(
-                M[row_incr,]/dD,
-                dP[row_incr], dP.max[row_incr],
+            dR[row_incr] <- find_divisor(
+                M[row_incr,]/dC,
+                dR[row_incr], dR.max[row_incr],
                 seats_rows[row_incr], round_func)
         }
 
         # change district divisors
-        col_decr = which.min0(mc(M,dD,dP) - seats_cols)
+        col_decr = which.min0(mc(M,dC,dR) - seats_cols)
         if(length(col_decr) == 1) {
-            dD[col_decr] <- find_divisor(
-                M[,col_decr]/dP,
-                dD[col_decr], dD.min[col_decr],
+            dC[col_decr] <- find_divisor(
+                M[,col_decr]/dR,
+                dC[col_decr], dC.min[col_decr],
                 seats_cols[col_decr], round_func)
         }
 
-        col_incr = which.max0(mc(M,dD,dP) - seats_cols)
+        col_incr = which.max0(mc(M,dC,dR) - seats_cols)
         if(length(col_incr) == 1) {
-            dD[col_incr] <- find_divisor(
-                M[,col_incr]/dP,
-                dD[col_incr], dD.max[col_incr],
+            dC[col_incr] <- find_divisor(
+                M[,col_incr]/dR,
+                dC[col_incr], dC.max[col_incr],
                 seats_cols[col_incr], round_func)
         }
     }
 
-    # prettier divisors
-    dP <- prettier_divisors(dP, \(x) round_func(m.(votes_matrix, dD, x)))
-    dD <- prettier_divisors(dD, \(x) round_func(m.(votes_matrix, x, dP)))
-
-    # create output
-    output = round_func(m.(M, dD, dP))
-    dimnames(output) <- dimnames(M)
-    attributes(output)$divisors <- list()
-    attributes(output)$divisors$districts <- dD
-    names(attributes(output)$divisors$districts) <- colnames(M)
-    attributes(output)$divisors$parties <- dP
-    names(attributes(output)$divisors$parties) <- rownames(M)
-    return(output)
+    return(list(cols = dC, rows = dR))
 }
 
-# calculate raw seat matrix
-# accesses function environment variables div_distr and div_party
-divide_votes_matrix = function(.M, .div_distr, .div_party) {
-    M_district = matrix(rep(.div_distr, nrow(.M)), byrow = TRUE, nrow = nrow(.M))
-    M_party = matrix(rep(.div_party, ncol(.M)), byrow = FALSE, nrow = nrow(.M))
-
-    x = .M/M_district/M_party
-    x[is.nan(x)] <- 0
-    return(x)
-}
-
-# Find a divisor within divisor_from and divisor_to
-# that leads to `round_func(votes/divisor) == target_seats`
+#' Find divisor to assign seats
+#'
+#' Find a divisor between `divisor_from` and `divisor_to` such as
+#' `sum(round_func(votes/divisor))` equals `target_seats`
+#'
+#' @param votes votes vector
+#' @param divisor_from lower bound for divisor search range (is decreased if necessary)
+#' @param divisor_to upper bound for divisor search range (is increased if necessary)
+#' @param target_seats number of seats to distribute (single number)
+#' @param round_func rounding function
+#'
+#' @return divisor
+#' @keywords internal
 find_divisor = function(votes,
                         divisor_from, divisor_to,
                         target_seats, round_func) {
-    stopifnot(length(target_seats) == 1)
+    assert(is.vector(votes))
+    assert(length(target_seats) == 1)
 
     fun = function(divisor) {
         target_seats - sum(round_func(votes/divisor))
