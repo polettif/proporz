@@ -300,7 +300,7 @@ test_that("undefined result biproportional", {
 })
 
 test_that("find_divisor", {
-    v = c(80,10,10)
+    v = matrix(c(80,10,10))
     .check = function(div) round(v/div)
 
     d0 = find_divisor(v, 0, 100, 10, function(x) ceil_at(x, 0.5))

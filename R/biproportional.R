@@ -384,6 +384,9 @@ divide_votes_matrix = function(.M, .div_distr, .div_party) {
 #' @return list of divisors
 #' @keywords internal
 find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
+    assert(is.matrix(M))
+    assert(is.matrix(round_func(M)))
+
     # divisor parties
     dR = rep(1, nrow(M))
     dR.min = rep(0.5, nrow(M))
@@ -419,7 +422,7 @@ find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
         row_decr = which.min0(mr(M,dC,dR) - seats_rows)
         if(length(row_decr) == 1) {
             dR[row_decr] <- find_divisor(
-                M[row_decr,]/dC,
+                M[row_decr,,drop=F]/dC,
                 dR[row_decr], dR.min[row_decr],
                 seats_rows[row_decr], round_func)
         }
@@ -427,7 +430,7 @@ find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
         row_incr = which.max0(mr(M,dC,dR) - seats_rows)
         if(length(row_incr) == 1) {
             dR[row_incr] <- find_divisor(
-                M[row_incr,]/dC,
+                M[row_incr,,drop=F]/dC,
                 dR[row_incr], dR.max[row_incr],
                 seats_rows[row_incr], round_func)
         }
@@ -436,7 +439,7 @@ find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
         col_decr = which.min0(mc(M,dC,dR) - seats_cols)
         if(length(col_decr) == 1) {
             dC[col_decr] <- find_divisor(
-                M[,col_decr]/dR,
+                M[,col_decr,drop=F]/dR,
                 dC[col_decr], dC.min[col_decr],
                 seats_cols[col_decr], round_func)
         }
@@ -444,7 +447,7 @@ find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
         col_incr = which.max0(mc(M,dC,dR) - seats_cols)
         if(length(col_incr) == 1) {
             dC[col_incr] <- find_divisor(
-                M[,col_incr]/dR,
+                M[,col_incr,drop=F]/dR,
                 dC[col_incr], dC.max[col_incr],
                 seats_cols[col_incr], round_func)
         }
@@ -458,7 +461,7 @@ find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
 #' Find a divisor between `divisor_from` and `divisor_to` such as
 #' `sum(round_func(votes/divisor))` equals `target_seats`
 #'
-#' @param votes votes vector
+#' @param votes votes (matrix with only one column or vector)
 #' @param divisor_from lower bound for divisor search range (is decreased if necessary)
 #' @param divisor_to upper bound for divisor search range (is increased if necessary)
 #' @param target_seats number of seats to distribute (single number)
@@ -469,11 +472,13 @@ find_lower_apport_divisors = function(M, seats_cols, seats_rows, round_func) {
 find_divisor = function(votes,
                         divisor_from, divisor_to,
                         target_seats, round_func) {
-    assert(is.vector(votes))
+    assert(is.matrix(votes))
+    assert(any(dim(votes) == 1))
     assert(length(target_seats) == 1)
 
+    # use matrix instead of vector for rownames
     fun = function(divisor) {
-        target_seats - sum(round_func(votes/divisor))
+          target_seats - sum(round_func(votes/divisor))
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))
