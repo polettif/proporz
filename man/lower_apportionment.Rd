@@ -16,16 +16,16 @@ calculated with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
 \item{method}{Apportion method that defines how seats are assigned. The
-following are supported:
+following methods are supported:
 \itemize{
 \item{\code{round}: The default Sainte-Laguë/Webster method is the standard
 for biproportional apportionment and the only method guaranteed to terminate.}
-\item{\code{wto}: Works like "round" with the condition that the party
-that got the most votes in a district also gets \emph{at least} one seat. The function
-errors if two or more parties have the same number of votes.}
-\item{You can also provide a custom function that rounds a matrix (the
+\item{\code{wto}: "winner take one" works like "round" with a condition that the party that
+got the most votes in a district also gets \emph{at least} one seat ('Majorzbedingung').
+The function errors if two or more parties have the same number of votes.}
+\item{You can provide a custom function that rounds a matrix (i.e. the
 the votes_matrix divided by party and list divisors).}
-\item{It is also possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}.}
+\item{It is possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}.}
 }}
 }
 \value{

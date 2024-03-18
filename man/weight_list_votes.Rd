@@ -18,7 +18,7 @@ the weighted \code{votes_matrix}
 \description{
 Weigh list votes by dividing the votes matrix entries by the number
 of seats per district. This method is used in \code{\link[=upper_apportionment]{upper_apportionment()}} if
-\code{use_list_votes} is \code{TRUE} (default).
+\code{use_list_votes} is \code{TRUE} (default). The weighted votes are not rounded.
 }
 \examples{
 weight_list_votes(uri2020$votes_matrix, uri2020$seats_vector)

@@ -34,7 +34,7 @@ the number of available district seats with \code{\link[=weight_list_votes]{weig
 \code{votes_matrix} shows the number of voters (e.g. they can only cast one vote for one
 party).}
 
-\item{method}{Defines which method is used to assign seats. The following values are
+\item{method}{Defines which method is used to assign seats. The following methods are
 recommended:
 \itemize{
 \item{\code{round}: Uses the Sainte-Laguë/Webster method (standard rounding) for the upper

@@ -2,11 +2,11 @@
 #'
 #' Round `x` up if `x-floor(x) >= threshold`, otherwise round down.
 #'
-#' @param x numeric vector >= 0 (`NaN` is not supported)
+#' @param x numeric vector or matrix >= 0 (`NaN` is not supported)
 #' @param threshold threshold in \[0,1\] or "harmonic"/"geometric" to use
 #'   harmonic or geometric mean thresholds
 #'
-#' @returns the rounded vector
+#' @returns the rounded vector or matrix
 #'
 #' @examples
 #' ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
