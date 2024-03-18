@@ -34,11 +34,21 @@ the number of available district seats with \code{\link[=weight_list_votes]{weig
 \code{votes_matrix} shows the number of voters (e.g. they can only cast one vote for one
 party).}
 
-\item{method}{Defines the method how seats in upper and lower apportionment are assigned.
-For a different method for upper and lower apportionment use a vector with two entries.
-The default "round" for the Sainte-Laguë/Webster method is the standard for
-biproportional apportionment and the only method guaranteed to terminate. See
-\code{\link[=proporz]{proporz()}} for other methods.}
+\item{method}{Defines which method is used to assign seats. The following values are
+recommended:
+\itemize{
+\item{\code{round}: Uses the Sainte-Laguë/Webster method (standard rounding) for the upper
+and lower apportionment which is the standard for biproportional apportionment and
+the only method guaranteed to terminate.}
+\item{\code{wto}: "winner take one" works like "round" with a condition that the party that
+got the most votes in a district also gets \emph{at least} one seat ('Majorzbedingung').
+Seats in the upper apportionment are assigned with Sainte-Laguë/Webster.
+\code{votes_matrix} must have row and column names to use this method. See
+\code{\link[=lower_apportionment]{lower_apportionment()}} for an example.}
+}
+It is also possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}. If you want to
+use a different method for the upper and lower apportionment, provide a list with two
+entries.}
 }
 \value{
 Matrix with the same dimension as \code{votes_matrix} containing the number of seats

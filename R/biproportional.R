@@ -118,11 +118,21 @@ pukelsheim = function(votes_df, district_seats_df,
 #'   eligible for seats). The easiest way to do this is via [quorum_any()] or
 #'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
 #'   vector. No quorum is applied if parameter is missing or `NULL`.
-#' @param method Defines the method how seats in upper and lower apportionment are assigned.
-#'   For a different method for upper and lower apportionment use a vector with two entries.
-#'   The default "round" for the Sainte-Laguë/Webster method is the standard for
-#'   biproportional apportionment and the only method guaranteed to terminate. See
-#'   [proporz()] for other methods.
+#' @param method Defines which method is used to assign seats. The following values are
+#'   recommended:
+#'   \itemize{
+#'     \item{`round`: Uses the Sainte-Laguë/Webster method (standard rounding) for the upper
+#'           and lower apportionment which is the standard for biproportional apportionment and
+#'           the only method guaranteed to terminate.}
+#'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
+#'           got the most votes in a district also gets _at least_ one seat ('Majorzbedingung').
+#'           Seats in the upper apportionment are assigned with Sainte-Laguë/Webster.
+#'           `votes_matrix` must have row and column names to use this method. See
+#'           [lower_apportionment()] for an example.}
+#'   }
+#'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
+#'   use a different method for the upper and lower apportionment, provide a list with two
+#'   entries.
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'   with the default Sainte-Laguë/Webster method.
@@ -167,10 +177,10 @@ biproporz = function(votes_matrix,
     }
 
     # upper apportionment (Oberzuteilung)
-    upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes, method[1])
+    upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes, method[[1]])
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party, method[2])
+    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party, method[[2]])
 
     class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)
@@ -196,7 +206,8 @@ biproporz = function(votes_matrix,
 #'   the number of available district seats with [weight_list_votes()]. Set to `FALSE` if
 #'   `votes_matrix` shows the number of voters (e.g. they can only cast one vote for one
 #'   party).
-#' @param method Apportion method that defines how seats are assigned, see [proporz()].
+#' @param method Apportion method that defines how seats are assigned, see [proporz()]. Default
+#'   is the Saintë-Lague/Webster method (standard rounding).
 #'
 #' @seealso [biproporz()], [lower_apportionment()]
 #'
@@ -306,10 +317,18 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #'   calculated with [upper_apportionment()].
 #' @param seats_rows number of seats per row (parties/lists), calculated with
 #'   [upper_apportionment()].
-#' @param method Apportion method that defines how seats are assigned. The default "round"
-#'   for the Sainte-Laguë/Webster method is the standard for biproportional apportionment
-#'   and the only method guaranteed to terminate. See [proporz()] for other methods. It is
-#'   also possible to provide a function that rounds a vector or matrix.
+#' @param method Apportion method that defines how seats are assigned. The
+#'   following are supported:
+#'   \itemize{
+#'     \item{`round`: The default Sainte-Laguë/Webster method is the standard
+#'           for biproportional apportionment and the only method guaranteed to terminate.}
+#'     \item{`wto`: Works like "round" with the condition that the party
+#'           that got the most votes in a district also gets _at least_ one seat. The function
+#'           errors if two or more parties have the same number of votes.}
+#'     \item{You can also provide a custom function that rounds a matrix (the
+#'           the votes_matrix divided by party and list divisors).}
+#'     \item{It is also possible to use any divisor method name listed in [proporz()].}
+#'   }
 #'
 #' @returns A seat matrix with district (columns) and party (rows) divisors stored in
 #'   attributes.
@@ -326,6 +345,18 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #'
 #' lower_apportionment(votes_matrix, district_seats, party_seats)
 #'
+#'
+#' # using "winner takes one"
+#' vm = matrix(c(200,100,10,11), 2,
+#'             dimnames = list(c("Party A", "Party B"), c("I", "II")))
+#' district_seats = setNames(c(2,1), colnames(vm))
+#' ua = upper_apportionment(vm, district_seats)
+#'
+#' lower_apportionment(vm, ua$district, ua$party, method = "wto")
+#'
+#' # compare to standard method
+#' lower_apportionment(vm, ua$district, ua$party, method = "round")
+#'
 #' @export
 lower_apportionment = function(votes_matrix, seats_cols,
                                seats_rows, method = "round") {
@@ -337,6 +368,10 @@ lower_apportionment = function(votes_matrix, seats_cols,
     # rounding function from method
     if(is.function(method)) {
         round_func = method
+    } else if(method == "round") {
+        round_func = function(x) ceil_at(x, 0.5)
+    } else if(method == "wto") {
+        round_func = create_wto_round_function(votes_matrix, seats_rows)
     } else {
         method_impl <- get_method_implementation(method)
         if(method_impl != "divisor_round") {
@@ -478,7 +513,7 @@ find_divisor = function(votes,
 
     # use matrix instead of vector for rownames
     fun = function(divisor) {
-          target_seats - sum(round_func(votes/divisor))
+        target_seats - sum(round_func(votes/divisor))
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))

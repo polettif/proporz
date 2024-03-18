@@ -64,7 +64,11 @@ prep_method = function(method) {
         stop("Only one or two methods allowed.", call. = FALSE)
     }
     if(length(method) == 1) {
-        method <- c(method, method)
+        if(method == "wto") {
+            method = list("round", "wto")
+        } else {
+            method <- list(method, method)
+        }
     }
     if(any(method == "largest_remainder_method")) {
         stop('Cannot use "largest_remainder_method", only divisor methods ',

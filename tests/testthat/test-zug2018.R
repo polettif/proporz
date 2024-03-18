@@ -40,6 +40,14 @@ test_that("pukelsheim with zug2018 is as expected", {
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
 
     expect_equal(seats_mtrx[,colnames(seats_mtrx_exp)], seats_mtrx_exp)
+
+    # matrix
+    seats_mtrx_wto = biproporz(pivot_to_matrix(votes_df),
+                               district_seats_df,
+                               method = "wto",
+                               quorum = quorum_any(any_district = 0.05,
+                                                   total = 0.03))
+    expect_equal(max(seats_mtrx_wto-seats_mtrx), 0)
 })
 
 test_that("upper apportionment for districts", {

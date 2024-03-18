@@ -27,7 +27,8 @@ the number of available district seats with \code{\link[=weight_list_votes]{weig
 \code{votes_matrix} shows the number of voters (e.g. they can only cast one vote for one
 party).}
 
-\item{method}{Apportion method that defines how seats are assigned, see \code{\link[=proporz]{proporz()}}.}
+\item{method}{Apportion method that defines how seats are assigned, see \code{\link[=proporz]{proporz()}}. Default
+is the Saintë-Lague/Webster method (standard rounding).}
 }
 \value{
 A named list with district seats (for \code{votes_matrix} columns) and party seats

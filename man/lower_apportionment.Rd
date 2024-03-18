@@ -15,10 +15,18 @@ calculated with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 \item{seats_rows}{number of seats per row (parties/lists), calculated with
 \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
-\item{method}{Apportion method that defines how seats are assigned. The default "round"
-for the Sainte-Laguë/Webster method is the standard for biproportional apportionment
-and the only method guaranteed to terminate. See \code{\link[=proporz]{proporz()}} for other methods. It is
-also possible to provide a function that rounds a vector or matrix.}
+\item{method}{Apportion method that defines how seats are assigned. The
+following are supported:
+\itemize{
+\item{\code{round}: The default Sainte-Laguë/Webster method is the standard
+for biproportional apportionment and the only method guaranteed to terminate.}
+\item{\code{wto}: Works like "round" with the condition that the party
+that got the most votes in a district also gets \emph{at least} one seat. The function
+errors if two or more parties have the same number of votes.}
+\item{You can also provide a custom function that rounds a matrix (the
+the votes_matrix divided by party and list divisors).}
+\item{It is also possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}.}
+}}
 }
 \value{
 A seat matrix with district (columns) and party (rows) divisors stored in
@@ -52,6 +60,18 @@ district_seats = c(7,5,8)
 party_seats = c(5,11,4)
 
 lower_apportionment(votes_matrix, district_seats, party_seats)
+
+
+# using "winner takes one"
+vm = matrix(c(200,100,10,11), 2,
+            dimnames = list(c("Party A", "Party B"), c("I", "II")))
+district_seats = setNames(c(2,1), colnames(vm))
+ua = upper_apportionment(vm, district_seats)
+
+lower_apportionment(vm, ua$district, ua$party, method = "wto")
+
+# compare to standard method
+lower_apportionment(vm, ua$district, ua$party, method = "round")
 
 }
 \references{
