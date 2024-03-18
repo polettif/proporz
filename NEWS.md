@@ -1,5 +1,8 @@
 # proporz (development version)
 
+* round divisors to as few digits as possible
+* bugfix
+
 # proporz 1.4.0
 
 * first CRAN release
