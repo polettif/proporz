@@ -359,18 +359,8 @@ lower_apportionment = function(votes_matrix, seats_cols,
     # handle districts with only one seat (otherwise leads to infinite dD.max)
     dD.max[seats_cols == 1] <- (colSums(M)+1)[seats_cols == 1]
 
-    # calculate raw seat matrix
-    # accesses function environment variables div_distr and div_party
-    m. = function(.M, .div_distr, .div_party) {
-        M_district = matrix(rep(.div_distr, nrow(.M)), byrow = TRUE, nrow = nrow(.M))
-        M_party = matrix(rep(.div_party, ncol(.M)), byrow = FALSE, nrow = nrow(.M))
-
-        x = .M/M_district/M_party
-        x[is.nan(x)] <- 0
-        return(x)
-    }
-
     # convenience functions to round and summarise
+    m. = divide_votes_matrix
     mc = function(.M,.d,.p) colSums(round_func(m.(.M,.d,.p)))
     mr = function(.M,.d,.p) rowSums(round_func(m.(.M,.d,.p)))
 
@@ -422,16 +412,8 @@ lower_apportionment = function(votes_matrix, seats_cols,
     }
 
     # prettier divisors
-    expected = round_func(m.(M, dD, dP))
-    for(k in seq_len(15)) {
-        .dD = round(dD, k)
-        .dP = round(dP, k)
-        if(identical(round_func(m.(M, .dD, .dP)), expected)) {
-            dD <- .dD
-            dP <- .dP
-            break
-        }
-    }
+    dP <- prettier_divisors(dP, \(x) round_func(m.(votes_matrix, dD, x)))
+    dD <- prettier_divisors(dD, \(x) round_func(m.(votes_matrix, x, dP)))
 
     # create output
     output = round_func(m.(M, dD, dP))
@@ -444,6 +426,19 @@ lower_apportionment = function(votes_matrix, seats_cols,
     return(output)
 }
 
+# calculate raw seat matrix
+# accesses function environment variables div_distr and div_party
+divide_votes_matrix = function(.M, .div_distr, .div_party) {
+    M_district = matrix(rep(.div_distr, nrow(.M)), byrow = TRUE, nrow = nrow(.M))
+    M_party = matrix(rep(.div_party, ncol(.M)), byrow = FALSE, nrow = nrow(.M))
+
+    x = .M/M_district/M_party
+    x[is.nan(x)] <- 0
+    return(x)
+}
+
+# Find a divisor within divisor_from and divisor_to
+# that leads to `round_func(votes/divisor) == target_seats`
 find_divisor = function(votes,
                         divisor_from, divisor_to,
                         target_seats, round_func) {
