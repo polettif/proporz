@@ -40,6 +40,13 @@ test_that("stupid pivot functions", {
 
     expect_equal(colnames(pivot_to_df(unname(matrix1), "val")),
                  c("row", "col", "val"))
+
+    matrix2 = matrix(1:16, 4, 4)
+    expect_equal(colnames(pivot_to_df(matrix2)), c("row", "col", "values"))
+    matrix3 = matrix2
+    colnames(matrix3) <- as.character(1:4)
+    rownames(matrix3) <- c("A", "B", "C", "D")
+    expect_equal(colnames(pivot_to_df(matrix3)), c("row", "col", "values"))
 })
 
 test_that("print", {

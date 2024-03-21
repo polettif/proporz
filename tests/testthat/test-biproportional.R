@@ -347,7 +347,8 @@ test_that("error messages", {
     colnames(vdf) <- c("party", "district", "votes")
     seats_df = data.frame(col = 1:4, seats = seats)
     seats_df124 = seats_df[-3,]
-    vdf134 = vdf[vdf$col != 2,]
+    vdf134 = vdf[vdf[["district"]] != 2,]
+    expect_true(nrow(vdf134) > 0)
 
     # unique party ids
     vdf_dupl = rbind(vdf, vdf[9:12,])
@@ -375,6 +376,10 @@ test_that("error messages", {
     # mismatch on both ends
     expect_error_fixed(pukelsheim(vdf134, seats_df124),
                  "Not all district ids in `seats_df124`s first column exist in `vdf134`s second column")
+
+    # seats_df is not a data.frame
+    seats_vec124 = setNames(seats_df124$seats, seats_df124$col)
+    expect_error_fixed(pukelsheim(vdf134, seats_vec124), "`seats_vec124` must be a data.frame.")
 
     # non-numeric
     vdf_non_num = vdf

@@ -14,6 +14,9 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col, u
              "`s third column must be numbers >= 0.", call. = FALSE)
     }
 
+    if(!is.data.frame(district_seats_df)) {
+        stop("`", .district_seats_df, "` must be a data.frame.", call. = FALSE)
+    }
     if(length(unique(district_seats_df[[1]])) != nrow(district_seats_df)) {
         stop("District ids in `", .district_seats_df,
              "` are not unique.", call. = FALSE)
