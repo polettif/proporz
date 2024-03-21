@@ -1,7 +1,10 @@
-check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col, use_list_votes,
+check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
+                                   use_list_votes, winner_take_one,
                                    .votes_df, .district_seats_df) {
     assert(is.character(new_seats_col) && length(new_seats_col) == 1)
-    assert(is.logical(use_list_votes) && length(use_list_votes) == 1)
+    assert(is.logical(use_list_votes) && !is.na(use_list_votes) && length(use_list_votes) == 1)
+    assert(is.logical(winner_take_one) && !is.na(winner_take_one) && length(winner_take_one) == 1)
+
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
         stop("`", .votes_df, "` must be a data frame with 3 columns in the ",
              "following order:\nparty, district and votes (names can differ).",
@@ -9,8 +12,7 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col, u
     }
 
     if(!is.numeric(votes_df[[3]]) || any(votes_df[[3]] < 0)) {
-        stop("Vote values in `",
-             .votes_df,
+        stop("Vote values in `", .votes_df,
              "`s third column must be numbers >= 0.", call. = FALSE)
     }
 

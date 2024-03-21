@@ -41,10 +41,10 @@ recommended:
 and lower apportionment which is the standard for biproportional apportionment and
 the only method guaranteed to terminate.}
 \item{\code{wto}: "winner take one" works like "round" with a condition that the party that
-got the most votes in a district also gets \emph{at least} one seat ('Majorzbedingung').
-Seats in the upper apportionment are assigned with Sainte-Laguë/Webster.
-\code{votes_matrix} must have row and column names to use this method. See
-\code{\link[=lower_apportionment]{lower_apportionment()}} for an example.}
+got the most votes in a district must get \emph{at least} one seat ('Majorzbedingung')
+in said district. Seats in the upper apportionment are assigned with
+Sainte-Laguë/Webster. \code{votes_matrix} must have row and column names to use this
+method. See \code{\link[=lower_apportionment]{lower_apportionment()}} for an example.}
 }
 It is also possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}. If you want to
 use a different method for the upper and lower apportionment, provide a list with two

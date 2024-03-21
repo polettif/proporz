@@ -21,7 +21,7 @@ following methods are supported:
 \item{\code{round}: The default Sainte-Laguë/Webster method is the standard
 for biproportional apportionment and the only method guaranteed to terminate.}
 \item{\code{wto}: "winner take one" works like "round" with a condition that the party that
-got the most votes in a district also gets \emph{at least} one seat ('Majorzbedingung').
+got the most votes in a district must get \emph{at least} one seat ('Majorzbedingung').
 The function errors if two or more parties have the same number of votes.}
 \item{You can provide a custom function that rounds a matrix (i.e. the
 the votes_matrix divided by party and list divisors).}

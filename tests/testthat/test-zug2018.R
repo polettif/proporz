@@ -36,10 +36,17 @@ test_that("pukelsheim with zug2018 is as expected", {
     seats_df = pukelsheim(votes_df,
                           district_seats_df,
                           quorum = quorum_any(any_district = 0.05,
-                                              total = 0.03))
+                                              total = 0.03),
+                          winner_take_one = TRUE)
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
 
     expect_equal(seats_mtrx[,colnames(seats_mtrx_exp)], seats_mtrx_exp)
+
+    # previous behavior check: same result without winner_take_one
+    seats_df_wtoFALSE = pukelsheim(votes_df, district_seats_df,
+                                   quorum = quorum_any(any_district = 0.05, total = 0.03),
+                          winner_take_one = FALSE)
+    expect_true(all(seats_df_wtoFALSE == seats_df))
 
     # matrix
     seats_mtrx_wto = biproporz(pivot_to_matrix(votes_df),

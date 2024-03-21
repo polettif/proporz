@@ -23,7 +23,7 @@ test_that("district_winner_matrix", {
     expect_error(district_winner_matrix(votes_matrix), "Tied majority in 'B', 'C'")
 })
 
-test_that("winner takes one", {
+test_that("winner take one", {
     expect_error(
         biproporz(matrix(1:9, ncol = 3), 1:3, method = "wto"),
         "votes_matrix must have column and row names to handle district winners")
@@ -39,9 +39,17 @@ test_that("winner takes one", {
 
     expect_equal(c(bp1), c(1,1,1,0))
     expect_equal(c(bp2), c(2,0,0,1))
+
+    # pukelsheim
+    df = pivot_to_df(vm2)
+    seatsdf = data.frame(district = names(seats2), seats = seats2)
+    pk1 = pukelsheim(df, seatsdf, winner_take_one = FALSE)
+    expect_equal(matrix(pk1[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp1)))
+    pk2 = pukelsheim(df, seatsdf, winner_take_one = TRUE)
+    expect_equal(matrix(pk2[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp2)))
 })
 
-test_that("district winner takes at least one", {
+test_that("wto with grisons2022 dataset", {
     # Grisons 2022
     seats_expected = structure(
         c(0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 2, 1, 1, 3, 1, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 2, 1, 1,

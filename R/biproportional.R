@@ -35,6 +35,8 @@
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_df` shows the
 #'   number of voters (e.g. they can only vote for one party).
+#' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
+#'   must get _at least_ one seat ('Majorzbedingung') in this district. Default is `FALSE`.
 #'
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
@@ -49,7 +51,8 @@
 #'
 #' seats_df = pukelsheim(votes_df,
 #'                       district_seats_df,
-#'                       quorum_any(any_district = 0.05, total = 0.03))
+#'                       quorum_any(any_district = 0.05, total = 0.03),
+#'                       winner_take_one = TRUE)
 #'
 #' head(seats_df)
 #'
@@ -64,9 +67,10 @@
 pukelsheim = function(votes_df, district_seats_df,
                       quorum,
                       new_seats_col = "seats",
-                      use_list_votes = TRUE) {
+                      use_list_votes = TRUE,
+                      winner_take_one = FALSE) {
 
-    check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, use_list_votes,
+    check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, use_list_votes, winner_take_one,
                             deparse(substitute(votes_df)), deparse(substitute(district_seats_df)))
 
     # Create votes matrix
@@ -76,9 +80,11 @@ pukelsheim = function(votes_df, district_seats_df,
     district_seats = prep_district_seats_df(district_seats_df)
 
     # Biproportional Apportionment
+    method = ifelse(winner_take_one, "wto", "round")
     m = biproporz(votes_matrix, district_seats,
                   quorum = quorum,
-                  use_list_votes = use_list_votes)
+                  use_list_votes = use_list_votes,
+                  method = method)
     seats_df = pivot_to_df(m, new_seats_col)
 
     # join with original table
@@ -125,10 +131,10 @@ pukelsheim = function(votes_df, district_seats_df,
 #'           and lower apportionment which is the standard for biproportional apportionment and
 #'           the only method guaranteed to terminate.}
 #'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
-#'           got the most votes in a district also gets _at least_ one seat ('Majorzbedingung').
-#'           Seats in the upper apportionment are assigned with Sainte-Laguë/Webster.
-#'           `votes_matrix` must have row and column names to use this method. See
-#'           [lower_apportionment()] for an example.}
+#'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung')
+#'           in said district. Seats in the upper apportionment are assigned with
+#'           Sainte-Laguë/Webster. `votes_matrix` must have row and column names to use this
+#'           method. See [lower_apportionment()] for an example.}
 #'   }
 #'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
 #'   use a different method for the upper and lower apportionment, provide a list with two
@@ -323,7 +329,7 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #'     \item{`round`: The default Sainte-Laguë/Webster method is the standard
 #'           for biproportional apportionment and the only method guaranteed to terminate.}
 #'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
-#'           got the most votes in a district also gets _at least_ one seat ('Majorzbedingung').
+#'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung').
 #'           The function errors if two or more parties have the same number of votes.}
 #'     \item{You can provide a custom function that rounds a matrix (i.e. the
 #'           the votes_matrix divided by party and list divisors).}
