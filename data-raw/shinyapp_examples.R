@@ -19,4 +19,4 @@ shinyapp_examples = list(
 	)
 )
 
-usethis::use_data(shinyapp_examples, overwrite = TRUE, internal = TRUE)
+# usethis::use_data(shinyapp_examples, grisons2022, internal = TRUE)
