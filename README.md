@@ -57,57 +57,45 @@ proporz(votes, 10, "huntington-hill", quorum = 0.05)
 Biproportional apportionment ([Wikipedia](https://en.wikipedia.org/wiki/Biproportional_apportionment)) 
 is a method to proportionally allocate seats among parties and districts.
 
-We can use the provided `zug2018` data set to illustrate biproportional apportionment 
-with [`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.html).
+We can use the provided [`uri2020`](https://polettif.github.io/proporz/reference/uri2020.html) 
+data set to illustrate biproportional apportionment with [`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.html).
 You need a 'votes matrix' as input which shows the number of votes for each party
-(rows) and district (columns). In this data set, parties are called 'lists' and 
-districts 'entities'.
+(rows) and district (columns). You also need to define the number of seats per district.
 
 ``` r
-votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
-votes_matrix = pivot_to_matrix(votes_df)
-votes_matrix
-#>        entity_id
-#> list_id  1701 1702 1703 1704 1705 1706 1707 1708 1709 1710  1711
-#>       1  2993    0    0    0    0    0    0    0    0    0     0
-#>       2  8108 4687 1584  531  279  477 2363 3860 1481   91 22023
-#>       3 19389 9334 4807 1946  396 2844 3523 4702 3310  812 21343
-#>       4 14814 6691 4005  826  379 1654 2842 2624 2713  461 33789
-#>       5  4486 2270  621  198    0  361  728  465  925    0 10131
-#>       6 15695 4705 1750   84    0   51  627 1106 1563  302 21794
-#>       7 21298 8178 2875 1336  399 1450 3715 2610 4063  344 26798
+(votes_matrix <- uri2020$votes_matrix)
+#>      Altdorf Bürglen Erstfeld Schattdorf
+#> CVP    11471    2822     2309       4794
+#> SPGB   11908    1606     1705       2600
+#> FDP     9213    1567      946       2961
+#> SVP     7756    2945     1573       3498
 
-distr_df = unique(zug2018[c("entity_id", "election_mandates")])
-district_seats = setNames(distr_df$election_mandates, distr_df$entity_id)
-district_seats
-#> 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 
-#>   15   10    6    3    2    4    7    6    6    2   19
-```
+(district_seats <- uri2020$seats_vector)
+#>    Altdorf    Bürglen   Erstfeld Schattdorf 
+#>         15          7          6          9
 
-``` r
-biproporz(votes_matrix, district_seats, quorum_any(any_district = 0.05, total = 0.03))
-#>        entity_id
-#> list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711
-#>       1    0    0    0    0    0    0    0    0    0    0    0
-#>       2    2    1    1    0    0    0    1    2    1    0    3
-#>       3    3    3    2    1    1    2    2    2    1    1    3
-#>       4    2    2    1    1    0    1    2    1    1    1    5
-#>       5    1    1    0    0    0    0    0    0    0    0    2
-#>       6    3    1    1    0    0    0    0    0    1    0    3
-#>       7    4    2    1    1    1    1    2    1    2    0    3
+biproporz(votes_matrix, district_seats)
+#>      Altdorf Bürglen Erstfeld Schattdorf
+#> CVP        5       2        2          3
+#> SPGB       4       1        2          2
+#> FDP        3       1        1          2
+#> SVP        3       3        1          2
 ```
 
 You can use [`pukelsheim()`](https://polettif.github.io/proporz/reference/pukelsheim.html) 
-for data.frames in long format as input data. It is a wrapper for 
-`biproporz()`.
+for dataframes in long format as input data. It is a wrapper for `biproporz()`. [`zug2018`](https://polettif.github.io/proporz/reference/zug2018.html) shows an actual election 
+result for the Canton of Zug in a dataframe. We use this data set to create input data for 
+`pukelsheim()`. The other parameters are set to reflect the actual election system.
 
 ``` r
+# In this data set, parties are called 'lists' and districts 'entities'.
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
 seats_df = pukelsheim(votes_df,
                       district_seats_df,
-                      quorum = quorum_any(any_district = 0.05, total = 0.03))
+                      quorum = quorum_any(any_district = 0.05, total = 0.03),
+                      winner_take_one = TRUE)
 
 head(seats_df)
 #>   list_id entity_id list_votes seats

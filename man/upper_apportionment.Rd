@@ -28,7 +28,7 @@ the number of available district seats with \code{\link[=weight_list_votes]{weig
 party).}
 
 \item{method}{Apportion method that defines how seats are assigned, see \code{\link[=proporz]{proporz()}}. Default
-is the Saintë-Lague/Webster method (standard rounding).}
+is the Saintë-Lague/Webster method.}
 }
 \value{
 A named list with district seats (for \code{votes_matrix} columns) and party seats

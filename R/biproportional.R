@@ -127,7 +127,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #' @param method Defines which method is used to assign seats. The following methods are
 #'   recommended:
 #'   \itemize{
-#'     \item{`round`: Uses the Sainte-Laguë/Webster method (standard rounding) for the upper
+#'     \item{`round`: Uses the Sainte-Laguë/Webster method (rounding half up) for the upper
 #'           and lower apportionment which is the standard for biproportional apportionment and
 #'           the only method guaranteed to terminate.}
 #'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
@@ -213,7 +213,7 @@ biproporz = function(votes_matrix,
 #'   `votes_matrix` shows the number of voters (e.g. they can only cast one vote for one
 #'   party).
 #' @param method Apportion method that defines how seats are assigned, see [proporz()]. Default
-#'   is the Saintë-Lague/Webster method (standard rounding).
+#'   is the Saintë-Lague/Webster method.
 #'
 #' @seealso [biproporz()], [lower_apportionment()]
 #'

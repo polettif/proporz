@@ -37,7 +37,7 @@ party).}
 \item{method}{Defines which method is used to assign seats. The following methods are
 recommended:
 \itemize{
-\item{\code{round}: Uses the Sainte-Laguë/Webster method (standard rounding) for the upper
+\item{\code{round}: Uses the Sainte-Laguë/Webster method (rounding half up) for the upper
 and lower apportionment which is the standard for biproportional apportionment and
 the only method guaranteed to terminate.}
 \item{\code{wto}: "winner take one" works like "round" with a condition that the party that
