@@ -102,3 +102,9 @@ assert = function(check) {
     }
     invisible()
 }
+
+collapse_names = function(x) {
+    y = paste(x, collapse = "', '")
+    y <- paste0("'", y, "'")
+    return(y)
+}

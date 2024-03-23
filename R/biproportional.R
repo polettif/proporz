@@ -134,7 +134,7 @@ pukelsheim = function(votes_df, district_seats_df,
 #'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung')
 #'           in said district. Seats in the upper apportionment are assigned with
 #'           Sainte-Laguë/Webster. `votes_matrix` must have row and column names to use this
-#'           method. See [lower_apportionment()] for an example.}
+#'           method. See [lower_apportionment()] for more details.}
 #'   }
 #'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
 #'   use a different method for the upper and lower apportionment, provide a list with two
@@ -332,7 +332,9 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #'           for biproportional apportionment and the only method guaranteed to terminate.}
 #'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
 #'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung').
-#'           The function errors if two or more parties have the same number of votes.}
+#'           The condition does not apply in a district if two or more parties have the same
+#'           number of votes and there are not enough seats for these parties. A warning is
+#'           issued in this case. Modify the votes matrix to explicitly break ties.}
 #'     \item{You can provide a custom function that rounds a matrix (i.e. the
 #'           the votes_matrix divided by party and list divisors).}
 #'     \item{It is possible to use any divisor method name listed in [proporz()].}
@@ -354,7 +356,7 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #' lower_apportionment(votes_matrix, district_seats, party_seats)
 #'
 #'
-#' # using "winner takes one"
+#' # using "winner take one"
 #' vm = matrix(c(200,100,10,11), 2,
 #'             dimnames = list(c("Party A", "Party B"), c("I", "II")))
 #' district_seats = setNames(c(2,1), colnames(vm))
@@ -379,7 +381,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
     } else if(method == "round") {
         round_func = function(x) ceil_at(x, 0.5)
     } else if(method == "wto") {
-        round_func = create_wto_round_function(votes_matrix, seats_rows)
+        round_func = create_wto_round_function(votes_matrix, seats_cols, seats_rows)
     } else {
         method_impl <- get_method_implementation(method)
         if(method_impl != "divisor_round") {

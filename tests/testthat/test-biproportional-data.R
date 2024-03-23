@@ -67,20 +67,10 @@ test_that("Grisons 2022", {
                   method = "wto")
     }
 
-    expect_true(has_tied_district_winners(t(grisons2022$votes_matrix)))
-    expect_error(biproporz(t(grisons2022$votes_matrix), grisons2022$district_seats_df,
-                           method = "wto"), "Tied majority in 'Rheinwald'")
-
-    gr2022 = grisons2022$votes_matrix
-    # fix tie, the winner was actually chosen by lot
-    gr2022["Rheinwald", "SP&Grüne"] <- gr2022["Rheinwald","SP&Grüne"]+1
-    # one vote more doesnt' influence the result (0.0003% of all list votes)
-    gr2022 <- t(gr2022)
-
-    seats_wto = biproporz_grisons(gr2022, grisons2022$district_seats_df)
-
-    seats_actual = as.matrix(t(seats_wto))
-    expect_equal(seats_actual, grisons2022$expected_result)
+    seats_wto = expect_warning(
+        biproporz_grisons(t(grisons2022$votes_matrix), grisons2022$district_seats_df),
+        "Not enough seats for tied parties with the most votes in: 'Rheinwald'\nWinner take one condition is not applied in this district.")
+    expect_equal(as.matrix(t(seats_wto)), grisons2022$expected_result)
 })
 
 test_that("Zurich 2019", {

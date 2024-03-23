@@ -65,6 +65,22 @@ reprex::reprex({
     largest_remainder_method(votes, 20)
 })
 
+# pr
+reprex::reprex({
+    (vm = matrix(c(200,100,10,11), 2, dimnames = list(c("Party A", "Party B"), c("I", "II"))))
+    district_seats = setNames(c(2,1), c("I", "II"))
+
+    biproporz(vm, district_seats, method = "wto")
+
+    biproporz(vm, district_seats, method = "round")
+})
+
+reprex::reprex({
+    library(proporz)
+    GR_2022 = proporz:::testdata$GR_2022
+    x = biproporz(t(GR_2022$votes_matrix), GR_2022$district_seats_df, method = "wto")
+})
+
 # unused
 reprex::reprex({
     library(proporz)
