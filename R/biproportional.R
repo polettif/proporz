@@ -318,7 +318,9 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #'     region is correct with the chosen rounding method.
 #' }
 #'
-#' @param votes_matrix votes matrix
+#' @param votes_matrix matrix with votes by party in rows and votes by district in columns.
+#'   Must contain only integer values. To use data with floating point values consider scaling
+#'   the matrix beforehand (i.e. multiplying all values by a large enough multiplier).
 #' @param seats_cols number of seats per column (districts/regions), predetermined or
 #'   calculated with [upper_apportionment()].
 #' @param seats_rows number of seats per row (parties/lists), calculated with
