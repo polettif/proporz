@@ -85,6 +85,10 @@ prep_method = function(method) {
 
 prep_district_seats = function(district_seats, votes_matrix,
                                .district_seats.name, .votes_matrix.name) {
+    if(!(is.vector(district_seats) || is.data.frame(district_seats))) {
+        stop("`", .district_seats.name, "` must be a vector, data.frame or a single number.",
+             call. = FALSE)
+    }
     if(length(district_seats) > 1) {
         if(is.data.frame(district_seats)) {
             district_seats <- setNames(district_seats[[2]], district_seats[[1]])
