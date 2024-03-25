@@ -1,7 +1,9 @@
 # proporz (development version)
 
+* add new feature: winner take one method for `biproporz()` and `pukelsheim` (#10)
 * round divisors to as few digits as possible
-* bugfix
+* added more test for real life data
+* bugfixes and updated documentation
 
 # proporz 1.4.0
 

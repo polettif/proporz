@@ -85,8 +85,8 @@ prep_method = function(method) {
 
 prep_district_seats = function(district_seats, votes_matrix,
                                .district_seats.name, .votes_matrix.name) {
-    if(!(is.vector(district_seats) || is.data.frame(district_seats))) {
-        stop("`", .district_seats.name, "` must be a vector, data.frame or a single number.",
+    if(!(is.vector(district_seats, "numeric") || is.data.frame(district_seats))) {
+        stop("`", .district_seats.name, "` must be a numeric vector, data.frame or a single number.",
              call. = FALSE)
     }
     if(length(district_seats) > 1) {
@@ -98,13 +98,12 @@ prep_district_seats = function(district_seats, votes_matrix,
                  "` needs to have districts as columns and parties as rows.",
                  call. = FALSE)
         }
-        if(!is.null(colnames(votes_matrix))) {
-            if(is.null(names(district_seats)) ||
-               !all(sort(colnames(votes_matrix)) == sort(names(district_seats)))) {
-                stop(.district_seats.name,
-                     " needs to have the same names as the columns in ",
-                     .votes_matrix.name, ".", call. = FALSE)
-            }
+        if(!identical(sort(colnames(votes_matrix)), sort(names(district_seats)))) {
+            stop("`", .district_seats.name,
+                 "` needs to have the same names as the columns in `",
+                 .votes_matrix.name, "`.", call. = FALSE)
+        }
+        if(!is.null(colnames(votes_matrix))) { # seats vector is named/unnamed like matrix
             district_seats <- district_seats[colnames(votes_matrix)]
         }
     }

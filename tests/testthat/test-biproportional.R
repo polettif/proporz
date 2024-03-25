@@ -103,7 +103,11 @@ test_that("named votes_matrix", {
     dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 
     expect_error_fixed(biproporz(votes_matrix, c(50, 20)),
-                       "needs to have the same names as the columns in votes_matrix.")
+                       "needs to have the same names as the columns in `votes_matrix`")
+    expect_error_fixed(biproporz(unname(votes_matrix), c(Z1 = 50, Z2 = 20)),
+                       "needs to have the same names as the columns in `unname(votes_matrix)`.")
+    expect_error_fixed(biproporz(votes_matrix, c(Z0 = 50, Z2 = 20)),
+                       "needs to have the same names as the columns in `votes_matrix`.")
 
     seats = c("Z2" = 20, "Z1" = 50)
     expect_equal(biproporz(votes_matrix, seats), biproporz(votes_matrix, seats[2:1]))
@@ -393,6 +397,7 @@ test_that("error messages", {
                  "Vote values in `vdf_neg`s third column must be numbers >= 0")
 
     # biproportional
+    expect_error_fixed(biproporz(vm, NA), "`NA` must be a numeric vector, data.frame or a single number.")
     expect_error_fixed(biproporz(vdf, c(1,2,3)), "`vdf` must be a matrix.")
     expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows.")
     expect_error_fixed(biproporz(vm, seats, method = "largest_remainder_method"),
@@ -401,7 +406,7 @@ test_that("error messages", {
     expect_error_fixed(biproporz(vm, seats+0.1), "`seats + 0.1` must be integers.")
     expect_error_fixed(biproporz(vm, seats, method = c("round", "floor", "ceiling")),
                  "Only one or two methods allowed.")
-    expect_error_fixed(biproporz(vm, vm), "`vm` must be a vector, data.frame or a single number.")
+    expect_error_fixed(biproporz(vm, vm), "`vm` must be a numeric vector, data.frame or a single number.")
 
     # lower_apportionment
     expect_error_fixed(lower_apportionment(vm+0.1), "`vm + 0.1` must only contain integers.")

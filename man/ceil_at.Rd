@@ -16,7 +16,8 @@ harmonic or geometric mean thresholds}
 the rounded vector or matrix
 }
 \description{
-Round \code{x} up if \code{x-floor(x) >= threshold}, otherwise round down.
+Round \code{x} up to \code{ceiling(x)} if \code{x-floor(x) >= threshold},
+otherwise round down to \code{floor(x)}.
 }
 \examples{
 ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)

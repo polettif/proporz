@@ -53,7 +53,7 @@ create_wto_round_function = function(votes_matrix, seats_districts, seats_partie
         x_others[which(district_winners_subset)] <- 0
 
         # round all district winners to 1, standard rounding after that
-        y_winners = ceil_at(x_winners, "at_least_one")
+        y_winners = ceil_at(x_winners, "0.5_at_least_one")
         # standard rounding for everyone else
         y_others = ceil_at(x_others, 0.5)
 

@@ -87,10 +87,10 @@ test_that("ceil_at harmonic/geometric matrix", {
     expect_true(all(threshold_harmonic(i) < threshold_geometric(i)))
 })
 
-test_that("ceil_at at_least_one", {
+test_that("ceil_at 0.5_at_least_one", {
     x = c(0.1, 0.5, 1, 1.4, 1.5, 9.5, 10.5)
-    expect_equal(ceil_at(x, "at_least_one"), c(1,1,1, 1,2,10,11))
+    expect_equal(ceil_at(x, "0.5_at_least_one"), c(1,1,1, 1,2,10,11))
     m = matrix(c(0.1, 0.5, 1, 1.4, 1.5, 9.5, 10.5, 9), ncol = 2)
     m_exp = matrix(c(1,1,1, 1,2,10,11,9), ncol = 2)
-    expect_equal(ceil_at(m, "at_least_one"), m_exp)
+    expect_equal(ceil_at(m, "0.5_at_least_one"), m_exp)
 })
