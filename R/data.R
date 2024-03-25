@@ -46,3 +46,23 @@
 #' head(finland2019$votes_df)
 #' @keywords data
 "finland2019"
+
+#' Election Data for the Cantonal Council of Grisons (2022)
+#'
+#' Example election data from the 2020 election for the cantonal council
+#' of Grisons (Grossrat, Cussel grond, Gran Consiglio) in Switzerland. The data
+#' has been extracted from the document "Protokoll der Grossratswahlen vom 15.
+#' Mai 2022".
+#'
+#' @format List containing:
+#' \itemize{
+#'       \item{`votes_matrix` the number of votes for each district and party
+#'             (39 rows, 5 columns). Note that districts are in rows and parties
+#'             in columns, contrary to convention within this package.}
+#'       \item{`district_seats_df` with the number of seats per district
+#'             (37 rows, 2 columns)}
+#' }
+#'
+#' @source \url{https://www.gr.ch/DE/publikationen/abstimmungenwahlen/Grossratswahlen-2022/resultate/Seiten/Resultate.aspx}
+#' @keywords data
+# "grisons2022"

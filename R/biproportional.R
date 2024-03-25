@@ -35,6 +35,8 @@
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_df` shows the
 #'   number of voters (e.g. they can only vote for one party).
+#' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
+#'   must get _at least_ one seat ('Majorzbedingung') in this district. Default is `FALSE`.
 #'
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
@@ -49,7 +51,8 @@
 #'
 #' seats_df = pukelsheim(votes_df,
 #'                       district_seats_df,
-#'                       quorum_any(any_district = 0.05, total = 0.03))
+#'                       quorum_any(any_district = 0.05, total = 0.03),
+#'                       winner_take_one = TRUE)
 #'
 #' head(seats_df)
 #'
@@ -64,9 +67,10 @@
 pukelsheim = function(votes_df, district_seats_df,
                       quorum,
                       new_seats_col = "seats",
-                      use_list_votes = TRUE) {
+                      use_list_votes = TRUE,
+                      winner_take_one = FALSE) {
 
-    check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, use_list_votes,
+    check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, use_list_votes, winner_take_one,
                             deparse(substitute(votes_df)), deparse(substitute(district_seats_df)))
 
     # Create votes matrix
@@ -76,9 +80,11 @@ pukelsheim = function(votes_df, district_seats_df,
     district_seats = prep_district_seats_df(district_seats_df)
 
     # Biproportional Apportionment
+    method = ifelse(winner_take_one, "wto", "round")
     m = biproporz(votes_matrix, district_seats,
                   quorum = quorum,
-                  use_list_votes = use_list_votes)
+                  use_list_votes = use_list_votes,
+                  method = method)
     seats_df = pivot_to_df(m, new_seats_col)
 
     # join with original table
@@ -118,11 +124,21 @@ pukelsheim = function(votes_df, district_seats_df,
 #'   eligible for seats). The easiest way to do this is via [quorum_any()] or
 #'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
 #'   vector. No quorum is applied if parameter is missing or `NULL`.
-#' @param method Defines the method how seats in upper and lower apportionment are assigned.
-#'   For a different method for upper and lower apportionment use a vector with two entries.
-#'   The default "round" for the Sainte-Laguë/Webster method is the standard for
-#'   biproportional apportionment and the only method guaranteed to terminate. See
-#'   [proporz()] for other methods.
+#' @param method Defines which method is used to assign seats. The following methods are
+#'   recommended:
+#'   \itemize{
+#'     \item{`round`: Uses the Sainte-Laguë/Webster method (rounding half up) for the upper
+#'           and lower apportionment which is the standard for biproportional apportionment and
+#'           the only method guaranteed to terminate.}
+#'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
+#'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung')
+#'           in said district. Seats in the upper apportionment are assigned with
+#'           Sainte-Laguë/Webster. `votes_matrix` must have row and column names to use this
+#'           method. See [lower_apportionment()] for more details.}
+#'   }
+#'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
+#'   use a different method for the upper and lower apportionment, provide a list with two
+#'   entries.
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'   with the default Sainte-Laguë/Webster method.
@@ -167,10 +183,10 @@ biproporz = function(votes_matrix,
     }
 
     # upper apportionment (Oberzuteilung)
-    upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes, method[1])
+    upp_app = upper_apportionment(votes_matrix, district_seats, use_list_votes, method[[1]])
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party, method[2])
+    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party, method[[2]])
 
     class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)
@@ -196,7 +212,8 @@ biproporz = function(votes_matrix,
 #'   the number of available district seats with [weight_list_votes()]. Set to `FALSE` if
 #'   `votes_matrix` shows the number of voters (e.g. they can only cast one vote for one
 #'   party).
-#' @param method Apportion method that defines how seats are assigned, see [proporz()].
+#' @param method Apportion method that defines how seats are assigned, see [proporz()]. Default
+#'   is the Saintë-Lague/Webster method.
 #'
 #' @seealso [biproporz()], [lower_apportionment()]
 #'
@@ -253,7 +270,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' Weigh list votes by dividing the votes matrix entries by the number
 #' of seats per district. This method is used in [upper_apportionment()] if
-#' `use_list_votes` is `TRUE` (default).
+#' `use_list_votes` is `TRUE` (default). The weighted votes are not rounded.
 #'
 #' @param votes_matrix votes matrix
 #' @param seats_district seats per district, vector with same length
@@ -301,15 +318,27 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #'     region is correct with the chosen rounding method.
 #' }
 #'
-#' @param votes_matrix votes matrix
+#' @param votes_matrix matrix with votes by party in rows and votes by district in columns.
+#'   Must contain only integer values. To use data with floating point values consider scaling
+#'   the matrix beforehand (i.e. multiplying all values by a large enough multiplier).
 #' @param seats_cols number of seats per column (districts/regions), predetermined or
 #'   calculated with [upper_apportionment()].
 #' @param seats_rows number of seats per row (parties/lists), calculated with
 #'   [upper_apportionment()].
-#' @param method Apportion method that defines how seats are assigned. The default "round"
-#'   for the Sainte-Laguë/Webster method is the standard for biproportional apportionment
-#'   and the only method guaranteed to terminate. See [proporz()] for other methods. It is
-#'   also possible to provide a function that rounds a vector or matrix.
+#' @param method Apportion method that defines how seats are assigned. The
+#'   following methods are supported:
+#'   \itemize{
+#'     \item{`round`: The default Sainte-Laguë/Webster method is the standard
+#'           for biproportional apportionment and the only method guaranteed to terminate.}
+#'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
+#'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung').
+#'           The condition does not apply in a district if two or more parties have the same
+#'           number of votes and there are not enough seats for these parties. A warning is
+#'           issued in this case. Modify the votes matrix to explicitly break ties.}
+#'     \item{You can provide a custom function that rounds a matrix (i.e. the
+#'           the votes_matrix divided by party and list divisors).}
+#'     \item{It is possible to use any divisor method name listed in [proporz()].}
+#'   }
 #'
 #' @returns A seat matrix with district (columns) and party (rows) divisors stored in
 #'   attributes.
@@ -326,6 +355,18 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #'
 #' lower_apportionment(votes_matrix, district_seats, party_seats)
 #'
+#'
+#' # using "winner take one"
+#' vm = matrix(c(200,100,10,11), 2,
+#'             dimnames = list(c("Party A", "Party B"), c("I", "II")))
+#' district_seats = setNames(c(2,1), colnames(vm))
+#' ua = upper_apportionment(vm, district_seats)
+#'
+#' lower_apportionment(vm, ua$district, ua$party, method = "wto")
+#'
+#' # compare to standard method
+#' lower_apportionment(vm, ua$district, ua$party, method = "round")
+#'
 #' @export
 lower_apportionment = function(votes_matrix, seats_cols,
                                seats_rows, method = "round") {
@@ -334,9 +375,13 @@ lower_apportionment = function(votes_matrix, seats_cols,
     assert(all((seats_cols %% 1) == 0) && all((seats_rows %% 1) == 0))
     assert(length(seats_cols) == ncol(M) && length(seats_rows) == nrow(M))
 
-    # method
+    # rounding function from method
     if(is.function(method)) {
         round_func = method
+    } else if(method == "round") {
+        round_func = function(x) ceil_at(x, 0.5)
+    } else if(method == "wto") {
+        round_func = create_wto_round_function(votes_matrix, seats_cols, seats_rows)
     } else {
         method_impl <- get_method_implementation(method)
         if(method_impl != "divisor_round") {
@@ -346,18 +391,69 @@ lower_apportionment = function(votes_matrix, seats_cols,
         round_func = get_round_function(method_impl)
     }
 
+    # alternate scaling algorithm to find divisors
+    divisors = find_matrix_divisors(votes_matrix, seats_cols, seats_rows, round_func)
+
+    # prettier divisors
+    divisors <- prettier_divisors(votes_matrix, divisors, round_func)
+
+    # create output
+    dD = divisors[["cols"]]; dP = divisors[["rows"]]
+    output = round_func(divide_votes_matrix(M, dD, dP))
+    dimnames(output) <- dimnames(M)
+    attributes(output)$divisors <- list(districts = dD, parties = dP)
+    names(attributes(output)$divisors$districts) <- colnames(M)
+    names(attributes(output)$divisors$parties) <- rownames(M)
+    return(output)
+}
+
+#' Calculate raw seat matrix
+#'
+#' Apply row and column divisors to matrix to get non-rounded seat values.
+#'
+#' @param M matrix
+#' @param col_divisors divisors to apply to columns
+#' @param row_divisors divisors to apply to rows
+#'
+#' @returns matrix with the same dimension as `M` containing non-rounded seat values
+#' @keywords internal
+divide_votes_matrix = function(M, col_divisors, row_divisors) {
+    M_district = matrix(rep(col_divisors, nrow(M)), byrow = TRUE, nrow = nrow(M))
+    M_party = matrix(rep(row_divisors, ncol(M)), byrow = FALSE, nrow = nrow(M))
+
+    x = M/M_district/M_party
+    x[is.nan(x)] <- 0
+    return(x)
+}
+
+#' Find divisors for a matrix with alternate scaling
+#'
+#' @param M votes_matrix
+#' @param seats_cols target seats for each column
+#' @param seats_rows target seats for each row
+#' @param round_func rounding function. Called like
+#'   `round_func(M/row_divisors/col_divisors)`, divisors are applied row/col-wise with
+#'   [divide_votes_matrix()].
+#'
+#' @returns list of divisors (column and row)
+#' @keywords internal
+find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
+    assert(is.matrix(M))
+    assert(is.matrix(round_func(M)))
+
     # divisor parties
-    dP = rep(1, nrow(M))
-    dP.min = rep(0.5, nrow(M))
-    dP.max = rep(1.5, nrow(M))
+    dR = rep(1, nrow(M))
+    dR.min = rep(0.5, nrow(M))
+    dR.max = rep(1.5, nrow(M))
 
     # divisor districts
-    dD = round(colSums(M)/seats_cols)
-    dD[is.nan(dD)] <- 0
-    dD.min = floor(colSums(M)/(seats_cols+1) / max(dP.max))
-    dD.max = ceiling(colSums(M)/(seats_cols-1) / min(dP.min))
-    # handle districts with only one seat (otherwise leads to infinite dD.max)
-    dD.max[seats_cols == 1] <- (colSums(M)+1)[seats_cols == 1]
+    dC = round(colSums(M)/seats_cols)
+    dC[is.nan(dC)] <- 0
+    dC.min = floor(colSums(M)/(seats_cols+1) / max(dR.max))
+    dC.max = ceiling(colSums(M)/(seats_cols-1) / min(dR.min))
+
+    # handle districts with only one seat (otherwise leads to infinite dC.max)
+    dC.max[seats_cols == 1] <- (colSums(M)+1)[seats_cols == 1]
 
     # convenience functions to round and summarise
     m. = divide_votes_matrix
@@ -375,75 +471,67 @@ lower_apportionment = function(votes_matrix, seats_cols,
         which.max(x)
     }
 
-    while(!all(c(mc(M,dD,dP) == seats_cols, mr(M,dD,dP) == seats_rows))) {
+    while(!all(c(mc(M,dC,dR) == seats_cols, mr(M,dC,dR) == seats_rows))) {
         # change party divisors
-        row_decr = which.min0(mr(M,dD,dP) - seats_rows)
+        row_decr = which.min0(mr(M,dC,dR) - seats_rows)
         if(length(row_decr) == 1) {
-            dP[row_decr] <- find_divisor(
-                M[row_decr,]/dD,
-                dP[row_decr], dP.min[row_decr],
+            dR[row_decr] <- find_divisor(
+                M[row_decr,,drop=F]/dC,
+                dR[row_decr], dR.min[row_decr],
                 seats_rows[row_decr], round_func)
         }
 
-        row_incr = which.max0(mr(M,dD,dP) - seats_rows)
+        row_incr = which.max0(mr(M,dC,dR) - seats_rows)
         if(length(row_incr) == 1) {
-            dP[row_incr] <- find_divisor(
-                M[row_incr,]/dD,
-                dP[row_incr], dP.max[row_incr],
+            dR[row_incr] <- find_divisor(
+                M[row_incr,,drop=F]/dC,
+                dR[row_incr], dR.max[row_incr],
                 seats_rows[row_incr], round_func)
         }
 
         # change district divisors
-        col_decr = which.min0(mc(M,dD,dP) - seats_cols)
+        col_decr = which.min0(mc(M,dC,dR) - seats_cols)
         if(length(col_decr) == 1) {
-            dD[col_decr] <- find_divisor(
-                M[,col_decr]/dP,
-                dD[col_decr], dD.min[col_decr],
+            dC[col_decr] <- find_divisor(
+                M[,col_decr,drop=F]/dR,
+                dC[col_decr], dC.min[col_decr],
                 seats_cols[col_decr], round_func)
         }
 
-        col_incr = which.max0(mc(M,dD,dP) - seats_cols)
+        col_incr = which.max0(mc(M,dC,dR) - seats_cols)
         if(length(col_incr) == 1) {
-            dD[col_incr] <- find_divisor(
-                M[,col_incr]/dP,
-                dD[col_incr], dD.max[col_incr],
+            dC[col_incr] <- find_divisor(
+                M[,col_incr,drop=F]/dR,
+                dC[col_incr], dC.max[col_incr],
                 seats_cols[col_incr], round_func)
         }
     }
 
-    # prettier divisors
-    dP <- prettier_divisors(dP, \(x) round_func(m.(votes_matrix, dD, x)))
-    dD <- prettier_divisors(dD, \(x) round_func(m.(votes_matrix, x, dP)))
-
-    # create output
-    output = round_func(m.(M, dD, dP))
-    dimnames(output) <- dimnames(M)
-    attributes(output)$divisors <- list()
-    attributes(output)$divisors$districts <- dD
-    names(attributes(output)$divisors$districts) <- colnames(M)
-    attributes(output)$divisors$parties <- dP
-    names(attributes(output)$divisors$parties) <- rownames(M)
-    return(output)
+    return(list(cols = dC, rows = dR))
 }
 
-# calculate raw seat matrix
-# accesses function environment variables div_distr and div_party
-divide_votes_matrix = function(.M, .div_distr, .div_party) {
-    M_district = matrix(rep(.div_distr, nrow(.M)), byrow = TRUE, nrow = nrow(.M))
-    M_party = matrix(rep(.div_party, ncol(.M)), byrow = FALSE, nrow = nrow(.M))
-
-    x = .M/M_district/M_party
-    x[is.nan(x)] <- 0
-    return(x)
-}
-
-# Find a divisor within divisor_from and divisor_to
-# that leads to `round_func(votes/divisor) == target_seats`
+#' Find divisor to assign seats
+#'
+#' Find a divisor between `divisor_from` and `divisor_to` such as
+#' `sum(round_func(votes/divisor))` equals `target_seats`
+#'
+#' @param votes votes (matrix with only one column or vector, allows to use row/colnames
+#'   within `round_func`)
+#' @param divisor_from lower bound for divisor search range (is decreased if necessary)
+#' @param divisor_to upper bound for divisor search range (is increased if necessary)
+#' @param target_seats number of seats to distribute (single number)
+#' @param round_func rounding function
+#'
+#' @return divisor
+#' @keywords internal
 find_divisor = function(votes,
                         divisor_from, divisor_to,
                         target_seats, round_func) {
-    stopifnot(length(target_seats) == 1)
+    assert(is.matrix(votes))
+    assert(any(dim(votes) == 1))
+    assert(length(target_seats) == 1)
 
+    # use matrix instead of vector for rownames
     fun = function(divisor) {
         target_seats - sum(round_func(votes/divisor))
     }

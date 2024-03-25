@@ -9,7 +9,8 @@ pukelsheim(
   district_seats_df,
   quorum,
   new_seats_col = "seats",
-  use_list_votes = TRUE
+  use_list_votes = TRUE,
+  winner_take_one = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ vector. No quorum is applied if parameter is missing or \code{NULL}.}
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_df} shows the
 number of voters (e.g. they can only vote for one party).}
+
+\item{winner_take_one}{Set to \code{TRUE} if the party that got the most votes in a district
+must get \emph{at least} one seat ('Majorzbedingung') in this district. Default is \code{FALSE}.}
 }
 \value{
 A data.frame like \code{votes_df} with a new column denoting the number seats per
@@ -71,7 +75,8 @@ district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
 seats_df = pukelsheim(votes_df,
                       district_seats_df,
-                      quorum_any(any_district = 0.05, total = 0.03))
+                      quorum_any(any_district = 0.05, total = 0.03),
+                      winner_take_one = TRUE)
 
 head(seats_df)
 

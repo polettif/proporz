@@ -1,7 +1,10 @@
-check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col, use_list_votes,
+check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
+                                   use_list_votes, winner_take_one,
                                    .votes_df, .district_seats_df) {
     assert(is.character(new_seats_col) && length(new_seats_col) == 1)
-    assert(is.logical(use_list_votes) && length(use_list_votes) == 1)
+    assert(is.logical(use_list_votes) && !is.na(use_list_votes) && length(use_list_votes) == 1)
+    assert(is.logical(winner_take_one) && !is.na(winner_take_one) && length(winner_take_one) == 1)
+
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
         stop("`", .votes_df, "` must be a data frame with 3 columns in the ",
              "following order:\nparty, district and votes (names can differ).",
@@ -9,11 +12,13 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col, u
     }
 
     if(!is.numeric(votes_df[[3]]) || any(votes_df[[3]] < 0)) {
-        stop("Vote values in `",
-             .votes_df,
+        stop("Vote values in `", .votes_df,
              "`s third column must be numbers >= 0.", call. = FALSE)
     }
 
+    if(!is.data.frame(district_seats_df)) {
+        stop("`", .district_seats_df, "` must be a data.frame.", call. = FALSE)
+    }
     if(length(unique(district_seats_df[[1]])) != nrow(district_seats_df)) {
         stop("District ids in `", .district_seats_df,
              "` are not unique.", call. = FALSE)
@@ -64,7 +69,11 @@ prep_method = function(method) {
         stop("Only one or two methods allowed.", call. = FALSE)
     }
     if(length(method) == 1) {
-        method <- c(method, method)
+        if(method == "wto") {
+            method = list("round", "wto")
+        } else {
+            method <- list(method, method)
+        }
     }
     if(any(method == "largest_remainder_method")) {
         stop('Cannot use "largest_remainder_method", only divisor methods ',
@@ -76,6 +85,10 @@ prep_method = function(method) {
 
 prep_district_seats = function(district_seats, votes_matrix,
                                .district_seats.name, .votes_matrix.name) {
+    if(!(is.vector(district_seats, "numeric") || is.data.frame(district_seats))) {
+        stop("`", .district_seats.name, "` must be a numeric vector, data.frame or a single number.",
+             call. = FALSE)
+    }
     if(length(district_seats) > 1) {
         if(is.data.frame(district_seats)) {
             district_seats <- setNames(district_seats[[2]], district_seats[[1]])
@@ -85,13 +98,12 @@ prep_district_seats = function(district_seats, votes_matrix,
                  "` needs to have districts as columns and parties as rows.",
                  call. = FALSE)
         }
-        if(!is.null(colnames(votes_matrix))) {
-            if(is.null(names(district_seats)) ||
-               !all(sort(colnames(votes_matrix)) == sort(names(district_seats)))) {
-                stop(.district_seats.name,
-                     " needs to have the same names as the columns in ",
-                     .votes_matrix.name, ".", call. = FALSE)
-            }
+        if(!identical(sort(colnames(votes_matrix)), sort(names(district_seats)))) {
+            stop("`", .district_seats.name,
+                 "` needs to have the same names as the columns in `",
+                 .votes_matrix.name, "`.", call. = FALSE)
+        }
+        if(!is.null(colnames(votes_matrix))) { # seats vector is named/unnamed like matrix
             district_seats <- district_seats[colnames(votes_matrix)]
         }
     }

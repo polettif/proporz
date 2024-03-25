@@ -1,12 +1,13 @@
 #' Rounding with predefined thresholds
 #'
-#' Round `x` up if `x-floor(x) >= threshold`, otherwise round down.
+#' Round `x` up to `ceiling(x)` if `x-floor(x) >= threshold`,
+#' otherwise round down to `floor(x)`.
 #'
-#' @param x numeric vector >= 0 (`NaN` is not supported)
+#' @param x numeric vector or matrix >= 0 (`NaN` is not supported)
 #' @param threshold threshold in \[0,1\] or "harmonic"/"geometric" to use
 #'   harmonic or geometric mean thresholds
 #'
-#' @returns the rounded vector
+#' @returns the rounded vector or matrix
 #'
 #' @examples
 #' ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)
@@ -30,6 +31,8 @@ ceil_at = function(x, threshold) {
         threshold <- threshold_harmonic(values)
     } else if(threshold == "geometric") {
         threshold <- threshold_geometric(values)
+    } else if(threshold == "0.5_at_least_one") { # not documented
+        threshold <- threshold_0.5_at_least_one(values)
     } else {
         stop('Numeric value, "harmonic" or "geometric" expected for threshold argument.',
              call. = FALSE)
@@ -59,7 +62,6 @@ get_round_function = function(method_name) {
     function(x) ceil_at(x, method_thresholds[[method_name]])
 }
 
-
 threshold_harmonic = function(x) {
     x_ceil = ceiling(x)
     x_floor = floor(x)
@@ -83,4 +85,11 @@ threshold_geometric = function(x) {
 
 seq_geometric = function(nn, nn1 = nn-1) {
     sqrt((nn1)*nn)
+}
+
+threshold_0.5_at_least_one = function(x) {
+    al1 <- rep(0.5, length(x))
+    al1[x < 1] <- 0
+    al1 <- floor(x) + al1
+    return(al1)
 }
