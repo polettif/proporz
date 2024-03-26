@@ -11,12 +11,13 @@ shinyapp_examples = list(
 	wikipedia_de = list(
 		votes = matrix(c(5100, 6000, 6300, 9800, 10000, 10200, 4500, 12000, 14400), nrow = 3,
 					   dimnames = list(c("Party 1", "Party 2", "Party 3"), c("Wahlkreis A", "Wahlkreis B", "Wahlkreis C"))),
-		seats = c(4, 5, 6)
+		seats = setNames(c(4, 5, 6), c("Party 1", "Party 2", "Party 3"))
 	),
 	uri_2020 = list(
 	    votes = uri2020$votes_matrix,
 	    seats = uri2020$seats_vector
 	)
 )
+names(shinyapp_examples$zug_2018$seats) <- colnames(shinyapp_examples$zug_2018$votes)
 
-usethis::use_data(shinyapp_examples, testdata, internal = TRUE)
+usethis::use_data(shinyapp_examples, testdata, overwrite = TRUE, internal = TRUE)
