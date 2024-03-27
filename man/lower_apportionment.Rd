@@ -7,9 +7,7 @@
 lower_apportionment(votes_matrix, seats_cols, seats_rows, method = "round")
 }
 \arguments{
-\item{votes_matrix}{matrix with votes by party in rows and votes by district in columns.
-Must contain only integer values. To use data with floating point values consider scaling
-the matrix beforehand (i.e. multiplying all values by a large enough multiplier).}
+\item{votes_matrix}{matrix with votes by party in rows and votes by district in columns.}
 
 \item{seats_cols}{number of seats per column (districts/regions), predetermined or
 calculated with \code{\link[=upper_apportionment]{upper_apportionment()}}.}

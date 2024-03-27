@@ -99,7 +99,6 @@ test_that("Aargau 2020", {
     }
 
     seats_expected = aargau2020$expected_result
-    aargau2020$votes_df$Waehlerzahl <- round(aargau2020$votes_df$Waehlerzahl*1000) # TODO
     seats_actual = pukelsheim_aargau(aargau2020$votes_df, aargau2020$district_seats_df)
 
     seats_compare = merge(seats_expected, seats_actual, by = c("Partei", "Bezirk"))
