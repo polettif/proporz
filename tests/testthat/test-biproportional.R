@@ -395,6 +395,11 @@ test_that("error messages", {
     vdf_neg$votes <- vdf_neg$votes-500
     expect_error_fixed(pukelsheim(vdf_neg, seats_df),
                  "Vote values in `vdf_neg`s third column must be numbers >= 0")
+    vm_neg = vm
+    vm_neg[2:3,2] <- -vm_neg[2:3,2]
+    expect_error_fixed(biproporz(vm_neg, c(2,3,2,1)), "Votes in `vm_neg` must be numbers >= 0")
+    vm_char = matrix(as.character(vm), nrow = nrow(vm))
+    expect_error_fixed(biproporz(vm_char, c(2,3,2,1)), "Votes in `vm_char` must be numbers >= 0")
 
     # biproportional
     expect_error_fixed(biproporz(vm, NA), "`NA` must be a numeric vector, data.frame or a single number.")
@@ -402,14 +407,18 @@ test_that("error messages", {
     expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows.")
     expect_error_fixed(biproporz(vm, seats, method = "largest_remainder_method"),
                  'Cannot use "largest_remainder_method", only divisor methods are possible in biproportional apportionment.')
-    expect_error_fixed(biproporz(vm+0.1, seats), "`vm + 0.1` must only contain integers")
+    expect_s3_class(biproporz(vm+0.1, seats), "proporz_matrix")
+    expect_s3_class(biproporz(vm*0.1, seats), "proporz_matrix")
+    expect_equal(as.matrix(biproporz(vm*0.01, seats)), as.matrix(biproporz(vm*20, seats)))
     expect_error_fixed(biproporz(vm, seats+0.1), "`seats + 0.1` must be integers.")
     expect_error_fixed(biproporz(vm, seats, method = c("round", "floor", "ceiling")),
                  "Only one or two methods allowed.")
     expect_error_fixed(biproporz(vm, vm), "`vm` must be a numeric vector, data.frame or a single number.")
 
-    # lower_apportionment
-    expect_error_fixed(lower_apportionment(vm+0.1), "`vm + 0.1` must only contain integers.")
+    # upper/lower_apportionment
+    ua = upper_apportionment(vm+0.1, seats)
+    expect_true(is.matrix(lower_apportionment(vm+0.1, ua$district, ua$party)))
+    expect_error_fixed(lower_apportionment(vm+0.1, seats, 1:3), "sum(seats_cols) == sum(seats_rows")
 
     # votes_matrix
     vm_names = matrix(1, 3, 2)

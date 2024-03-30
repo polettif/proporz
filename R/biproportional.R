@@ -319,8 +319,6 @@ weight_list_votes = function(votes_matrix, seats_district) {
 #' }
 #'
 #' @param votes_matrix matrix with votes by party in rows and votes by district in columns.
-#'   Must contain only integer values. To use data with floating point values consider scaling
-#'   the matrix beforehand (i.e. multiplying all values by a large enough multiplier).
 #' @param seats_cols number of seats per column (districts/regions), predetermined or
 #'   calculated with [upper_apportionment()].
 #' @param seats_rows number of seats per row (parties/lists), calculated with
@@ -372,7 +370,9 @@ lower_apportionment = function(votes_matrix, seats_cols,
                                seats_rows, method = "round") {
     # check parameters
     M = prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
-    assert(all((seats_cols %% 1) == 0) && all((seats_rows %% 1) == 0))
+    assert(all((seats_cols %% 1) == 0))
+    assert(all((seats_rows %% 1) == 0))
+    assert(sum(seats_cols) == sum(seats_rows))
     assert(length(seats_cols) == ncol(M) && length(seats_rows) == nrow(M))
 
     # rounding function from method

@@ -49,8 +49,8 @@ prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
     if(!is.matrix(votes_matrix)) {
         stop(vmn, " must be a matrix.", call. = FALSE)
     }
-    if(sum(votes_matrix %% 1) != 0) {
-        stop(vmn, " must only contain integers.", call. = FALSE)
+    if(any(is.na(votes_matrix)) || any(votes_matrix < 0) || !is.numeric(votes_matrix)) {
+        stop("Votes in ", vmn, " must be numbers >= 0.", call. = FALSE)
     }
     if(!is.null(rownames(votes_matrix)) &&
        length(unique(rownames(votes_matrix))) != nrow(votes_matrix)) {

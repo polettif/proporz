@@ -5,7 +5,9 @@ test_that("generic proporz", {
     expect_equal(
         proporz(c(216, 310, 32), 20, "Hagenbach-Bischoff"),
         proporz(c(216, 310, 32), 20, "hare-niemeyer"))
-    expect_error(proporz(1,1, "unkown method"))
+    expect_error(proporz(1,1, "unkown method"), "Unknown apportion method")
+    v = c(10, 690, 210, 370)
+    expect_equal(proporz(v*.02, 10, "round"), proporz(v*0.1, 10, "round"))
 })
 
 .sample_votes = function(n_non_zero, n_zero) {
