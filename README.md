@@ -119,8 +119,7 @@ and `shinyMatrix` installed.
 ```r
 # install.packages("shiny")
 # install.packages("shinyMatrix")
-library(proporz)
-run_app()
+proporz::run_app()
 ```
 <img src="man/figures/shinyapp-example.gif" style = "width:70%;">
 

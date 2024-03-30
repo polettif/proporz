@@ -18,5 +18,7 @@ shinyapp_examples = list(
 	    seats = uri2020$seats_vector
 	)
 )
+names(shinyapp_examples$wikipedia_de$seats) <- colnames(shinyapp_examples$wikipedia_de$votes)
+names(shinyapp_examples$zug_2018$seats) <- colnames(shinyapp_examples$zug_2018$votes)
 
-usethis::use_data(shinyapp_examples, testdata, internal = TRUE)
+usethis::use_data(shinyapp_examples, testdata, overwrite = TRUE, internal = TRUE)
