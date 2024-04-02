@@ -73,8 +73,11 @@ check_equal_entries = function(remainders, ordered_remainders, n_seats_remaining
     remainder_first_without = remainders[ordered_remainders[n_seats_remaining+1]]
 
     if(remainder_last_with == remainder_first_without) {
-        indices = which(remainders == remainder_last_with, arr.ind = TRUE)
-        parties = paste0(indices, collapse = " & ")
+        indices = unique(which(remainders == remainder_last_with, arr.ind = TRUE))
+        parties = collapse_names(indices)
+        if(!is.null(names(remainders))) {
+            parties <- collapse_names(names(remainders)[indices])
+        }
         stop("Result is undefined, equal remainder for parties: ", parties,
              call. = FALSE)
     }

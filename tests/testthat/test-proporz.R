@@ -86,11 +86,16 @@ test_that("all method names", {
 
 test_that("undefined result errors", {
     expect_error(proporz(c(1, 10, 10), 1, "round"),
-                 "Result is undefined, equal quotient for parties: 2 & 3", fixed = TRUE)
+                 "Result is undefined, equal quotient for parties: 2, 3", fixed = TRUE)
+    expect_error(proporz(c(1, X = 10, ABC = 10), 1, "round"),
+                 "Result is undefined, equal quotient for parties: 'X', 'ABC'", fixed = TRUE)
     expect_equal(proporz(c(1, 10, 10), 2, "round"), c(0,1,1))
 
     expect_error(largest_remainder_method(c(10, 10, 0), 1),
-                 "Result is undefined, equal remainder for parties: 1 & 2",
+                 "Result is undefined, equal remainder for parties: 1, 2",
+                 fixed = TRUE)
+    expect_error(largest_remainder_method(c(A = 10, X = 10, P = 0), 1),
+                 "Result is undefined, equal remainder for parties: 'A', 'X'",
                  fixed = TRUE)
 })
 

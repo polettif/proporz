@@ -104,7 +104,11 @@ assert = function(check) {
 }
 
 collapse_names = function(x) {
-    y = paste(x, collapse = "', '")
-    y <- paste0("'", y, "'")
+    if(is.character(x)) {
+        y = paste(x, collapse = "', '")
+        y <- paste0("'", y, "'")
+    } else {
+        y = paste(x, collapse = ", ")
+    }
     return(y)
 }

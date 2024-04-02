@@ -9,8 +9,11 @@ check_edge_quotient = function(mtrx_quotient, n_seats, return_indices = FALSE) {
     if(is.nan(quotient_first_without)) quotient_first_without <- 0
 
     if(quotient_last_with == quotient_first_without) {
-        indices = which(mtrx_quotient == quotient_last_with, arr.ind = TRUE)[,"col"]
-        parties = paste0(indices, collapse = " & ")
+        indices = unique(which(mtrx_quotient == quotient_last_with, arr.ind = TRUE)[,"col"])
+        parties = collapse_names(indices)
+        if(!is.null(colnames(mtrx_quotient))) {
+            parties <- collapse_names(colnames(mtrx_quotient)[indices])
+        }
         stop("Result is undefined, equal quotient for parties: ", parties, call. = FALSE)
     }
 }

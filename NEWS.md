@@ -3,6 +3,7 @@
 * add new feature: winner take one method for `biproporz()` and `pukelsheim` (#10)
 * allow non-integer vote counts
 * round divisors to as few digits as possible
+* changed error message for undefined/tied results
 * fixed bugs and added more real data tests
 
 # proporz 1.4.0

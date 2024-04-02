@@ -142,7 +142,10 @@ test_that("undefined result biproportional", {
                  proporz(rowSums(vm), sum(seats), "round"))
 
     expect_error_fixed(upper_apportionment(vm, seats),
-                       "Result is undefined, equal quotient for parties: 4 & 6")
+                       "Result is undefined, equal quotient for parties: 4, 6")
+
+    expect_error_fixed(biproporz(uri2020$votes_matrix, uri2020$seats_vector, quorum_any(any_district = 0.7)),
+                       "Result is undefined, equal quotient for parties: 'CVP', 'SPGB', 'FDP', 'SVP'")
 
     # manual fix (actual implementation depends on rules)
     vm4 <- vm6 <- vm

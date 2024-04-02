@@ -40,6 +40,7 @@ highest_averages_method = function(votes, n_seats, divisors) {
 
     # method
     mtrx_votes = matrix(rep(votes, each=n_seats), ncol = n_parties)
+    colnames(mtrx_votes) <- names(votes)
     mtrx_divisors = matrix(rep(divisors, ncol(mtrx_votes)), ncol = n_parties)
 
     mtrx_quotient = mtrx_votes/mtrx_divisors
