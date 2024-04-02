@@ -471,7 +471,12 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         which.max(x)
     }
 
-    while(!all(c(mc(M,dC,dR) == seats_cols, mr(M,dC,dR) == seats_rows))) {
+    # usually less than 20 iterations are needed
+    max_iter = getOption("proporz_max_iterations", 1000)
+    for(i in seq_len(max_iter)) {
+        if(all(c(mc(M,dC,dR) == seats_cols, mr(M,dC,dR) == seats_rows))) {
+            return(list(cols = dC, rows = dR))
+        }
         # change party divisors
         row_decr = which.min0(mr(M,dC,dR) - seats_rows)
         if(length(row_decr) == 1) {
@@ -506,8 +511,8 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
                 seats_cols[col_incr], round_func)
         }
     }
-
-    return(list(cols = dC, rows = dR))
+    stop("Result is undefined, exceeded maximum number of iterations (", max_iter, ")",
+         call. = FALSE)
 }
 
 #' Find divisor to assign seats
