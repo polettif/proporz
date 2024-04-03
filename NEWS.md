@@ -1,4 +1,4 @@
-# proporz (development version)
+# proporz 1.5.0
 
 * add new feature: winner take one method for `biproporz()` and `pukelsheim` (#10)
 * allow non-integer vote counts
