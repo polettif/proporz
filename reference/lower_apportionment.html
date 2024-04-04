@@ -18,7 +18,7 @@ matrix satisfies the constraints given by the upper apportionment."><meta proper
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">proporz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0.9000</span>
       </span>
     </div>
 
@@ -71,7 +71,7 @@ matrix satisfies the constraints given by the upper apportionment.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>votes_matrix</dt>
-<dd><p>votes matrix</p></dd>
+<dd><p>matrix with votes by party in rows and votes by district in columns.</p></dd>
 
 
 <dt>seats_cols</dt>
@@ -85,10 +85,18 @@ calculated with <code><a href="upper_apportionment.html">upper_apportionment()</
 
 
 <dt>method</dt>
-<dd><p>Apportion method that defines how seats are assigned. The default "round"
-for the Sainte-Laguë/Webster method is the standard for biproportional apportionment
-and the only method guaranteed to terminate. See <code><a href="proporz.html">proporz()</a></code> for other methods. It is
-also possible to provide a function that rounds a vector or matrix.</p></dd>
+<dd><p>Apportion method that defines how seats are assigned. The
+following methods are supported:</p><ul><li><p><code>round</code>: The default Sainte-Laguë/Webster method is the standard
+for biproportional apportionment and the only method guaranteed to terminate.</p></li>
+<li><p><code>wto</code>: "winner take one" works like "round" with a condition that the party that
+got the most votes in a district must get <em>at least</em> one seat ('Majorzbedingung').
+The condition does not apply in a district if two or more parties have the same
+number of votes and there are not enough seats for these parties. A warning is
+issued in this case. Modify the votes matrix to explicitly break ties.</p></li>
+<li><p>You can provide a custom function that rounds a matrix (i.e. the
+the votes_matrix divided by party and list divisors).</p></li>
+<li><p>It is possible to use any divisor method name listed in <code><a href="proporz.html">proporz()</a></code>.</p></li>
+</ul></dd>
 
 </dl></div>
     <div id="value">
@@ -135,10 +143,46 @@ divisor methods. Mathematical Social Sciences, 80, 25-32.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    2    1    1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")$districts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 207.81 180.25 161.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 207 180 161</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")$parties</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.16 1.01 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.15 1.00 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># using "winner take one"</span></span></span>
+<span class="r-in"><span><span class="va">vm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>,<span class="fl">100</span>,<span class="fl">10</span>,<span class="fl">11</span><span class="op">)</span>, <span class="fl">2</span>,</span></span>
+<span class="r-in"><span>            dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party A"</span>, <span class="st">"Party B"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"I"</span>, <span class="st">"II"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">district_seats</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">vm</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ua</span> <span class="op">=</span> <span class="fu"><a href="upper_apportionment.html">upper_apportionment</a></span><span class="op">(</span><span class="va">vm</span>, <span class="va">district_seats</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">lower_apportionment</span><span class="op">(</span><span class="va">vm</span>, <span class="va">ua</span><span class="op">$</span><span class="va">district</span>, <span class="va">ua</span><span class="op">$</span><span class="va">party</span>, method <span class="op">=</span> <span class="st">"wto"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         I II</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Party A 2  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Party B 0  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")$districts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   I  II </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139  22 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")$parties</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0.92    2.00 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># compare to standard method</span></span></span>
+<span class="r-in"><span><span class="fu">lower_apportionment</span><span class="op">(</span><span class="va">vm</span>, <span class="va">ua</span><span class="op">$</span><span class="va">district</span>, <span class="va">ua</span><span class="op">$</span><span class="va">party</span>, method <span class="op">=</span> <span class="st">"round"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         I II</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Party A 1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Party B 1  0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")$districts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   I  II </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150  21 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"divisors")$parties</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Party A Party B </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     0.9     1.2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

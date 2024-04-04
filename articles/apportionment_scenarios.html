@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">proporz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0.9000</span>
       </span>
     </div>
 
@@ -458,7 +458,7 @@ the number of party seats on the national level with
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># sort table by D'Hondt seats</span></span>
-<span><span class="va">df_bydistrict</span> <span class="op">&lt;-</span> <span class="va">df_bydistrict</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,<span class="op">]</span> </span>
+<span><span class="va">df_bydistrict</span> <span class="op">&lt;-</span> <span class="va">df_bydistrict</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,<span class="op">]</span> </span>
 <span></span>
 <span><span class="co"># print parties with at least one seat</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -1087,7 +1087,7 @@ its vote share. To do this, we use the total number of seats for the
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">full_biproportional</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, </span>
 <span>                                district_seats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">district_seats</span><span class="op">)</span>,</span>
-<span>                                use_list_votes <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span>
+<span>                                use_list_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># party seat distribution has not changed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">full_biproportional</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seats_biproportional</span><span class="op">)</span></span>

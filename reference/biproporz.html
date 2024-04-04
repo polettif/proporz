@@ -18,7 +18,7 @@ entities, regions), thus bi-proportional."><meta property="og:image" content="/l
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">proporz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0.9000</span>
       </span>
     </div>
 
@@ -106,11 +106,18 @@ party).</p></dd>
 
 
 <dt>method</dt>
-<dd><p>Defines the method how seats in upper and lower apportionment are assigned.
-For a different method for upper and lower apportionment use a vector with two entries.
-The default "round" for the Sainte-Laguë/Webster method is the standard for
-biproportional apportionment and the only method guaranteed to terminate. See
-<code><a href="proporz.html">proporz()</a></code> for other methods.</p></dd>
+<dd><p>Defines which method is used to assign seats. The following methods are
+recommended:</p><ul><li><p><code>round</code>: Uses the Sainte-Laguë/Webster method (rounding half up) for the upper
+and lower apportionment which is the standard for biproportional apportionment and
+the only method guaranteed to terminate.</p></li>
+<li><p><code>wto</code>: "winner take one" works like "round" with a condition that the party that
+got the most votes in a district must get <em>at least</em> one seat ('Majorzbedingung')
+in said district. Seats in the upper apportionment are assigned with
+Sainte-Laguë/Webster. <code>votes_matrix</code> must have row and column names to use this
+method. See <code><a href="lower_apportionment.html">lower_apportionment()</a></code> for more details.</p></li>
+</ul><p>It is also possible to use any divisor method name listed in <code><a href="proporz.html">proporz()</a></code>. If you want to
+use a different method for the upper and lower apportionment, provide a list with two
+entries.</p></dd>
 
 </dl></div>
     <div id="value">

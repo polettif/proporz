@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">proporz</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0.9000</span>
       </span>
     </div>
 
@@ -146,45 +146,35 @@
 <h3 id="biproportional-apportionment">Biproportional Apportionment<a class="anchor" aria-label="anchor" href="#biproportional-apportionment"></a>
 </h3>
 <p>Biproportional apportionment (<a href="https://en.wikipedia.org/wiki/Biproportional_apportionment" class="external-link">Wikipedia</a>) is a method to proportionally allocate seats among parties and districts.</p>
-<p>We can use the provided <code>zug2018</code> data set to illustrate biproportional apportionment with <a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link"><code>biproporz()</code></a>. You need a ‘votes matrix’ as input which shows the number of votes for each party (rows) and district (columns). In this data set, parties are called ‘lists’ and districts ‘entities’.</p>
+<p>We can use the provided <a href="https://polettif.github.io/proporz/reference/uri2020.html" class="external-link"><code>uri2020</code></a> data set to illustrate biproportional apportionment with <a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link"><code>biproporz()</code></a>. You need a ‘votes matrix’ as input which shows the number of votes for each party (rows) and district (columns). You also need to define the number of seats per district.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">votes_matrix</span> <span class="op">=</span> <span class="fu"><a href="reference/pivot_to_matrix.html">pivot_to_matrix</a></span><span class="op">(</span><span class="va">votes_df</span><span class="op">)</span></span>
-<span><span class="va">votes_matrix</span></span>
-<span><span class="co">#&gt;        entity_id</span></span>
-<span><span class="co">#&gt; list_id  1701 1702 1703 1704 1705 1706 1707 1708 1709 1710  1711</span></span>
-<span><span class="co">#&gt;       1  2993    0    0    0    0    0    0    0    0    0     0</span></span>
-<span><span class="co">#&gt;       2  8108 4687 1584  531  279  477 2363 3860 1481   91 22023</span></span>
-<span><span class="co">#&gt;       3 19389 9334 4807 1946  396 2844 3523 4702 3310  812 21343</span></span>
-<span><span class="co">#&gt;       4 14814 6691 4005  826  379 1654 2842 2624 2713  461 33789</span></span>
-<span><span class="co">#&gt;       5  4486 2270  621  198    0  361  728  465  925    0 10131</span></span>
-<span><span class="co">#&gt;       6 15695 4705 1750   84    0   51  627 1106 1563  302 21794</span></span>
-<span><span class="co">#&gt;       7 21298 8178 2875 1336  399 1450 3715 2610 4063  344 26798</span></span>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">votes_matrix</span> <span class="op">&lt;-</span> <span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      Altdorf Bürglen Erstfeld Schattdorf</span></span>
+<span><span class="co">#&gt; CVP    11471    2822     2309       4794</span></span>
+<span><span class="co">#&gt; SPGB   11908    1606     1705       2600</span></span>
+<span><span class="co">#&gt; FDP     9213    1567      946       2961</span></span>
+<span><span class="co">#&gt; SVP     7756    2945     1573       3498</span></span>
 <span></span>
-<span><span class="va">distr_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"entity_id"</span>, <span class="st">"election_mandates"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">district_seats</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="va">distr_df</span><span class="op">$</span><span class="va">election_mandates</span>, <span class="va">distr_df</span><span class="op">$</span><span class="va">entity_id</span><span class="op">)</span></span>
-<span><span class="va">district_seats</span></span>
-<span><span class="co">#&gt; 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 </span></span>
-<span><span class="co">#&gt;   15   10    6    3    2    4    7    6    6    2   19</span></span></code></pre></div>
+<span><span class="op">(</span><span class="va">district_seats</span> <span class="op">&lt;-</span> <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    Altdorf    Bürglen   Erstfeld Schattdorf </span></span>
+<span><span class="co">#&gt;         15          7          6          9</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      Altdorf Bürglen Erstfeld Schattdorf</span></span>
+<span><span class="co">#&gt; CVP        5       2        2          3</span></span>
+<span><span class="co">#&gt; SPGB       4       1        2          2</span></span>
+<span><span class="co">#&gt; FDP        3       1        1          2</span></span>
+<span><span class="co">#&gt; SVP        3       3        1          2</span></span></code></pre></div>
+<p>You can use <a href="https://polettif.github.io/proporz/reference/pukelsheim.html" class="external-link"><code>pukelsheim()</code></a> for dataframes in long format as input data. It is a wrapper for <code><a href="reference/biproporz.html">biproporz()</a></code>. <a href="https://polettif.github.io/proporz/reference/zug2018.html" class="external-link"><code>zug2018</code></a> shows an actual election result for the Canton of Zug in a dataframe. We use this data set to create input data for <code><a href="reference/pukelsheim.html">pukelsheim()</a></code>. The other parameters are set to reflect the actual election system.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        entity_id</span></span>
-<span><span class="co">#&gt; list_id 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711</span></span>
-<span><span class="co">#&gt;       1    0    0    0    0    0    0    0    0    0    0    0</span></span>
-<span><span class="co">#&gt;       2    2    1    1    0    0    0    1    2    1    0    3</span></span>
-<span><span class="co">#&gt;       3    3    3    2    1    1    2    2    2    1    1    3</span></span>
-<span><span class="co">#&gt;       4    2    2    1    1    0    1    2    1    1    1    5</span></span>
-<span><span class="co">#&gt;       5    1    1    0    0    0    0    0    0    0    0    2</span></span>
-<span><span class="co">#&gt;       6    3    1    1    0    0    0    0    0    1    0    3</span></span>
-<span><span class="co">#&gt;       7    4    2    1    1    1    1    2    1    2    0    3</span></span></code></pre></div>
-<p>You can use <a href="https://polettif.github.io/proporz/reference/pukelsheim.html" class="external-link"><code>pukelsheim()</code></a> for data.frames in long format as input data. It is a wrapper for <code><a href="reference/biproporz.html">biproporz()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># In this data set, parties are called 'lists' and districts 'entities'.</span></span>
+<span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">district_seats_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"entity_id"</span>, <span class="st">"election_mandates"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">seats_df</span> <span class="op">=</span> <span class="fu"><a href="reference/pukelsheim.html">pukelsheim</a></span><span class="op">(</span><span class="va">votes_df</span>,</span>
 <span>                      <span class="va">district_seats_df</span>,</span>
-<span>                      quorum <span class="op">=</span> <span class="fu"><a href="reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span></span>
+<span>                      quorum <span class="op">=</span> <span class="fu"><a href="reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>any_district <span class="op">=</span> <span class="fl">0.05</span>, total <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span>,</span>
+<span>                      winner_take_one <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   list_id entity_id list_votes seats</span></span>
@@ -201,11 +191,10 @@
 <h2 id="shiny-app">Shiny app<a class="anchor" aria-label="anchor" href="#shiny-app"></a>
 </h2>
 <p>The package provides a basic Shiny app where you can calculate biproportional apportionment on an interactive dashboard. You need to have the packages <code>shiny</code> and <code>shinyMatrix</code> installed.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("shiny")</span></span>
 <span><span class="co"># install.packages("shinyMatrix")</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/polettif/proporz" class="external-link">proporz</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">proporz</span><span class="fu">::</span><span class="fu"><a href="reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/shinyapp-example.gif" style="width:70%;"></p>
 </div>
 <div class="section level2">
@@ -216,7 +205,7 @@
 <h4 id="divisor-methods">Divisor methods<a class="anchor" aria-label="anchor" href="#divisor-methods"></a>
 </h4>
 <p>You can use divisor methods directly:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party A"</span> <span class="op">=</span> <span class="fl">690</span>, <span class="st">"Party B"</span> <span class="op">=</span> <span class="fl">370</span>, <span class="st">"Party C"</span> <span class="op">=</span> <span class="fl">210</span>, <span class="st">"Party D"</span> <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># D'Hondt, Jefferson or Hagenbach-Bischoff method</span></span>
@@ -248,7 +237,7 @@
 <h4 id="largest-remainder-method">Largest remainder method<a class="anchor" aria-label="anchor" href="#largest-remainder-method"></a>
 </h4>
 <p>The largest remainder method is also accessible directly:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"I"</span> <span class="op">=</span> <span class="fl">16200</span>, <span class="st">"II"</span> <span class="op">=</span> <span class="fl">47000</span>, <span class="st">"III"</span> <span class="op">=</span> <span class="fl">12700</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Hamilton, Hare-Niemeyer or Vinton method</span></span>
