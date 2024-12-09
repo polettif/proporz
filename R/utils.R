@@ -61,9 +61,13 @@ bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
 pivot_to_matrix = function(df_long) {
     stopifnot(ncol(df_long) == 3)
     stopifnot(nrow(df_long) == nrow(unique(df_long[1:2])))
+
+    asnum = as.numeric
+    if(is.integer(df_long[[3]])) asnum = as.integer
+
     tbl = table(df_long)
     stopifnot(max(tbl) == 1)
-    apply(tbl, c(1,2), function(x) sum(as.numeric(names(x))*unname(x)))
+    apply(tbl, c(1,2), function(x) sum(asnum(names(x))*unname(x)))
 }
 
 #' @rdname pivot_to_matrix

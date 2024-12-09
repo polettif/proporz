@@ -1,7 +1,7 @@
 test_that("col/row max", {
     m = matrix(c(8,9,2,1), 2)
-    expect_equal(row_maxs(m), c(8,9))
-    expect_equal(col_maxs(m), c(9,2))
+    expect_identical(row_maxs(m), c(8,9))
+    expect_identical(col_maxs(m), c(9,2))
 })
 
 test_that("most_votes_in_district_matrix", {
@@ -10,10 +10,10 @@ test_that("most_votes_in_district_matrix", {
     dw = most_votes_in_district_matrix(votes_matrix)
     dw <- unname(dw)
 
-    expect_equal(dw, matrix(c(T,F,T,F,F,T), ncol = 3))
+    expect_identical(dw, matrix(c(T,F,T,F,F,T), ncol = 3))
     expect_true(is.logical(dw))
-    expect_equal(colSums(dw), c(1,1,1))
-    expect_equal(sum(colSums(dw)), 3)
+    expect_identical(colSums(dw), c(1,1,1))
+    expect_identical(sum(colSums(dw)), 3)
 })
 
 test_that("winner take one", {
@@ -30,16 +30,16 @@ test_that("winner take one", {
     bp1 = biproporz(vm2, seats2, method = "round")
     bp2 = biproporz(vm2, seats2, method = "wto")
 
-    expect_equal(c(bp1), c(1,1,1,0))
-    expect_equal(c(bp2), c(2,0,0,1))
+    expect_identical(c(bp1), c(1L,1L,1L,0L))
+    expect_identical(c(bp2), c(2L,0L,0L,1L))
 
     # pukelsheim
     df = pivot_to_df(vm2)
     seatsdf = data.frame(district = names(seats2), seats = seats2)
     pk1 = pukelsheim(df, seatsdf, winner_take_one = FALSE)
-    expect_equal(matrix(pk1[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp1)))
+    expect_identical(matrix(pk1[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp1)))
     pk2 = pukelsheim(df, seatsdf, winner_take_one = TRUE)
-    expect_equal(matrix(pk2[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp2)))
+    expect_identical(matrix(pk2[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp2)))
 })
 
 test_that("two with ties and enough seats", {

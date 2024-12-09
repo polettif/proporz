@@ -28,7 +28,7 @@ largest_remainder_method = function(votes, n_seats, quorum = 0) {
         return(n_seats)
     }
     if(n_seats == 0) {
-        return(rep(0, length(votes)))
+        return(rep(0L, length(votes)))
     }
 
     # apply quorum

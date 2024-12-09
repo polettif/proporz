@@ -400,6 +400,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
     # create output
     dD = divisors[["cols"]]; dP = divisors[["rows"]]
     output = round_func(divide_votes_matrix(M, dD, dP))
+    mode(output) <- "integer"
     dimnames(output) <- dimnames(M)
     attributes(output)$divisors <- list(districts = dD, parties = dP)
     names(attributes(output)$divisors$districts) <- colnames(M)

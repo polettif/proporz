@@ -28,7 +28,7 @@ highest_averages_method = function(votes, n_seats, divisors) {
 
     if(length(votes) == 1) { return(n_seats) }
     stopifnot(all(!is.na(votes)))
-    if(n_seats == 0) { return(rep(0, length(votes))) }
+    if(n_seats == 0) { return(rep(0L, length(votes))) }
 
     stopifnot(is.null(dim(divisors)))
     if(length(divisors) == 1) {
@@ -48,10 +48,11 @@ highest_averages_method = function(votes, n_seats, divisors) {
 
     # assign seats
     mtrx_seats = mtrx_quotient-mtrx_quotient # 0 filled matrix
-    mtrx_seats[order(mtrx_quotient, decreasing = TRUE)[1:n_seats]] <- 1
+    mtrx_seats[order(mtrx_quotient, decreasing = TRUE)[seq_len(n_seats)]] <- 1L
 
     vec = colSums(mtrx_seats)
     vec[is.nan(vec)] <- 0
+    vec <- as.integer(vec)
     names(vec) <- names(votes)
 
     return(vec)

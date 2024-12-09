@@ -73,13 +73,13 @@ test_that("ceil_at harmonic/geometric matrix", {
                  x+1), nrow = 5, byrow = TRUE)
 
     R_0.5 = matrix(c(x,x,x,x+1,x+1), nrow = 5, byrow = TRUE)
-    expect_equal(ceil_at(M, 0.5), R_0.5)
+    expect_equal(ceil_at(M, 0.5), R_0.5, tolerance = 1e-14)
 
     R_geometric = matrix(c(x, x, c(0,x_non0+1), x+1, x+1), nrow = 5, byrow = TRUE)
-    expect_equal(ceil_at(M, "geometric"), R_geometric)
+    expect_equal(ceil_at(M, "geometric"), R_geometric, tolerance = 1e-14)
 
     R_harmonic = matrix(c(x, c(0,x_non0+1), c(0,x_non0+1), x+1, x+1), nrow = 5, byrow = TRUE)
-    expect_equal(ceil_at(M, "harmonic"), R_harmonic)
+    expect_equal(ceil_at(M, "harmonic"), R_harmonic, tolerance = 1e-14)
 
     expect_equal(threshold_geometric(18.4), threshold_geometric(18.5))
     set.seed(1)
