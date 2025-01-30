@@ -17,10 +17,10 @@ biproporz(
 in columns}
 
 \item{district_seats}{Vector defining the number of seats per district. Must be the same
-length as \code{ncol(votes_matrix)}. Values are name-matched to \code{votes_matrix} if both are
-named. If the number of seats per district should be assigned according to the number
-of votes (not the general use case), a single number for the total number of seats can
-be used.}
+length as \code{ncol(votes_matrix)}. Values are name-matched to \code{votes_matrix} columns if both
+are named. If the number of seats per district should be assigned according to the number
+of votes (not the general use case), a single number for the total number of seats can be
+used.}
 
 \item{quorum}{Optional list of functions which take the votes_matrix and return a logical
 vector that denotes for each list/party whether they reached the quorum (i.e. are

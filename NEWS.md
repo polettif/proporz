@@ -1,5 +1,6 @@
 # proporz (development version)
 
+* add `district_winner_matrix()` function
 * returned seat values from proporz/biproporz functions are always integer
 
 # proporz 1.5.0

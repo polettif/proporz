@@ -203,10 +203,10 @@ biproporz = function(votes_matrix,
 #' @param votes_matrix Vote count matrix with votes by party in rows and votes by district
 #'   in columns
 #' @param district_seats Vector defining the number of seats per district. Must be the same
-#'   length as `ncol(votes_matrix)`. Values are name-matched to `votes_matrix` if both are
-#'   named. If the number of seats per district should be assigned according to the number
-#'   of votes (not the general use case), a single number for the total number of seats can
-#'   be used.
+#'   length as `ncol(votes_matrix)`. Values are name-matched to `votes_matrix` columns if both
+#'   are named. If the number of seats per district should be assigned according to the number
+#'   of votes (not the general use case), a single number for the total number of seats can be
+#'   used.
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Thus, votes are weighted according to
 #'   the number of available district seats with [weight_list_votes()]. Set to `FALSE` if
