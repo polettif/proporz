@@ -1,3 +1,7 @@
+# proporz (development version)
+
+* returned seat values from proporz/biproporz functions are always integer
+
 # proporz 1.5.0
 
 * add new feature: winner take one method for `biproporz()` and `pukelsheim` (#10)
@@ -46,4 +50,3 @@
 # proporz 1.0.0
 
 * Publish package to Github
-
