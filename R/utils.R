@@ -16,7 +16,7 @@ bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
             x2 <- x
         }
     }
-    stop("Exceeded maximum number of iterations (", max_iterations, ")") # nocov
+    stop("Exceeded maximum number of bisection iterations (", max_iterations, ")") # nocov
 }
 
 #' Pivot long data.frame to wide matrix and vice versa

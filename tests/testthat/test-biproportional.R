@@ -158,6 +158,17 @@ test_that("undefined result biproportional", {
     ua4 = upper_apportionment(vm4, seats)
     ua6 = upper_apportionment(vm6, seats)
     expect_identical(ua4$party[4], ua6$party[6])
+
+    # fully tied
+    vdf = data.frame(
+        party = rep(c("A", "B", "C", "D", "E"), 5),
+        district = rep(c("d1", "d2", "d3", "d4", "d5"), each = 5L),
+        votes = rep(c(0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2, 0.5, 0.2),
+                    c(2L, 3L, 2L, 5L, 3L, 2L, 3L, 2L, 3L)))
+    vdf_seats = data.frame(
+        district = c("d1", "d2", "d3", "d4", "d5"),
+        seats = rep(1L, 5L))
+    expect_error(pukelsheim(vdf, vdf_seats), "Result is undefined, tied votes and multiple possible seat assignments")
 })
 
 test_that("find_divisor", {

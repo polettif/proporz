@@ -468,12 +468,12 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 
     which.min0 = function(x) {
         x[which(x == 0)] <- max(x)
-        if(all(x == max(x))) return(c())
+        if(length(unique(x)) == 1L) return(NA)
         which.min(x)
     }
     which.max0 = function(x) {
         x[which(x == 0)] <- min(x)
-        if(all(x == min(x))) return(c())
+        if(length(unique(x)) == 1L) return(NA)
         which.max(x)
     }
 
@@ -493,7 +493,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 
         # change party divisors
         row_decr = which.min0(mr(M,dC,dR) - seats_rows)
-        if(length(row_decr) == 1) {
+        if(!is.na(row_decr)) {
             dR[row_decr] <- find_divisor(
                 M[row_decr,,drop=F]/dC,
                 dR[row_decr], dR.min[row_decr],
@@ -501,7 +501,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         }
 
         row_incr = which.max0(mr(M,dC,dR) - seats_rows)
-        if(length(row_incr) == 1) {
+        if(!is.na(row_incr)) {
             dR[row_incr] <- find_divisor(
                 M[row_incr,,drop=F]/dC,
                 dR[row_incr], dR.max[row_incr],
@@ -510,7 +510,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 
         # change district divisors
         col_decr = which.min0(mc(M,dC,dR) - seats_cols)
-        if(length(col_decr) == 1) {
+        if(!is.na(col_decr)) {
             dC[col_decr] <- find_divisor(
                 M[,col_decr,drop=F]/dR,
                 dC[col_decr], dC.min[col_decr],
@@ -518,11 +518,16 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         }
 
         col_incr = which.max0(mc(M,dC,dR) - seats_cols)
-        if(length(col_incr) == 1) {
+        if(!is.na(col_incr)) {
             dC[col_incr] <- find_divisor(
                 M[,col_incr,drop=F]/dR,
                 dC[col_incr], dC.max[col_incr],
                 seats_cols[col_incr], round_func)
+        }
+
+        if(is.na(row_decr) && is.na(row_incr) && is.na(col_decr) && is.na(col_incr)) {
+            stop("Result is undefined, tied votes and multiple possible seat assignments",
+                 call. = FALSE)
         }
     }
     stop("Result is undefined, exceeded maximum number of iterations (", max_iter, ")",
@@ -549,6 +554,8 @@ find_divisor = function(votes,
     assert(is.matrix(votes))
     assert(any(dim(votes) == 1))
     assert(length(target_seats) == 1)
+    assert(all(!is.infinite(votes)) && all(!is.na(votes)))
+    assert(!is.na(divisor_from) && !is.na(divisor_to))
 
     # use matrix instead of vector for rownames
     fun = function(divisor) {
