@@ -36,7 +36,8 @@
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_df` shows the
 #'   number of voters (e.g. they can only vote for one party).
 #' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
-#'   must get _at least_ one seat ('Majorzbedingung') in this district. Default is `FALSE`.
+#'   must get _at least_ one seat ('Majorzbedingung') in this district. This only applies if
+#'   they are entitled to a seat in the upper apportionment. Default is `FALSE`.
 #'
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
@@ -132,9 +133,9 @@ pukelsheim = function(votes_df, district_seats_df,
 #'           the only method guaranteed to terminate.}
 #'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
 #'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung')
-#'           in said district. Seats in the upper apportionment are assigned with
-#'           Sainte-Laguë/Webster. `votes_matrix` must have row and column names to use this
-#'           method. See [lower_apportionment()] for more details.}
+#'           in said district. This only applies if they got enough seats in the upper
+#'           apportionment (which uses the Sainte-Laguë/Webster method). See
+#'           [lower_apportionment()] for more details.}
 #'   }
 #'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
 #'   use a different method for the upper and lower apportionment, provide a list with two
@@ -329,12 +330,16 @@ weight_list_votes = function(votes_matrix, district_seats) {
 #'     \item{`round`: The default Sainte-Laguë/Webster method is the standard
 #'           for biproportional apportionment and the only method guaranteed to terminate.}
 #'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
-#'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung').
+#'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung',
+#'           also called 'strongest party constrained' rule (SPC)). `votes_matrix` must have
+#'           row and column names to use this method.
+#'           A district winner can only get a seat if they are entitled to one from the upper
+#'           apportionment (`seats_rows`).
 #'           The condition does not apply in a district if two or more parties have the same
 #'           number of votes and there are not enough seats for these parties. A warning is
 #'           issued in this case. Modify the votes matrix to explicitly break ties.}
 #'     \item{You can provide a custom function that rounds a matrix (i.e. the
-#'           the votes_matrix divided by party and list divisors).}
+#'           the votes_matrix divided by party and list divisors) without further parameters.}
 #'     \item{It is possible to use any divisor method name listed in [proporz()].}
 #'   }
 #'
@@ -344,7 +349,7 @@ weight_list_votes = function(votes_matrix, district_seats) {
 #' @references Oelbermann, K. F. (2016): Alternate scaling algorithm for biproportional
 #'   divisor methods. Mathematical Social Sciences, 80, 25-32.
 #'
-#' @seealso [biproporz()], [upper_apportionment()]
+#' @seealso [biproporz()], [upper_apportionment()], [district_winner_matrix()]
 #'
 #' @examples
 #' votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)

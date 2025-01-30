@@ -21,12 +21,16 @@ following methods are supported:
 \item{\code{round}: The default Sainte-Laguë/Webster method is the standard
 for biproportional apportionment and the only method guaranteed to terminate.}
 \item{\code{wto}: "winner take one" works like "round" with a condition that the party that
-got the most votes in a district must get \emph{at least} one seat ('Majorzbedingung').
+got the most votes in a district must get \emph{at least} one seat ('Majorzbedingung',
+also called 'strongest party constrained' rule (SPC)). \code{votes_matrix} must have
+row and column names to use this method.
+A district winner can only get a seat if they are entitled to one from the upper
+apportionment (\code{seats_rows}).
 The condition does not apply in a district if two or more parties have the same
 number of votes and there are not enough seats for these parties. A warning is
 issued in this case. Modify the votes matrix to explicitly break ties.}
 \item{You can provide a custom function that rounds a matrix (i.e. the
-the votes_matrix divided by party and list divisors).}
+the votes_matrix divided by party and list divisors) without further parameters.}
 \item{It is possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}.}
 }}
 }
@@ -81,5 +85,5 @@ Oelbermann, K. F. (2016): Alternate scaling algorithm for biproportional
 divisor methods. Mathematical Social Sciences, 80, 25-32.
 }
 \seealso{
-\code{\link[=biproporz]{biproporz()}}, \code{\link[=upper_apportionment]{upper_apportionment()}}
+\code{\link[=biproporz]{biproporz()}}, \code{\link[=upper_apportionment]{upper_apportionment()}}, \code{\link[=district_winner_matrix]{district_winner_matrix()}}
 }
