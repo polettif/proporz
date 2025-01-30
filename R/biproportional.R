@@ -453,9 +453,10 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
     dR.max = rep(1.5, nrow(M))
 
     # divisor districts
-    dC = round(colSums(M)/seats_cols)
+    dC = unname(round(colSums(M)/seats_cols))
     dC[is.nan(dC)] <- 0
     dC.min = floor(colSums(M)/(seats_cols+1) / max(dR.max))
+    dC.min[dC.min == 0] <- 0.1 # will be lowered in find_divisor if necessary
     dC.max = ceiling(colSums(M)/(seats_cols-1) / min(dR.min))
 
     # handle districts with only one seat (otherwise leads to infinite dC.max)
