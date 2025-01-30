@@ -30,10 +30,9 @@ test_that("lower apportionment", {
     x3 = lower_apportionment(M2, d2, p2, method = function(x) ceil_at(x, 0.5))
     expect_identical(x3, x2)
 
-    expect_warning(
-        lower_apportionment(matrix(c(1,0,1,0), 2), c(1,1), c(2,0), method = "harmonic"),
-        'Lower apportionment is only guaranteed to terminate with the default Sainte-Lagu\u00EB/Webster method (method = "round")',
-        fixed = TRUE)
+    expect_identical(sum(
+        lower_apportionment(matrix(c(1,0,1,0), 2), c(1,1), c(2,0), method = "harmonic")),
+        2L)
 
     # exact 0.5 seats edge case
     vm0.5 = matrix(c(10, 10, 20, 10), 2, 2)

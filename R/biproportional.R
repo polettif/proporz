@@ -388,11 +388,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
     } else if(method == "wto") {
         round_func = create_wto_round_function(votes_matrix, seats_cols, seats_rows)
     } else {
-        method_impl <- get_method_implementation(method)
-        if(method_impl != "divisor_round") {
-            warning('Lower apportionment is only guaranteed to terminate with the default ',
-                    'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = FALSE)
-        }
+        method_impl = get_method_implementation(method)
         round_func = get_round_function(method_impl)
     }
 
