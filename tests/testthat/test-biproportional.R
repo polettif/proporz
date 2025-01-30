@@ -128,7 +128,35 @@ test_that("almost empty vote_matrix", {
     vm3 = matrix(c(4,3,0,20,1,0), nrow = 2)
     expect_error_fixed(
         biproporz(vm3, c(1,3,4)),
-        "Result is undefined, cannot assign all seats in lower apportionment")
+        "Not enough seats for party '2' in all districts with non-zero votes (6 seats necessary, available at most: 4)")
+
+    vm4 = matrix(c(5,0,0,0,15,16), nrow = 3)
+    expect_error_fixed(
+        lower_apportionment(vm4, c(3,1), c(2,1,1)), # almost impossible to trigger with biproporz
+        "Not enough seats in district '1' (3 seats necessary, available at most: 2)")
+
+    rownames(vm3) <- c("ONE", "TWO")
+    expect_error_fixed(
+        biproporz(vm3, c(1,3,4)),
+        "Not enough seats for party 'TWO' in all districts with non-zero votes (6 seats necessary, available at most: 4)")
+
+    expect_error_fixed(
+        biproporz(matrix(c(1000,10,0,1), 2), c(1,1)),
+        "Not enough seats for party '1' in all districts with non-zero votes (2 seats necessary, available at most: 1)")
+
+    vm_blocks = matrix(c(12L, 10L, 0L, 0L, 5L, 5L, 0L, 0L, 0L, 0L, 6L, 10L, 0L, 0L, 10L, 5L),
+                       nrow = 4L, ncol = 4L,
+                       dimnames = list(party = c("A", "B", "C", "D"),
+                                       district = c("District 1", "District 2", "District 3", "District 4")))
+    seats_blocks = c(`District 1` = 5L, `District 2` = 5L, `District 3` = 5L, `District 4` = 6L)
+    expect_error_fixed(biproporz(vm_blocks, seats_blocks),
+                       "Not enough seats available in submatrix [c(1,2), c(1,2)]")
+    expect_error_fixed(biproporz(vm_blocks[c(4,3,1,2),c(1,3,2,4)], seats_blocks[c(1,3,2,4)]),
+                       "Not enough seats available in submatrix [c(3,4), c(1,3)]")
+
+    # no submatrix error for matrix with diag = 0
+    vm_diag = matrix(c(0, 20, 100, 20, 0, 20, 100, 100, 0), nrow = 3)
+    expect_is(biproporz(vm_diag, c(50, 30, 90)), "proporz_matrix")
 })
 
 test_that("undefined result biproportional", {

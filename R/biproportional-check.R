@@ -121,3 +121,53 @@ prep_district_seats_df = function(district_seats_df) {
     names(district_seats) <- district_seats_df[[1]]
     return(district_seats)
 }
+
+check_enough_biproporz_seats = function(M, seats_cols, seats_rows) {
+    # row check
+    seats_cols_M = matrix(rep(seats_cols, each = nrow(M)), nrow = nrow(M))
+    row_check = rowSums(seats_cols_M * (M > 0))
+    not_enough = unname(which(seats_rows > row_check))
+    party_names = if(!is.null(rownames(M))) rownames(M) else as.character(seq_len(nrow(M)))
+    if(length(not_enough) > 0) {
+        stop("Not enough seats for party ", collapse_names(party_names[not_enough]),
+             " in all districts with non-zero votes (", sum(seats_rows[not_enough]),
+             " seats necessary, available at most: ", sum(row_check[not_enough]), ")",
+             call. = FALSE)
+    }
+
+    # col check
+    seats_row_M = matrix(rep(seats_rows, ncol(M)), ncol = ncol(M))
+    col_check = colSums(seats_row_M * (M > 0))
+    not_enough = unname(which(seats_cols > col_check))
+    district_names = if(!is.null(colnames(M))) colnames(M) else as.character(seq_len(ncol(M)))
+    if(length(not_enough) > 0) {
+        stop("Not enough seats in district ", collapse_names(district_names[not_enough]),
+             " (", sum(seats_cols[not_enough]),
+             " seats necessary, available at most: ", sum(col_check[not_enough]), ")",
+             call. = FALSE)
+    }
+
+    # block check (submatrices in this case don't share any non-zero columns or rows)
+    if(length(unique(rowSums(M > 0))) == 1 && length(unique(colSums(M > 0))) == 1) {
+        row_block_index = apply((M > 0) * 1, 1, paste, collapse = "")
+        col_block_index = apply((M > 0) * 1, 2, paste, collapse = "")
+
+        if(length(unique(row_block_index)) < nrow(M) || length(unique(col_block_index)) < ncol(M)) {
+            block_index_M = matrix(paste(rep(row_block_index, ncol(M)), rep(col_block_index, each = nrow(M))), nrow = nrow(M))
+
+            for(bi in unique(block_index_M)) {
+                m = M
+                m[block_index_M != bi] <- 0
+                sc = sum(seats_cols[colSums(m) == 0])
+                sr = sum(seats_rows[rowSums(m) == 0])
+                if(sc != sr) {
+                    stop("Not enough seats available in submatrix [c(",
+                         paste(unique(row(m)[m > 0]), collapse = ","),
+                         "), c(", paste(unique(col(m)[m > 0]), collapse = ",") ,")]", call. = FALSE)
+                }
+            }
+        }
+    }
+
+    invisible(TRUE)
+}
