@@ -479,10 +479,18 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 
     # usually less than 20 iterations are needed
     max_iter = getOption("proporz_max_iterations", 1000)
+    target_diff_prev = sum(2*seats_cols)
     for(i in seq_len(max_iter)) {
-        if(all(c(mc(M,dC,dR) == seats_cols, mr(M,dC,dR) == seats_rows))) {
+        # break conditions
+        target_diff = sum(abs(mc(M,dC,dR) - seats_cols)) + sum(abs(mr(M,dC,dR) - seats_rows))
+        if(target_diff > target_diff_prev) {
+            stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
+        }
+        target_diff_prev <- target_diff
+        if(sum(target_diff) == 0) {
             return(list(cols = dC, rows = dR))
         }
+
         # change party divisors
         row_decr = which.min0(mr(M,dC,dR) - seats_rows)
         if(length(row_decr) == 1) {
@@ -548,10 +556,6 @@ find_divisor = function(votes,
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))
-
-    if(any(is.infinite(votes)) || any(is.nan(votes))) {
-        stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
-    }
 
     # Divisors should be within votes/(seats-1) and votes/(seats+1).
     # It might be necessary to increase the search range given that

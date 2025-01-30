@@ -149,7 +149,7 @@ test_that("undefined result biproportional", {
 
     vm5 = matrix(c(10, 10, 10, 10), 2, 2)
     expect_error_fixed(biproporz(vm5, c(3,1)),
-                       "Result is undefined, exceeded maximum number of iterations")
+                       "Result is undefined, cannot assign all seats in lower apportionment")
 
     # manual fix (actual implementation depends on rules)
     vm4 <- vm6 <- vm
@@ -435,4 +435,9 @@ test_that("error messages", {
     expect_error_fixed(prep_votes_matrix(vm_names, "x"), "rownames in `x` must be unique")
     rownames(vm_names) <- c("A", "C", "B")
     expect_error_fixed(prep_votes_matrix(vm_names, "x"), "colnames in `x` must be unique")
+
+    # max iterations
+    options(proporz_max_iterations = 2)
+    expect_error_fixed(biproporz(vm, seats), "Result is undefined, exceeded maximum number of iterations (2)")
+    options(proporz_max_iterations = NULL)
 })
