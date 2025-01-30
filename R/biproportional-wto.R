@@ -13,7 +13,7 @@ most_votes_in_district_matrix = function(votes_matrix) {
     return(votes_matrix == .district_max_matrix)
 }
 
-create_wto_round_function = function(votes_matrix, seats_districts, seats_parties) {
+create_wto_round_function = function(votes_matrix, district_seats, seats_parties) {
     if(is.null(colnames(votes_matrix)) || is.null(rownames(votes_matrix))) {
         stop("votes_matrix must have column and row names to handle district winners",
              call. = FALSE)
@@ -22,7 +22,7 @@ create_wto_round_function = function(votes_matrix, seats_districts, seats_partie
     district_winners = most_votes_in_district_matrix(votes_matrix)
 
     # Check if there are more winners than seats in any district
-    not_enough_district_seats = which(colSums(district_winners) > seats_districts)
+    not_enough_district_seats = which(colSums(district_winners) > district_seats)
     if(length(not_enough_district_seats) > 0) {
         district_winners[,not_enough_district_seats] <- FALSE
 

@@ -273,7 +273,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' `use_list_votes` is `TRUE` (default). The weighted votes are not rounded.
 #'
 #' @param votes_matrix votes matrix
-#' @param seats_district seats per district, vector with same length
+#' @param district_seats seats per district, vector with same length
 #'   as `ncol(votes_matrix)`)
 #'
 #' @returns the weighted `votes_matrix`
@@ -282,10 +282,10 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' weight_list_votes(uri2020$votes_matrix, uri2020$seats_vector)
 #'
 #' @export
-weight_list_votes = function(votes_matrix, seats_district) {
+weight_list_votes = function(votes_matrix, district_seats) {
     M_seats_district = matrix(
-        rep(seats_district, nrow(votes_matrix)),
-        byrow = TRUE, ncol = length(seats_district))
+        rep(district_seats, nrow(votes_matrix)),
+        byrow = TRUE, ncol = length(district_seats))
 
     votes_matrix <- votes_matrix/M_seats_district
 
