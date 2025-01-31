@@ -58,3 +58,27 @@ test_that("two with ties and enough seats", {
     expect_error(biproporz(vm3, seats2, method = "wto"),
                  "Not enough upper apportionment seats to give district winner seats to party/list: '3'")
 })
+
+test_that("district_winner_matrix", {
+    vm = matrix(c(60,30,0,20,10,20), 3, dimnames = list(as.character(1:3), c("A", "B")))
+
+    dwm_c = function(...) c(district_winner_matrix(...))
+
+    expect_equal(dwm_c(vm), c(TRUE,FALSE,FALSE,NA,FALSE,NA))
+    expect_equal(district_winner_matrix(vm, c(3,1)), district_winner_matrix(vm, c(B=1,A=3)))
+    expect_equal(dimnames(district_winner_matrix(vm, c(3,1))), dimnames(vm))
+
+    expect_equal(dwm_c(vm, c(0,1)), c(NA,FALSE,FALSE,NA,FALSE,NA))
+    expect_equal(dwm_c(vm, c(0,2)), c(NA,FALSE,FALSE,TRUE,FALSE,TRUE))
+    expect_equal(dwm_c(vm, c(0,0)), c(NA,FALSE,FALSE,NA,FALSE,NA))
+    expect_equal(dwm_c(vm, 0), c(NA,FALSE,FALSE,NA,FALSE,NA))
+
+    # Find ties
+    is.na(district_winner_matrix(vm))
+
+    # Find winners with ties if enough seats are avialable
+    district_winner_matrix(vm, c(1,2))
+
+    # Find entries with not enough seats and no ties (unrealistic example)
+    is.na(district_winner_matrix(vm, 0)) != is.na(district_winner_matrix(vm, 1))
+})

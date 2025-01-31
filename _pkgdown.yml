@@ -39,6 +39,7 @@ reference:
 - title: "Helpers"
   contents:
   - get_divisors
+  - district_winner_matrix
   - pivot_to_matrix
   - pivot_to_df
   - ceil_at

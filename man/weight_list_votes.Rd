@@ -4,12 +4,12 @@
 \alias{weight_list_votes}
 \title{Create weighted votes matrix}
 \usage{
-weight_list_votes(votes_matrix, seats_district)
+weight_list_votes(votes_matrix, district_seats)
 }
 \arguments{
 \item{votes_matrix}{votes matrix}
 
-\item{seats_district}{seats per district, vector with same length
+\item{district_seats}{seats per district, vector with same length
 as \code{ncol(votes_matrix)})}
 }
 \value{
