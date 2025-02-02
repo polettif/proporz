@@ -107,12 +107,31 @@ assert = function(check) {
     invisible()
 }
 
-collapse_names = function(x) {
-    if(is.character(x)) {
-        y = paste(x, collapse = "', '")
-        y <- paste0("'", y, "'")
-    } else {
-        y = paste(x, collapse = ", ")
+collapse_names = function(x, x_names = NULL) {
+    if(is.logical(x)) {
+        x <- which(x)
     }
-    return(y)
+    if(!is.null(x_names)) {
+        assert(is.numeric(x))
+        x <- x_names[x]
+    }
+
+    if(is.character(x)) {
+        out = paste(x, collapse = "', '")
+        out <- paste0("'", out, "'")
+    } else {
+        out = paste(x, collapse = ", ")
+    }
+
+    return(out)
+}
+
+num_word = function(singular, plural, i) {
+    if(is.logical(i)) {
+        i <- which(i)
+    }
+    if(length(i) == 1L) {
+        return(singular)
+    }
+    return(plural)
 }

@@ -442,7 +442,7 @@ divide_votes_matrix = function(M, col_divisors, row_divisors) {
 find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
     assert(is.matrix(M))
     assert(is.matrix(round_func(M)))
-    check_enough_biproporz_seats(M, seats_cols, seats_rows)
+    check_flow_criterion(M, seats_cols, seats_rows)
 
     # divisor parties
     dR = rep(1, nrow(M))
