@@ -2,6 +2,7 @@
 
 * add `district_winner_matrix()` function
 * returned seat values from proporz/biproporz functions are always integer
+* undefined biproporz results are caught earlier (flow criterion check)
 
 # proporz 1.5.0
 

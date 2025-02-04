@@ -126,31 +126,15 @@ prep_district_seats_df = function(district_seats_df) {
 # the number of seats that are rewarded to the districts in which these parties campaign.
 # -- Oelbermann, K. F. (2016)
 check_flow_criterion = function(M, seats_cols, seats_rows) {
-    names(seats_rows) <- seq_along(seats_rows)
-    parties_with_seats = seats_rows[seats_rows > 0]
-    parties_without_seats = seats_rows[seats_rows == 0]
+    assert(dim(M) == c(length(seats_rows), length(seats_cols)))
+    assert(sum(seats_cols) == sum(seats_rows))
 
-    # skip check for party counts that are too big too handle with expand.grid and a loop
-    if(length(parties_with_seats) > 16) {
-        return(invisible(TRUE))
-    }
+    m = M > 0 # shows which party ran in which district
+    for(p in seq_along(seats_rows)) {
+        j = m[p,]
+        # Find matching parties that didn't run in other districts
+        i = apply(m, 1, is_flow_criterion_pair, j)
 
-    # create party combination sets (only use parties with seats in expand.grid)
-    party_comb_set = t(expand.grid(rep(list(c(TRUE, FALSE)), length(parties_with_seats))))
-    rownames(party_comb_set) <- names(parties_with_seats)
-    party_comb_set <- party_comb_set[,colSums(party_comb_set) > 0,drop=F]
-
-    if(length(parties_without_seats) > 0) {
-        party_comb_set_0 = matrix(FALSE, nrow = length(parties_without_seats), ncol = ncol(party_comb_set))
-        rownames(party_comb_set_0) <- names(parties_without_seats)
-        party_comb_set <- rbind(party_comb_set, party_comb_set_0)
-    }
-    party_comb_set <- party_comb_set[as.character(seq_along(seats_rows)),,drop=FALSE]
-    party_comb_set <- party_comb_set[,order(colSums(party_comb_set)),drop=FALSE]
-
-    for(p in seq_len(ncol(party_comb_set))) {
-        i = c(party_comb_set[,p])
-        j = colSums((M > 0)[i,,drop=F]) > 0
         party_seats_necessary = sum(seats_rows[i])
         district_seats_available = sum(seats_cols[j])
 
@@ -164,6 +148,15 @@ check_flow_criterion = function(M, seats_cols, seats_rows) {
                  call. = FALSE)
         }
     }
-
     invisible(TRUE)
+}
+
+# returns FALSE if party `x` ran (i.e. got votes) in districts where party
+# `base` did not run. In other words: `x` can campaign in the same or fewer
+# districts (but at least one) as `base` but not more
+is_flow_criterion_pair = function(x, base) {
+    assert(is.logical(x) && !is.matrix(x))
+    assert(is.logical(base) && !is.matrix(x))
+    x_districts_not_covered_by_base = setdiff(which(x), which(base))
+    return(any(x) && length(x_districts_not_covered_by_base) == 0)
 }

@@ -135,7 +135,7 @@ test_that("flow criterion check for almost empty matrix", {
     expect_error_fixed(
         lower_apportionment(matrix(c(0, 10, 15, 0, 0, 20, 10, 0, 10, 0, 0, 20), 4),
                             c(3,1,1), c(2,1,1,1)),
-        "Not enough seats for party 1 in district 3\n(2 seats necessary, 1 available)")
+        "Not enough seats for parties 1, 4 in district 3\n(3 seats necessary, 1 available)")
 
     expect_error_fixed(
         biproporz(matrix(c(1000,10,0,1), 2), c(1,1)),
@@ -155,6 +155,12 @@ test_that("flow criterion check for almost empty matrix", {
     expect_error_fixed(
         biproporz(vm3b, c(A=1,B=4,C=3)),
         "Not enough seats for party 'TWO' in districts 'A', 'C'\n(6 seats necessary, 4 available)")
+
+    # check in multiple districts
+    expect_error_fixed(
+        check_flow_criterion(matrix(c(1,1,1,0,0,0, 1,0,0,1,1,0, 0,0,0,0,0,1), nrow = 6),
+                             c(2,2,2), c(1,1,1,1,1,1)),
+        "Not enough seats for parties 1, 2, 3, 4, 5 in districts 1, 2\n(5 seats necessary, 4 available)")
 
     vm_blocks1 = matrix(c(12L, 10L, 0L, 0L, 5L, 5L, 0L, 0L, 0L, 0L, 6L, 10L, 0L, 0L, 10L, 5L),
                         nrow = 4L, ncol = 4L,
@@ -176,26 +182,18 @@ test_that("flow criterion check for almost empty matrix", {
     expect_error(biproporz(vm_blocks3, uri2020$seats_vector),
                  "Not enough seats for parties 'CVP', 'SVP' in district 'Erstfeld'")
 
-    # no submatrix error for matrix with diag = 0
+     # no submatrix error for matrix with diag = 0
     vm_diag = matrix(c(0, 20, 100, 20, 0, 20, 100, 100, 0), nrow = 3)
     expect_is(biproporz(vm_diag, c(50, 30, 90)), "proporz_matrix")
+})
 
-    # too many parties for flow criterion check
-    set.seed(1)
-    vm_big1 = matrix(round(runif(60*20, 10, 1000)), nrow = 60)
-    expect_is(biproporz(vm_big1, rep(10, 20), use_list_votes = FALSE),
-              "proporz_matrix")
-    # shouldn't take longer than vm_big1
-    vm_big2 = matrix(round(runif(16*20, 10, 1000)), nrow = 16)
-    expect_is(biproporz(vm_big2, rep(10, 20), use_list_votes = FALSE),
-              "proporz_matrix")
-    # find cutoff point
-    # for(np in 10:25) {
-    #     print(c(np, system.time({
-    #         biproporz(matrix(round(runif(np*20, 10, 1000)), nrow = np),
-    #                   rep(10, 20), use_list_votes = FALSE)
-    #     })))
-    # }
+test_that("flow criterion helper", {
+    M = matrix(c(T,T,F,T,F,F,T,F,F,F,T,F,F,F,T), byrow = TRUE, ncol = 3)
+    expect_false(is_flow_criterion_pair(c(FALSE,FALSE),c(TRUE,FALSE)))
+    expect_false(is_flow_criterion_pair(c(TRUE,FALSE),c(FALSE,FALSE)))
+    expect_equal(apply(M, 1, is_flow_criterion_pair, M[1,]), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+    expect_equal(apply(M, 1, is_flow_criterion_pair, M[2,]), c(FALSE, TRUE, TRUE, FALSE, FALSE))
+    expect_equal(apply(M, 1, is_flow_criterion_pair, M[5,]), c(FALSE, FALSE, FALSE, FALSE, TRUE))
 })
 
 test_that("undefined result biproportional", {
