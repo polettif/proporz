@@ -1,0 +1,135 @@
+# Load all biproportional example datasets from BAZI and run them
+# with biproporz. The apportionment results are not validated, this
+# script is intended to find unexpected errors.
+# Bazi data has to be extracted to "data/" directory
+
+source("bazi.R")
+
+library(proporz)
+
+# Setup functions ####
+get_proporz_method = function(bazi_data) {
+    if(!is.null(bazi_data$DISTRIKTOPTION) && tolower(bazi_data$DISTRIKTOPTION) == "nzz") {
+        return("nzz")
+    }
+
+    data_method = tolower(gsub(" ", "", bazi_data$METHODE))
+    if(data_method == "divstd") {
+        method = list("round", "round")
+    } else if(data_method == "divauf") {
+        method = "divisor_ceiling"
+    } else if(data_method == "divabr") {
+        method = "divisor_floor"
+    } else if(data_method == "divgeo") {
+        method = "divisor_geometric"
+    } else if(data_method == "divstd,divabr") {
+        method = list("divisor_round", "divisor_floor")
+    } else if(data_method == "divabr,divstd") {
+        method = list("divisor_floor", "divisor_round")
+    } else {
+        stop(bazi_data$METHODE)
+    }
+    return(method)
+}
+
+# Neue Zürcher Zuteilungsmethode
+nzz = function(vm, ds) {
+    weighted_votes_matrix = weight_list_votes(vm, ds)
+    # weighted votes are rounded with the nzz method
+    rounded_matrix = ceil_at(weighted_votes_matrix, 0.5)
+    seats_party = proporz(rowSums(rounded_matrix), sum(ds), "round")
+
+    seats_matrix = lower_apportionment(vm, ds, seats_party)
+    t(seats_matrix)
+}
+
+# function to run pukelsheim with bazi_data
+pukelsheim_bazi = function(bazi_data) {
+    method = get_proporz_method(bazi_data)
+
+    # datasets using voter counts are not described in the data files
+    use_list_vote_false = c(
+        "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi",
+        "data/zTest_data/NZZ_problems/Tied_cases/AH2.bazi",
+        "data/zTest_data/Biproportional_problems/Tied_cases/FP6.bazi",
+        "data/zTest_data/Biproportional_problems/Nonexistence/FG3.bazi",
+        "data/zTest_data/Biproportional_problems/Nonexistence/NE4.bazi",
+        "data/zTest_data/Biproportional_problems/Nonexistence/Gassner2000-62Exemple24.bazi",
+        "data/zTest_data/NZZ_problems/AH1-AH14/AH14.bazi"
+    )
+    use_list_votes = !bazi_data$filename %in% use_list_vote_false
+
+    # run biproporz
+    vm = pivot_to_matrix(bazi_data$data[,c(2,1,3)])
+    ds = setNames(bazi_data$seats$seats, bazi_data$seats$district)
+
+    if("nzz" %in% unlist(method)) {
+        if(!use_list_votes) {
+            method <- "round"
+        } else {
+            return(nzz(vm, ds))
+        }
+    }
+    seats = biproporz(vm, ds, method = method,
+                      use_list_votes = use_list_votes)
+    t(seats)
+}
+
+load_bazi_dir = function(path) {
+    bazi_data_list = list.files(path, full.names = T, recursive = T, pattern = "bazi") |>
+        lapply(read_bazi_data)
+    names(bazi_data_list) <- lapply(bazi_data_list, getElement, "filename")
+    bazi_data_list
+}
+
+# Load working example data ####
+bazi_examples = c(
+    load_bazi_dir("data/zTest_data/Biproportional_problems/Diverse"),
+    load_bazi_dir("data/zTest_data/NZZ_problems/Diverse"),
+    load_bazi_dir("data/zTest_data/NZZ_problems/AH1-AH14"),
+    load_bazi_dir("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"),
+    # tied votes are actually broken in alternate scaling
+    "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(read_bazi_data("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
+    )
+
+# Remove datasets with issues ####
+# typo: XI as district name instead of IX
+bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/MLB-michigan.bazi"]] <- NULL
+
+# typo: EINGABE only with 2 instead of 3 values (missing ",")
+bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/Swiss2003Sim5006M.bazi"]] <- NULL
+
+# parsing: additional undefined column between party and votes
+bazi_examples[["data/zTest_data/NZZ_problems/Diverse/FP1.bazi"]] <- NULL
+
+# Run workable datasets, expecting no errors ####
+for(bazi_data in bazi_examples) {
+    testthat::expect_no_error(pukelsheim_bazi(bazi_data))
+}
+
+# Load edge case datasets ####
+bazi_errors = c(
+    load_bazi_dir("data/zTest_data/Biproportional_problems/Nonexistence"),
+    load_bazi_dir("data/zTest_data/NZZ_problems/Tied_cases")
+)
+
+# Remove datasets with issues ####
+# method: use a winner-take-TWO method (not implemented in proporz) and has no result even with intended method
+bazi_errors[["data/zTest_data/Biproportional_problems/Nonexistence/SM3.bazi"]] <- NULL
+bazi_errors[["data/zTest_data/Biproportional_problems/Nonexistence/SM4.bazi"]] <- NULL
+
+# The following examples lead to a "iterations exceeded" error that is not caught beforehand
+bazi_errors[["data/zTest_data/Biproportional_problems/Nonexistence/FG3.bazi"]] <- NULL # flow criterion check in bazi uses district sets
+bazi_errors[["data/zTest_data/NZZ_problems/Tied_cases/AS2.bazi"]] <- NULL # "2 gleichberechtige Unterzuteilungen"
+bazi_errors[["data/zTest_data/NZZ_problems/Tied_cases/mlb1.bazi"]] <- NULL # "2 gleichberechtige Unterzuteilungen"
+bazi_errors[["data/zTest_data/NZZ_problems/Tied_cases/AH2.bazi"]] <- NULL # "2 gleichberechtige Unterzuteilungen"
+
+# data sets that don't acutally lead to errors
+bazi_errors <- bazi_errors[setdiff(names(bazi_errors), names(bazi_examples))]
+
+# Expect errors in edge case datasets ####
+for(bazi_data in bazi_errors) {
+	testthat::expect_error(
+	    pukelsheim_bazi(bazi_data),
+	    "(Result is undefined, tied votes)|(Result is undefined, equal quotient)|(Result is undefined, cannot assign)|(Not enough seats)")
+}

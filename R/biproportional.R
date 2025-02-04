@@ -388,11 +388,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
     } else if(method == "wto") {
         round_func = create_wto_round_function(votes_matrix, seats_cols, seats_rows)
     } else {
-        method_impl <- get_method_implementation(method)
-        if(method_impl != "divisor_round") {
-            warning('Lower apportionment is only guaranteed to terminate with the default ',
-                    'Sainte-Lagu\u00EB/Webster method (method = "round")', call. = FALSE)
-        }
+        method_impl = get_method_implementation(method)
         round_func = get_round_function(method_impl)
     }
 
@@ -446,6 +442,7 @@ divide_votes_matrix = function(M, col_divisors, row_divisors) {
 find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
     assert(is.matrix(M))
     assert(is.matrix(round_func(M)))
+    check_flow_criterion(M, seats_cols, seats_rows)
 
     # divisor parties
     dR = rep(1, nrow(M))
@@ -453,9 +450,10 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
     dR.max = rep(1.5, nrow(M))
 
     # divisor districts
-    dC = round(colSums(M)/seats_cols)
+    dC = unname(round(colSums(M)/seats_cols))
     dC[is.nan(dC)] <- 0
     dC.min = floor(colSums(M)/(seats_cols+1) / max(dR.max))
+    dC.min[dC.min == 0] <- 0.1 # will be lowered in find_divisor if necessary
     dC.max = ceiling(colSums(M)/(seats_cols-1) / min(dR.min))
 
     # handle districts with only one seat (otherwise leads to infinite dC.max)
@@ -468,24 +466,32 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 
     which.min0 = function(x) {
         x[which(x == 0)] <- max(x)
-        if(all(x == max(x))) return(c())
+        if(length(unique(x)) == 1L) return(NA)
         which.min(x)
     }
     which.max0 = function(x) {
         x[which(x == 0)] <- min(x)
-        if(all(x == min(x))) return(c())
+        if(length(unique(x)) == 1L) return(NA)
         which.max(x)
     }
 
     # usually less than 20 iterations are needed
     max_iter = getOption("proporz_max_iterations", 1000)
+    target_diff_prev = sum(2*seats_cols)
     for(i in seq_len(max_iter)) {
-        if(all(c(mc(M,dC,dR) == seats_cols, mr(M,dC,dR) == seats_rows))) {
+        # break conditions
+        target_diff = sum(abs(mc(M,dC,dR) - seats_cols)) + sum(abs(mr(M,dC,dR) - seats_rows))
+        if(target_diff > target_diff_prev) {
+            stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
+        }
+        target_diff_prev <- target_diff
+        if(sum(target_diff) == 0) {
             return(list(cols = dC, rows = dR))
         }
+
         # change party divisors
         row_decr = which.min0(mr(M,dC,dR) - seats_rows)
-        if(length(row_decr) == 1) {
+        if(!is.na(row_decr)) {
             dR[row_decr] <- find_divisor(
                 M[row_decr,,drop=F]/dC,
                 dR[row_decr], dR.min[row_decr],
@@ -493,7 +499,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         }
 
         row_incr = which.max0(mr(M,dC,dR) - seats_rows)
-        if(length(row_incr) == 1) {
+        if(!is.na(row_incr)) {
             dR[row_incr] <- find_divisor(
                 M[row_incr,,drop=F]/dC,
                 dR[row_incr], dR.max[row_incr],
@@ -502,7 +508,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 
         # change district divisors
         col_decr = which.min0(mc(M,dC,dR) - seats_cols)
-        if(length(col_decr) == 1) {
+        if(!is.na(col_decr)) {
             dC[col_decr] <- find_divisor(
                 M[,col_decr,drop=F]/dR,
                 dC[col_decr], dC.min[col_decr],
@@ -510,11 +516,16 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         }
 
         col_incr = which.max0(mc(M,dC,dR) - seats_cols)
-        if(length(col_incr) == 1) {
+        if(!is.na(col_incr)) {
             dC[col_incr] <- find_divisor(
                 M[,col_incr,drop=F]/dR,
                 dC[col_incr], dC.max[col_incr],
                 seats_cols[col_incr], round_func)
+        }
+
+        if(is.na(row_decr) && is.na(row_incr) && is.na(col_decr) && is.na(col_incr)) {
+            stop("Result is undefined, tied votes and multiple possible seat assignments",
+                 call. = FALSE)
         }
     }
     stop("Result is undefined, exceeded maximum number of iterations (", max_iter, ")",
@@ -541,6 +552,8 @@ find_divisor = function(votes,
     assert(is.matrix(votes))
     assert(any(dim(votes) == 1))
     assert(length(target_seats) == 1)
+    assert(all(!is.infinite(votes)) && all(!is.na(votes)))
+    assert(!is.na(divisor_from) && !is.na(divisor_to))
 
     # use matrix instead of vector for rownames
     fun = function(divisor) {
@@ -548,10 +561,6 @@ find_divisor = function(votes,
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))
-
-    if(any(is.infinite(votes)) || any(is.nan(votes))) {
-        stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
-    }
 
     # Divisors should be within votes/(seats-1) and votes/(seats+1).
     # It might be necessary to increase the search range given that

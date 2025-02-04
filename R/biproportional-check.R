@@ -121,3 +121,42 @@ prep_district_seats_df = function(district_seats_df) {
     names(district_seats) <- district_seats_df[[1]]
     return(district_seats)
 }
+
+# The flow-criterion is violated if the total number of seats of some set of parties exceeds
+# the number of seats that are rewarded to the districts in which these parties campaign.
+# -- Oelbermann, K. F. (2016)
+check_flow_criterion = function(M, seats_cols, seats_rows) {
+    assert(dim(M) == c(length(seats_rows), length(seats_cols)))
+    assert(sum(seats_cols) == sum(seats_rows))
+
+    m = M > 0 # shows which party ran in which district
+    for(p in seq_along(seats_rows)) {
+        j = m[p,]
+        # Find matching parties that didn't run in other districts
+        i = apply(m, 1, is_flow_criterion_pair, j)
+
+        party_seats_necessary = sum(seats_rows[i])
+        district_seats_available = sum(seats_cols[j])
+
+        if(party_seats_necessary > district_seats_available) {
+            stop("Not enough seats for ", num_word("party ", "parties ", i),
+                 collapse_names(i, rownames(M)),
+                 " in ", num_word("district ", "districts ", j),
+                 collapse_names(j, colnames(M)),
+                 "\n(", party_seats_necessary, " seats necessary",
+                 ", ", district_seats_available, " available)",
+                 call. = FALSE)
+        }
+    }
+    invisible(TRUE)
+}
+
+# returns FALSE if party `x` ran (i.e. got votes) in districts where party
+# `base` did not run. In other words: `x` can campaign in the same or fewer
+# districts (but at least one) as `base` but not more
+is_flow_criterion_pair = function(x, base) {
+    assert(is.logical(x) && !is.matrix(x))
+    assert(is.logical(base) && !is.matrix(x))
+    x_districts_not_covered_by_base = setdiff(which(x), which(base))
+    return(any(x) && length(x_districts_not_covered_by_base) == 0)
+}
