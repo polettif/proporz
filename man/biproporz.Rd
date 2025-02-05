@@ -14,11 +14,11 @@ biproporz(
 }
 \arguments{
 \item{votes_matrix}{Vote count matrix with votes by party in rows and votes by district
-in columns}
+in columns.}
 
 \item{district_seats}{Vector defining the number of seats per district. Must be the same
 length as \code{ncol(votes_matrix)}. Values are name-matched to \code{votes_matrix} columns if both
-are named. If the number of seats per district should be assigned according to the number
+are named. If the number of seats per district should be calculated according to the number
 of votes (not the general use case), a single number for the total number of seats can be
 used.}
 
@@ -31,7 +31,7 @@ vector. No quorum is applied if parameter is missing or \code{NULL}.}
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
 the number of available district seats with \code{\link[=weight_list_votes]{weight_list_votes()}}. Set to \code{FALSE} if
-\code{votes_matrix} shows the number of voters (e.g. they can only cast one vote for one
+\code{votes_matrix} shows the number of voters (i.e. they can only cast one vote for one
 party).}
 
 \item{method}{Defines which method is used to assign seats. The following methods are

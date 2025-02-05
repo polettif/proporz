@@ -91,7 +91,7 @@ get_method_implementation = function(method_name) {
         }
         method_names = paste0(method_names, collapse = ", ")
         doc[length(doc)+1] <- paste0("    \\item{", method_names,
-                                     ": use [", implementation, "()]}")
+                                     ": [", implementation, "()]}")
     }
     doc[length(doc)+1] <- "}"
     return(paste(doc, collapse = "\n"))

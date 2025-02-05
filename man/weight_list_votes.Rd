@@ -10,15 +10,18 @@ weight_list_votes(votes_matrix, district_seats)
 \item{votes_matrix}{votes matrix}
 
 \item{district_seats}{seats per district, vector with same length
-as \code{ncol(votes_matrix)})}
+as \code{ncol(votes_matrix)}}
 }
 \value{
 the weighted \code{votes_matrix}
 }
 \description{
-Weigh list votes by dividing the votes matrix entries by the number
+Weight list votes by dividing the votes matrix entries by the number
 of seats per district. This method is used in \code{\link[=upper_apportionment]{upper_apportionment()}} if
-\code{use_list_votes} is \code{TRUE} (default). The weighted votes are not rounded.
+\code{use_list_votes} is \code{TRUE} (default).
+}
+\note{
+The weighted votes are not rounded. Matrix and vector names are ignored.
 }
 \examples{
 weight_list_votes(uri2020$votes_matrix, uri2020$seats_vector)

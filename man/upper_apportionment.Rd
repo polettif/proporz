@@ -2,7 +2,7 @@
 % Please edit documentation in R/biproportional.R
 \name{upper_apportionment}
 \alias{upper_apportionment}
-\title{Calculate upper apportionment}
+\title{Upper apportionment}
 \usage{
 upper_apportionment(
   votes_matrix,
@@ -13,40 +13,37 @@ upper_apportionment(
 }
 \arguments{
 \item{votes_matrix}{Vote count matrix with votes by party in rows and votes by district
-in columns}
+in columns.}
 
 \item{district_seats}{Vector defining the number of seats per district. Must be the same
 length as \code{ncol(votes_matrix)}. Values are name-matched to \code{votes_matrix} columns if both
-are named. If the number of seats per district should be assigned according to the number
+are named. If the number of seats per district should be calculated according to the number
 of votes (not the general use case), a single number for the total number of seats can be
 used.}
 
 \item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
 the number of available district seats with \code{\link[=weight_list_votes]{weight_list_votes()}}. Set to \code{FALSE} if
-\code{votes_matrix} shows the number of voters (e.g. they can only cast one vote for one
+\code{votes_matrix} shows the number of voters (i.e. they can only cast one vote for one
 party).}
 
 \item{method}{Apportion method that defines how seats are assigned, see \code{\link[=proporz]{proporz()}}. Default
 is the Saintë-Lague/Webster method.}
 }
 \value{
-A named list with district seats (for \code{votes_matrix} columns) and party seats
+A named list with \code{district} seats (for \code{votes_matrix} columns) and \code{party} seats
 (for rows).
 }
 \description{
-In the upper apportionment, the seats for each party are computed with a highest averages
-method. This determines how many of all seats each party deserves due to the total of all
-their votes (that is the sum of the votes for all regional lists of that party).
-Analogical, the same highest averages method is used to determine how many of all seats
-each region deserves.
+In the first step of biproportional apportionment parties are given seats according to the
+sum of their votes across all districts.
 }
 \note{
-The results from the upper apportionment are final results for the number of the
-seats of one party (and analogically for the number of the seats of one region) within
-the whole voting area, the lower apportionment will only determine where (which
-regions) the party seats are allocated. Thus, after the upper apportionment is done,
-the final strength of a party/region within the parliament is definite.
+The results from the upper apportionment define the number of seats for each party and
+the number of seats for each district for the whole voting area. The lower apportionment
+will only determine where (i.e. which district) the party seats are allocated. Thus, after
+the upper apportionment is done, the final strength of a party/district within the
+parliament is definite.
 }
 \examples{
 votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)

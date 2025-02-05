@@ -2,10 +2,10 @@
 #'
 #' Show the district and party divisors used to assign seats.
 #' This method provides easier access to divisors stored in
-#' `attributes(...)$divisors`
+#' `attributes(...)$divisors`.
 #'
-#' @param biproporz_result a matrix created by [biproporz()]
-#'                         or a data.frame created by [pukelsheim()]
+#' @param biproporz_result a matrix created by [biproporz()] or a
+#'   data.frame created by [pukelsheim()]
 #'
 #' @returns The district and party divisors in a list, each as a vector
 #'
@@ -15,7 +15,7 @@
 #'
 #' @export
 get_divisors = function(biproporz_result) {
-    attributes(biproporz_result)$divisors
+    attributes(biproporz_result)[["divisors"]]
 }
 
 prettier_divisors = function(votes_matrix, divisors, round_func) {
@@ -34,7 +34,7 @@ prettier_divisors = function(votes_matrix, divisors, round_func) {
     expected = round_matrix_func(divisors)
 
     # start with divisors with the most digits
-    for(i in order(n_digits(divisors), decreasing = T)) {
+    for(i in order(n_digits(divisors), decreasing = TRUE)) {
         # see if rounded down or up to k digits leads to the same result
         for(k in seq(0,15)) {
             divisors_cand = divisors

@@ -10,7 +10,7 @@ test_that("most_votes_in_district_matrix", {
     dw = most_votes_in_district_matrix(votes_matrix)
     dw <- unname(dw)
 
-    expect_identical(dw, matrix(c(T,F,T,F,F,T), ncol = 3))
+    expect_identical(dw, matrix(c(TRUE,FALSE,TRUE,FALSE,FALSE,TRUE), ncol = 3))
     expect_true(is.logical(dw))
     expect_identical(colSums(dw), c(1,1,1))
     expect_identical(sum(colSums(dw)), 3)
@@ -37,9 +37,9 @@ test_that("winner take one", {
     df = pivot_to_df(vm2)
     seatsdf = data.frame(district = names(seats2), seats = seats2)
     pk1 = pukelsheim(df, seatsdf, winner_take_one = FALSE)
-    expect_identical(matrix(pk1[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp1)))
+    expect_identical(matrix(pk1[["seats"]], 2, 2, byrow = TRUE), as.matrix(unname(bp1)))
     pk2 = pukelsheim(df, seatsdf, winner_take_one = TRUE)
-    expect_identical(matrix(pk2[["seats"]], 2, 2, byrow = T), as.matrix(unname(bp2)))
+    expect_identical(matrix(pk2[["seats"]], 2, 2, byrow = TRUE), as.matrix(unname(bp2)))
 })
 
 test_that("two with ties and enough seats", {
@@ -64,14 +64,14 @@ test_that("district_winner_matrix", {
 
     dwm_c = function(...) c(district_winner_matrix(...))
 
-    expect_equal(dwm_c(vm), c(TRUE,FALSE,FALSE,NA,FALSE,NA))
-    expect_equal(district_winner_matrix(vm, c(3,1)), district_winner_matrix(vm, c(B=1,A=3)))
-    expect_equal(dimnames(district_winner_matrix(vm, c(3,1))), dimnames(vm))
+    expect_identical(dwm_c(vm), c(TRUE,FALSE,FALSE,NA,FALSE,NA))
+    expect_identical(district_winner_matrix(vm, c(3,1)), district_winner_matrix(vm, c(B=1,A=3)))
+    expect_identical(dimnames(district_winner_matrix(vm, c(3,1))), dimnames(vm))
 
-    expect_equal(dwm_c(vm, c(0,1)), c(NA,FALSE,FALSE,NA,FALSE,NA))
-    expect_equal(dwm_c(vm, c(0,2)), c(NA,FALSE,FALSE,TRUE,FALSE,TRUE))
-    expect_equal(dwm_c(vm, c(0,0)), c(NA,FALSE,FALSE,NA,FALSE,NA))
-    expect_equal(dwm_c(vm, 0), c(NA,FALSE,FALSE,NA,FALSE,NA))
+    expect_identical(dwm_c(vm, c(0,1)), c(NA,FALSE,FALSE,NA,FALSE,NA))
+    expect_identical(dwm_c(vm, c(0,2)), c(NA,FALSE,FALSE,TRUE,FALSE,TRUE))
+    expect_identical(dwm_c(vm, c(0,0)), c(NA,FALSE,FALSE,NA,FALSE,NA))
+    expect_identical(dwm_c(vm, 0), c(NA,FALSE,FALSE,NA,FALSE,NA))
 
     # Find ties
     is.na(district_winner_matrix(vm))

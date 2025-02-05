@@ -51,6 +51,7 @@ test_that("biproporz", {
 test_that("weight_list_votes", {
     vm = matrix(c(110,50,20,10), 2)
     vmw = weight_list_votes(vm, c(10, 2))
+    expect_error_fixed(weight_list_votes(vm, 1), "`length(district_seats)` must be the same as `ncol(votes_matrix)`")
     expect_equal(vmw, matrix(c(110/10,50/10,20/2,10/2), 2), tolerance = 1e-14)
 })
 
@@ -79,7 +80,8 @@ test_that("pukelsheim wrapper", {
     result = pukelsheim(pklshm, pklshm_seats, new_seats_col = "Sitze")
     expect_identical(result[,1:3], pklshm)
     expect_identical(result$Sitze, as.integer(c(1,2,1,1,2,2,2,1,3)))
-    expect_true(!is.null(get_divisors(result)))
+    expect_false(is.null(get_divisors(result)$districts))
+    expect_false(is.null(get_divisors(result)$parties))
 })
 
 test_that("free apportionment for districts", {
@@ -188,12 +190,15 @@ test_that("flow criterion check for almost empty matrix", {
 })
 
 test_that("flow criterion helper", {
-    M = matrix(c(T,T,F,T,F,F,T,F,F,F,T,F,F,F,T), byrow = TRUE, ncol = 3)
+    M = matrix(c(TRUE,TRUE,FALSE,TRUE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE,TRUE), byrow = TRUE, ncol = 3)
     expect_false(is_flow_criterion_pair(c(FALSE,FALSE),c(TRUE,FALSE)))
     expect_false(is_flow_criterion_pair(c(TRUE,FALSE),c(FALSE,FALSE)))
-    expect_equal(apply(M, 1, is_flow_criterion_pair, M[1,]), c(TRUE, TRUE, TRUE, TRUE, FALSE))
-    expect_equal(apply(M, 1, is_flow_criterion_pair, M[2,]), c(FALSE, TRUE, TRUE, FALSE, FALSE))
-    expect_equal(apply(M, 1, is_flow_criterion_pair, M[5,]), c(FALSE, FALSE, FALSE, FALSE, TRUE))
+    expect_identical(
+        apply(M, 1, is_flow_criterion_pair, M[1,]), c(TRUE, TRUE, TRUE, TRUE, FALSE))
+    expect_identical(
+        apply(M, 1, is_flow_criterion_pair, M[2,]), c(FALSE, TRUE, TRUE, FALSE, FALSE))
+    expect_identical(
+        apply(M, 1, is_flow_criterion_pair, M[5,]), c(FALSE, FALSE, FALSE, FALSE, TRUE))
 })
 
 test_that("undefined result biproportional", {
@@ -434,7 +439,7 @@ test_that("error messages", {
     seats_df = data.frame(col = 1:4, seats = seats)
     seats_df124 = seats_df[-3,]
     vdf134 = vdf[vdf[["district"]] != 2,]
-    expect_true(nrow(vdf134) > 0)
+    expect_gt(nrow(vdf134), 0)
 
     # unique party ids
     vdf_dupl = rbind(vdf, vdf[9:12,])

@@ -29,7 +29,7 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
         warning("Not enough seats for tied parties with the most votes in: ",
                 collapse_names(names(not_enough_district_seats)),
                 "\nWinner take one condition is not applied in ",
-                ifelse(length(not_enough_district_seats) == 1, "this district.", "these districts."),
+                num_word("this district.", "these districts.", not_enough_district_seats),
                 call. = FALSE)
     }
 
@@ -46,7 +46,7 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
     #   Pukelsheim F.; Schumacher C. (2011):
     #   Doppelproporz bei Parlamentswahlen. Ein Rück- und Ausblick.
     district_winner_round_func = function(x) {
-        district_winners_subset = district_winners[rownames(x),colnames(x),drop=F]
+        district_winners_subset = district_winners[rownames(x),colnames(x),drop=FALSE]
 
         x_winners <- x_others <- x
         x_winners[which(!district_winners_subset)] <- 0
@@ -65,12 +65,14 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
     return(district_winner_round_func)
 }
 
-#' Create a matrix that shows which party has the most votes in a district
+#' Find which party has the most votes in a district
+#'
+#' Create a logical matrix that shows whether a party got the most votes in a district or not.
 #'
 #' @inheritParams upper_apportionment
 #' @param district_seats Vector defining the number of seats per district. Must be the same
 #'   length as `ncol(votes_matrix)`. Values are name-matched to `votes_matrix` columns if both
-#'   are named. If a single value is supplied (like 1 as default), it is used as the number of
+#'   are named. If a single value is supplied (like `1` as default), it is used as the number of
 #'   seats for every district.
 #'
 #' @return logical matrix with the same dimensions and names as `votes_matrix`

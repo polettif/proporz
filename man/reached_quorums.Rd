@@ -18,8 +18,8 @@ called within \code{\link[=biproporz]{biproporz()}}. There's generally no need t
 directly.}
 }
 \value{
-boolean vector with length equal to the number of lists/parties
-(\code{votes_matrix} rows) whether they reached the quorum or not
+Logical vector with length equal to the number of lists/parties (\code{votes_matrix}
+rows) showing whether they reached the quorum or not.
 }
 \description{
 Apply a list of quorum functions to a votes matrix

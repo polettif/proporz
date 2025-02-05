@@ -25,12 +25,12 @@ Calculate seat apportionment for legislative bodies.
 }
 \details{
 The following methods are available: \itemize{
-\item{d'hondt, jefferson, hagenbach-bischoff, floor: use \code{\link[=divisor_floor]{divisor_floor()}}}
-\item{sainte-lague, webster, round: use \code{\link[=divisor_round]{divisor_round()}}}
-\item{adams, ceiling: use \code{\link[=divisor_ceiling]{divisor_ceiling()}}}
-\item{dean, harmonic: use \code{\link[=divisor_harmonic]{divisor_harmonic()}}}
-\item{huntington-hill, hill-huntington, geometric: use \code{\link[=divisor_geometric]{divisor_geometric()}}}
-\item{hare-niemeyer, hamilton, vinton, largest_remainder_method: use \code{\link[=largest_remainder_method]{largest_remainder_method()}}}
+\item{d'hondt, jefferson, hagenbach-bischoff, floor: \code{\link[=divisor_floor]{divisor_floor()}}}
+\item{sainte-lague, webster, round: \code{\link[=divisor_round]{divisor_round()}}}
+\item{adams, ceiling: \code{\link[=divisor_ceiling]{divisor_ceiling()}}}
+\item{dean, harmonic: \code{\link[=divisor_harmonic]{divisor_harmonic()}}}
+\item{huntington-hill, hill-huntington, geometric: \code{\link[=divisor_geometric]{divisor_geometric()}}}
+\item{hare-niemeyer, hamilton, vinton, largest_remainder_method: \code{\link[=largest_remainder_method]{largest_remainder_method()}}}
 }
 }
 \note{

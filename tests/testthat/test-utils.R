@@ -67,12 +67,12 @@ test_that("collapse_names", {
     y = c(2, 6, 67)
     expect_identical(collapse_names(x), "'Abc', 'XYZ'")
     expect_identical(collapse_names(y), "2, 6, 67")
-    expect_identical(collapse_names(c(T,F,T), c("A", "X", "B")), "'A', 'B'")
+    expect_identical(collapse_names(c(TRUE,FALSE,TRUE), c("A", "X", "B")), "'A', 'B'")
 })
 
 test_that("num_word", {
     expect_identical(num_word("party", "parties", 1), "party")
     expect_identical(num_word("party", "parties", 2), "party")
     expect_identical(num_word("party", "parties", c(2, 3)), "parties")
-    expect_identical(num_word("party", "parties", c(T, F)), "party")
+    expect_identical(num_word("party", "parties", c(TRUE, FALSE)), "party")
 })

@@ -1,4 +1,4 @@
-# proporz <img src="man/figures/logo.png" align="right" height="138" />
+# proporz <img src="man/figures/logo.png" align="right" height="138" alt = "proporz logo"/>
 
 Calculate seat apportionment for legislative bodies with various methods. These
 methods include divisor methods (e.g. D'Hondt, Webster or Adams), largest 
@@ -121,7 +121,7 @@ and `shinyMatrix` installed.
 # install.packages("shinyMatrix")
 proporz::run_app()
 ```
-<img src="man/figures/shinyapp-example.gif" style = "width:70%;">
+<img src="man/figures/shinyapp-example.gif" style = "width:70%;" alt = "shiny app gif">
 
 
 ## Function details
@@ -180,10 +180,10 @@ more focus on analysis. However, biproportional apportionment is missing from th
 pure R packages and RBazi needs rJava with an accompanying jar.
 
 - [RBazi](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html): Package using rJava to access the functions of [BAZI](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html).
-- [seatdist](https://github.com/jmedzihorsky/seatdist) package for seat apportionment and disproportionality measurement.
-- [disprr](https://github.com/pierzgal/disprr) Examine Disproportionality of Apportionment Methods.
+- [seatdist](https://github.com/jmedzihorsky/seatdist): Package for seat apportionment and disproportionality measurement.
+- [disprr](https://github.com/pierzgal/disprr): Simulate election results and examine disproportionality of apportionment methods.
 - [apportR](https://github.com/jalapic/apportR): Package containing various apportionment methods, with particular relevance for the problem of apportioning seats in the House of Representatives.
-- [apportion](https://github.com/christopherkenny/apportion) Convert populations into integer number of seats for legislative bodies, focusing on the United States.
+- [apportion](https://github.com/christopherkenny/apportion): Convert populations into integer number of seats for legislative bodies, focusing on the United States.
 
 ### Contributing
 

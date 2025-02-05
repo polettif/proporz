@@ -10,22 +10,20 @@ check_edge_quotient = function(mtrx_quotient, n_seats, return_indices = FALSE) {
 
     if(quotient_last_with == quotient_first_without) {
         indices = unique(which(mtrx_quotient == quotient_last_with, arr.ind = TRUE)[,"col"])
-        parties = collapse_names(indices)
-        if(!is.null(colnames(mtrx_quotient))) {
-            parties <- collapse_names(colnames(mtrx_quotient)[indices])
-        }
-        stop("Result is undefined, equal quotient for parties: ", parties, call. = FALSE)
+        stop("Result is undefined, equal quotient for parties: ",
+             collapse_names(indices, colnames(mtrx_quotient)), call. = FALSE)
     }
+    invisible(TRUE)
 }
 
 # methods that give every party at least one seat should also get one
 check_enough_seats = function(votes, n_seats, method) {
     if(n_seats >= length(votes[votes > 0])) {
-        return()
+        return(invisible(TRUE))
     }
     if(n_seats == 0) {
         # n_seats=0 is explicitly allowed to make modelling scenarios easier
-        return()
+        return(invisible(TRUE))
     }
     stop("With ", method," rounding there must be at least as many seats as ",
          "there are parties with non-zero votes.", call. = FALSE)

@@ -45,8 +45,6 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
     }
     rm(district_seats)
 
-    apport_methods_choices = unique(unname(unlist(proporz_methods)))[c(2,1,3:6)]
-
     # UI ####
     ui = shiny::fluidPage(
         shiny::titlePanel("Biproportional Apportionment"),
@@ -110,7 +108,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                                 shiny::numericInput("quorum_total", "Quorum (total)", 0, min = 0),
                                 shiny::checkboxInput("quorum_all", "Both quorums necessary", FALSE),
                                 shiny::checkboxInput("use_list_votes", "Use list votes", TRUE),
-                                shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE),
+                                shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE)
                    )
             )
         )

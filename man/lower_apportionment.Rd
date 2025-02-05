@@ -2,7 +2,7 @@
 % Please edit documentation in R/biproportional.R
 \name{lower_apportionment}
 \alias{lower_apportionment}
-\title{Calculate lower apportionment}
+\title{Lower apportionment}
 \usage{
 lower_apportionment(votes_matrix, seats_cols, seats_rows, method = "round")
 }
@@ -20,7 +20,7 @@ following methods are supported:
 \itemize{
 \item{\code{round}: The default Sainte-Laguë/Webster method is the standard
 for biproportional apportionment and the only method guaranteed to terminate.}
-\item{\code{wto}: "winner take one" works like "round" with a condition that the party that
+\item{\code{wto}: "winner take one" works like \code{round} with a condition that the party that
 got the most votes in a district must get \emph{at least} one seat ('Majorzbedingung',
 also called 'strongest party constrained' rule (SPC)). \code{votes_matrix} must have
 row and column names to use this method.
@@ -39,8 +39,9 @@ A seat matrix with district (columns) and party (rows) divisors stored in
 attributes.
 }
 \description{
-Iterate and change column and row divisors such that the row and column sums of the seats
-matrix satisfies the constraints given by the upper apportionment.
+In the second biproportional apportionment step, party and district divisors are calculated
+such that the row and column sums of the resulting seats matrix satisfy the constraints
+given by the upper apportionment.
 }
 \details{
 The result is obtained by an iterative process ('Alternate Scaling Algorithm', see
@@ -59,6 +60,12 @@ party is correct with the chosen rounding method,
 \item modify the regional divisors such that the apportionment within the
 region is correct with the chosen rounding method.
 }
+}
+\note{
+If the maximum number of optimization iterations is reached, an error is thrown since
+no solution can be found. You can overwrite the default (1000) with
+\code{options(proporz_max_iterations = ...)} but it is very likely that the result is undefined
+given the structure of the input parameters.
 }
 \examples{
 votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)

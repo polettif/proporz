@@ -1,8 +1,8 @@
 #' Create quorum functions for biproportional apportionment
 #'
 #' `quorum_any()` and `quorum_all()` are used for the `quorum` parameter in
-#' [biproporz()] or [pukelsheim()] and help describe how quorums should be
-#' applied previous to seat distributions.
+#' [biproporz()]/[pukelsheim()] and help describe how quorums should be
+#' applied prior to seat distributions.
 #'
 #' @param any_district Vote threshold a party must reach in \emph{at least} one
 #'   district. Used as share of total votes within a district if less than 1
@@ -28,9 +28,11 @@
 #' seats = c(Z1 = 50, Z2 = 20)
 #'
 #' # use as parameter in biproporz or pukelsheim (general use case)
-#' biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1, total = 100))
+#' biproporz(votes_matrix, seats,
+#'           quorum = quorum_any(any_district = 0.1, total = 100))
 #'
-#' biproporz(votes_matrix, seats, quorum = quorum_all(any_district = 0.1, total = 100))
+#' biproporz(votes_matrix, seats,
+#'           quorum = quorum_all(any_district = 0.1, total = 100))
 #'
 #' biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1))
 #'
@@ -57,7 +59,7 @@ quorum_any = function(any_district, total) {
 }
 
 create_quorum_function_list = function(type, any_district, total) {
-    stopifnot(type %in% c("ANY", "ALL"))
+    assert(type %in% c("ANY", "ALL"))
     quorum_funcs = list()
 
     if(!missing(any_district)) {
@@ -85,8 +87,8 @@ create_quorum_function_list = function(type, any_district, total) {
 #'                     Used as quota of total votes if less than 1, otherwise
 #'                     as number of votes. Must be greater than 0.
 #'
-#' @returns boolean vector with length equal to the number of lists/parties
-#'          (`votes_matrix` rows) whether they reached the quorum or not
+#' @returns Logical vector with length equal to the number of lists/parties (`votes_matrix`
+#'   rows) showing whether they reached the quorum or not.
 #'
 #' @seealso [reached_quorum_any_district()]
 #'
@@ -95,7 +97,7 @@ create_quorum_function_list = function(type, any_district, total) {
 #' reached_quorum_total(vm, 35)
 #' @export
 reached_quorum_total = function(votes_matrix, quorum_total) {
-    stopifnot(quorum_total > 0)
+    assert(quorum_total > 0)
     if(quorum_total < 1) {
         quorum_total <- sum(votes_matrix)*quorum_total
     }
@@ -121,7 +123,7 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #' reached_quorum_any_district(vm, 25)
 #' @export
 reached_quorum_any_district = function(votes_matrix, quorum_districts) {
-    stopifnot(quorum_districts > 0)
+    assert(quorum_districts > 0)
     if(quorum_districts < 1) {
         quorum_districts <- colSums(votes_matrix)*quorum_districts
     }
@@ -184,7 +186,7 @@ apply_quorum_matrix = function(votes_matrix, quorum) {
     if(is.list(quorum)) {
         quorum_bool = reached_quorums(votes_matrix, quorum)
     } else if(is.vector(quorum) && is.logical(quorum)) {
-        stopifnot(length(quorum) == nrow(votes_matrix))
+        assert(length(quorum) == nrow(votes_matrix))
         quorum_bool = quorum
     } else {
         stop("Cannot parse quorum function or vector.", call. = FALSE)
@@ -200,7 +202,7 @@ apply_quorum_matrix = function(votes_matrix, quorum) {
 # quorum for single vector for proporz() methods
 apply_quorum_vector = function(votes_vector, quorum) {
     check_votes_vector(votes_vector)
-    stopifnot(length(quorum) == 1, is.numeric(quorum), quorum >= 0)
+    assert(length(quorum) == 1 && is.numeric(quorum) && quorum >= 0)
 
     if(quorum < 1) {
         quorum = ceiling(sum(votes_vector)*quorum)

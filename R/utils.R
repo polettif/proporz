@@ -1,9 +1,9 @@
 bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
-    stopifnot(length(x1) == 1, length(x2) == 1, length(tol) == 1, x1 < x2)
-    stopifnot((f(x1) <= 0 && f(x2) >= 0) || (f(x1) >= 0 && f(x2) <= 0))
-    stopifnot(!is.infinite(x1), !is.infinite(x2))
-    stopifnot(!is.nan(x1), !is.nan(x2))
-    stopifnot(x1 >= 0, x2 >= 0)
+    assert(length(x1) == 1 && length(x2) == 1 && length(tol) == 1)
+    assert((f(x1) <= 0 && f(x2) >= 0) || (f(x1) >= 0 && f(x2) <= 0))
+    assert(x1 >= 0 && x2 >= 0 && x1 < x2)
+    assert(!is.infinite(x1) && !is.infinite(x2))
+    assert(!is.nan(x1) && !is.nan(x2))
 
     for(i in seq_len(max_iterations)) {
         x <- (x1 + x2)/2
@@ -59,22 +59,22 @@ bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
 #'
 #' @export
 pivot_to_matrix = function(df_long) {
-    stopifnot(ncol(df_long) == 3)
-    stopifnot(nrow(df_long) == nrow(unique(df_long[1:2])))
+    assert(ncol(df_long) == 3)
+    assert(nrow(df_long) == nrow(unique(df_long[1:2])))
 
     asnum = as.numeric
     if(is.integer(df_long[[3]])) asnum = as.integer
 
     tbl = table(df_long)
-    stopifnot(max(tbl) == 1)
+    assert(max(tbl) == 1)
     apply(tbl, c(1,2), function(x) sum(asnum(names(x))*unname(x)))
 }
 
 #' @rdname pivot_to_matrix
 #' @export
 pivot_to_df = function(matrix_wide, value_colname = "values") {
-    if(is.null(colnames(matrix_wide))) colnames(matrix_wide) <- 1:ncol(matrix_wide)
-    if(is.null(rownames(matrix_wide))) rownames(matrix_wide) <- 1:nrow(matrix_wide)
+    if(is.null(colnames(matrix_wide))) colnames(matrix_wide) <- seq_len(ncol(matrix_wide))
+    if(is.null(rownames(matrix_wide))) rownames(matrix_wide) <- seq_len(nrow(matrix_wide))
     if(is.null(names(dimnames(matrix_wide)))) {
         names(dimnames(matrix_wide)) <- c("row", "col")
     }
@@ -89,9 +89,9 @@ pivot_to_df = function(matrix_wide, value_colname = "values") {
     colnames(new_df) <- names(dimnames(matrix_wide))
 
     # "byrow" indices for matrix
-    values_indices = c(vapply(1:nrow(matrix_wide),
+    values_indices = c(vapply(seq_len(nrow(matrix_wide)),
                               function(i) seq(i, length(matrix_wide), nrow(matrix_wide)),
-                              1:ncol(matrix_wide)))
+                              seq_len(ncol(matrix_wide))))
 
     # select values by index
     new_df[[value_colname]] <- matrix_wide[values_indices]
@@ -104,7 +104,7 @@ assert = function(check) {
         .x = deparse(substitute(check))
         stop(.x, " is not TRUE", call. = FALSE)
     }
-    invisible()
+    invisible(TRUE)
 }
 
 collapse_names = function(x, x_names = NULL) {

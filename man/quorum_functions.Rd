@@ -28,8 +28,8 @@ quorums.
 }
 \description{
 \code{quorum_any()} and \code{quorum_all()} are used for the \code{quorum} parameter in
-\code{\link[=biproporz]{biproporz()}} or \code{\link[=pukelsheim]{pukelsheim()}} and help describe how quorums should be
-applied previous to seat distributions.
+\code{\link[=biproporz]{biproporz()}}/\code{\link[=pukelsheim]{pukelsheim()}} and help describe how quorums should be
+applied prior to seat distributions.
 }
 \details{
 There's a difference in how the functions work. With \code{quroum_any},
@@ -43,9 +43,11 @@ dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 seats = c(Z1 = 50, Z2 = 20)
 
 # use as parameter in biproporz or pukelsheim (general use case)
-biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1, total = 100))
+biproporz(votes_matrix, seats,
+          quorum = quorum_any(any_district = 0.1, total = 100))
 
-biproporz(votes_matrix, seats, quorum = quorum_all(any_district = 0.1, total = 100))
+biproporz(votes_matrix, seats,
+          quorum = quorum_all(any_district = 0.1, total = 100))
 
 biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1))
 

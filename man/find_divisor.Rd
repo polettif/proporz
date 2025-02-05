@@ -22,7 +22,7 @@ within \code{round_func})}
 divisor
 }
 \description{
-Find a divisor between \code{divisor_from} and \code{divisor_to} such as
+Find a divisor between \code{divisor_from} and \code{divisor_to} such that
 \code{sum(round_func(votes/divisor))} equals \code{target_seats}
 }
 \keyword{internal}

@@ -8,13 +8,13 @@ test_that("Uri 2020", {
           2L, 2L, 1L, 1L, 3L, 2L, 2L, 2L),
         .Dim = c(4L, 4L), .Dimnames = list(
             c("CVP", "SPGB", "FDP", "SVP"),
-            c("Altdorf", "Bürglen", "Erstfeld", "Schattdorf")))
+            c("Altdorf", "B\u00fcrglen", "Erstfeld", "Schattdorf")))
 
     uri20_output = biproporz(uri2020$votes_matrix, uri2020$seats_vector)
     expect_identical(unname(as.matrix(uri20_output)), unname(uri20_result))
     expect_identical(rownames(uri20_output), rownames(uri20_result))
     expect_identical(colnames(uri20_output), colnames(uri20_result))
-    expect_true(!is.null(get_divisors(uri20_output)))
+    expect_false(is.null(get_divisors(uri20_output)))
 })
 
 test_that("Zug 2018", {
@@ -31,8 +31,8 @@ test_that("Zug 2018", {
           0, 1, 2, 2, 0, 0, 2, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1)), dim = c(7L, 11L),
         dimnames = list(
             list_id = c("1", "2", "3", "4", "5", "6", "7"),
-            entity_name = c("Zug", "Oberägeri", "Unterägeri", "Menzingen", "Baar", "Cham",
-                            "Hünenberg", "Steinhausen", "Risch", "Walchwil", "Neuheim")))
+            entity_name = c("Zug", "Ober\u00e4geri", "Unter\u00e4geri", "Menzingen", "Baar", "Cham",
+                "H\u00fcnenberg", "Steinhausen", "Risch", "Walchwil", "Neuheim")))
 
     # check pukelsheim result is equal to actual result
     votes_df = unique(zug2018[c("list_id", "entity_name", "list_votes")])

@@ -193,39 +193,36 @@ biproporz = function(votes_matrix,
     return(seats_matrix)
 }
 
-#' Calculate upper apportionment
+#' Upper apportionment
 #'
-#' In the upper apportionment, the seats for each party are computed with a highest averages
-#' method. This determines how many of all seats each party deserves due to the total of all
-#' their votes (that is the sum of the votes for all regional lists of that party).
-#' Analogical, the same highest averages method is used to determine how many of all seats
-#' each region deserves.
+#' In the first step of biproportional apportionment parties are given seats according to the
+#' sum of their votes across all districts.
 #'
 #' @param votes_matrix Vote count matrix with votes by party in rows and votes by district
-#'   in columns
+#'   in columns.
 #' @param district_seats Vector defining the number of seats per district. Must be the same
 #'   length as `ncol(votes_matrix)`. Values are name-matched to `votes_matrix` columns if both
-#'   are named. If the number of seats per district should be assigned according to the number
+#'   are named. If the number of seats per district should be calculated according to the number
 #'   of votes (not the general use case), a single number for the total number of seats can be
 #'   used.
 #' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Thus, votes are weighted according to
 #'   the number of available district seats with [weight_list_votes()]. Set to `FALSE` if
-#'   `votes_matrix` shows the number of voters (e.g. they can only cast one vote for one
+#'   `votes_matrix` shows the number of voters (i.e. they can only cast one vote for one
 #'   party).
 #' @param method Apportion method that defines how seats are assigned, see [proporz()]. Default
 #'   is the Saintë-Lague/Webster method.
 #'
 #' @seealso [biproporz()], [lower_apportionment()]
 #'
-#' @returns A named list with district seats (for `votes_matrix` columns) and party seats
+#' @returns A named list with `district` seats (for `votes_matrix` columns) and `party` seats
 #'   (for rows).
 #'
-#' @note The results from the upper apportionment are final results for the number of the
-#'   seats of one party (and analogically for the number of the seats of one region) within
-#'   the whole voting area, the lower apportionment will only determine where (which
-#'   regions) the party seats are allocated. Thus, after the upper apportionment is done,
-#'   the final strength of a party/region within the parliament is definite.
+#' @note The results from the upper apportionment define the number of seats for each party and
+#'   the number of seats for each district for the whole voting area. The lower apportionment
+#'   will only determine where (i.e. which district) the party seats are allocated. Thus, after
+#'   the upper apportionment is done, the final strength of a party/district within the
+#'   parliament is definite.
 #'
 #' @examples
 #' votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
@@ -269,13 +266,15 @@ upper_apportionment = function(votes_matrix, district_seats,
 
 #' Create weighted votes matrix
 #'
-#' Weigh list votes by dividing the votes matrix entries by the number
+#' Weight list votes by dividing the votes matrix entries by the number
 #' of seats per district. This method is used in [upper_apportionment()] if
-#' `use_list_votes` is `TRUE` (default). The weighted votes are not rounded.
+#' `use_list_votes` is `TRUE` (default).
 #'
 #' @param votes_matrix votes matrix
 #' @param district_seats seats per district, vector with same length
-#'   as `ncol(votes_matrix)`)
+#'   as `ncol(votes_matrix)`
+#'
+#' @note The weighted votes are not rounded. Matrix and vector names are ignored.
 #'
 #' @returns the weighted `votes_matrix`
 #'
@@ -284,6 +283,9 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' @export
 weight_list_votes = function(votes_matrix, district_seats) {
+    if(ncol(votes_matrix) != length(district_seats)) {
+        stop("`length(district_seats)` must be the same as `ncol(votes_matrix)`", call. = FALSE)
+    }
     M_seats_district = matrix(
         rep(district_seats, nrow(votes_matrix)),
         byrow = TRUE, ncol = length(district_seats))
@@ -297,10 +299,11 @@ weight_list_votes = function(votes_matrix, district_seats) {
     return(votes_matrix)
 }
 
-#' Calculate lower apportionment
+#' Lower apportionment
 #'
-#' Iterate and change column and row divisors such that the row and column sums of the seats
-#' matrix satisfies the constraints given by the upper apportionment.
+#' In the second biproportional apportionment step, party and district divisors are calculated
+#' such that the row and column sums of the resulting seats matrix satisfy the constraints
+#' given by the upper apportionment.
 #'
 #' The result is obtained by an iterative process ('Alternate Scaling Algorithm', see
 #' Reference). Initially, for each district a divisor is chosen using the highest averages
@@ -329,7 +332,7 @@ weight_list_votes = function(votes_matrix, district_seats) {
 #'   \itemize{
 #'     \item{`round`: The default Sainte-Laguë/Webster method is the standard
 #'           for biproportional apportionment and the only method guaranteed to terminate.}
-#'     \item{`wto`: "winner take one" works like "round" with a condition that the party that
+#'     \item{`wto`: "winner take one" works like `round` with a condition that the party that
 #'           got the most votes in a district must get _at least_ one seat ('Majorzbedingung',
 #'           also called 'strongest party constrained' rule (SPC)). `votes_matrix` must have
 #'           row and column names to use this method.
@@ -345,6 +348,11 @@ weight_list_votes = function(votes_matrix, district_seats) {
 #'
 #' @returns A seat matrix with district (columns) and party (rows) divisors stored in
 #'   attributes.
+#'
+#' @note If the maximum number of optimization iterations is reached, an error is thrown since
+#'   no solution can be found. You can overwrite the default (1000) with
+#'   `options(proporz_max_iterations = ...)` but it is very likely that the result is undefined
+#'   given the structure of the input parameters.
 #'
 #' @references Oelbermann, K. F. (2016): Alternate scaling algorithm for biproportional
 #'   divisor methods. Mathematical Social Sciences, 80, 25-32.
@@ -493,7 +501,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         row_decr = which.min0(mr(M,dC,dR) - seats_rows)
         if(!is.na(row_decr)) {
             dR[row_decr] <- find_divisor(
-                M[row_decr,,drop=F]/dC,
+                M[row_decr,,drop=FALSE]/dC,
                 dR[row_decr], dR.min[row_decr],
                 seats_rows[row_decr], round_func)
         }
@@ -501,7 +509,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         row_incr = which.max0(mr(M,dC,dR) - seats_rows)
         if(!is.na(row_incr)) {
             dR[row_incr] <- find_divisor(
-                M[row_incr,,drop=F]/dC,
+                M[row_incr,,drop=FALSE]/dC,
                 dR[row_incr], dR.max[row_incr],
                 seats_rows[row_incr], round_func)
         }
@@ -510,7 +518,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         col_decr = which.min0(mc(M,dC,dR) - seats_cols)
         if(!is.na(col_decr)) {
             dC[col_decr] <- find_divisor(
-                M[,col_decr,drop=F]/dR,
+                M[,col_decr,drop=FALSE]/dR,
                 dC[col_decr], dC.min[col_decr],
                 seats_cols[col_decr], round_func)
         }
@@ -518,7 +526,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         col_incr = which.max0(mc(M,dC,dR) - seats_cols)
         if(!is.na(col_incr)) {
             dC[col_incr] <- find_divisor(
-                M[,col_incr,drop=F]/dR,
+                M[,col_incr,drop=FALSE]/dR,
                 dC[col_incr], dC.max[col_incr],
                 seats_cols[col_incr], round_func)
         }
@@ -534,7 +542,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 
 #' Find divisor to assign seats
 #'
-#' Find a divisor between `divisor_from` and `divisor_to` such as
+#' Find a divisor between `divisor_from` and `divisor_to` such that
 #' `sum(round_func(votes/divisor))` equals `target_seats`
 #'
 #' @param votes votes (matrix with only one column or vector, allows to use row/colnames

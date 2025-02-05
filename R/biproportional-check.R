@@ -42,6 +42,7 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
         stop("Not all district ids in `", .votes_df, "`s second column exist in `",
              .district_seats_df, "`s first column.", call. = FALSE)
     }
+    invisible(TRUE)
 }
 
 prep_votes_matrix = function(votes_matrix, votes_matrix.name) {

@@ -2,24 +2,24 @@
 % Please edit documentation in R/biproportional-wto.R
 \name{district_winner_matrix}
 \alias{district_winner_matrix}
-\title{Create a matrix that shows which party has the most votes in a district}
+\title{Find which party has the most votes in a district}
 \usage{
 district_winner_matrix(votes_matrix, district_seats = 1L)
 }
 \arguments{
 \item{votes_matrix}{Vote count matrix with votes by party in rows and votes by district
-in columns}
+in columns.}
 
 \item{district_seats}{Vector defining the number of seats per district. Must be the same
 length as \code{ncol(votes_matrix)}. Values are name-matched to \code{votes_matrix} columns if both
-are named. If a single value is supplied (like 1 as default), it is used as the number of
+are named. If a single value is supplied (like \code{1} as default), it is used as the number of
 seats for every district.}
 }
 \value{
 logical matrix with the same dimensions and names as \code{votes_matrix}
 }
 \description{
-Create a matrix that shows which party has the most votes in a district
+Create a logical matrix that shows whether a party got the most votes in a district or not.
 }
 \details{
 If two or more parties are tied and there are not enough seats for each tied party,

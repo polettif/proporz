@@ -33,7 +33,7 @@ test_that("proporz parameter range", {
                     if(n_seats < n_parties &&
                        method_impl %in% c("divisor_ceiling", "divisor_geometric", "divisor_harmonic") &&
                        n_seats > 0) {
-                        .method_impl = gsub("divisor_", "", method_impl)
+                        .method_impl = gsub("divisor_", "", method_impl, fixed = TRUE)
                         expect_error(
                             proporz(votes, n_seats, method_impl),
                             paste0("With ",  .method_impl, " rounding there must be at ",
@@ -41,7 +41,7 @@ test_that("proporz parameter range", {
                             fixed = TRUE)
                     } else {
                         seats = proporz(votes, n_seats, method_impl)
-                        stopifnot(is.integer(seats))
+                        assert(is.integer(seats))
                         expect_true(is.integer(seats))
                         expect_identical(length(seats), length(votes))
                         expect_identical(sum(seats), n_seats)
