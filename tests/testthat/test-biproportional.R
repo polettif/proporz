@@ -219,7 +219,7 @@ test_that("undefined result biproportional", {
 
     vm5 = matrix(c(10, 10, 10, 10), 2, 2)
     expect_error_fixed(biproporz(vm5, c(3,1)),
-                       "Result is undefined, cannot assign all seats in lower apportionment")
+                       "Result is undefined, tied votes and multiple possible seat assignments")
 
     # manual fix (actual implementation depends on rules)
     vm4 <- vm6 <- vm
@@ -239,6 +239,9 @@ test_that("undefined result biproportional", {
         district = c("d1", "d2", "d3", "d4", "d5"),
         seats = rep(1L, 5L))
     expect_error(pukelsheim(vdf, vdf_seats), "Result is undefined, tied votes and multiple possible seat assignments")
+
+    expect_error(
+        biproporz(matrix(c(50,40,30,20,25,20,15,10), nrow = 4), c(10, 10)), "Result is undefined, cannot assign all seats in lower apportionment")
 })
 
 test_that("find_divisor", {
