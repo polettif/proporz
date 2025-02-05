@@ -1,3 +1,9 @@
+template:
+  bootstrap: 5
+  bootswatch: lumen
+  theme: tango
+  bslib:
+    primary: "#799FB0"
 reference:
 - title: "Proportional Apportionment"
   desc: >

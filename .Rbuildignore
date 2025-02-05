@@ -9,3 +9,5 @@
 ^LICENSE$
 ^doc$
 ^CRAN-SUBMISSION$
+^_pkgdown\.yml$
+^pkgdown$
