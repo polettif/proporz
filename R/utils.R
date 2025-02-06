@@ -98,6 +98,16 @@ pivot_to_df = function(matrix_wide, value_colname = "values") {
     return(new_df)
 }
 
+col_as_matrix = function(x, M) {
+    assert(length(x) == nrow(M))
+    matrix(rep(x, ncol(M)), nrow = nrow(M))
+}
+
+row_as_matrix = function(x, M) {
+    assert(length(x) == ncol(M))
+    matrix(rep(x, each = nrow(M)), nrow = nrow(M))
+}
+
 # simpler and marginally faster version of stopifnot
 assert = function(check) {
     if(!all(check)) {
@@ -134,4 +144,11 @@ num_word = function(singular, plural, i) {
         return(singular)
     }
     return(plural)
+}
+
+# divide x and assign 0 for infinite or nan values
+div0 = function(x, div) {
+    d = x/div
+    d[is.nan(d) | is.infinite(d) | is.na(d)] <- 0
+    d
 }

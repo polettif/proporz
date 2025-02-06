@@ -428,11 +428,11 @@ lower_apportionment = function(votes_matrix, seats_cols,
 #' @returns matrix with the same dimension as `M` containing non-rounded seat values
 #' @keywords internal
 divide_votes_matrix = function(M, col_divisors, row_divisors) {
-    M_district = matrix(rep(col_divisors, nrow(M)), byrow = TRUE, nrow = nrow(M))
-    M_party = matrix(rep(row_divisors, ncol(M)), byrow = FALSE, nrow = nrow(M))
+    M_district = row_as_matrix(col_divisors, M)
+    M_party = col_as_matrix(row_divisors, M)
 
     x = M/M_district/M_party
-    x[is.nan(x)] <- 0
+    x[is.nan(x) | is.infinite(x) | is.na(x)] <- 0
     return(x)
 }
 
@@ -452,33 +452,29 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
     assert(is.matrix(round_func(M)))
     check_flow_criterion(M, seats_cols, seats_rows)
 
+    # convenience functions to round and summarise
+    m. = divide_votes_matrix
+    mc = function(.M,.d,.p) colSums(round_func(m.(.M,.d,.p)))
+    mr = function(.M,.d,.p) rowSums(round_func(m.(.M,.d,.p)))
+
     # divisor parties
     dR = rep(1, nrow(M))
     dR.min = rep(0.5, nrow(M))
     dR.max = rep(1.5, nrow(M))
 
     # divisor districts
-    dC = unname(colSums(M)/seats_cols)
-    dC[is.nan(dC)] <- 0
-    dC.min = unname(floor(colSums(M)/(seats_cols+1) / max(dR.max)))
-    dC.min[dC.min == 0] <- 0.1 # will be lowered in find_divisor if necessary
-    dC.max = unname(ceiling(colSums(M)/(seats_cols-1) / min(dR.min)))
-
-    # handle districts with only one seat (otherwise leads to infinite dC.max)
-    dC.max[seats_cols == 1] <- (colSums(M)+1)[seats_cols == 1]
-
-    # convenience functions to round and summarise
-    m. = divide_votes_matrix
-    mc = function(.M,.d,.p) colSums(round_func(m.(.M,.d,.p)))
-    mr = function(.M,.d,.p) rowSums(round_func(m.(.M,.d,.p)))
+    .colsums = unname(colSums(M))
+    dC = .colsums/seats_cols
+    dC.min = .colsums / (seats_cols+1) / max(dR.max)
+    dC.max = .colsums / pmax(1, seats_cols-1) / min(dR.min)
 
     which.min0 = function(x) {
-        x[which(x == 0)] <- max(x)
+        x[x == 0] <- max(x)
         if(length(unique(x)) == 1L) return(NA)
         which.min(x)
     }
     which.max0 = function(x) {
-        x[which(x == 0)] <- min(x)
+        x[x == 0] <- min(x)
         if(length(unique(x)) == 1L) return(NA)
         which.max(x)
     }
@@ -501,7 +497,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         row_decr = which.min0(mr(M,dC,dR) - seats_rows)
         if(!is.na(row_decr)) {
             dR[row_decr] <- find_divisor(
-                M[row_decr,,drop=FALSE]/dC,
+                div0(M[row_decr,,drop=FALSE], dC),
                 dR[row_decr], dR.min[row_decr],
                 seats_rows[row_decr], round_func)
         }
@@ -509,7 +505,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         row_incr = which.max0(mr(M,dC,dR) - seats_rows)
         if(!is.na(row_incr)) {
             dR[row_incr] <- find_divisor(
-                M[row_incr,,drop=FALSE]/dC,
+                div0(M[row_incr,,drop=FALSE], dC),
                 dR[row_incr], dR.max[row_incr],
                 seats_rows[row_incr], round_func)
         }
@@ -518,7 +514,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         col_decr = which.min0(mc(M,dC,dR) - seats_cols)
         if(!is.na(col_decr)) {
             dC[col_decr] <- find_divisor(
-                M[,col_decr,drop=FALSE]/dR,
+                div0(M[,col_decr,drop=FALSE], dR),
                 dC[col_decr], dC.min[col_decr],
                 seats_cols[col_decr], round_func)
         }
@@ -526,14 +522,24 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
         col_incr = which.max0(mc(M,dC,dR) - seats_cols)
         if(!is.na(col_incr)) {
             dC[col_incr] <- find_divisor(
-                M[,col_incr,drop=FALSE]/dR,
+                div0(M[,col_incr,drop=FALSE], dR),
                 dC[col_incr], dC.max[col_incr],
                 seats_cols[col_incr], round_func)
         }
 
+        # no rows/cols to change found
         if(is.na(row_decr) && is.na(row_incr) && is.na(col_decr) && is.na(col_incr)) {
-            stop("Result is undefined, tied votes and multiple possible seat assignments",
-                 call. = FALSE)
+            # ensure that there's at least one seat distributed initially
+            if(sum(mc(M,dC,dR)) == 0) {
+                for(s in seq(0.5,max(seats_cols),0.5)) {
+                    dC <- .colsums/(seats_cols+s)
+                    if(sum(mc(M,dC,dR)) > 0) break
+                }
+            } else {
+                stop("Result is undefined, tied votes and multiple possible seat assignments",
+                     call. = FALSE)
+            }
+
         }
     }
     stop("Result is undefined, exceeded maximum number of iterations (", max_iter, ")",
@@ -562,10 +568,11 @@ find_divisor = function(votes,
     assert(length(target_seats) == 1)
     assert(all(!is.infinite(votes)) && all(!is.na(votes)))
     assert(!is.na(divisor_from) && !is.na(divisor_to))
+    assert(divisor_from > 0)
 
     # use matrix instead of vector for rownames
     fun = function(divisor) {
-        target_seats - sum(round_func(votes/divisor))
+        target_seats - sum(round_func(div0(votes, divisor)))
     }
 
     divisor_range = sort(c(divisor_from, divisor_to))

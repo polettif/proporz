@@ -127,6 +127,21 @@ test_that("flow criterion check for almost empty matrix", {
                        "No votes in a district with at least one seat")
 
     expect_error_fixed(
+        lower_apportionment(
+            matrix(c(0,0,0,1,0,0,0,0,0),3), c(1,1,1), c(1,0,2)),
+            "Not enough non-zero votes matrix entries to assign seats in districts: 1, 3")
+
+    expect_error_fixed(
+        lower_apportionment(
+            matrix(c(1,0,0,1,0,0,0,0,0),3), c(1,1,0), c(1,1,0)),
+            "Not enough non-zero votes matrix entries to assign seats to party: 2")
+
+    expect_error_fixed(
+        lower_apportionment(
+            matrix(0, nrow = 4), c(1,1,1,1), c(1,0,1,2),
+            "Not enough non-zero votes matrix entries to assign seats in districts: 1, 3, 4"))
+
+    expect_error_fixed(
         biproporz(matrix(c(0, 1, 0, 0, 4, 3, 0, 0, 20), 3), c(4,1,3)),
         "Not enough seats for party 3 in districts 2, 3\n(6 seats necessary, 4 available)")
 
@@ -238,17 +253,23 @@ test_that("undefined result biproportional", {
     vdf_seats = data.frame(
         district = c("d1", "d2", "d3", "d4", "d5"),
         seats = rep(1L, 5L))
-    expect_error(pukelsheim(vdf, vdf_seats), "Result is undefined, tied votes and multiple possible seat assignments")
+    expect_error(pukelsheim(vdf, vdf_seats),
+                 "Result is undefined, cannot assign all seats in lower apportionment")
 
     expect_error(
-        biproporz(matrix(c(50,40,30,20,25,20,15,10), nrow = 4), c(10, 10)), "Result is undefined, cannot assign all seats in lower apportionment")
+        biproporz(matrix(c(50,40,30,20,25,20,15,10), nrow = 4), c(10, 10)),
+        "Result is undefined, cannot assign all seats in lower apportionment")
+
+    expect_is(
+        biproporz(matrix(c(10,15,10,15,10,10,10,10,15), 3), c(1,1,1)),
+        "proporz_matrix")
 })
 
 test_that("find_divisor", {
     v = matrix(c(80,10,10))
     .check = function(div) round(v/div)
 
-    d0 = find_divisor(v, 0, 100, 10, function(x) ceil_at(x, 0.5))
+    d0 = find_divisor(v, 0.1, 100, 10, function(x) ceil_at(x, 0.5))
     expect_identical(.check(d0), .check(10))
     # expand lower limit
     d1 = find_divisor(v, 20, 100, 10, function(x) ceil_at(x, 0.5))

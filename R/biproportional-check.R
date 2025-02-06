@@ -131,6 +131,26 @@ check_flow_criterion = function(M, seats_cols, seats_rows) {
     assert(sum(seats_cols) == sum(seats_rows))
 
     m = M > 0 # shows which party ran in which district
+
+    # check whole matrix
+    district_seats_matrix = row_as_matrix(seats_cols, M)
+    not_enough_districts = colSums(m * district_seats_matrix) < seats_cols
+    if(any(not_enough_districts)) {
+        stop("Not enough non-zero votes matrix entries to assign seats in ",
+             num_word("district: ", "districts: ", not_enough_districts),
+             collapse_names(not_enough_districts, colnames(M)),
+             call. = FALSE)
+    }
+    party_seats_matrix = col_as_matrix(seats_rows, M)
+    not_enough_parties = rowSums(m * party_seats_matrix) < seats_rows
+    if(any(not_enough_parties)) {
+        stop("Not enough non-zero votes matrix entries to assign seats to ",
+             num_word("party: ", "parties: ", not_enough_parties),
+             collapse_names(not_enough_parties, rownames(M)),
+             call. = FALSE)
+    }
+
+    # check party sets
     for(p in seq_along(seats_rows)) {
         j = m[p,]
         # Find matching parties that didn't run in other districts

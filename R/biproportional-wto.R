@@ -7,10 +7,8 @@ col_maxs = function(mtrx) {
 }
 
 most_votes_in_district_matrix = function(votes_matrix) {
-    .districts_max = unname(col_maxs(votes_matrix))
-    .district_max_matrix = matrix(rep(.districts_max, each = nrow(votes_matrix)),
-                                  nrow(votes_matrix))
-    return(votes_matrix == .district_max_matrix)
+    district_max_matrix = row_as_matrix(col_maxs(votes_matrix), votes_matrix)
+    return(votes_matrix == district_max_matrix)
 }
 
 create_wto_round_function = function(votes_matrix, district_seats, seats_parties) {
