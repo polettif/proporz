@@ -1,11 +1,3 @@
-row_maxs = function(mtrx) {
-    apply(mtrx, 1, max)
-}
-
-col_maxs = function(mtrx) {
-    apply(mtrx, 2, max)
-}
-
 most_votes_in_district_matrix = function(votes_matrix) {
     district_max_matrix = row_as_matrix(col_maxs(votes_matrix), votes_matrix)
     return(votes_matrix == district_max_matrix)

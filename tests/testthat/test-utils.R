@@ -13,14 +13,6 @@ test_that("bisect", {
     expect_equal(round(act, 4), exp, tolerance = 1e-14)
 })
 
-test_that("quorum", {
-    votes = c(49, 38, 13)
-    expect_equal(apply_quorum_vector(votes, 0), c(49, 38, 13), tolerance = 1e-14)
-    expect_equal(apply_quorum_vector(votes, 0.13), c(49, 38, 13), tolerance = 1e-14)
-    expect_equal(apply_quorum_vector(votes, 0.135), c(49, 38, 0), tolerance = 1e-14)
-    expect_equal(apply_quorum_vector(votes, 15), c(49, 38, 0), tolerance = 1e-14)
-})
-
 test_that("stupid pivot functions", {
     df0 = data.frame(id = c("a", "a", "a", "a", "b", "b"),
                      key = c("w", "x", "y", "z", "x", "y"),

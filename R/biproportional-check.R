@@ -1,50 +1,3 @@
-check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
-                                   use_list_votes, winner_take_one,
-                                   .votes_df, .district_seats_df) {
-    assert(is.character(new_seats_col) && length(new_seats_col) == 1)
-    assert(is.logical(use_list_votes) && !is.na(use_list_votes) && length(use_list_votes) == 1)
-    assert(is.logical(winner_take_one) && !is.na(winner_take_one) && length(winner_take_one) == 1)
-
-    if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
-        stop("`", .votes_df, "` must be a data frame with 3 columns in the ",
-             "following order:\nparty, district and votes (names can differ).",
-             call. = FALSE)
-    }
-
-    if(!is.numeric(votes_df[[3]]) || any(votes_df[[3]] < 0)) {
-        stop("Vote values in `", .votes_df,
-             "`s third column must be numbers >= 0.", call. = FALSE)
-    }
-
-    if(!is.data.frame(district_seats_df)) {
-        stop("`", .district_seats_df, "` must be a data.frame.", call. = FALSE)
-    }
-    if(length(unique(district_seats_df[[1]])) != nrow(district_seats_df)) {
-        stop("District ids in `", .district_seats_df,
-             "` are not unique.", call. = FALSE)
-    }
-    if(nrow(votes_df[,c(1,2)]) != nrow(unique(votes_df[,c(1,2)]))) {
-        stop("There are duplicate party-district pairs in `", .votes_df, "`.",
-             call. = FALSE)
-    }
-
-    if(!all(district_seats_df[[1]] %in% votes_df[[2]])) {
-        if(all(district_seats_df[[1]] %in% votes_df[[1]])) {
-            stop("District ids not found in second column of `", .votes_df,
-                 "`. Are columns in the correct order (party, district, votes)?",
-                 call. = FALSE)
-        }
-        stop("Not all district ids in `", .district_seats_df, "`s first column ",
-             "exist in `", .votes_df, "`s second column.", call. = FALSE)
-    }
-
-    if(!all(votes_df[[2]] %in% district_seats_df[[1]])) {
-        stop("Not all district ids in `", .votes_df, "`s second column exist in `",
-             .district_seats_df, "`s first column.", call. = FALSE)
-    }
-    invisible(TRUE)
-}
-
 prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
     vmn = paste0("`", votes_matrix.name, "`")
     if(!is.matrix(votes_matrix)) {
@@ -122,6 +75,54 @@ prep_district_seats_df = function(district_seats_df) {
     names(district_seats) <- district_seats_df[[1]]
     return(district_seats)
 }
+
+check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
+                                   use_list_votes, winner_take_one,
+                                   .votes_df, .district_seats_df) {
+    assert(is.character(new_seats_col) && length(new_seats_col) == 1)
+    assert(is.logical(use_list_votes) && !is.na(use_list_votes) && length(use_list_votes) == 1)
+    assert(is.logical(winner_take_one) && !is.na(winner_take_one) && length(winner_take_one) == 1)
+
+    if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
+        stop("`", .votes_df, "` must be a data frame with 3 columns in the ",
+             "following order:\nparty, district and votes (names can differ).",
+             call. = FALSE)
+    }
+
+    if(!is.numeric(votes_df[[3]]) || any(votes_df[[3]] < 0)) {
+        stop("Vote values in `", .votes_df,
+             "`s third column must be numbers >= 0.", call. = FALSE)
+    }
+
+    if(!is.data.frame(district_seats_df)) {
+        stop("`", .district_seats_df, "` must be a data.frame.", call. = FALSE)
+    }
+    if(length(unique(district_seats_df[[1]])) != nrow(district_seats_df)) {
+        stop("District ids in `", .district_seats_df,
+             "` are not unique.", call. = FALSE)
+    }
+    if(nrow(votes_df[,c(1,2)]) != nrow(unique(votes_df[,c(1,2)]))) {
+        stop("There are duplicate party-district pairs in `", .votes_df, "`.",
+             call. = FALSE)
+    }
+
+    if(!all(district_seats_df[[1]] %in% votes_df[[2]])) {
+        if(all(district_seats_df[[1]] %in% votes_df[[1]])) {
+            stop("District ids not found in second column of `", .votes_df,
+                 "`. Are columns in the correct order (party, district, votes)?",
+                 call. = FALSE)
+        }
+        stop("Not all district ids in `", .district_seats_df, "`s first column ",
+             "exist in `", .votes_df, "`s second column.", call. = FALSE)
+    }
+
+    if(!all(votes_df[[2]] %in% district_seats_df[[1]])) {
+        stop("Not all district ids in `", .votes_df, "`s second column exist in `",
+             .district_seats_df, "`s first column.", call. = FALSE)
+    }
+    invisible(TRUE)
+}
+
 
 # The flow-criterion is violated if the total number of seats of some set of parties exceeds
 # the number of seats that are rewarded to the districts in which these parties campaign.

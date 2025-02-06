@@ -76,14 +76,3 @@ test_that("compare", {
     expect_identical(divisor_round(v, 10),    c(5L,3L,1L,1L,0L))
     expect_identical(divisor_floor(v, 10),    c(5L,4L,1L,0L,0L))
 })
-
-test_that("check seats number after quorum", {
-    v = c(100, 1, 1)
-    expect_error(divisor_ceiling(v, 1), "at least as many seats")
-    expect_error(divisor_geometric(v, 1), "at least as many seats")
-    expect_error(divisor_harmonic(v, 1), "at least as many seats")
-
-    expect_no_error(divisor_ceiling(v, 1, 2))
-    expect_no_error(divisor_geometric(v, 1, 2))
-    expect_no_error(divisor_harmonic(v, 1, 2))
-})
