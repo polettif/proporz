@@ -1,7 +1,6 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   apportionment_scenarios: apportionment_scenarios.html
-last_built: 2024-04-04T10:58Z
-
+last_built: 2025-02-06T07:27Z

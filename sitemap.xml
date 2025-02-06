@@ -1,99 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/apportionment_scenarios.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/biproporz.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ceil_at.html</loc>
-  </url>
-  <url>
-    <loc>/reference/divide_votes_matrix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/divisor_methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/find_divisor.html</loc>
-  </url>
-  <url>
-    <loc>/reference/find_matrix_divisors.html</loc>
-  </url>
-  <url>
-    <loc>/reference/finland2019.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_divisors.html</loc>
-  </url>
-  <url>
-    <loc>/reference/highest_averages_method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/largest_remainder_method.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lower_apportionment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pivot_to_matrix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/proporz.html</loc>
-  </url>
-  <url>
-    <loc>/reference/proporz_methods.html</loc>
-  </url>
-  <url>
-    <loc>/reference/pukelsheim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/quorum_functions.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reached_quorum_any_district.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reached_quorum_total.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reached_quorums.html</loc>
-  </url>
-  <url>
-    <loc>/reference/run_app.html</loc>
-  </url>
-  <url>
-    <loc>/reference/upper_apportionment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/uri2020.html</loc>
-  </url>
-  <url>
-    <loc>/reference/weight_list_votes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/zug2018.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/articles/apportionment_scenarios.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/biproporz.html</loc></url>
+<url><loc>/reference/ceil_at.html</loc></url>
+<url><loc>/reference/district_winner_matrix.html</loc></url>
+<url><loc>/reference/divide_votes_matrix.html</loc></url>
+<url><loc>/reference/divisor_methods.html</loc></url>
+<url><loc>/reference/find_divisor.html</loc></url>
+<url><loc>/reference/find_matrix_divisors.html</loc></url>
+<url><loc>/reference/finland2019.html</loc></url>
+<url><loc>/reference/get_divisors.html</loc></url>
+<url><loc>/reference/highest_averages_method.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/largest_remainder_method.html</loc></url>
+<url><loc>/reference/lower_apportionment.html</loc></url>
+<url><loc>/reference/pivot_to_matrix.html</loc></url>
+<url><loc>/reference/proporz.html</loc></url>
+<url><loc>/reference/proporz_methods.html</loc></url>
+<url><loc>/reference/pukelsheim.html</loc></url>
+<url><loc>/reference/quorum_functions.html</loc></url>
+<url><loc>/reference/reached_quorum_any_district.html</loc></url>
+<url><loc>/reference/reached_quorum_total.html</loc></url>
+<url><loc>/reference/reached_quorums.html</loc></url>
+<url><loc>/reference/run_app.html</loc></url>
+<url><loc>/reference/upper_apportionment.html</loc></url>
+<url><loc>/reference/uri2020.html</loc></url>
+<url><loc>/reference/weight_list_votes.html</loc></url>
+<url><loc>/reference/zug2018.html</loc></url>
 </urlset>
+
