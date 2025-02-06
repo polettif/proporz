@@ -4,6 +4,7 @@ template:
   theme: tango
   bslib:
     primary: "#799FB0"
+url: https://polettif.github.io/proporz
 reference:
 - title: "Proportional Apportionment"
   desc: >
