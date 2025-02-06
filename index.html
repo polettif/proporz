@@ -20,7 +20,7 @@
 <meta property="og:title" content="Proportional Apportionment">
 <meta name="description" content="Calculate seat apportionment for legislative bodies with various methods. The algorithms include divisor or highest averages methods (e.g. Jefferson, Webster or Adams), largest remainder methods and biproportional apportionment. Gaffke, N. &amp; Pukelsheim, F. (2008) &lt;doi:10.1016/j.mathsocsci.2008.01.004&gt; Oelbermann, K. F. (2016) &lt;doi:10.1016/j.mathsocsci.2016.02.003&gt;.">
 <meta property="og:description" content="Calculate seat apportionment for legislative bodies with various methods. The algorithms include divisor or highest averages methods (e.g. Jefferson, Webster or Adams), largest remainder methods and biproportional apportionment. Gaffke, N. &amp; Pukelsheim, F. (2008) &lt;doi:10.1016/j.mathsocsci.2008.01.004&gt; Oelbermann, K. F. (2016) &lt;doi:10.1016/j.mathsocsci.2016.02.003&gt;.">
-<meta property="og:image" content="/logo.png">
+<meta property="og:image" content="https://polettif.github.io/proporz/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -84,7 +84,7 @@
 <div class="section level3">
 <h3 id="proportional-apportionment">Proportional Apportionment<a class="anchor" aria-label="anchor" href="#proportional-apportionment"></a>
 </h3>
-<p><a href="https://polettif.github.io/proporz/reference/proporz.html" class="external-link"><code>proporz()</code></a> distributes seats proportionally for a vector of votes according to the following methods:</p>
+<p><a href="https://polettif.github.io/proporz/reference/proporz.html"><code>proporz()</code></a> distributes seats proportionally for a vector of votes according to the following methods:</p>
 <ul>
 <li>
 <strong>Divisor methods</strong> (<a href="https://en.wikipedia.org/wiki/Highest_averages_method" class="external-link">Wikipedia</a>)
@@ -104,7 +104,7 @@
 </li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/polettif/proporz" class="external-link">proporz</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://polettif.github.io/proporz">proporz</a></span><span class="op">)</span></span>
 <span><span class="va">votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Party A"</span> <span class="op">=</span> <span class="fl">651</span>, <span class="st">"Party B"</span> <span class="op">=</span> <span class="fl">349</span>, <span class="st">"Party C"</span> <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes</span>, n_seats <span class="op">=</span> <span class="fl">10</span>, method <span class="op">=</span> <span class="st">"sainte-lague"</span><span class="op">)</span></span>
@@ -119,7 +119,7 @@
 <h3 id="biproportional-apportionment">Biproportional Apportionment<a class="anchor" aria-label="anchor" href="#biproportional-apportionment"></a>
 </h3>
 <p>Biproportional apportionment (<a href="https://en.wikipedia.org/wiki/Biproportional_apportionment" class="external-link">Wikipedia</a>) is a method to proportionally allocate seats among parties and districts.</p>
-<p>We can use the provided <a href="https://polettif.github.io/proporz/reference/uri2020.html" class="external-link"><code>uri2020</code></a> data set to illustrate biproportional apportionment with <a href="https://polettif.github.io/proporz/reference/biproporz.html" class="external-link"><code>biproporz()</code></a>. You need a ‘votes matrix’ as input which shows the number of votes for each party (rows) and district (columns). You also need to define the number of seats per district.</p>
+<p>We can use the provided <a href="https://polettif.github.io/proporz/reference/uri2020.html"><code>uri2020</code></a> data set to illustrate biproportional apportionment with <a href="https://polettif.github.io/proporz/reference/biproporz.html"><code>biproporz()</code></a>. You need a ‘votes matrix’ as input which shows the number of votes for each party (rows) and district (columns). You also need to define the number of seats per district.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">votes_matrix</span> <span class="op">&lt;-</span> <span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      Altdorf Bürglen Erstfeld Schattdorf</span></span>
@@ -138,7 +138,7 @@
 <span><span class="co">#&gt; SPGB       4       1        2          2</span></span>
 <span><span class="co">#&gt; FDP        3       1        1          2</span></span>
 <span><span class="co">#&gt; SVP        3       3        1          2</span></span></code></pre></div>
-<p>You can use <a href="https://polettif.github.io/proporz/reference/pukelsheim.html" class="external-link"><code>pukelsheim()</code></a> for dataframes in long format as input data. It is a wrapper for <code><a href="reference/biproporz.html">biproporz()</a></code>. <a href="https://polettif.github.io/proporz/reference/zug2018.html" class="external-link"><code>zug2018</code></a> shows an actual election result for the Canton of Zug in a dataframe. We use this data set to create input data for <code><a href="reference/pukelsheim.html">pukelsheim()</a></code>. The other parameters are set to reflect the actual election system.</p>
+<p>You can use <a href="https://polettif.github.io/proporz/reference/pukelsheim.html"><code>pukelsheim()</code></a> for dataframes in long format as input data. It is a wrapper for <code><a href="reference/biproporz.html">biproporz()</a></code>. <a href="https://polettif.github.io/proporz/reference/zug2018.html"><code>zug2018</code></a> shows an actual election result for the Canton of Zug in a dataframe. We use this data set to create input data for <code><a href="reference/pukelsheim.html">pukelsheim()</a></code>. The other parameters are set to reflect the actual election system.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># In this data set, parties are called 'lists' and districts 'entities'.</span></span>
 <span><span class="va">votes_df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">zug2018</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"list_id"</span>, <span class="st">"entity_id"</span>, <span class="st">"list_votes"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
@@ -157,7 +157,7 @@
 <span><span class="co">#&gt; 4       4      1701      14814     2</span></span>
 <span><span class="co">#&gt; 5       5      1701       4486     1</span></span>
 <span><span class="co">#&gt; 6       6      1701      15695     3</span></span></code></pre></div>
-<p>The <a href="https://polettif.github.io/proporz/articles/apportionment_scenarios.html" class="external-link"><strong>apportionment scenarios vignette</strong></a> contains more examples.</p>
+<p>The <a href="https://polettif.github.io/proporz/articles/apportionment_scenarios.html"><strong>apportionment scenarios vignette</strong></a> contains more examples.</p>
 </div>
 </div>
 <div class="section level2">
@@ -173,7 +173,7 @@
 <div class="section level2">
 <h2 id="function-details">Function details<a class="anchor" aria-label="anchor" href="#function-details"></a>
 </h2>
-<p><a href="https://polettif.github.io/proporz/reference/index.html" class="external-link"><strong>Full function reference</strong></a></p>
+<p><a href="https://polettif.github.io/proporz/reference/index.html"><strong>Full function reference</strong></a></p>
 <div class="section level4">
 <h4 id="divisor-methods">Divisor methods<a class="anchor" aria-label="anchor" href="#divisor-methods"></a>
 </h4>
