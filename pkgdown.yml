@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   apportionment_scenarios: apportionment_scenarios.html
-last_built: 2025-02-06T10:26Z
+last_built: 2025-02-17T07:46Z
 urls:
   reference: https://polettif.github.io/proporz/reference
   article: https://polettif.github.io/proporz/articles
