@@ -33,6 +33,8 @@ test_that("winner take one", {
     expect_identical(c(bp1), c(1L,1L,1L,0L))
     expect_identical(c(bp2), c(2L,0L,0L,1L))
 
+    expect_identical(c(biproporz(vm2, c(A=2,B=0), method = "wto")), c(1L, 1L, 0L, 0L))
+
     # pukelsheim
     df = pivot_to_df(vm2)
     seatsdf = data.frame(district = names(seats2), seats = seats2)

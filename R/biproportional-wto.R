@@ -12,7 +12,8 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
     DISTRICT_WINNERS = most_votes_in_district_matrix(votes_matrix)
 
     # Check if there are more winners than seats in any district
-    not_enough_district_seats = which(colSums(DISTRICT_WINNERS) > district_seats)
+    not_enough_district_seats = which(colSums(DISTRICT_WINNERS) > district_seats &
+                                          district_seats > 0) # ignore districts without any seats
     if(length(not_enough_district_seats) > 0) {
         DISTRICT_WINNERS[,not_enough_district_seats] <- FALSE
 
