@@ -25,7 +25,7 @@ test_that("proporz parameter range", {
                         expect_error(
                             proporz(votes, n_seats, method_impl),
                             paste0("With ",  .method_impl, " rounding there must be at ",
-                                   "least as many seats as there are parties with non-zero votes."),
+                                   "least as many seats as there are parties with non-zero votes"),
                             fixed = TRUE)
                     } else {
                         seats = proporz(votes, n_seats, method_impl)

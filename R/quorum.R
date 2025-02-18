@@ -254,7 +254,7 @@ apply_quorum_vector = function(votes_vector, quorum) {
     }
 
     if(all(votes_vector < quorum)) {
-        stop("No party reached the quorum.", call. = FALSE)
+        stop("No party reached the quorum", call. = FALSE)
     }
 
     votes_vector[votes_vector < quorum] <- 0
@@ -263,7 +263,7 @@ apply_quorum_vector = function(votes_vector, quorum) {
 
 check_quorum_param_vector = function(quorum) {
     if(!(length(quorum) == 1 && is.numeric(quorum) && quorum >= 0)) {
-        stop("Quorum parameter must be a single number >= 0.",
+        stop("Quorum parameter must be a single number >= 0",
              call. = FALSE)
     }
     invisible(TRUE)

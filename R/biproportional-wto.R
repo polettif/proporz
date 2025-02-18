@@ -20,14 +20,14 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
         warning("Not enough seats for tied parties with the most votes in: ",
                 collapse_names(names(not_enough_district_seats)),
                 "\nWinner take one condition is not applied in ",
-                num_word("this district.", "these districts.", not_enough_district_seats),
+                num_word("this district.\n", "these districts.\n", not_enough_district_seats),
                 call. = FALSE)
     }
 
     # check if there are enough seats for each party to satisfy winner constraint
     not_enough_party_seats = which(rowSums(DISTRICT_WINNERS) > seats_parties)
     if(length(not_enough_party_seats) > 0) {
-        stop("Not enough upper apportionment seats to give district winner seats to party/list: ",
+        stop("Not enough upper apportionment seats to give district winner seats to party: ",
              collapse_names(names(not_enough_party_seats)), call. = FALSE)
     }
 

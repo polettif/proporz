@@ -26,7 +26,7 @@ check_enough_seats = function(votes, n_seats, method) {
         return(invisible(TRUE))
     }
     stop("With ", method," rounding there must be at least as many seats as ",
-         "there are parties with non-zero votes.", call. = FALSE)
+         "there are parties with non-zero votes", call. = FALSE)
 }
 
 check_seats_number = function(n_seats, n_seats.name) {

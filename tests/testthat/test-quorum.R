@@ -5,7 +5,7 @@ test_that("quorum proporz", {
     method_list = unique(unlist(proporz_methods, use.names = FALSE))
 
     for(method in method_list) {
-        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum.",
+        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum",
                      fixed = TRUE)
     }
 })
