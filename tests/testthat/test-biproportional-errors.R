@@ -230,4 +230,9 @@ test_that("error messages", {
     options(proporz_max_iterations = 2)
     expect_error_fixed(biproporz(vm, seats), "Result is undefined, exceeded maximum number of iterations (2)")
     options(proporz_max_iterations = NULL)
+
+    # custom function
+    expect_error(
+        lower_apportionment(matrix(c(21,11,33,21), 2), c(2,2), c(2,2), method = function(x) x),
+        "Rounding function does not return integers")
 })
