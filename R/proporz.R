@@ -5,8 +5,8 @@
 #' @param votes numeric vector with number of votes for each party
 #' @param n_seats total number of seats
 #' @param method Apportionment method to use, as character. Not case sensitive. See details.
-#' @param quorum Vote threshold a party must reach. Used as quota of total
-#'               votes within a district if less than 1 otherwise as number
+#' @param quorum Vote threshold a party must reach. Used as fraction of total
+#'               votes within if less than 1 otherwise as number
 #'               of votes.
 #'
 #' @details The following methods are available: `r .doc_proporz_methods()`

@@ -38,10 +38,11 @@ check_seats_number = function(n_seats, n_seats.name) {
     stop("`", n_seats.name, "` must be an integer >= 0", call. = FALSE)
 }
 
-check_votes_vector = function(votes, votes.name) {
+check_votes_vector = function(votes, .votes) {
+    assert(!missing(.votes))
     if(is.numeric(votes) && all(!is.na(votes)) &&
        all(votes >= 0) && is.vector(votes)) {
         return()
     }
-    stop("`", votes.name, "` must be a numeric vector >= 0", call. = FALSE)
+    stop("`", .votes, "` must be a numeric vector >= 0", call. = FALSE)
 }

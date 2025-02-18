@@ -25,6 +25,7 @@ rows) showing whether they reached the quorum or not.
 Apply a list of quorum functions to a votes matrix
 }
 \seealso{
-\code{\link[=quorum_all]{quorum_all()}}, \code{\link[=quorum_any]{quorum_any()}} to create a list of quorum functions.
+\code{\link[=quorum_functions]{quorum_functions}} to create a list of quorum
+functions.
 }
 \keyword{internal}

@@ -20,7 +20,7 @@
 #'
 #' @inheritParams upper_apportionment
 #' @param quorum Optional list of functions which take the votes_matrix and return a logical
-#'   vector that denotes for each list/party whether they reached the quorum (i.e. are
+#'   vector that denotes for each party/row whether they reached the quorum (i.e. are
 #'   eligible for seats). The easiest way to do this is via [quorum_any()] or
 #'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
 #'   vector. No quorum is applied if parameter is missing or `NULL`.
