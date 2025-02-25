@@ -1,7 +1,8 @@
 # proporz (development version)
 
-* add `district_winner_matrix()` function
-* add `apply_quorum()` function
+* add `district_winner_matrix()` function (exported internal implementation)
+* add `apply_quorum()` function (exported internal implementation)
+* add `summary()` method for biproporz results showing marginal sums and divisors
 * returned seat values from proporz/biproporz functions are always integer
 * undefined biproporz results are caught earlier (flow criterion check)
 

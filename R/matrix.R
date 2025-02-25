@@ -52,6 +52,7 @@ pivot_to_matrix = function(df_long) {
 #' @rdname pivot_to_matrix
 #' @export
 pivot_to_df = function(matrix_wide, value_colname = "values") {
+    assert(is.matrix(matrix_wide))
     if(is.null(colnames(matrix_wide))) colnames(matrix_wide) <- seq_len(ncol(matrix_wide))
     if(is.null(rownames(matrix_wide))) rownames(matrix_wide) <- seq_len(nrow(matrix_wide))
     if(is.null(names(dimnames(matrix_wide)))) {
