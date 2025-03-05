@@ -107,8 +107,9 @@ head(seats_df)
 #> 6       6      1701      15695     3
 ```
 
-The [**apportionment scenarios vignette**](https://polettif.github.io/proporz/articles/apportionment_scenarios.html) 
-contains more examples.
+The [**Apportionment scenarios vignette**](https://polettif.github.io/proporz/articles/apportionment_scenarios.html) 
+contains more examples. 
+How to adapt `biproporz` for special use cases is demonstrated in the [**Modifying biproporz() vignette**](https://polettif.github.io/proporz/articles/modifying_biproporz.html).
 
 ## Shiny app
 

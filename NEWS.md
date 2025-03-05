@@ -1,5 +1,6 @@
 # proporz (development version)
 
+* add "Modifying biproporz()" vignette
 * add `district_winner_matrix()` function (exported internal implementation)
 * add `apply_quorum()` function (exported internal implementation)
 * add `summary()` method for biproporz results showing marginal sums and divisors
