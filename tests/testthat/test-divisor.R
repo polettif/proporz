@@ -76,3 +76,11 @@ test_that("compare", {
     expect_identical(divisor_round(v, 10),    c(5L,3L,1L,1L,0L))
     expect_identical(divisor_floor(v, 10),    c(5L,4L,1L,0L,0L))
 })
+
+test_that("highest_averages_method", {
+    expect_identical(highest_averages_method(c(5200, 1700, 3100), 15, 0.5), c(8L,2L,5L))
+    expect_identical(highest_averages_method(c(100, 80, 30, 20), 8, 1), c(4L,3L,1L,0L))
+
+    expect_error(highest_averages_method(c(100, 80, 30, 20), 3, c(0.5, 1.5)),
+                 "Number of divisors is not equal to the number of seats")
+})

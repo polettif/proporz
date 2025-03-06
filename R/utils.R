@@ -36,7 +36,7 @@ num_word = function(singular, plural, i) {
     return(plural)
 }
 
-# divide x and assign 0 for infinite or nan values
+# divide x by div and assign 0 for infinite or nan values
 div0 = function(x, div) {
     d = x/div
     d[is.nan(d) | is.infinite(d) | is.na(d)] <- 0

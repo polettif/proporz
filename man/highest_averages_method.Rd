@@ -13,7 +13,7 @@ highest_averages_method(votes, n_seats, divisors)
 
 \item{divisors}{sequence of divisors (length equal to the number of seats).
 If it is a single number (e.g. 0.5), a sequence is generated
-starting with it.}
+starting with it, increasing by 1.}
 }
 \value{
 The number of seats per party as a vector

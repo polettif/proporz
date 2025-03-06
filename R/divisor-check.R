@@ -6,9 +6,7 @@ check_edge_quotient = function(mtrx_quotient, n_seats, return_indices = FALSE) {
     quotient_last_with = mtrx_quotient[ordered_quotients[n_seats]]
     quotient_first_without = mtrx_quotient[ordered_quotients[n_seats+1]]
 
-    if(is.nan(quotient_first_without)) quotient_first_without <- 0
-
-    if(quotient_last_with == quotient_first_without) {
+    if(identical(quotient_last_with, quotient_first_without)) {
         indices = unique(which(mtrx_quotient == quotient_last_with, arr.ind = TRUE)[,"col"])
         stop("Result is undefined, equal quotient for parties: ",
              collapse_names(indices, colnames(mtrx_quotient)), call. = FALSE)
@@ -33,7 +31,7 @@ check_seats_number = function(n_seats, n_seats.name) {
     if(length(n_seats) == 1 && !is.null(n_seats) && !is.na(n_seats) &&
        (n_seats %% 1 == 0) &&
        n_seats >= 0) {
-        return()
+        return(invisible(TRUE))
     }
     stop("`", n_seats.name, "` must be an integer >= 0", call. = FALSE)
 }
@@ -42,7 +40,7 @@ check_votes_vector = function(votes, .votes) {
     assert(!missing(.votes))
     if(is.numeric(votes) && all(!is.na(votes)) &&
        all(votes >= 0) && is.vector(votes)) {
-        return()
+        return(invisible(TRUE))
     }
     stop("`", .votes, "` must be a numeric vector >= 0", call. = FALSE)
 }
