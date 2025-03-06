@@ -20,6 +20,11 @@ rows) showing whether they reached the quorum or not.
 \description{
 Base implementation, used by \code{\link[=quorum_functions]{quorum_functions}}.
 }
+\note{
+Votes are not weighted across districts. This is relevant if the quorum threshold is the
+minimal number of \emph{voters} (either as percentage or absolute value). In this case, use
+\code{\link[=weight_list_votes]{weight_list_votes()}} before calculating the quorum.
+}
 \examples{
 (vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
 reached_quorum_total(vm, 35)

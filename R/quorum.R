@@ -9,7 +9,8 @@
 #'   otherwise as number of votes. Must be greater than 0. Uses
 #'   [reached_quorum_any_district()].
 #' @param total Vote threshold a party must reach for all votes cast. Used as
-#'   share of total votes if less than 1, otherwise as number of votes. Must be
+#'   share of total votes if less than 1. Otherwise as number of votes. Note that
+#'   votes are not weighted with [weight_list_votes()] across districts. Must be
 #'   greater than 0. Uses [reached_quorum_total()].
 #'
 #' @details There's a difference in how the functions work. With `quorum_any`,
@@ -91,6 +92,11 @@ create_quorum_function_list = function(type, any_district, total) {
 #'
 #' @returns Logical vector with length equal to the number of lists/parties (`votes_matrix`
 #'   rows) showing whether they reached the quorum or not.
+#'
+#' @note
+#' Votes are not weighted across districts. This is relevant if the quorum threshold is the
+#' minimal number of *voters* (either as percentage or absolute value). In this case, use
+#' [weight_list_votes()] before calculating the quorum.
 #'
 #' @seealso [reached_quorum_any_district()]
 #'

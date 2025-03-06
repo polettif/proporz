@@ -130,9 +130,9 @@ divide_votes_matrix = function(M, col_divisors, row_divisors) {
     M_district = row_as_matrix(col_divisors, M)
     M_party = col_as_matrix(row_divisors, M)
 
-    x = M/M_district/M_party
-    x[is.nan(x) | is.infinite(x) | is.na(x)] <- 0
-    return(x)
+    d = M/M_district/M_party
+    d[is.nan(d) | is.infinite(d) | is.na(d)] <- 0
+    return(d)
 }
 
 #' Find divisors for a matrix with alternate scaling

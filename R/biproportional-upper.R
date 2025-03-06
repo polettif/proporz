@@ -88,18 +88,22 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' @export
 weight_list_votes = function(votes_matrix, district_seats) {
+    assert(all(district_seats >= 0))
+    assert(is.matrix(votes_matrix))
     if(ncol(votes_matrix) != length(district_seats)) {
         stop("`length(district_seats)` must be the same as `ncol(votes_matrix)`", call. = FALSE)
     }
+    if(!is.null(colnames(votes_matrix)) && !is.null(names(district_seats))) {
+        assert(colnames(votes_matrix) == names(district_seats))
+    }
+
     M_seats_district = matrix(
         rep(district_seats, nrow(votes_matrix)),
         byrow = TRUE, ncol = length(district_seats))
 
-    votes_matrix <- votes_matrix/M_seats_district
-
     # it's possible if district seats are proportionally assigned that
     # a district has 0 seats, fix NaNs and Infs here
-    votes_matrix[is.nan(votes_matrix) | is.infinite(votes_matrix)] <- 0
+    votes_matrix <- div0(votes_matrix, M_seats_district)
 
     return(votes_matrix)
 }
