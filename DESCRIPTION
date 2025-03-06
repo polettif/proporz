@@ -23,6 +23,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown
-URL: https://polettif.github.io/proporz, https://github.com/polettif/proporz
+URL: https://polettif.github.io/proporz/, https://github.com/polettif/proporz
 BugReports: https://github.com/polettif/proporz/issues
 VignetteBuilder: knitr
