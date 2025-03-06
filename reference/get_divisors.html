@@ -23,6 +23,7 @@ attributes(...)$divisors."><meta property="og:image" content="https://polettif.g
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/apportionment_scenarios.html">Apportionment scenarios</a></li>
+    <li><a class="dropdown-item" href="../articles/modifying_biproporz.html">Modifying biproporz()</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -62,7 +63,8 @@ data.frame created by <code><a href="pukelsheim.html">pukelsheim()</a></code></p
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The district and party divisors in a list, each as a vector</p>
+    <p>The district and party divisors (named "districts" and "parties") in a list, each
+as a vector</p>
     </div>
 
     <div class="section level2">
@@ -77,6 +79,28 @@ data.frame created by <code><a href="pukelsheim.html">pukelsheim()</a></code></p
 <span class="r-out co"><span class="r-pr">#&gt;</span>   CVP  SPGB   FDP   SVP </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 0.946 1.000 1.000 0.970 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">seats_df</span> <span class="op">=</span> <span class="fu"><a href="pukelsheim.html">pukelsheim</a></span><span class="op">(</span><span class="fu"><a href="pivot_to_matrix.html">pivot_to_df</a></span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span><span class="op">)</span>, <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">get_divisors</span><span class="op">(</span><span class="va">seats_df</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $districts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Altdorf    Bürglen   Erstfeld Schattdorf </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       2689       1194       1088       1539 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parties</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   CVP   FDP  SPGB   SVP </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.946 1.000 1.000 0.970 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># summary() also prints the divisors for a biproporz matrix</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">seats_matrix</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Altdorf Bürglen Erstfeld Schattdorf (sum) (divisor)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        CVP       5       2        2          3    12     0.946</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       SPGB       4       1        2          2     9         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        FDP       3       1        1          2     7         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        SVP       3       3        1          2     9      0.97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      (sum)      15       7        6          9    37          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  (divisor)    2689    1194     1088       1539                </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

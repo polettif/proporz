@@ -21,6 +21,7 @@ districts/regions/entities ('Doppelter Pukelsheim')."><meta property="og:image" 
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/apportionment_scenarios.html">Apportionment scenarios</a></li>
+    <li><a class="dropdown-item" href="../articles/modifying_biproporz.html">Modifying biproporz()</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -74,7 +75,7 @@ districts/regions/entities ('Doppelter Pukelsheim').</p>
 
 <dt id="arg-quorum">quorum<a class="anchor" aria-label="anchor" href="#arg-quorum"></a></dt>
 <dd><p>Optional list of functions which take the votes_matrix and return a logical
-vector that denotes for each list/party whether they reached the quorum (i.e. are
+vector that denotes for each party/row whether they reached the quorum (i.e. are
 eligible for seats). The easiest way to do this is via <code><a href="quorum_functions.html">quorum_any()</a></code> or
 <code><a href="quorum_functions.html">quorum_all()</a></code>, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if parameter is missing or <code>NULL</code>.</p></dd>

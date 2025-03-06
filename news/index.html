@@ -19,6 +19,7 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/apportionment_scenarios.html">Apportionment scenarios</a></li>
+    <li><a class="dropdown-item" href="../articles/modifying_biproporz.html">Modifying biproporz()</a></li>
   </ul></li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -37,13 +38,16 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="proporz-development-version">proporz (development version)<a class="anchor" aria-label="anchor" href="#proporz-development-version"></a></h2>
-<ul><li>add <code><a href="../reference/district_winner_matrix.html">district_winner_matrix()</a></code> function</li>
+<ul><li>add “Modifying biproporz()” vignette</li>
+<li>add <code><a href="../reference/district_winner_matrix.html">district_winner_matrix()</a></code> function (exported internal implementation)</li>
+<li>add <code><a href="../reference/apply_quorum.html">apply_quorum()</a></code> function (exported internal implementation)</li>
+<li>add <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method for biproporz results showing marginal sums and divisors</li>
 <li>returned seat values from proporz/biproporz functions are always integer</li>
 <li>undefined biproporz results are caught earlier (flow criterion check)</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.5.0" id="proporz-150">proporz 1.5.0<a class="anchor" aria-label="anchor" href="#proporz-150"></a></h2><p class="text-muted">CRAN release: 2024-04-03</p>
-<ul><li>add new feature: winner take one method for <code><a href="../reference/biproporz.html">biproporz()</a></code> and <code>pukelsheim</code> (<a href="https://github.com/polettif/proporz/issues/10" class="external-link">#10</a>)</li>
+<ul><li>add new feature: winner take one method for <code><a href="../reference/biproporz.html">biproporz()</a></code> and <code><a href="../reference/pukelsheim.html">pukelsheim()</a></code> (<a href="https://github.com/polettif/proporz/issues/10" class="external-link">#10</a>)</li>
 <li>allow non-integer vote counts</li>
 <li>round divisors to as few digits as possible</li>
 <li>changed error message for undefined/tied results</li>
