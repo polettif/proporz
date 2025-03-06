@@ -24,8 +24,8 @@ divisor_ceiling(votes, n_seats, quorum = 0)
 
 \item{n_seats}{total number of seats}
 
-\item{quorum}{Vote threshold a party must reach. Used as quota of total
-votes within a district if less than 1 otherwise as number
+\item{quorum}{Vote threshold a party must reach. Used as fraction of total
+votes within if less than 1 otherwise as number
 of votes.}
 }
 \value{

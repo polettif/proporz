@@ -33,6 +33,7 @@ reference:
 - subtitle: "Quorum calculations"
   contents:
   - quorum_functions
+  - apply_quorum
   - reached_quorum_any_district
   - reached_quorum_total
 - title: "Shiny App"

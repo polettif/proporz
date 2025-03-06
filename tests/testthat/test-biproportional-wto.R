@@ -23,7 +23,7 @@ test_that("winner take one", {
 
     vm = matrix(c(60,10,10,11), 2, dimnames = list(as.character(1:2), c("A", "B")))
     expect_error(biproporz(vm, setNames(c(1,1), colnames(vm)), method = "wto"),
-                 "Not enough upper apportionment seats to give district winner seats to party/list: '2'")
+                 "Not enough upper apportionment seats to give district winner seats to party: '2'")
 
     vm2 = matrix(c(200,100,10,11), 2, dimnames = list(as.character(1:2), c("A", "B")))
     seats2 = setNames(c(2,1), colnames(vm))
@@ -32,6 +32,8 @@ test_that("winner take one", {
 
     expect_identical(c(bp1), c(1L,1L,1L,0L))
     expect_identical(c(bp2), c(2L,0L,0L,1L))
+
+    expect_identical(c(biproporz(vm2, c(A=2,B=0), method = "wto")), c(1L, 1L, 0L, 0L))
 
     # pukelsheim
     df = pivot_to_df(vm2)
@@ -56,7 +58,7 @@ test_that("two with ties and enough seats", {
     expect_warning(biproporz(vm3, seats1, method = "wto"),
                    "Not enough seats for tied parties with the most votes in: 'B'")
     expect_error(biproporz(vm3, seats2, method = "wto"),
-                 "Not enough upper apportionment seats to give district winner seats to party/list: '3'")
+                 "Not enough upper apportionment seats to give district winner seats to party: '3'")
 })
 
 test_that("district_winner_matrix", {

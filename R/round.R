@@ -24,7 +24,7 @@ ceil_at = function(x, threshold) {
 
     if(is.numeric(threshold)) {
         if(threshold < 0 || threshold > 1) {
-            stop("Threshold argument must be in [0,1].", call. = FALSE)
+            stop("Threshold argument must be in [0,1]", call. = FALSE)
         }
         threshold <- floor(values) + threshold
     } else if(threshold == "harmonic") {

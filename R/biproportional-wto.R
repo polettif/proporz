@@ -9,24 +9,25 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
              call. = FALSE)
     }
 
-    district_winners = most_votes_in_district_matrix(votes_matrix)
+    DISTRICT_WINNERS = most_votes_in_district_matrix(votes_matrix)
 
     # Check if there are more winners than seats in any district
-    not_enough_district_seats = which(colSums(district_winners) > district_seats)
+    not_enough_district_seats = which(colSums(DISTRICT_WINNERS) > district_seats &
+                                          district_seats > 0) # ignore districts without any seats
     if(length(not_enough_district_seats) > 0) {
-        district_winners[,not_enough_district_seats] <- FALSE
+        DISTRICT_WINNERS[,not_enough_district_seats] <- FALSE
 
         warning("Not enough seats for tied parties with the most votes in: ",
                 collapse_names(names(not_enough_district_seats)),
                 "\nWinner take one condition is not applied in ",
-                num_word("this district.", "these districts.", not_enough_district_seats),
+                num_word("this district.\n", "these districts.\n", not_enough_district_seats),
                 call. = FALSE)
     }
 
     # check if there are enough seats for each party to satisfy winner constraint
-    not_enough_party_seats = which(rowSums(district_winners) > seats_parties)
+    not_enough_party_seats = which(rowSums(DISTRICT_WINNERS) > seats_parties)
     if(length(not_enough_party_seats) > 0) {
-        stop("Not enough upper apportionment seats to give district winner seats to party/list: ",
+        stop("Not enough upper apportionment seats to give district winner seats to party: ",
              collapse_names(names(not_enough_party_seats)), call. = FALSE)
     }
 
@@ -36,11 +37,11 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
     #   Pukelsheim F.; Schumacher C. (2011):
     #   Doppelproporz bei Parlamentswahlen. Ein Rück- und Ausblick.
     district_winner_round_func = function(x) {
-        district_winners_subset = district_winners[rownames(x),colnames(x),drop=FALSE]
+        district_winners_subset = DISTRICT_WINNERS[rownames(x),colnames(x),drop=FALSE]
 
         x_winners <- x_others <- x
-        x_winners[which(!district_winners_subset)] <- 0
-        x_others[which(district_winners_subset)] <- 0
+        x_winners[!district_winners_subset] <- 0
+        x_others[district_winners_subset] <- 0
 
         # round all district winners to 1, standard rounding after that
         y_winners = ceil_at(x_winners, "0.5_at_least_one")

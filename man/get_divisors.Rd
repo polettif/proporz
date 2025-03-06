@@ -11,7 +11,8 @@ get_divisors(biproporz_result)
 data.frame created by \code{\link[=pukelsheim]{pukelsheim()}}}
 }
 \value{
-The district and party divisors in a list, each as a vector
+The district and party divisors (named "districts" and "parties") in a list, each
+as a vector
 }
 \description{
 Show the district and party divisors used to assign seats.
@@ -21,5 +22,12 @@ This method provides easier access to divisors stored in
 \examples{
 seats_matrix = biproporz(uri2020$votes_matrix, uri2020$seats_vector)
 get_divisors(seats_matrix)
+
+seats_df = pukelsheim(pivot_to_df(uri2020$votes_matrix),
+                      data.frame(names(uri2020$seats_vector), uri2020$seats_vector))
+get_divisors(seats_df)
+
+# summary() also prints the divisors for a biproporz matrix
+summary(seats_matrix)
 
 }

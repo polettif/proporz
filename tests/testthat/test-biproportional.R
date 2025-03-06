@@ -104,9 +104,9 @@ test_that("named votes_matrix", {
     expect_error_fixed(biproporz(votes_matrix, c(50, 20)),
                        "needs to have the same names as the columns in `votes_matrix`")
     expect_error_fixed(biproporz(unname(votes_matrix), c(Z1 = 50, Z2 = 20)),
-                       "needs to have the same names as the columns in `unname(votes_matrix)`.")
+                       "needs to have the same names as the columns in `unname(votes_matrix)`")
     expect_error_fixed(biproporz(votes_matrix, c(Z0 = 50, Z2 = 20)),
-                       "needs to have the same names as the columns in `votes_matrix`.")
+                       "needs to have the same names as the columns in `votes_matrix`")
 
     seats = c("Z2" = 20, "Z1" = 50)
     expect_identical(biproporz(votes_matrix, seats), biproporz(votes_matrix, seats[2:1]))

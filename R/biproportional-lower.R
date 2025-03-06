@@ -183,6 +183,9 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
     target_diff_prev = sum(2*seats_cols)
     for(i in seq_len(max_iter)) {
         # break conditions
+        if(any(round_func(m.(M,dC,dR)) %% 1 != 0)) {
+            stop("Rounding function does not return integers", call. = FALSE)
+        }
         target_diff = sum(abs(mc(M,dC,dR) - seats_cols)) + sum(abs(mr(M,dC,dR) - seats_rows))
         if(target_diff > target_diff_prev) {
             stop("Result is undefined, cannot assign all seats in lower apportionment", call. = FALSE)
@@ -238,7 +241,6 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
                 stop("Result is undefined, tied votes and multiple possible seat assignments",
                      call. = FALSE)
             }
-
         }
     }
     stop("Result is undefined, exceeded maximum number of iterations (", max_iter, ")",

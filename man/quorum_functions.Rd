@@ -32,7 +32,7 @@ quorums.
 applied prior to seat distributions.
 }
 \details{
-There's a difference in how the functions work. With \code{quroum_any},
+There's a difference in how the functions work. With \code{quorum_any},
 \emph{at least one} quorum must be reached. With \code{quorum_all} \emph{all}
 (i.e. both) quorums must be reached. If you only use one parameter,
 \code{quorum_any()} and \code{quorum_all()} are identical.
@@ -58,4 +58,7 @@ biproporz(votes_matrix, seats, quorum = quorum_any(total = 0.5))
 # the quorum parameter also accepts vectors (e.g. calculated elsewhere)
 biproporz(votes_matrix, seats, quorum = c(FALSE, TRUE, TRUE, TRUE))
 
+}
+\seealso{
+\code{\link[=apply_quorum]{apply_quorum()}} for standalone quorum calculations
 }

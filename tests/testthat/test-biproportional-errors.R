@@ -20,6 +20,10 @@ test_that("undefined result biproportional", {
     expect_error_fixed(biproporz(vm5, c(3,1)),
                        "Result is undefined, tied votes and multiple possible seat assignments")
 
+    vm0.5 = matrix(c(1500, 4500), 2)
+    expect_identical(c(biproporz(vm0.5, 5, method = "round")), c(1L, 4L))
+    expect_identical(c(biproporz(vm0.5, 7, method = "round")), c(2L, 5L))
+
     # manual fix (actual implementation depends on rules)
     vm4 <- vm6 <- vm
     vm4[4,1] <- vm4[4,1]+1
@@ -157,7 +161,7 @@ test_that("error messages", {
 
     # unique district ids
     expect_error_fixed(pukelsheim(vdf_dupl, rbind(seats_df, seats_df)),
-                       "District ids in `rbind(seats_df, seats_df)` are not unique.")
+                       "District ids in `rbind(seats_df, seats_df)` are not unique")
 
     # more helpful message if columns are switched
     expect_error_fixed(pukelsheim(vdf[,c(2,1,3)], seats_df),
@@ -167,7 +171,7 @@ test_that("error messages", {
     # districts not in vote_districts
     expect_error_fixed(pukelsheim(vdf134, seats_df),
                        paste0("Not all district ids in `seats_df`s first column exist ",
-                              "in `vdf134`s second column."))
+                              "in `vdf134`s second column"))
 
     # vote_districts not in districts
     expect_error_fixed(pukelsheim(vdf, seats_df124),
@@ -179,7 +183,7 @@ test_that("error messages", {
 
     # seats_df is not a data.frame
     seats_vec124 = setNames(seats_df124$seats, seats_df124$col)
-    expect_error_fixed(pukelsheim(vdf134, seats_vec124), "`seats_vec124` must be a data.frame.")
+    expect_error_fixed(pukelsheim(vdf134, seats_vec124), "`seats_vec124` must be a data.frame")
 
     # non-numeric
     vdf_non_num = vdf
@@ -199,18 +203,20 @@ test_that("error messages", {
     expect_error_fixed(biproporz(vm_char, c(2,3,2,1)), "Votes in `vm_char` must be numbers >= 0")
 
     # biproportional
-    expect_error_fixed(biproporz(vm, NA), "`NA` must be a numeric vector, data.frame or a single number.")
-    expect_error_fixed(biproporz(vdf, c(1,2,3)), "`vdf` must be a matrix.")
-    expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows.")
+    expect_error_fixed(biproporz(vm, NA), "`NA` must be a numeric vector, data.frame or a single number")
+    expect_error_fixed(biproporz(vdf, c(1,2,3)), "`vdf` must be a matrix")
+    expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows")
     expect_error_fixed(biproporz(vm, seats, method = "largest_remainder_method"),
-                       'Cannot use "largest_remainder_method", only divisor methods are possible in biproportional apportionment.')
+                       'Cannot use "largest_remainder_method", only divisor methods are possible in biproportional apportionment')
     expect_s3_class(biproporz(vm+0.1, seats), "proporz_matrix")
     expect_s3_class(biproporz(vm*0.1, seats), "proporz_matrix")
     expect_identical(as.matrix(biproporz(vm*0.01, seats)), as.matrix(biproporz(vm*20, seats)))
-    expect_error_fixed(biproporz(vm, seats+0.1), "`seats + 0.1` must be integers.")
+    expect_error_fixed(biproporz(vm, seats+0.1), "`seats + 0.1` must be integers")
     expect_error_fixed(biproporz(vm, seats, method = c("round", "floor", "ceiling")),
-                       "Only one or two methods allowed.")
-    expect_error_fixed(biproporz(vm, vm), "`vm` must be a numeric vector, data.frame or a single number.")
+                       "Only one or two methods allowed")
+    expect_error_fixed(biproporz(vm, seats, method = round),
+                       "Method must be a character or a list")
+    expect_error_fixed(biproporz(vm, vm), "`vm` must be a numeric vector, data.frame or a single number")
 
     # upper/lower_apportionment
     ua = upper_apportionment(vm+0.1, seats)
@@ -230,4 +236,9 @@ test_that("error messages", {
     options(proporz_max_iterations = 2)
     expect_error_fixed(biproporz(vm, seats), "Result is undefined, exceeded maximum number of iterations (2)")
     options(proporz_max_iterations = NULL)
+
+    # custom function
+    expect_error(
+        lower_apportionment(matrix(c(21,11,33,21), 2), c(2,2), c(2,2), method = function(x) x),
+        "Rounding function does not return integers")
 })

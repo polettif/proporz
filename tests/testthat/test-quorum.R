@@ -5,7 +5,7 @@ test_that("quorum proporz", {
     method_list = unique(unlist(proporz_methods, use.names = FALSE))
 
     for(method in method_list) {
-        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum.",
+        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum",
                      fixed = TRUE)
     }
 })
@@ -48,7 +48,8 @@ test_that("quorum with vote counts", {
 
     expect_identical(sum(apply_quorum_matrix(vm, c(FALSE,FALSE,FALSE))), 0)
     expect_identical(sum(apply_quorum_matrix(vm, c(FALSE,TRUE,FALSE))), 30)
-    expect_error_fixed(apply_quorum_matrix(vm, "x"), "Cannot parse quorum function or vector.")
+    expect_error_fixed(apply_quorum_matrix(vm, "x"),
+                       "Quorum parameter must be a logical vector or a list of quorum functions (see ?quorum_functions)")
 })
 
 test_that("quorum with percentages counts", {
@@ -86,13 +87,15 @@ test_that("quorum param", {
                      q_district_and_total)
     expect_identical(reached_quorums(vm, quorum_all(any_district = 0.05, total = 63)),
                      q_district_and_total)
-    expect_error_fixed(reached_quorums(vm, reached_quorum_total), "`reached_quorum_total` is not a list of functions.")
-    expect_error_fixed(reached_quorums(vm, list(1, 2)), "`list(1, 2)` is not a list of functions.")
+    expect_error_fixed(reached_quorums(vm, reached_quorum_total), "is_quorum_function_list(quorum_funcs) is not TRUE")
+    expect_error_fixed(reached_quorums(vm, list(1, 2)), "is_quorum_function_list(quorum_funcs) is not TRUE")
 
     dummy_list = list(function(x) x > 0, function(x) x < 0)
-    expect_error_fixed(reached_quorums(vm, dummy_list), "type must be set as list attribute.")
+    expect_error_fixed(reached_quorums(vm, dummy_list), "is_quorum_function_list(quorum_funcs) is not TRUE")
     attributes(dummy_list)$type <- "either_or"
-    expect_error_fixed(reached_quorums(vm, dummy_list), "Unknown type `either_or`.")
+    expect_error_fixed(reached_quorums(vm, dummy_list), "is_quorum_function_list(quorum_funcs) is not TRUE")
+    attributes(dummy_list)$type <- c("ALL", "ANY")
+    expect_error_fixed(reached_quorums(vm, dummy_list), "is_quorum_function_list(quorum_funcs) is not TRUE")
 
     # vote_matrix
     soll_district = vm * matrix(rep(q_district, 2), ncol = 2)
@@ -147,4 +150,28 @@ test_that("quorum param", {
     ec_vm = matrix(c(89,5,2,4, 96,1,1,4), ncol = 2)
     ec_bp = biproporz(vm, c(93, 100), quorum_any(any_district = 0.05))
     expect_is(ec_bp, "proporz_matrix")
+})
+
+test_that("apply_quorum", {
+    vc = c(91, 9)
+    expect_identical(apply_quorum(vc, 0), apply_quorum_vector(vc, 0))
+    expect_identical(apply_quorum(vc, 0.1), apply_quorum_vector(vc, 0.1))
+    expect_identical(apply_quorum(vc, 10), apply_quorum_vector(vc, 10))
+
+    vm = matrix(c(89, 11, 199, 1), 2)
+    expect_identical(apply_quorum(vm, quorum_any(any_district = 0.1)),
+                     apply_quorum_matrix(vm, quorum_any(any_district = 0.1)))
+    expect_identical(apply_quorum(vm, quorum_all(any_district = 0.1, total = 0.05)),
+                     apply_quorum_matrix(vm, quorum_all(any_district = 0.1, total = 0.05)))
+
+    expect_error(apply_quorum(vm, 0),
+                 "Quorum parameter must be a logical vector or a list of quorum functions (see ?quorum_functions)",
+                 fixed = TRUE)
+    expect_identical(sum(apply_quorum(vm, c(FALSE, FALSE))), 0)
+    expect_error_fixed(apply_quorum(vm, c(FALSE)), "length(quorum) == nrow(votes_matrix) is not TRUE")
+
+    expect_error(apply_quorum(vc, quorum_all(0.5)),
+                 "Quorum parameter must be a single number >= 0", fixed = TRUE)
+    expect_error(apply_quorum(vc, -1),
+                 "Quorum parameter must be a single number >= 0", fixed = TRUE)
 })

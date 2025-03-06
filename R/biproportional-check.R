@@ -1,26 +1,29 @@
 prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
     vmn = paste0("`", votes_matrix.name, "`")
     if(!is.matrix(votes_matrix)) {
-        stop(vmn, " must be a matrix.", call. = FALSE)
+        stop(vmn, " must be a matrix", call. = FALSE)
     }
     if(any(is.na(votes_matrix)) || any(votes_matrix < 0) || !is.numeric(votes_matrix)) {
-        stop("Votes in ", vmn, " must be numbers >= 0.", call. = FALSE)
+        stop("Votes in ", vmn, " must be numbers >= 0", call. = FALSE)
     }
     if(!is.null(rownames(votes_matrix)) &&
        length(unique(rownames(votes_matrix))) != nrow(votes_matrix)) {
-        stop("rownames in ", vmn , " must be unique.", call. = FALSE)
+        stop("rownames in ", vmn , " must be unique", call. = FALSE)
     }
     if(!is.null(colnames(votes_matrix)) &&
        length(unique(colnames(votes_matrix))) != ncol(votes_matrix)) {
-        stop("colnames in ", vmn, " must be unique.", call. = FALSE)
+        stop("colnames in ", vmn, " must be unique", call. = FALSE)
     }
 
     return(votes_matrix)
 }
 
 prep_method = function(method) {
+    if(!is.vector(method)) {
+        stop("Method must be a character or a list", call. = FALSE)
+    }
     if(!length(method) %in% c(1,2)) {
-        stop("Only one or two methods allowed.", call. = FALSE)
+        stop("Only one or two methods allowed", call. = FALSE)
     }
     if(length(method) == 1) {
         if(method == "wto") {
@@ -31,7 +34,7 @@ prep_method = function(method) {
     }
     if(any(method == "largest_remainder_method")) {
         stop('Cannot use "largest_remainder_method", only divisor methods ',
-             'are possible in biproportional apportionment.', call. = FALSE)
+             'are possible in biproportional apportionment', call. = FALSE)
     }
 
     return(method)
@@ -55,14 +58,14 @@ prep_district_seats = function(district_seats, votes_matrix,
         if(!identical(sort(colnames(votes_matrix)), sort(names(district_seats)))) {
             stop("`", .district_seats.name,
                  "` needs to have the same names as the columns in `",
-                 .votes_matrix.name, "`.", call. = FALSE)
+                 .votes_matrix.name, "`", call. = FALSE)
         }
         if(!is.null(colnames(votes_matrix))) { # seats vector is named/unnamed like matrix
             district_seats <- district_seats[colnames(votes_matrix)]
         }
     }
     if(sum(district_seats %% 1) != 0) {
-        stop("`", .district_seats.name, "` must be integers.", call. = FALSE)
+        stop("`", .district_seats.name, "` must be integers", call. = FALSE)
     }
     assert(is.atomic(district_seats))
 
@@ -91,15 +94,15 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
 
     if(!is.numeric(votes_df[[3]]) || any(votes_df[[3]] < 0)) {
         stop("Vote values in `", .votes_df,
-             "`s third column must be numbers >= 0.", call. = FALSE)
+             "`s third column must be numbers >= 0", call. = FALSE)
     }
 
     if(!is.data.frame(district_seats_df)) {
-        stop("`", .district_seats_df, "` must be a data.frame.", call. = FALSE)
+        stop("`", .district_seats_df, "` must be a data.frame", call. = FALSE)
     }
     if(length(unique(district_seats_df[[1]])) != nrow(district_seats_df)) {
         stop("District ids in `", .district_seats_df,
-             "` are not unique.", call. = FALSE)
+             "` are not unique", call. = FALSE)
     }
     if(nrow(votes_df[,c(1,2)]) != nrow(unique(votes_df[,c(1,2)]))) {
         stop("There are duplicate party-district pairs in `", .votes_df, "`.",
@@ -113,12 +116,12 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
                  call. = FALSE)
         }
         stop("Not all district ids in `", .district_seats_df, "`s first column ",
-             "exist in `", .votes_df, "`s second column.", call. = FALSE)
+             "exist in `", .votes_df, "`s second column", call. = FALSE)
     }
 
     if(!all(votes_df[[2]] %in% district_seats_df[[1]])) {
         stop("Not all district ids in `", .votes_df, "`s second column exist in `",
-             .district_seats_df, "`s first column.", call. = FALSE)
+             .district_seats_df, "`s first column", call. = FALSE)
     }
     invisible(TRUE)
 }

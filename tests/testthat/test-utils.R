@@ -54,6 +54,35 @@ test_that("print", {
     expect_identical(capture.output(print(M)), capture.output(print(as.matrix(M))))
 })
 
+test_that("summary", {
+    M = biproporz(uri2020$votes_matrix, uri2020$seats_vector)
+    expect_identical(capture.output(summary(M)),c(
+        "           Altdorf B\U{FC}rglen Erstfeld Schattdorf (sum) (divisor)",
+        "       CVP       5       2        2          3    12     0.946",
+        "      SPGB       4       1        2          2     9         1",
+        "       FDP       3       1        1          2     7         1",
+        "       SVP       3       3        1          2     9      0.97",
+        "     (sum)      15       7        6          9    37          ",
+        " (divisor)    2689    1194     1088       1539                "
+    ))
+    expect_identical(capture.output(summary(t(M))), c(
+        "              CVP SPGB FDP  SVP (sum) (divisor)",
+        "    Altdorf     5    4   3    3    15      2689",
+        "    B\U{FC}rglen     2    1   1    3     7      1194",
+        "   Erstfeld     2    2   1    1     6      1088",
+        " Schattdorf     3    2   2    2     9      1539",
+        "      (sum)    12    9   7    9    37          ",
+        "  (divisor) 0.946    1   1 0.97                "
+    ))
+    M2 = M
+    names(dimnames(M2)) <- c("Partei", "Gemeinde")
+    expect_identical(summary(M2), summary(M))
+
+    dimnames(M) <- NULL
+    expect_error(summary(M), "proporz_matrix must have dimnames identical to divisor names")
+    expect_error(summary(t(M)), "proporz_matrix must have dimnames identical to divisor names")
+})
+
 test_that("collapse_names", {
     x = c("Abc", "XYZ")
     y = c(2, 6, 67)
