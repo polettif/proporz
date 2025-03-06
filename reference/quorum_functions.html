@@ -67,7 +67,8 @@ otherwise as number of votes. Must be greater than 0. Uses
 
 <dt id="arg-total">total<a class="anchor" aria-label="anchor" href="#arg-total"></a></dt>
 <dd><p>Vote threshold a party must reach for all votes cast. Used as
-share of total votes if less than 1, otherwise as number of votes. Must be
+share of total votes if less than 1. Otherwise as number of votes. Note that
+votes are not weighted with <code><a href="weight_list_votes.html">weight_list_votes()</a></code> across districts. Must be
 greater than 0. Uses <code><a href="reached_quorum_total.html">reached_quorum_total()</a></code>.</p></dd>
 
 </dl></div>
