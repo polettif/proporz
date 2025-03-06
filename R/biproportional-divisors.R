@@ -31,8 +31,8 @@ prettier_divisors = function(votes_matrix, divisors, round_func) {
     dD <- divisors[["cols"]]
     dP <- divisors[["rows"]]
 
-    dP <- .round_matrix_divisors(dP, \(x) round_func(divide_votes_matrix(votes_matrix, dD, x)))
-    dD <- .round_matrix_divisors(dD, \(x) round_func(divide_votes_matrix(votes_matrix, x, dP)))
+    dP <- .round_matrix_divisors(dP, function(x) round_func(divide_votes_matrix(votes_matrix, dD, x)))
+    dD <- .round_matrix_divisors(dD, function(x) round_func(divide_votes_matrix(votes_matrix, x, dP)))
 
     return(list(cols = dD, rows = dP))
 }
