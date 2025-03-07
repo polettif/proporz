@@ -309,12 +309,13 @@ the conflict, allowing WTO to work in the lower apportionment.</p>
 <span><span class="co">#&gt;     E      1      1      1        0        0</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="wto-with-ties">WTO with ties<a class="anchor" aria-label="anchor" href="#wto-with-ties"></a>
+<h3 id="wto-with-ties">WTO with Ties<a class="anchor" aria-label="anchor" href="#wto-with-ties"></a>
 </h3>
 <p>If two parties have the same number of votes in a district (and
 there’s not enought seats for both), there is no clear district winner
 and the WTO condition is not applied in this district.
-<code>biproporz</code> issues a warning as seen in this example:</p>
+<code>biproporz</code> issues a warning in this case, as seen in this
+example:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">tied_votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">500</span>, <span class="fl">150</span>, <span class="fl">150</span><span class="op">)</span>, <span class="fl">2</span>, </span>
@@ -335,10 +336,10 @@ and the WTO condition is not applied in this district.
 <p>When WTO is suspended in district <em>2</em>, tied party <em>Y</em>
 gets a seat in district <em>1</em> as this distribution better satisfies
 the constraints given by the upper apportionment. To explicitly break
-the tie (which might be necessary depending on the actual voting system
+the tie (which might be necessary depending on the actual
 specifications) you need to modify the votes matrix by adding a very
-small amount to the district winner. Here is a workflow to break ties
-randomly:</p>
+small vote amount to the district winner. Here is a workflow to break
+ties randomly:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tied_districts</span> <span class="op">=</span> <span class="fu"><a href="../reference/district_winner_matrix.html">district_winner_matrix</a></span><span class="op">(</span><span class="va">tied_votes</span>, <span class="va">tied_votes_seats</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span>
