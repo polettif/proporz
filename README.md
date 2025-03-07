@@ -115,7 +115,7 @@ How to adapt `biproporz` for special use cases is demonstrated in the [**Modifyi
 
 The package provides a basic Shiny app where you can calculate biproportional
 apportionment on an interactive dashboard. You need to have the packages `shiny` 
-and `shinyMatrix` installed.
+and `shinyMatrix` installed. [Try it out on shinyapps.io](https://polettif.shinyapps.io/proporz/)
 
 ```r
 # install.packages("shiny")
