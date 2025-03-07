@@ -1,6 +1,6 @@
 ---
 title: "Modifying biproporz()"
-date: 2025-03-05
+date: 2025-03-07
 author: "Flavio Poletti"
 output: rmarkdown::html_vignette
 vignette: >
@@ -14,12 +14,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-options(knitr.kable.NA = "")
 ```
 
 ## Introduction
 
-This vignette demonstrates how to modify and extend the default implementation of biproportional apportionment in `biproporz()`. We cover the following modifications:
+This vignette demonstrates how to modify and extend the default implementation of biproportional apportionment in `biproporz()`.
+We cover the following modifications:
 
 - Applying a quorum to filter seat-eligible parties
 - Using alternative predefined apportionment methods
@@ -66,10 +66,10 @@ The result is a matrix with fractional voter counts, as votes can be split betwe
 The default `biproporz()` method allocates seats based on the votes matrix and district seats using standard rounding for both the upper and lower apportionments.
 
 ```{r standard}
-(v1 = biproporz(votes_matrix, district_seats))
+seats_biproporz_standard = biproporz(votes_matrix, district_seats)
 
 # Number of seats per party
-rowSums(v1)
+rowSums(seats_biproporz_standard)
 ```
 
 Key observations from the standard apportionment:
@@ -82,10 +82,10 @@ The `biproporz()` function returns the seat allocation as a matrix with divisors
 You can print the marginal sums (total seats per party and district) and divisors with `summary()`.
 
 ```{r summary}
-summary(v1)
+summary(seats_biproporz_standard)
 
 # You can transpose the matrix
-# summary(t(v1))
+# summary(t(seats_biproporz_standard))
 ```
 
 ## Modifying biproporz with Parameters
@@ -96,7 +96,7 @@ A quorum can ensure that only parties with a minimum percentage or number of vot
 In this example, we impose a 5% quorum on the total votes.
 
 ```{r standard_quorum}
-(v2 = biproporz(votes_matrix, district_seats, quorum_any(total = 0.05)))
+biproporz(votes_matrix, district_seats, quorum_any(total = 0.05))
 ```
 
 This does not actually change the seat distribution compared to the standard method, as *Party D* is already below the "natural quorum" and did not get enough votes for any seat.
@@ -107,7 +107,7 @@ This does not actually change the seat distribution compared to the standard met
 For example, we can use the Adams method for the upper apportionment and standard rounding for the lower apportionment.
 
 ```{r alternative_methods}
-(v3 = biproporz(votes_matrix, district_seats, method = list("adams", "round")))
+biproporz(votes_matrix, district_seats, method = list("adams", "round"))
 ```
 
 ### Custom Rounding Function
@@ -132,8 +132,8 @@ custom_rounding_func = function(x) {
 custom_rounding_func(matrix(c(0.5, 0.6, 1.5, 2.5), 2))
 
 # Apply custom rounding function in lower apportionment
-(v4 = biproporz(votes_matrix, district_seats, 
-                method = list("adams", custom_rounding_func)))
+biproporz(votes_matrix, district_seats, 
+          method = list("adams", custom_rounding_func))
 ```
 
 Compared to using standard rounding, parties *A* and *E* swap one seat in cities *1* and *2*.
@@ -152,14 +152,59 @@ try(biproporz(votes_matrix, district_seats, method = "wto"))
 *Party D* has the most votes in *Region 4* and should get a seat there but there's no party seat to allocate.
 To prevent this case, a quorum is usually applied to ensure that only large enough parties are eligible for seats.
 
+```{r wto_quorum}
+biproporz(votes_matrix, district_seats, method = "wto",
+          quorum = quorum_any(total = 0.01))
+```
+
 ### WTO with an Alternative Upper Apportionment Method
 
 By switching to the Adams method for the upper apportionment, *Party D* gets one seat (as we've already seen).
 This resolves the conflict, allowing WTO to work in the lower apportionment.
 
 ```{r wto_other_method}
-(v5 = biproporz(votes_matrix, district_seats, method = list("adams", "wto")))
+biproporz(votes_matrix, district_seats, method = list("adams", "wto"))
 ```
+
+### WTO with Ties
+If two parties have the same number of votes in a district (and there's not enought seats for both), there is no clear district winner and the WTO condition is not applied in this district. 
+`biproporz` issues a warning in this case, as seen in this example:
+
+```{r wto_ties}
+(tied_votes = matrix(
+    c(1000, 500, 150, 150), 2, 
+    dimnames = list(party = c("X", "Y"), district = 1:2)))
+tied_votes_seats = setNames(c(2,1), colnames(tied_votes))
+
+try(biproporz(tied_votes, tied_votes_seats, method = "wto"))
+```
+
+When WTO is suspended in district *2*, tied party *Y* gets a seat in district *1* as this distribution better satisfies the constraints given by the upper apportionment.
+To explicitly break the tie (which might be necessary depending on the actual specifications) you need to modify the votes matrix by adding a very small vote amount to the district winner.
+Here is a workflow to break ties randomly:
+
+```{r wto_tiebreak}
+tied_districts = district_winner_matrix(tied_votes, tied_votes_seats)
+set.seed(4)
+for(d in seq_len(ncol(tied_votes))) {
+    if(anyNA(tied_districts[,d])) {
+        tied_parties = which(is.na(tied_districts[,d]))
+        
+        # break tie randomly
+        tiebreak_winner = sample(tied_parties, 1)
+        cat("party", names(tiebreak_winner), "wins district", d)
+        
+        # assuming the impact of a small vote difference on 
+        # the overall result is negligible
+        tied_votes[tiebreak_winner,d] <- tied_votes[tiebreak_winner,d]+1e-9
+    }
+}
+
+biproporz(tied_votes, tied_votes_seats, method = "wto")
+```
+
+As you can see, party *Y* now has a seat in district *2* as they won the tiebreaker.
+This means in turn that party *X* must get both seats in district *1*.
 
 ### Guaranteeing District Winners a Seat
 
@@ -174,7 +219,7 @@ biproporz_absolute_wto = function(votes_matrix, district_seats,
     # Note: This step could also happen after the quorum has been applied
     # (depending on the desired method implementation)
     district_winners = district_winner_matrix(votes_matrix, district_seats)
-    district_winners[is.na(district_winners)] <- FALSE  # Ignore ties
+    district_winners[is.na(district_winners)] <- FALSE # Ignore ties
 
     # 2) Apply quorum if specified
     if(!is.null(quorum)) {
@@ -220,15 +265,13 @@ biproporz_absolute_wto = function(votes_matrix, district_seats,
 Let’s compare the standard biproportional apportionment to the modified method, which guarantees district winners a seat.
 
 ```{r absolute_wto}
-(v1 = biproporz(votes_matrix, district_seats)) # same as above
+seats_biproporz_absolute_wto = biproporz_absolute_wto(votes_matrix, district_seats)
 
-(v6 = biproporz_absolute_wto(votes_matrix, district_seats))
-
-# Show the difference
-v6 - v1
+# Show the difference to the standard apportionment
+seats_biproporz_absolute_wto - seats_biproporz_standard
 ```
 
 In this example, *Party D* gains a seat from *Party B*. To satisfy the new constraints, there are changes in district seat distributions for *Party A* and *Party E*.
 
 Note that while this method resolves possible conflicts for district winners without upper apportionment seats, other conflicts might arise.
-For example, if too many district winners are missing upper apportionment seats, the constraints for allocation the remaining seats may become overly restrictive.
+For example, if too many district winners are missing upper apportionment seats, the constraints for allocating the remaining seats may become overly restrictive.
