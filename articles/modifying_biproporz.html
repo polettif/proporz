@@ -67,7 +67,7 @@
                         <h4 data-toc-skip class="author">Flavio
 Poletti</h4>
             
-            <h4 data-toc-skip class="date">2025-03-05</h4>
+            <h4 data-toc-skip class="date">2025-03-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/master/vignettes/modifying_biproporz.Rmd" class="external-link"><code>vignettes/modifying_biproporz.Rmd</code></a></small>
       <div class="d-none name"><code>modifying_biproporz.Rmd</code></div>
@@ -147,17 +147,10 @@ parties.</p>
 the votes matrix and district seats using standard rounding for both the
 upper and lower apportionments.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">v1</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      district</span></span>
-<span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
-<span><span class="co">#&gt;     A      1      2      4        0        1</span></span>
-<span><span class="co">#&gt;     B      3      1      5        0        0</span></span>
-<span><span class="co">#&gt;     C      1      1      4        0        0</span></span>
-<span><span class="co">#&gt;     D      0      0      0        0        0</span></span>
-<span><span class="co">#&gt;     E      0      1      1        1        0</span></span>
+<code class="sourceCode R"><span><span class="va">seats_biproporz_standard</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Number of seats per party</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">v1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seats_biproporz_standard</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A B C D E </span></span>
 <span><span class="co">#&gt; 8 9 6 0 3</span></span></code></pre></div>
 <p>Key observations from the standard apportionment:</p>
@@ -177,7 +170,7 @@ a matrix with divisors as hidden attributes (see
 seats per party and district) and divisors with
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">v1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">seats_biproporz_standard</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            City 1 City 2 City 3 Region 4 Region 5 (sum) (divisor)</span></span>
 <span><span class="co">#&gt;          A      1      2      4        0        1     8      0.91</span></span>
 <span><span class="co">#&gt;          B      3      1      5        0        0     9       0.8</span></span>
@@ -188,7 +181,7 @@ seats per party and district) and divisors with
 <span><span class="co">#&gt;  (divisor)   1703   1286   1008      101      324</span></span>
 <span></span>
 <span><span class="co"># You can transpose the matrix</span></span>
-<span><span class="co"># summary(t(v1))</span></span></code></pre></div>
+<span><span class="co"># summary(t(seats_biproporz_standard))</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="modifying-biproporz-with-parameters">Modifying biproporz with Parameters<a class="anchor" aria-label="anchor" href="#modifying-biproporz-with-parameters"></a>
@@ -200,7 +193,7 @@ seats per party and district) and divisors with
 number of votes are eligible for seat allocation. In this example, we
 impose a 5% quorum on the total votes.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">v2</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="../reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="fu"><a href="../reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      district</span></span>
 <span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
 <span><span class="co">#&gt;     A      1      2      4        0        1</span></span>
@@ -221,7 +214,7 @@ the upper and lower apportionment by passing a list to the
 for the upper apportionment and standard rounding for the lower
 apportionment.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">v3</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"adams"</span>, <span class="st">"round"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"adams"</span>, <span class="st">"round"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      district</span></span>
 <span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
 <span><span class="co">#&gt;     A      1      2      5        0        0</span></span>
@@ -258,8 +251,8 @@ below .5 are rounded down)</li>
 <span><span class="co">#&gt; [2,]    0    3</span></span>
 <span></span>
 <span><span class="co"># Apply custom rounding function in lower apportionment</span></span>
-<span><span class="op">(</span><span class="va">v4</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, </span>
-<span>                method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"adams"</span>, <span class="va">custom_rounding_func</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, </span>
+<span>          method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"adams"</span>, <span class="va">custom_rounding_func</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      district</span></span>
 <span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
 <span><span class="co">#&gt;     A      0      3      5        0        0</span></span>
@@ -288,6 +281,16 @@ may lead to conflicts and an error, as seen below.</p>
 get a seat there but there’s no party seat to allocate. To prevent this
 case, a quorum is usually applied to ensure that only large enough
 parties are eligible for seats.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, method <span class="op">=</span> <span class="st">"wto"</span>,</span>
+<span>          quorum <span class="op">=</span> <span class="fu"><a href="../reference/quorum_functions.html">quorum_any</a></span><span class="op">(</span>total <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      district</span></span>
+<span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
+<span><span class="co">#&gt;     A      1      2      4        0        1</span></span>
+<span><span class="co">#&gt;     B      3      1      5        0        0</span></span>
+<span><span class="co">#&gt;     C      1      1      4        0        0</span></span>
+<span><span class="co">#&gt;     D      0      0      0        0        0</span></span>
+<span><span class="co">#&gt;     E      0      1      1        1        0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="wto-with-an-alternative-upper-apportionment-method">WTO with an Alternative Upper Apportionment Method<a class="anchor" aria-label="anchor" href="#wto-with-an-alternative-upper-apportionment-method"></a>
@@ -295,8 +298,8 @@ parties are eligible for seats.</p>
 <p>By switching to the Adams method for the upper apportionment,
 <em>Party D</em> gets one seat (as we’ve already seen). This resolves
 the conflict, allowing WTO to work in the lower apportionment.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">v5</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"adams"</span>, <span class="st">"wto"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"adams"</span>, <span class="st">"wto"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      district</span></span>
 <span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
 <span><span class="co">#&gt;     A      0      2      5        0        1</span></span>
@@ -306,20 +309,78 @@ the conflict, allowing WTO to work in the lower apportionment.</p>
 <span><span class="co">#&gt;     E      1      1      1        0        0</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="wto-with-ties">WTO with ties<a class="anchor" aria-label="anchor" href="#wto-with-ties"></a>
+</h3>
+<p>If two parties have the same number of votes in a district (and
+there’s not enought seats for both), there is no clear district winner
+and the WTO condition is not applied in this district.
+<code>biproporz</code> issues a warning as seen in this example:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">tied_votes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">500</span>, <span class="fl">150</span>, <span class="fl">150</span><span class="op">)</span>, <span class="fl">2</span>, </span>
+<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>party <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"X"</span>, <span class="st">"Y"</span><span class="op">)</span>, district <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      district</span></span>
+<span><span class="co">#&gt; party    1   2</span></span>
+<span><span class="co">#&gt;     X 1000 150</span></span>
+<span><span class="co">#&gt;     Y  500 150</span></span>
+<span><span class="va">tied_votes_seats</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tied_votes</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">tied_votes</span>, <span class="va">tied_votes_seats</span>, method <span class="op">=</span> <span class="st">"wto"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Not enough seats for tied parties with the most votes in: '2'</span></span>
+<span><span class="co">#&gt; Winner take one condition is not applied in this district.</span></span>
+<span><span class="co">#&gt;      district</span></span>
+<span><span class="co">#&gt; party 1 2</span></span>
+<span><span class="co">#&gt;     X 1 1</span></span>
+<span><span class="co">#&gt;     Y 1 0</span></span></code></pre></div>
+<p>When WTO is suspended in district <em>2</em>, tied party <em>Y</em>
+gets a seat in district <em>1</em> as this distribution better satisfies
+the constraints given by the upper apportionment. To explicitly break
+the tie (which might be necessary depending on the actual voting system
+specifications) you need to modify the votes matrix by adding a very
+small amount to the district winner. Here is a workflow to break ties
+randomly:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">tied_districts</span> <span class="op">=</span> <span class="fu"><a href="../reference/district_winner_matrix.html">district_winner_matrix</a></span><span class="op">(</span><span class="va">tied_votes</span>, <span class="va">tied_votes_seats</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span>
+<span><span class="kw">for</span><span class="op">(</span><span class="va">d</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">tied_votes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">anyNA</a></span><span class="op">(</span><span class="va">tied_districts</span><span class="op">[</span>,<span class="va">d</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">tied_parties</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">tied_districts</span><span class="op">[</span>,<span class="va">d</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>        </span>
+<span>        <span class="co"># break tie randomly</span></span>
+<span>        <span class="va">tiebreak_winner</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">tied_parties</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"party"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">tiebreak_winner</span><span class="op">)</span>, <span class="st">"wins district"</span>, <span class="va">d</span><span class="op">)</span></span>
+<span>        </span>
+<span>        <span class="co"># assuming the impact of a small vote difference on </span></span>
+<span>        <span class="co"># the overall result is negligible</span></span>
+<span>        <span class="va">tied_votes</span><span class="op">[</span><span class="va">tiebreak_winner</span>,<span class="va">d</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">tied_votes</span><span class="op">[</span><span class="va">tiebreak_winner</span>,<span class="va">d</span><span class="op">]</span><span class="op">+</span><span class="fl">1e-9</span></span>
+<span>    <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="co">#&gt; party Y wins district 2</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">tied_votes</span>, <span class="va">tied_votes_seats</span>, method <span class="op">=</span> <span class="st">"wto"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      district</span></span>
+<span><span class="co">#&gt; party 1 2</span></span>
+<span><span class="co">#&gt;     X 2 0</span></span>
+<span><span class="co">#&gt;     Y 0 1</span></span></code></pre></div>
+<p>As you can see, party <em>Y</em> now has a seat in district
+<em>2</em> as they won the tiebreaker. This means in turn that party
+<em>X</em> must get both seats in district <em>1</em>.</p>
+</div>
+<div class="section level3">
 <h3 id="guaranteeing-district-winners-a-seat">Guaranteeing District Winners a Seat<a class="anchor" aria-label="anchor" href="#guaranteeing-district-winners-a-seat"></a>
 </h3>
 <p>You can modify the WTO method to ensure district winners always get a
 seat, even if they don’t meet the upper apportionment criteria. Below is
 a custom function that implements this approach. This is a non-standard
 approach and the function should be adapted as needed.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">biproporz_absolute_wto</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>,</span>
 <span>                                  <span class="va">quorum</span> <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">use_list_votes</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># 1) Identify unambiguous district winners</span></span>
 <span>    <span class="co"># Note: This step could also happen after the quorum has been applied</span></span>
 <span>    <span class="co"># (depending on the desired method implementation)</span></span>
 <span>    <span class="va">district_winners</span> <span class="op">=</span> <span class="fu"><a href="../reference/district_winner_matrix.html">district_winner_matrix</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span></span>
-<span>    <span class="va">district_winners</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">district_winners</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span>  <span class="co"># Ignore ties</span></span>
+<span>    <span class="va">district_winners</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">district_winners</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span> <span class="co"># Ignore ties</span></span>
 <span></span>
 <span>    <span class="co"># 2) Apply quorum if specified</span></span>
 <span>    <span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">quorum</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -362,27 +423,11 @@ approach and the function should be adapted as needed.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Let’s compare the standard biproportional apportionment to the
 modified method, which guarantees district winners a seat.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">v1</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span><span class="op">)</span> <span class="co"># same as above</span></span>
-<span><span class="co">#&gt;      district</span></span>
-<span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
-<span><span class="co">#&gt;     A      1      2      4        0        1</span></span>
-<span><span class="co">#&gt;     B      3      1      5        0        0</span></span>
-<span><span class="co">#&gt;     C      1      1      4        0        0</span></span>
-<span><span class="co">#&gt;     D      0      0      0        0        0</span></span>
-<span><span class="co">#&gt;     E      0      1      1        1        0</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">seats_biproporz_absolute_wto</span> <span class="op">=</span> <span class="fu">biproporz_absolute_wto</span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span></span>
 <span></span>
-<span><span class="op">(</span><span class="va">v6</span> <span class="op">=</span> <span class="fu">biproporz_absolute_wto</span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      district</span></span>
-<span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
-<span><span class="co">#&gt;     A      0      2      5        0        1</span></span>
-<span><span class="co">#&gt;     B      3      1      4        0        0</span></span>
-<span><span class="co">#&gt;     C      1      1      4        0        0</span></span>
-<span><span class="co">#&gt;     D      0      0      0        1        0</span></span>
-<span><span class="co">#&gt;     E      1      1      1        0        0</span></span>
-<span></span>
-<span><span class="co"># Show the difference</span></span>
-<span><span class="va">v6</span> <span class="op">-</span> <span class="va">v1</span></span>
+<span><span class="co"># Show the difference to the standard apportionment</span></span>
+<span><span class="va">seats_biproporz_absolute_wto</span> <span class="op">-</span> <span class="va">seats_biproporz_standard</span></span>
 <span><span class="co">#&gt;      district</span></span>
 <span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
 <span><span class="co">#&gt;     A     -1      0      1        0        0</span></span>
@@ -396,7 +441,7 @@ distributions for <em>Party A</em> and <em>Party E</em>.</p>
 <p>Note that while this method resolves possible conflicts for district
 winners without upper apportionment seats, other conflicts might arise.
 For example, if too many district winners are missing upper
-apportionment seats, the constraints for allocation the remaining seats
+apportionment seats, the constraints for allocating the remaining seats
 may become overly restrictive.</p>
 </div>
 </div>

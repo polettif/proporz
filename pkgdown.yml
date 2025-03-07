@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   apportionment_scenarios: apportionment_scenarios.html
   modifying_biproporz: modifying_biproporz.html
-last_built: 2025-03-06T17:12Z
+last_built: 2025-03-07T15:04Z
 urls:
   reference: https://polettif.github.io/proporz/reference
   article: https://polettif.github.io/proporz/articles
