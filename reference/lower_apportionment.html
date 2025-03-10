@@ -11,7 +11,7 @@ given by the upper apportionment."><meta property="og:image" content="https://po
 
     <a class="navbar-brand me-2" href="../index.html">proporz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@ given by the upper apportionment."><meta property="og:image" content="https://po
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Lower apportionment</h1>
-      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/master/R/biproportional-lower.R" class="external-link"><code>R/biproportional-lower.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.1/R/biproportional-lower.R" class="external-link"><code>R/biproportional-lower.R</code></a></small>
       <div class="d-none name"><code>lower_apportionment.Rd</code></div>
     </div>
 
@@ -84,7 +84,8 @@ The condition does not apply in a district if two or more parties have the same
 number of votes and there are not enough seats for these parties. A warning is
 issued in this case. Modify the votes matrix to explicitly break ties.</p></li>
 <li><p>You can provide a custom function that rounds a matrix (i.e. the
-the votes_matrix divided by party and list divisors) without further parameters.</p></li>
+the <code>votes_matrix</code> divided by party and district divisors) without further
+parameters.</p></li>
 <li><p>It is possible to use any divisor method name listed in <code><a href="proporz.html">proporz()</a></code>.</p></li>
 </ul></dd>
 
