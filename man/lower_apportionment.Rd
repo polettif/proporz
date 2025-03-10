@@ -30,7 +30,8 @@ The condition does not apply in a district if two or more parties have the same
 number of votes and there are not enough seats for these parties. A warning is
 issued in this case. Modify the votes matrix to explicitly break ties.}
 \item{You can provide a custom function that rounds a matrix (i.e. the
-the votes_matrix divided by party and list divisors) without further parameters.}
+the \code{votes_matrix} divided by party and district divisors) without further
+parameters.}
 \item{It is possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}.}
 }}
 }

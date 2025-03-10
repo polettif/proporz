@@ -1,11 +1,12 @@
-# proporz (development version)
+# proporz 1.5.1
 
-* add "Modifying biproporz()" vignette
-* add `district_winner_matrix()` function (exported internal implementation)
-* add `apply_quorum()` function (exported internal implementation)
-* add `summary()` method for biproporz results showing marginal sums and divisors
+* new "Modifying biproporz()" vignette (#15)
+* add `district_winner_matrix()` function, exported internal implementation (#13)
+* add `apply_quorum()` function, exported internal implementation
+* add `summary()` method for biproporz results which shows marginal sums and divisors
 * returned seat values from proporz/biproporz functions are always integer
-* undefined biproporz results are caught earlier (flow criterion check)
+* undefined biproporz results are caught earlier, added flow criterion check (#14)
+* minor changes to error messages
 
 # proporz 1.5.0
 
