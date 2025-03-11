@@ -232,8 +232,8 @@ biproporz_absolute_wto = function(votes_matrix, district_seats,
 
     # 4.1) Assign seats to district winners without 
     # enough upper apportionment seats
-    seats_without_ua = district_winners * 1
-    seats_without_ua[rowSums(district_winners) <= ua$party, ] <- 0
+    seats_without_ua = district_winners * 1L
+    seats_without_ua[rowSums(district_winners) <= ua$party, ] <- 0L
     
     # 4.2) Biproportional apportionment for remaining seats
     # Build votes matrix, set votes for district winners 
@@ -243,10 +243,7 @@ biproporz_absolute_wto = function(votes_matrix, district_seats,
     
     # Reduce the number of seats for districts that 
     # already had a "insufficient district winner" seat assigned
-    non_biprop_distr = colSums(seats_without_ua) > 0
-    biprop_district_seats = district_seats
-    biprop_district_seats[non_biprop_distr] <- 
-        biprop_district_seats[non_biprop_distr] - 1
+    biprop_district_seats = district_seats - colSums(seats_without_ua)
     
     # Run biproporz
     seats_biproporz = biproporz(biprop_votes_matrix, biprop_district_seats, 
