@@ -69,7 +69,7 @@ Poletti</h4>
             
             <h4 data-toc-skip class="date">2025-03-07</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.1/vignettes/modifying_biproporz.Rmd" class="external-link"><code>vignettes/modifying_biproporz.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/master/vignettes/modifying_biproporz.Rmd" class="external-link"><code>vignettes/modifying_biproporz.Rmd</code></a></small>
       <div class="d-none name"><code>modifying_biproporz.Rmd</code></div>
     </div>
 
@@ -394,8 +394,8 @@ approach and the function should be adapted as needed.</p>
 <span></span>
 <span>    <span class="co"># 4.1) Assign seats to district winners without </span></span>
 <span>    <span class="co"># enough upper apportionment seats</span></span>
-<span>    <span class="va">seats_without_ua</span> <span class="op">=</span> <span class="va">district_winners</span> <span class="op">*</span> <span class="fl">1</span></span>
-<span>    <span class="va">seats_without_ua</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">district_winners</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="va">ua</span><span class="op">$</span><span class="va">party</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span>    <span class="va">seats_without_ua</span> <span class="op">=</span> <span class="va">district_winners</span> <span class="op">*</span> <span class="fl">1L</span></span>
+<span>    <span class="va">seats_without_ua</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">district_winners</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="va">ua</span><span class="op">$</span><span class="va">party</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0L</span></span>
 <span>    </span>
 <span>    <span class="co"># 4.2) Biproportional apportionment for remaining seats</span></span>
 <span>    <span class="co"># Build votes matrix, set votes for district winners </span></span>
@@ -405,10 +405,7 @@ approach and the function should be adapted as needed.</p>
 <span>    </span>
 <span>    <span class="co"># Reduce the number of seats for districts that </span></span>
 <span>    <span class="co"># already had a "insufficient district winner" seat assigned</span></span>
-<span>    <span class="va">non_biprop_distr</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">seats_without_ua</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
-<span>    <span class="va">biprop_district_seats</span> <span class="op">=</span> <span class="va">district_seats</span></span>
-<span>    <span class="va">biprop_district_seats</span><span class="op">[</span><span class="va">non_biprop_distr</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
-<span>        <span class="va">biprop_district_seats</span><span class="op">[</span><span class="va">non_biprop_distr</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1</span></span>
+<span>    <span class="va">biprop_district_seats</span> <span class="op">=</span> <span class="va">district_seats</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">seats_without_ua</span><span class="op">)</span></span>
 <span>    </span>
 <span>    <span class="co"># Run biproporz</span></span>
 <span>    <span class="va">seats_biproporz</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">biprop_votes_matrix</span>, <span class="va">biprop_district_seats</span>, </span>
