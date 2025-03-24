@@ -31,7 +31,15 @@
 #'@export
 proporz = function(votes, n_seats, method, quorum = 0) {
     proporz_method = get_method_implementation(method)
-    proporz_func = match.fun(proporz_method)
+    proporz_func = list(
+        "divisor_floor" = divisor_floor,
+        "divisor_round" = divisor_round,
+        "divisor_ceiling" = divisor_ceiling,
+        "divisor_harmonic" = divisor_harmonic,
+        "divisor_geometric" = divisor_geometric,
+        "largest_remainder_method" = largest_remainder_method
+    )[[proporz_method]]
+
     proporz_func(votes, n_seats, quorum)
 }
 

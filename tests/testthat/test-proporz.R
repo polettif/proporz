@@ -15,6 +15,12 @@ test_that("all method names", {
         x = proporz(c(10, 20, 5), 3, m)
         expect_length(x, 3)
     }
+
+    # ensure that package functions are used
+    divisor_round = function(votes, n_seats, quorum) {
+        stop("Used masking function in namespace!")
+    }
+    expect_identical(proporz(1:2, 1, "round"), c(0L, 1L))
 })
 
 test_that("undefined result errors", {
