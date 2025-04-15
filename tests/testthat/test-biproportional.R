@@ -181,7 +181,7 @@ test_that("use_list_votes=FALSE", {
     # compare with pukelsheim using raw voter data
     seats_df = pukelsheim(suomi19_votes, suomi19_distr_seats, use_list_votes = FALSE)
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
-    expect_equal(seats_vec, rowSums(seats_mtrx), tolerance = 1e-14)
+    expect_equal(seats_vec, rowSums(seats_mtrx))
 })
 
 test_that("different method for upper and lower app", {
@@ -190,7 +190,7 @@ test_that("different method for upper and lower app", {
                       use_list_votes = FALSE,
                       method = c("floor", "round"))
     dhondt19 = proporz(rowSums(vm_19), 30, "d'hondt")
-    expect_equal(rowSums(bip19), dhondt19, tolerance = 1e-14)
+    expect_equal(rowSums(bip19), dhondt19)
     bip19_list = biproporz(vm_19, suomi19_distr_seats,
                            use_list_votes = FALSE,
                            method = list("floor", "round"))

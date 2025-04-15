@@ -1,6 +1,6 @@
 # simpler and marginally faster version of stopifnot
 assert = function(check) {
-    if(!all(check)) {
+    if(length(check) == 0 || !isTRUE(all(check))) {
         .x = deparse(substitute(check))
         stop(.x, " is not TRUE", call. = FALSE)
     }

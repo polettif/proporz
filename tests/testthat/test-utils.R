@@ -89,3 +89,7 @@ test_that("num_word", {
     expect_identical(num_word("party", "parties", c(2, 3)), "parties")
     expect_identical(num_word("party", "parties", c(TRUE, FALSE)), "party")
 })
+
+test_that("assert", {
+    expect_error(assert(NA), "NA is not TRUE")
+})
