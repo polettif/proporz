@@ -1,5 +1,11 @@
 # proporz <img src="man/figures/logo.png" align="right" height="138" alt = "proporz logo"/>
 
+[![CRAN status](https://www.r-pkg.org/badges/version/proporz)](https://cran.r-project.org/package=proporz/)
+[![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) 
+[![CRAN downloads per month](https://cranlogs.r-pkg.org/badges/proporz)](https://cran.r-project.org/package=proporz)
+[![R-CMD-check](https://github.com/polettif/proporz/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/polettif/proporz/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/polettif/proporz/graph/badge.svg)](https://app.codecov.io/gh/polettif/proporz)
+
 Calculate seat apportionment for legislative bodies with various methods. These
 methods include divisor methods (e.g. D'Hondt, Webster or Adams), largest 
 remainder methods and biproportional apportionment.
