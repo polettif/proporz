@@ -1,10 +1,12 @@
 # proporz <img src="man/figures/logo.png" align="right" height="138" alt = "proporz logo"/>
 
+<!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/proporz)](https://cran.r-project.org/package=proporz/)
 [![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active) 
 [![CRAN downloads per month](https://cranlogs.r-pkg.org/badges/proporz)](https://cran.r-project.org/package=proporz)
 [![R-CMD-check](https://github.com/polettif/proporz/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/polettif/proporz/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/polettif/proporz/graph/badge.svg)](https://app.codecov.io/gh/polettif/proporz)
+<!-- badges: end -->
 
 Calculate seat apportionment for legislative bodies with various methods. These
 methods include divisor methods (e.g. D'Hondt, Webster or Adams), largest 
@@ -60,11 +62,12 @@ proporz(votes, 10, "huntington-hill", quorum = 0.05)
 
 ### Biproportional Apportionment
 
-Biproportional apportionment ([Wikipedia](https://en.wikipedia.org/wiki/Biproportional_apportionment)) 
+Biproportional apportionment ([Wikipedia](https://en.wikipedia.org/wiki/Biproportional_apportionment))
 is a method to proportionally allocate seats among parties and districts.
+The method is implemented in [`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.html).
 
 We can use the provided [`uri2020`](https://polettif.github.io/proporz/reference/uri2020.html) 
-data set to illustrate biproportional apportionment with [`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.html).
+data set to illustrate biproportional apportionment with `biproporz()`.
 You need a 'votes matrix' as input which shows the number of votes for each party
 (rows) and district (columns). You also need to define the number of seats per district.
 
@@ -121,7 +124,9 @@ How to adapt `biproporz` for special use cases is demonstrated in the [**Modifyi
 
 The package provides a basic Shiny app where you can calculate biproportional
 apportionment on an interactive dashboard. You need to have the packages `shiny` 
-and `shinyMatrix` installed. [Try it out on shinyapps.io](https://polettif.shinyapps.io/proporz/)
+and `shinyMatrix` installed.
+
+🌐 [Try it out on shinyapps.io](https://polettif.shinyapps.io/proporz/)
 
 ```r
 # install.packages("shiny")
