@@ -1,10 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   apportionment_scenarios: apportionment_scenarios.html
   modifying_biproporz: modifying_biproporz.html
-last_built: 2025-03-11T07:43Z
+last_built: 2025-09-05T12:17Z
 urls:
   reference: https://polettif.github.io/proporz/reference
   article: https://polettif.github.io/proporz/articles
