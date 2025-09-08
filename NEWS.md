@@ -1,3 +1,8 @@
+# proporz (dev)
+
+* `proporz::proporz()` can now be used without calling `library(proporz)`
+* Additional checks and error messages
+
 # proporz 1.5.1
 
 * new "Modifying biproporz()" vignette (#15)
