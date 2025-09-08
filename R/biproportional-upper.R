@@ -77,7 +77,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' @param votes_matrix votes matrix
 #' @param district_seats seats per district, vector with same length
-#'   as `ncol(votes_matrix)`
+#'   as `ncol(votes_matrix)` and names as `colnames(votes_matrix)`
 #'
 #' @note The weighted votes are not rounded. Matrix and vector names are ignored.
 #'
@@ -89,13 +89,11 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' @export
 weight_list_votes = function(votes_matrix, district_seats) {
     assert(all(district_seats >= 0))
-    assert(is.matrix(votes_matrix))
     if(ncol(votes_matrix) != length(district_seats)) {
         stop("`length(district_seats)` must be the same as `ncol(votes_matrix)`", call. = FALSE)
     }
-    if(!is.null(colnames(votes_matrix)) && !is.null(names(district_seats))) {
-        assert(colnames(votes_matrix) == names(district_seats))
-    }
+    votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
+    district_seats <- prep_district_seats(district_seats, votes_matrix, "district_seats", "votes_matrix")
 
     M_seats_district = matrix(
         rep(district_seats, nrow(votes_matrix)),

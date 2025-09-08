@@ -8,6 +8,13 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
         stop("votes_matrix must have column and row names to handle district winners",
              call. = FALSE)
     }
+    assert_no_duplicates(colnames(votes_matrix))
+    assert_no_duplicates(rownames(votes_matrix))
+    assert_no_duplicates(names(district_seats))
+    assert_no_duplicates(names(seats_parties))
+
+    stopifnot(identical(colnames(votes_matrix), names(district_seats)))
+    stopifnot(identical(rownames(votes_matrix), names(seats_parties)))
 
     DISTRICT_WINNERS = most_votes_in_district_matrix(votes_matrix)
 

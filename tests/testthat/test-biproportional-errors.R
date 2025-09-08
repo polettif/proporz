@@ -223,14 +223,7 @@ test_that("error messages", {
     expect_true(is.matrix(lower_apportionment(vm+0.1, ua$district, ua$party)))
     expect_error_fixed(lower_apportionment(vm+0.1, seats, 1:3), "sum(seats_cols) == sum(seats_rows")
 
-    # votes_matrix
-    vm_names = matrix(1, 3, 2)
-    rownames(vm_names) <- c("A", "A", "B")
-    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "rownames in `x` must be unique")
-    colnames(vm_names) <- c("I", "I")
-    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "rownames in `x` must be unique")
-    rownames(vm_names) <- c("A", "C", "B")
-    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "colnames in `x` must be unique")
+
 
     # max iterations
     options(proporz_max_iterations = 2)
@@ -242,3 +235,24 @@ test_that("error messages", {
         lower_apportionment(matrix(c(21,11,33,21), 2), c(2,2), c(2,2), method = function(x) x),
         "Rounding function does not return integers")
 })
+
+test_that("unique name checks", {
+    # votes_matrix
+    vm_names = matrix(1, 3, 2)
+    rownames(vm_names) <- c("A", "A", "B")
+    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "rownames in `x` must be unique without NA's")
+    colnames(vm_names) <- c("I", "I")
+    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "rownames in `x` must be unique without NA's")
+    rownames(vm_names) <- c("A", "C", "B")
+    expect_error_fixed(prep_votes_matrix(vm_names, "x"), "colnames in `x` must be unique without NA's")
+
+    # district seats
+    ds_dupl = c("I" = 5, "I" = 5)
+    expect_error_fixed(prep_district_seats(ds_dupl, vm_names, "distrdupl", "xy"),
+                       "`distrdupl` must have unique names without NA's")
+    names(ds_dupl)[2] <- NA
+    colnames(vm_names)[2] <- NA
+    expect_error_fixed(prep_district_seats(ds_dupl, vm_names, "distrdupl", "xy"),
+                       "`distrdupl` must have unique names without NA's")
+})
+

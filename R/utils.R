@@ -7,6 +7,15 @@ assert = function(check) {
     invisible(TRUE)
 }
 
+has_duplicates_or_NA = function(x) {
+    anyNA(x) || anyDuplicated(x) != 0
+}
+
+assert_no_duplicates = function(vec) {
+    stopifnot(anyDuplicated(vec) == 0L)
+    invisible(TRUE)
+}
+
 collapse_names = function(x, x_names = NULL) {
     if(is.logical(x)) {
         x <- which(x)

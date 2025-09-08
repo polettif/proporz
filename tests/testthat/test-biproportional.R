@@ -52,10 +52,14 @@ test_that("weight_list_votes", {
     expect_error_fixed(weight_list_votes(vm, 1), "`length(district_seats)` must be the same as `ncol(votes_matrix)`")
     expect_equal(vmw, matrix(c(110/10,50/10,20/2,10/2), 2), tolerance = 1e-14)
     colnames(vm) <- c("A", "B")
+    ds = setNames(c(1,1), c("B", "X"))
+    expect_error_fixed(weight_list_votes(vm, ds),
+                       "`district_seats` needs to have the same names as the columns in `votes_matrix`")
     ds = setNames(c(1,1), c("B", "A"))
-    expect_error_fixed(weight_list_votes(vm, ds), "colnames(votes_matrix) == names(district_seats) is not TRUE")
+    expect_no_error(weight_list_votes(vm, ds))
     expect_no_error(weight_list_votes(vm, ds[2:1]))
-    expect_no_error(weight_list_votes(vm, unname(ds)))
+    expect_error_fixed(weight_list_votes(vm, unname(ds)),
+                       "`district_seats` needs to have the same names as the columns in `votes_matrix`")
 })
 
 # expanded usage ####

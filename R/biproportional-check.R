@@ -7,12 +7,12 @@ prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
         stop("Votes in ", vmn, " must be numbers >= 0", call. = FALSE)
     }
     if(!is.null(rownames(votes_matrix)) &&
-       length(unique(rownames(votes_matrix))) != nrow(votes_matrix)) {
-        stop("rownames in ", vmn , " must be unique", call. = FALSE)
+       has_duplicates_or_NA(rownames(votes_matrix))) {
+        stop("rownames in ", vmn , " must be unique without NA's", call. = FALSE)
     }
     if(!is.null(colnames(votes_matrix)) &&
-       length(unique(colnames(votes_matrix))) != ncol(votes_matrix)) {
-        stop("colnames in ", vmn, " must be unique", call. = FALSE)
+       has_duplicates_or_NA(colnames(votes_matrix))) {
+        stop("colnames in ", vmn, " must be unique without NA's", call. = FALSE)
     }
 
     return(votes_matrix)
@@ -46,6 +46,7 @@ prep_district_seats = function(district_seats, votes_matrix,
         stop("`", .district_seats.name, "` must be a numeric vector, data.frame or a single number.",
              call. = FALSE)
     }
+
     if(length(district_seats) > 1) {
         if(is.data.frame(district_seats)) {
             district_seats <- setNames(district_seats[[2]], district_seats[[1]])
@@ -55,6 +56,12 @@ prep_district_seats = function(district_seats, votes_matrix,
                  "` needs to have districts as columns and parties as rows.",
                  call. = FALSE)
         }
+
+        if(!is.null(names(district_seats)) && has_duplicates_or_NA(names(district_seats))) {
+            stop("`", .district_seats.name , "` must have unique names without NA's", call. = FALSE)
+        }
+
+        # Either both are named (then check names) or one of them is NULL
         if(!identical(sort(colnames(votes_matrix)), sort(names(district_seats)))) {
             stop("`", .district_seats.name,
                  "` needs to have the same names as the columns in `",

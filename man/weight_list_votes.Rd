@@ -10,7 +10,7 @@ weight_list_votes(votes_matrix, district_seats)
 \item{votes_matrix}{votes matrix}
 
 \item{district_seats}{seats per district, vector with same length
-as \code{ncol(votes_matrix)}}
+as \code{ncol(votes_matrix)} and names as \code{colnames(votes_matrix)}}
 }
 \value{
 the weighted \code{votes_matrix}
