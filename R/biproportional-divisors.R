@@ -44,7 +44,7 @@ prettier_divisors = function(votes_matrix, divisors, round_func) {
     # start with divisors with the most digits
     for(i in order(n_digits(divisors), decreasing = TRUE)) {
         # see if rounded down or up to k digits leads to the same result
-        for(k in seq(0,15)) {
+        for(k in seq(0, 15)) {
             divisors_cand = divisors
 
             # floor

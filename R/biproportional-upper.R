@@ -40,10 +40,10 @@ upper_apportionment = function(votes_matrix, district_seats,
                                use_list_votes = TRUE,
                                method = "round") {
     # check parameters
-    .votes_matrix.name = deparse(substitute(votes_matrix))
-    .district_seats.name = deparse(substitute(district_seats))
-    votes_matrix <- prep_votes_matrix(votes_matrix, .votes_matrix.name)
-    district_seats <- prep_district_seats(district_seats, votes_matrix, .district_seats.name, .votes_matrix.name)
+    .vmn = deparse(substitute(votes_matrix))
+    .dsn = deparse(substitute(district_seats))
+    votes_matrix <- prep_votes_matrix(votes_matrix, .vmn)
+    district_seats <- prep_district_seats(district_seats, votes_matrix, .dsn, .vmn)
     assert(length(use_list_votes) == 1 && is.logical(use_list_votes))
 
     # district seats

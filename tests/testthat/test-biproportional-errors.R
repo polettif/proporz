@@ -205,7 +205,7 @@ test_that("error messages", {
     # biproportional
     expect_error_fixed(biproporz(vm, NA), "`NA` must be a numeric vector, data.frame or a single number")
     expect_error_fixed(biproporz(vdf, c(1,2,3)), "`vdf` must be a matrix")
-    expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` needs to have districts as columns and parties as rows")
+    expect_error_fixed(biproporz(vm, c(1,2,3)), "`vm` must have districts as columns and parties as rows")
     expect_error_fixed(biproporz(vm, seats, method = "largest_remainder_method"),
                        'Cannot use "largest_remainder_method", only divisor methods are possible in biproportional apportionment')
     expect_s3_class(biproporz(vm+0.1, seats), "proporz_matrix")
@@ -222,8 +222,6 @@ test_that("error messages", {
     ua = upper_apportionment(vm+0.1, seats)
     expect_true(is.matrix(lower_apportionment(vm+0.1, ua$district, ua$party)))
     expect_error_fixed(lower_apportionment(vm+0.1, seats, 1:3), "sum(seats_cols) == sum(seats_rows")
-
-
 
     # max iterations
     options(proporz_max_iterations = 2)
@@ -255,4 +253,3 @@ test_that("unique name checks", {
     expect_error_fixed(prep_district_seats(ds_dupl, vm_names, "distrdupl", "xy"),
                        "`distrdupl` must have unique names without NA's")
 })
-

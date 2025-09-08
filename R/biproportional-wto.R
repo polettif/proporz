@@ -97,10 +97,10 @@ district_winner_matrix = function(votes_matrix,
         district_seats <- rep(district_seats, ncol(votes_matrix))
     }
     if(is.null(names(district_seats))) names(district_seats) <- colnames(votes_matrix)
-    .votes_matrix.name = deparse(substitute(votes_matrix))
-    .district_seats.name = deparse(substitute(district_seats))
-    votes_matrix <- prep_votes_matrix(votes_matrix, .votes_matrix.name)
-    district_seats <- prep_district_seats(district_seats, votes_matrix, .district_seats.name, .votes_matrix.name)
+    .vmn = deparse(substitute(votes_matrix))
+    .dsm = deparse(substitute(district_seats))
+    votes_matrix <- prep_votes_matrix(votes_matrix, .vmn)
+    district_seats <- prep_district_seats(district_seats, votes_matrix, .dsm, .vmn)
 
     most_votes = most_votes_in_district_matrix(votes_matrix)
     not_enough_district_seats = which(colSums(most_votes) > district_seats)

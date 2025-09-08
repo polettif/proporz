@@ -8,7 +8,7 @@ prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
     }
     if(!is.null(rownames(votes_matrix)) &&
        has_duplicates_or_NA(rownames(votes_matrix))) {
-        stop("rownames in ", vmn , " must be unique without NA's", call. = FALSE)
+        stop("rownames in ", vmn, " must be unique without NA's", call. = FALSE)
     }
     if(!is.null(colnames(votes_matrix)) &&
        has_duplicates_or_NA(colnames(votes_matrix))) {
@@ -22,7 +22,7 @@ prep_method = function(method) {
     if(!is.vector(method)) {
         stop("Method must be a character or a list", call. = FALSE)
     }
-    if(!length(method) %in% c(1,2)) {
+    if(!length(method) %in% c(1L, 2L)) {
         stop("Only one or two methods allowed", call. = FALSE)
     }
     if(length(method) == 1) {
@@ -53,18 +53,18 @@ prep_district_seats = function(district_seats, votes_matrix,
         }
         if(ncol(votes_matrix) != length(district_seats)) {
             stop("`", .votes_matrix.name,
-                 "` needs to have districts as columns and parties as rows.",
+                 "` must have districts as columns and parties as rows.",
                  call. = FALSE)
         }
 
         if(!is.null(names(district_seats)) && has_duplicates_or_NA(names(district_seats))) {
-            stop("`", .district_seats.name , "` must have unique names without NA's", call. = FALSE)
+            stop("`", .district_seats.name, "` must have unique names without NA's", call. = FALSE)
         }
 
         # Either both are named (then check names) or one of them is NULL
         if(!identical(sort(colnames(votes_matrix)), sort(names(district_seats)))) {
             stop("`", .district_seats.name,
-                 "` needs to have the same names as the columns in `",
+                 "` must have the same names as the columns in `",
                  .votes_matrix.name, "`", call. = FALSE)
         }
         if(!is.null(colnames(votes_matrix))) { # seats vector is named/unnamed like matrix

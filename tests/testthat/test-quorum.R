@@ -103,7 +103,7 @@ test_that("quorum param", {
     soll_district_and_total = vm * matrix(rep(q_district_and_total, 2), ncol = 2)
     soll_district_or_total = vm * matrix(rep(q_district_or_total, 2), ncol = 2)
 
-    # biproporz()
+    # biproporz
     expect_identical(
         biproporz(vm, c(100, 100), quorum_any(any_district = 0.05)) > 0,
         soll_district > 0)
@@ -126,7 +126,7 @@ test_that("quorum param", {
         biproporz(vm, c(100, 100), q_district_or_total) > 0,
         soll_district_or_total > 0)
 
-    # pukelsheim()
+    # pukelsheim
     vm_df = pivot_to_df(vm)
     wrap_pukelsheim = function(...) {
         seats_df = data.frame(col = c(1,2), seats = c(100, 100))
@@ -164,9 +164,9 @@ test_that("apply_quorum", {
     expect_identical(apply_quorum(vm, quorum_all(any_district = 0.1, total = 0.05)),
                      apply_quorum_matrix(vm, quorum_all(any_district = 0.1, total = 0.05)))
 
-    expect_error(apply_quorum(vm, 0),
-                 "Quorum parameter must be a logical vector or a list of quorum functions (see ?quorum_functions)",
-                 fixed = TRUE)
+    expect_error_fixed(
+        apply_quorum(vm, 0),
+        "Quorum parameter must be a logical vector or a list of quorum functions (see ?quorum_functions)")
     expect_identical(sum(apply_quorum(vm, c(FALSE, FALSE))), 0)
     expect_error_fixed(apply_quorum(vm, c(FALSE)), "length(quorum) == nrow(votes_matrix) is not TRUE")
 

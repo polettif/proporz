@@ -14,7 +14,9 @@ p2 = 4:6
 
 # https://de.wikipedia.org/wiki/Sitzzuteilungsverfahren#Biproportionales_Verfahren
 test_that("upper apportionment (party seats)", {
+    expect_identical(upper_apportionment(M1, d1)$district, d1)
     expect_identical(upper_apportionment(M1, d1)$party, p1)
+    expect_identical(upper_apportionment(M2, d2)$district, d2)
     expect_identical(upper_apportionment(M2, d2)$party, p2)
 })
 
@@ -49,17 +51,19 @@ test_that("biproporz", {
 test_that("weight_list_votes", {
     vm = matrix(c(110,50,20,10), 2)
     vmw = weight_list_votes(vm, c(10, 2))
-    expect_error_fixed(weight_list_votes(vm, 1), "`length(district_seats)` must be the same as `ncol(votes_matrix)`")
+    expect_error(weight_list_votes(vm, 1),
+                 "`length(district_seats)` must be the same as `ncol(votes_matrix)`",
+                 fixed = TRUE)
     expect_equal(vmw, matrix(c(110/10,50/10,20/2,10/2), 2), tolerance = 1e-14)
     colnames(vm) <- c("A", "B")
     ds = setNames(c(1,1), c("B", "X"))
     expect_error_fixed(weight_list_votes(vm, ds),
-                       "`district_seats` needs to have the same names as the columns in `votes_matrix`")
+                       "`district_seats` must have the same names as the columns in `votes_matrix`")
     ds = setNames(c(1,1), c("B", "A"))
     expect_no_error(weight_list_votes(vm, ds))
     expect_no_error(weight_list_votes(vm, ds[2:1]))
     expect_error_fixed(weight_list_votes(vm, unname(ds)),
-                       "`district_seats` needs to have the same names as the columns in `votes_matrix`")
+                       "`district_seats` must have the same names as the columns in `votes_matrix`")
 })
 
 # expanded usage ####
@@ -111,11 +115,11 @@ test_that("named votes_matrix", {
     dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 
     expect_error_fixed(biproporz(votes_matrix, c(50, 20)),
-                       "needs to have the same names as the columns in `votes_matrix`")
+                       "must have the same names as the columns in `votes_matrix`")
     expect_error_fixed(biproporz(unname(votes_matrix), c(Z1 = 50, Z2 = 20)),
-                       "needs to have the same names as the columns in `unname(votes_matrix)`")
+                       "must have the same names as the columns in `unname(votes_matrix)`")
     expect_error_fixed(biproporz(votes_matrix, c(Z0 = 50, Z2 = 20)),
-                       "needs to have the same names as the columns in `votes_matrix`")
+                       "must have the same names as the columns in `votes_matrix`")
 
     seats = c("Z2" = 20, "Z1" = 50)
     expect_identical(biproporz(votes_matrix, seats), biproporz(votes_matrix, seats[2:1]))

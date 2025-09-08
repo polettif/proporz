@@ -302,7 +302,7 @@ bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
     assert(!is.nan(x1) && !is.nan(x2))
 
     for(i in seq_len(max_iterations)) {
-        x <- (x1 + x2)/2
+        x <- (x1 + x2) / 2
         if(f(x) == 0 || (x2-x1) < tol) {
             return(x)
         }
