@@ -1,7 +1,11 @@
+# BAZI Dataset (data.zip) available from:
+# https://www.tha.de/Geistes-und-Naturwissenschaften/Data-Science/BAZI.html
+# Direct URL: https://www.tha.de/Binaries/Binary78393/data.zip
+# Extract to "data/" folder
+
 # Load all biproportional example datasets from BAZI and run them
-# with biproporz. The apportionment results are not validated, this
+# with biproporz(). The apportionment results are not validated, this
 # script is intended to find unexpected errors.
-# Bazi data has to be extracted to "data/" directory
 
 source("bazi.R")
 
@@ -76,6 +80,8 @@ pukelsheim_bazi = function(bazi_data) {
 }
 
 load_bazi_dir = function(path) {
+    stopifnot(dir.exists(path))
+    stopifnot(!endsWith(path, "/"))
     bazi_data_list = list.files(path, full.names = T, recursive = T, pattern = "bazi") |>
         lapply(read_bazi_data)
     names(bazi_data_list) <- lapply(bazi_data_list, getElement, "filename")
@@ -87,7 +93,6 @@ bazi_examples = c(
     load_bazi_dir("data/zTest_data/Biproportional_problems/Diverse"),
     load_bazi_dir("data/zTest_data/NZZ_problems/Diverse"),
     load_bazi_dir("data/zTest_data/NZZ_problems/AH1-AH14"),
-    load_bazi_dir("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"),
     # tied votes are actually broken in alternate scaling
     "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(read_bazi_data("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
     )
@@ -113,7 +118,7 @@ bazi_errors = c(
     load_bazi_dir("data/zTest_data/NZZ_problems/Tied_cases")
 )
 
-# Remove datasets with issues ####
+# Remove datasets that exceed iterations ####
 # method: use a winner-take-TWO method (not implemented in proporz) and has no result even with intended method
 bazi_errors[["data/zTest_data/Biproportional_problems/Nonexistence/SM3.bazi"]] <- NULL
 bazi_errors[["data/zTest_data/Biproportional_problems/Nonexistence/SM4.bazi"]] <- NULL
@@ -124,7 +129,6 @@ bazi_errors[["data/zTest_data/NZZ_problems/Tied_cases/AS2.bazi"]] <- NULL # "2 g
 bazi_errors[["data/zTest_data/NZZ_problems/Tied_cases/mlb1.bazi"]] <- NULL # "2 gleichberechtige Unterzuteilungen"
 bazi_errors[["data/zTest_data/NZZ_problems/Tied_cases/AH2.bazi"]] <- NULL # "2 gleichberechtige Unterzuteilungen"
 
-# data sets that don't acutally lead to errors
 bazi_errors <- bazi_errors[setdiff(names(bazi_errors), names(bazi_examples))]
 
 # Expect errors in edge case datasets ####
