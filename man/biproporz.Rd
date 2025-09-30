@@ -9,7 +9,8 @@ biproporz(
   district_seats,
   quorum,
   weight_votes = TRUE,
-  method = "round"
+  method = "round",
+  ...
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ apportionment (which uses the Sainte-Laguë/Webster method). See
 It is also possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}. If you want to
 use a different method for the upper and lower apportionment, provide a list with two
 entries.}
+
+\item{...}{ignored (available for backwards compability)}
 }
 \value{
 Matrix with the same dimension as \code{votes_matrix} containing the number of seats

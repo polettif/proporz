@@ -1,5 +1,6 @@
 # proporz (dev)
 
+* Parameter `use_list_votes` renamed to `weight_votes`. `use_list_votes` will continue to work, with a message being shown.
 * `proporz::proporz()` can now be used without calling `library(proporz)`
 * `pukelsheim()` returns tibbles for tibble input
 * Additional checks and error messages

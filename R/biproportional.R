@@ -39,6 +39,7 @@
 #'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
 #'   use a different method for the upper and lower apportionment, provide a list with two
 #'   entries.
+#' @param ... ignored (available for backwards compability)
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'   with the default Sainte-Laguë/Webster method.
@@ -69,7 +70,10 @@ biproporz = function(votes_matrix,
                      district_seats,
                      quorum,
                      weight_votes = TRUE,
-                     method = "round") {
+                     method = "round",
+                     ...) {
+    weight_votes <- catch_deprecated_use_list_votes(weight_votes, ...)
+
     # check parameters
     .vmn = deparse(substitute(votes_matrix))
     .dsn = deparse(substitute(district_seats))
@@ -132,6 +136,7 @@ biproporz = function(votes_matrix,
 #' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
 #'   must get _at least_ one seat ('Majorzbedingung') in this district. This only applies if
 #'   they are entitled to a seat in the upper apportionment. Default is `FALSE`.
+#' @param ... ignored (available for backwards compability)
 #'
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
@@ -163,7 +168,9 @@ pukelsheim = function(votes_df, district_seats_df,
                       quorum,
                       new_seats_col = "seats",
                       weight_votes = TRUE,
-                      winner_take_one = FALSE) {
+                      winner_take_one = FALSE,
+                      ...) {
+    weight_votes <- catch_deprecated_use_list_votes(weight_votes, ...)
 
     check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, weight_votes, winner_take_one,
                             deparse(substitute(votes_df)), deparse(substitute(district_seats_df)))

@@ -192,3 +192,15 @@ is_flow_criterion_pair = function(x, base) {
     x_districts_not_covered_by_base = setdiff(which(x), which(base))
     return(any(x) && length(x_districts_not_covered_by_base) == 0)
 }
+
+catch_deprecated_use_list_votes = function(weight_votes, ...) {
+    dots = list(...)
+    if("use_list_votes" %in% names(dots)) {
+        if(getOption("proporz_use_list_votes_info", TRUE)) {
+            message("The parameter `use_list_votes` has been renamed to `weight_list_votes`")
+            options("proporz_use_list_votes_info" = FALSE)
+        }
+        weight_votes <- dots[["use_list_votes"]]
+    }
+    return(weight_votes)
+}

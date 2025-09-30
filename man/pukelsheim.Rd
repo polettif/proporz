@@ -10,7 +10,8 @@ pukelsheim(
   quorum,
   new_seats_col = "seats",
   weight_votes = TRUE,
-  winner_take_one = FALSE
+  winner_take_one = FALSE,
+  ...
 )
 }
 \arguments{
@@ -42,6 +43,8 @@ number of voters (e.g. they can only vote for one party).}
 \item{winner_take_one}{Set to \code{TRUE} if the party that got the most votes in a district
 must get \emph{at least} one seat ('Majorzbedingung') in this district. This only applies if
 they are entitled to a seat in the upper apportionment. Default is \code{FALSE}.}
+
+\item{...}{ignored (available for backwards compability)}
 }
 \value{
 A data.frame like \code{votes_df} with a new column denoting the number seats per

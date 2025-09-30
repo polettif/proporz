@@ -206,6 +206,17 @@ test_that("different method for upper and lower app", {
     expect_identical(bip19_list, bip19)
 })
 
+test_that("catch use_list_votes in ...", {
+    expect_message(
+        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE),
+        "The parameter `use_list_votes` has been renamed to `weight_list_votes`")
+    expect_no_message(biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
+    b1 = suppressMessages(
+        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
+    b2 = biproporz(uri2020$votes_matrix, uri2020$seats_vector, weight_votes = FALSE)
+    expect_identical(b1, b2)
+})
+
 test_that("non-data.frames", {
     # tibble
     grouped_tibble = structure(
