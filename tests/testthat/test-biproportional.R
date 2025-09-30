@@ -89,6 +89,7 @@ test_that("pukelsheim wrapper", {
                        "District ids not found in second column of `x`. Are columns in the correct order (party, district, votes)?")
 
     result = pukelsheim(pklshm, pklshm_seats, new_seats_col = "Sitze")
+    expect_identical(class(result), "data.frame")
     expect_identical(result[,1:3], pklshm)
     expect_identical(result$Sitze, as.integer(c(1,2,1,1,2,2,2,1,3)))
     expect_false(is.null(get_divisors(result)$districts))
@@ -203,4 +204,38 @@ test_that("different method for upper and lower app", {
                            use_list_votes = FALSE,
                            method = list("floor", "round"))
     expect_identical(bip19_list, bip19)
+})
+
+test_that("non-data.frames", {
+    # tibble
+    grouped_tibble = structure(
+        list(Liste = c(1L, 1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L),
+             Wahlkreis = c("A", "B", "C", "A", "B", "C", "A", "B", "C"),
+             Stimmen = c(51, 98, 45, 60, 100, 120, 63, 102, 144)),
+        class = c("grouped_df", "tbl_df", "tbl", "data.frame"),
+        row.names = c(NA, -9L),
+        groups = structure(list(
+            Liste = 1:3,
+            .rows = structure(list(1:3, 4:6, 7:9), ptype = integer(0), class = c("vctrs_list_of", "vctrs_vctr", "list"))),
+            class = c("tbl_df", "tbl", "data.frame"),
+            row.names = c(NA, -3L),
+            .drop = TRUE))
+
+    seats_tibble = structure(
+        list(Wahlkreis = c("A", "B", "C"), Sitze = 4:6),
+        class = c("tbl_df", "tbl", "data.frame"), row.names = c(NA, -3L))
+
+    p1 = pukelsheim(grouped_tibble, seats_tibble)
+    expect_is(p1, "tbl_df")
+    expect_identical(colnames(p1)[1:3], colnames(grouped_tibble))
+
+    # data.table is returned as data.frame
+    dt = structure(
+        list(Liste = c(1L, 1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L),
+             Wahlkreis = c("A", "B", "C", "A", "B", "C", "A", "B", "C"),
+             Stimmen = c(51, 98, 45, 60, 100, 120, 63, 102, 144)),
+        row.names = c(NA, -9L), class = c("data.table", "data.frame"), .internal.selfref = NA)
+
+    p2 = pukelsheim(dt, seats_tibble)
+    expect_identical(class(p2), "data.frame")
 })
