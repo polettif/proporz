@@ -18,7 +18,7 @@ otherwise as number of votes. Must be greater than 0. Uses
 
 \item{total}{Vote threshold a party must reach for all votes cast. Used as
 share of total votes if less than 1. Otherwise as number of votes. Note that
-votes are not weighted with \code{\link[=weight_list_votes]{weight_list_votes()}} across districts. Must be
+votes are not weighted with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}} across districts. Must be
 greater than 0. Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}}.}
 }
 \value{

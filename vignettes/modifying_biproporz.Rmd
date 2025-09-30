@@ -50,12 +50,13 @@ district_seats = setNames(c(5, 5, 14, 1, 1), colnames(votes_matrix))
 ### Analyzing the Votes Matrix
 
 In our example `votes_matrix`, each voter casts as many votes as there are seats in the district.
-To understand the party strength across districts, we calculate the number of *voters* per party and district by weighting the votes matrix with `weight_list_votes()`:
+To understand the party strength across districts, we calculate the number of *voters* per party 
+and district by weighting the votes matrix with `weight_votes_matrix()`:
 
 ```{r weight_votes}
 votes_matrix
 
-(voters = weight_list_votes(votes_matrix, district_seats))
+(voters = weight_votes_matrix(votes_matrix, district_seats))
 ```
 
 This step is performed within `biproporz()` with the parameter `weight_votes = TRUE`.

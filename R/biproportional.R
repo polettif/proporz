@@ -132,7 +132,7 @@ biproporz = function(votes_matrix,
 #' @param new_seats_col name of the new column
 #' @param weight_votes By default (`TRUE`) it's assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_df` shows the
-#'   number of voters (e.g. they can only vote for one party).
+#'   number of _voters_ (e.g. because they can only vote for one party).
 #' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
 #'   must get _at least_ one seat ('Majorzbedingung') in this district. This only applies if
 #'   they are entitled to a seat in the upper apportionment. Default is `FALSE`.

@@ -48,21 +48,21 @@ test_that("biproporz", {
     expect_is(act, "matrix")
 })
 
-test_that("weight_list_votes", {
+test_that("weight_votes_matrix", {
     vm = matrix(c(110,50,20,10), 2)
-    vmw = weight_list_votes(vm, c(10, 2))
-    expect_error(weight_list_votes(vm, 1),
+    vmw = weight_votes_matrix(vm, c(10, 2))
+    expect_error(weight_votes_matrix(vm, 1),
                  "`length(district_seats)` must be the same as `ncol(votes_matrix)`",
                  fixed = TRUE)
     expect_equal(vmw, matrix(c(110/10,50/10,20/2,10/2), 2), tolerance = 1e-14)
     colnames(vm) <- c("A", "B")
     ds = setNames(c(1,1), c("B", "X"))
-    expect_error_fixed(weight_list_votes(vm, ds),
+    expect_error_fixed(weight_votes_matrix(vm, ds),
                        "`district_seats` must have the same names as the columns in `votes_matrix`")
     ds = setNames(c(1,1), c("B", "A"))
-    expect_no_error(weight_list_votes(vm, ds))
-    expect_no_error(weight_list_votes(vm, ds[2:1]))
-    expect_error_fixed(weight_list_votes(vm, unname(ds)),
+    expect_no_error(weight_votes_matrix(vm, ds))
+    expect_no_error(weight_votes_matrix(vm, ds[2:1]))
+    expect_error_fixed(weight_votes_matrix(vm, unname(ds)),
                        "`district_seats` must have the same names as the columns in `votes_matrix`")
 })
 
@@ -206,17 +206,7 @@ test_that("different method for upper and lower app", {
     expect_identical(bip19_list, bip19)
 })
 
-test_that("catch use_list_votes in ...", {
-    expect_message(
-        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE),
-        "The parameter `use_list_votes` has been renamed to `weight_list_votes`")
-    expect_no_message(biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
-    b1 = suppressMessages(
-        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
-    b2 = biproporz(uri2020$votes_matrix, uri2020$seats_vector, weight_votes = FALSE)
-    expect_identical(b1, b2)
-})
-
+# return type ####
 test_that("non-data.frames", {
     # tibble
     grouped_tibble = structure(
@@ -252,4 +242,22 @@ test_that("non-data.frames", {
 
     p3 = pukelsheim(dt, seats_tibble)
     expect_identical(class(p3), "data.frame")
+})
+
+# deprecated vote weight methods ####
+test_that("catch use_list_votes in ...", {
+    expect_message(
+        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE),
+        "The parameter `use_list_votes` has been renamed to `weight_votes`")
+    expect_no_message(biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
+    b1 = suppressMessages(
+        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
+    b2 = biproporz(uri2020$votes_matrix, uri2020$seats_vector, weight_votes = FALSE)
+    expect_identical(b1, b2)
+})
+
+test_that("deprecated weight_list_votes", {
+    expect_warning(
+        weight_list_votes(M1, 1:3), class = "deprecatedWarning",
+        "weight_list_votes has been renamed to weight_votes_matrix")
 })

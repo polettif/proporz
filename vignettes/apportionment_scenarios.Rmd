@@ -181,7 +181,7 @@ districts.
 With that being said, let's assume our data set is properly modeled already. We 
 need to consider that voters in Finland can only vote for _one_ person in each 
 district. They can't distribute as many votes as there are seats in their 
-district among candidates/parties. Thus we need to use `weight_votes=FALSE` 
+district among candidates/parties. Thus we need to use `weight_votes = FALSE` 
 as a parameter in `biproporz`.
 
 ```{r biprop, results="hide"}

@@ -31,9 +31,9 @@ vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
 \item{weight_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
-the number of available district seats with \code{\link[=weight_list_votes]{weight_list_votes()}}. Set to \code{FALSE} if
-\code{votes_matrix} shows the number of voters (i.e. they can only cast one vote for one
-party).}
+the number of available district seats with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}}. Set to \code{FALSE} if
+\code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast one vote for
+one party).}
 
 \item{method}{Defines which method is used to assign seats. The following methods are
 recommended:

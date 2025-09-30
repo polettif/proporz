@@ -38,7 +38,7 @@ vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
 \item{weight_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_df} shows the
-number of voters (e.g. they can only vote for one party).}
+number of \emph{voters} (e.g. because they can only vote for one party).}
 
 \item{winner_take_one}{Set to \code{TRUE} if the party that got the most votes in a district
 must get \emph{at least} one seat ('Majorzbedingung') in this district. This only applies if

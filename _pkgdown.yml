@@ -47,8 +47,8 @@ reference:
 - title: "Helpers"
   contents:
   - get_divisors
+  - weight_votes_matrix
   - district_winner_matrix
   - pivot_to_matrix
   - pivot_to_df
   - ceil_at
-  - weight_list_votes
