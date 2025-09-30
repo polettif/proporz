@@ -9,7 +9,7 @@ pukelsheim(
   district_seats_df,
   quorum,
   new_seats_col = "seats",
-  use_list_votes = TRUE,
+  weight_votes = TRUE,
   winner_take_one = FALSE
 )
 }
@@ -35,7 +35,7 @@ vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
 \item{new_seats_col}{name of the new column}
 
-\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
+\item{weight_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_df} shows the
 number of voters (e.g. they can only vote for one party).}
 
@@ -85,7 +85,7 @@ head(seats_df)
 finland19_result = pukelsheim(finland2019$votes_df,
                              finland2019$district_seats_df,
                              new_seats_col = "mandates",
-                             use_list_votes = FALSE)
+                             weight_votes = FALSE)
 tail(finland19_result[order(finland19_result$mandates),])
 
 }

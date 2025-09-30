@@ -7,7 +7,7 @@ test_that("undefined result biproportional", {
     vm <- round(vm)
     vm[vm < 200] <- 0
 
-    expect_identical(upper_apportionment(vm, seats, use_list_votes = FALSE)$party,
+    expect_identical(upper_apportionment(vm, seats, weight_votes = FALSE)$party,
                      proporz(rowSums(vm), sum(seats), "round"))
 
     expect_error_fixed(upper_apportionment(vm, seats),

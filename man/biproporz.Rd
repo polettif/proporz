@@ -8,7 +8,7 @@ biproporz(
   votes_matrix,
   district_seats,
   quorum,
-  use_list_votes = TRUE,
+  weight_votes = TRUE,
   method = "round"
 )
 }
@@ -28,7 +28,7 @@ eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
-\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
+\item{weight_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
 the number of available district seats with \code{\link[=weight_list_votes]{weight_list_votes()}}. Set to \code{FALSE} if
 \code{votes_matrix} shows the number of voters (i.e. they can only cast one vote for one

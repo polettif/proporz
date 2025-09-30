@@ -181,14 +181,14 @@ test_that("expand divisor range", {
     expect_identical(sum(suomi19_listvotes$seats), sum(suomi19_distr_seats$election_mandates))
 })
 
-test_that("use_list_votes=FALSE", {
+test_that("weight_votes=FALSE", {
     # divisor round with sainte-lague
     vm_19 = pivot_to_matrix(suomi19_votes)
     votes_vec = rowSums(vm_19)
     seats_vec = divisor_round(votes_vec, 30)
 
     # compare with pukelsheim using raw voter data
-    seats_df = pukelsheim(suomi19_votes, suomi19_distr_seats, use_list_votes = FALSE)
+    seats_df = pukelsheim(suomi19_votes, suomi19_distr_seats, weight_votes = FALSE)
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
     expect_equal(seats_vec, rowSums(seats_mtrx))
 })
@@ -196,12 +196,12 @@ test_that("use_list_votes=FALSE", {
 test_that("different method for upper and lower app", {
     vm_19 = pivot_to_matrix(suomi19_votes)
     bip19 = biproporz(vm_19, suomi19_distr_seats,
-                      use_list_votes = FALSE,
+                      weight_votes = FALSE,
                       method = c("floor", "round"))
     dhondt19 = proporz(rowSums(vm_19), 30, "d'hondt")
     expect_equal(rowSums(bip19), dhondt19)
     bip19_list = biproporz(vm_19, suomi19_distr_seats,
-                           use_list_votes = FALSE,
+                           weight_votes = FALSE,
                            method = list("floor", "round"))
     expect_identical(bip19_list, bip19)
 })

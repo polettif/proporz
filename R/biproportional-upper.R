@@ -10,7 +10,7 @@
 #'   are named. If the number of seats per district should be calculated according to the number
 #'   of votes (not the general use case), a single number for the total number of seats can be
 #'   used.
-#' @param use_list_votes By default (`TRUE`) it's assumed that each voter in a district has
+#' @param weight_votes By default (`TRUE`) it's assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Thus, votes are weighted according to
 #'   the number of available district seats with [weight_list_votes()]. Set to `FALSE` if
 #'   `votes_matrix` shows the number of voters (i.e. they can only cast one vote for one
@@ -37,14 +37,14 @@
 #'
 #' @export
 upper_apportionment = function(votes_matrix, district_seats,
-                               use_list_votes = TRUE,
+                               weight_votes = TRUE,
                                method = "round") {
     # check parameters
     .vmn = deparse(substitute(votes_matrix))
     .dsn = deparse(substitute(district_seats))
     votes_matrix <- prep_votes_matrix(votes_matrix, .vmn)
     district_seats <- prep_district_seats(district_seats, votes_matrix, .dsn, .vmn)
-    assert(length(use_list_votes) == 1 && is.logical(use_list_votes))
+    assert(length(weight_votes) == 1 && is.logical(weight_votes))
 
     # district seats
     if(length(district_seats) == 1) {
@@ -55,7 +55,7 @@ upper_apportionment = function(votes_matrix, district_seats,
     }
 
     # party seats
-    if(use_list_votes) {
+    if(weight_votes) {
         votes_matrix <- weight_list_votes(votes_matrix, seats_district)
     }
     seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
@@ -73,7 +73,8 @@ upper_apportionment = function(votes_matrix, district_seats,
 #'
 #' Weight list votes by dividing the votes matrix entries by the number
 #' of seats per district. This method is used in [upper_apportionment()] if
-#' `use_list_votes` is `TRUE` (default).
+#' `weight_votes` is `TRUE` (default). The name comes from the list of candidates
+#' voters select from in a district.
 #'
 #' @param votes_matrix votes matrix
 #' @param district_seats seats per district, vector with same length

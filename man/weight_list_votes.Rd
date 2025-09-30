@@ -18,7 +18,8 @@ the weighted \code{votes_matrix}
 \description{
 Weight list votes by dividing the votes matrix entries by the number
 of seats per district. This method is used in \code{\link[=upper_apportionment]{upper_apportionment()}} if
-\code{use_list_votes} is \code{TRUE} (default).
+\code{weight_votes} is \code{TRUE} (default). The name comes from the list of candidates
+voters select from in a district.
 }
 \note{
 The weighted votes are not rounded. Matrix and vector names are ignored.

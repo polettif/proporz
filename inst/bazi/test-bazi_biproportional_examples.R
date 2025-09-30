@@ -61,21 +61,21 @@ pukelsheim_bazi = function(bazi_data) {
         "data/zTest_data/Biproportional_problems/Nonexistence/Gassner2000-62Exemple24.bazi",
         "data/zTest_data/NZZ_problems/AH1-AH14/AH14.bazi"
     )
-    use_list_votes = !bazi_data$filename %in% use_list_vote_false
+    weight_votes = !bazi_data$filename %in% use_list_vote_false
 
     # run biproporz
     vm = pivot_to_matrix(bazi_data$data[,c(2,1,3)])
     ds = setNames(bazi_data$seats$seats, bazi_data$seats$district)
 
     if("nzz" %in% unlist(method)) {
-        if(!use_list_votes) {
+        if(!weight_votes) {
             method <- "round"
         } else {
             return(nzz(vm, ds))
         }
     }
     seats = biproporz(vm, ds, method = method,
-                      use_list_votes = use_list_votes)
+                      weight_votes = weight_votes)
     t(seats)
 }
 

@@ -95,7 +95,7 @@ test_that("Aargau 2020", {
     pukelsheim_aargau = function(votes_df, district_seats_df) {
         pukelsheim(votes_df, district_seats_df,
                    quorum = quorum_any(any_district = 0.05, total = 0.03),
-                   use_list_votes = FALSE) # the test data set uses "Wählerzahl"
+                   weight_votes = FALSE) # the test data set uses "Wählerzahl"
     }
 
     seats_expected = aargau2020$expected_result
