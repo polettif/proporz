@@ -1,6 +1,7 @@
 # proporz (dev)
 
 * `proporz::proporz()` can now be used without calling `library(proporz)`
+* `pukelsheim()` returns tibbles for tibble input
 * Additional checks and error messages
 
 # proporz 1.5.1

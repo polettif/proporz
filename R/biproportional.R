@@ -189,10 +189,12 @@ pukelsheim = function(votes_df, district_seats_df,
                       sort = FALSE,
                       by = colnames(votes_df)[1:2])
 
+    # store divisors
+    attributes(return_df)$divisors <- attributes(m)$divisors
+
     # as_tibble, remove groups
     if(inherits(votes_df, "tbl_df")) {
-        class(return_df) <- c("tbl_df", "tbl", "data.frame")
+        return_df <- .as_tibble(return_df)
     }
-    attributes(return_df)$divisors <- attributes(m)$divisors
     return(return_df)
 }

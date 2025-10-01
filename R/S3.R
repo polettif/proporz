@@ -63,3 +63,13 @@ print.proporz_matrix_summary = function(x, ...) {
     print.data.frame(x, row.names = FALSE, right = TRUE)
     invisible(x)
 }
+
+.as_tibble = function(df) {
+    tibble_attr = c("class", "row.names", "names")
+    attributes(df) <- attributes(df)[c(tibble_attr, setdiff(names(attributes(df)), tibble_attr))]
+
+    attr(df, "class") <- c("tbl_df", "tbl", "data.frame")
+    attr(df, "row.names") <- c(NA, -nrow(df))
+
+    return(df)
+}

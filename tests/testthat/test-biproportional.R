@@ -229,6 +229,9 @@ test_that("non-data.frames", {
     expect_is(p1, "tbl_df")
     expect_identical(colnames(p1)[1:3], colnames(grouped_tibble))
 
+    p2 = pukelsheim(as.data.frame(grouped_tibble), seats_tibble)
+    expect_identical(get_divisors(p1), get_divisors(p2))
+
     # data.table is returned as data.frame
     dt = structure(
         list(Liste = c(1L, 1L, 1L, 2L, 2L, 2L, 3L, 3L, 3L),
@@ -236,6 +239,6 @@ test_that("non-data.frames", {
              Stimmen = c(51, 98, 45, 60, 100, 120, 63, 102, 144)),
         row.names = c(NA, -9L), class = c("data.table", "data.frame"), .internal.selfref = NA)
 
-    p2 = pukelsheim(dt, seats_tibble)
-    expect_identical(class(p2), "data.frame")
+    p3 = pukelsheim(dt, seats_tibble)
+    expect_identical(class(p3), "data.frame")
 })
