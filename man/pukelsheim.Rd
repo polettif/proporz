@@ -45,8 +45,8 @@ they are entitled to a seat in the upper apportionment. Default is \code{FALSE}.
 }
 \value{
 A data.frame like \code{votes_df} with a new column denoting the number seats per
-party and district. Party and district divisors stored in attributes in attributes
-(hidden from print, see \code{\link[=get_divisors]{get_divisors()}}).
+party and district. Party and district divisors stored in attributes (hidden from print,
+see \code{\link[=get_divisors]{get_divisors()}}). A ungrouped tibble is returned if \code{votes_df} is a tibble.
 }
 \description{
 Method to proportionally allocate seats among parties/lists and

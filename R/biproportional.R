@@ -136,8 +136,8 @@ biproporz = function(votes_matrix,
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
 #' @returns A data.frame like `votes_df` with a new column denoting the number seats per
-#'   party and district. Party and district divisors stored in attributes in attributes
-#'   (hidden from print, see [get_divisors()]).
+#'   party and district. Party and district divisors stored in attributes (hidden from print,
+#'   see [get_divisors()]). A ungrouped tibble is returned if `votes_df` is a tibble.
 #'
 #' @examples
 #' # Zug 2018
@@ -184,11 +184,17 @@ pukelsheim = function(votes_df, district_seats_df,
 
     # join with original table
     assert(nrow(votes_df) <= nrow(seats_df))
-    return_df = merge(votes_df,
-                      seats_df,
+    return_df = merge(as.data.frame(votes_df),
+                      as.data.frame(seats_df),
                       sort = FALSE,
                       by = colnames(votes_df)[1:2])
-    class(return_df) <- class(votes_df)
+
+    # store divisors
     attributes(return_df)$divisors <- attributes(m)$divisors
+
+    # as_tibble, remove groups
+    if(inherits(votes_df, "tbl_df")) {
+        return_df <- .as_tibble(return_df)
+    }
     return(return_df)
 }
