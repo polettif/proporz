@@ -107,7 +107,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                                 shiny::numericInput("quorum_districts", "Quorum (districts)", 0, min = 0),
                                 shiny::numericInput("quorum_total", "Quorum (total)", 0, min = 0),
                                 shiny::checkboxInput("quorum_all", "Both quorums necessary", FALSE),
-                                shiny::checkboxInput("use_list_votes", "Use list votes", TRUE),
+                                shiny::checkboxInput("weight_votes", "Use list votes", TRUE),
                                 shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE)
                    )
             )
@@ -148,7 +148,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 
             bp = biproporz(vals$votes_matrix, .seats,
                            quorum = .quorum,
-                           use_list_votes = input$use_list_votes,
+                           weight_votes = input$weight_votes,
                            method = .method)
 
             # add seat totals
@@ -250,7 +250,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                 vals$seats_total <- shinyapp_examples$wikipedia_en$seats
                 vals$seats_districts <- divisor_round(colSums(shinyapp_examples$wikipedia_en$votes),
                                                       shinyapp_examples$wikipedia_en$seats)
-                set_inputs(use_list_votes = FALSE, set_seats_per_district = FALSE)
+                set_inputs(weight_votes = FALSE, set_seats_per_district = FALSE)
                 update_votesMatrix(vals$votes_matrix)
                 update_seatsMatrix(vals$seats_total)
             } else if(input$load_example == "Wikipedia DE") {
@@ -264,9 +264,9 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
         }, ignoreInit = TRUE)
 
         set_inputs = function(quorum_districts = 0, quorum_total = 0,
-                              use_list_votes = TRUE, set_seats_per_district = TRUE,
+                              weight_votes = TRUE, set_seats_per_district = TRUE,
                               wto = FALSE) {
-            shiny::updateCheckboxInput(session, "use_list_votes", value = use_list_votes)
+            shiny::updateCheckboxInput(session, "weight_votes", value = weight_votes)
             shiny::updateNumericInput(session, "quorum_districts", value = quorum_districts)
             shiny::updateNumericInput(session, "quorum_total", value = quorum_total)
             shiny::updateCheckboxInput(session, "set_seats_per_district", value = set_seats_per_district)

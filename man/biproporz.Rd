@@ -8,8 +8,9 @@ biproporz(
   votes_matrix,
   district_seats,
   quorum,
-  use_list_votes = TRUE,
-  method = "round"
+  weight_votes = TRUE,
+  method = "round",
+  ...
 )
 }
 \arguments{
@@ -28,11 +29,11 @@ eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if parameter is missing or \code{NULL}.}
 
-\item{use_list_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
+\item{weight_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
-the number of available district seats with \code{\link[=weight_list_votes]{weight_list_votes()}}. Set to \code{FALSE} if
-\code{votes_matrix} shows the number of voters (i.e. they can only cast one vote for one
-party).}
+the number of available district seats with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}}. Set to \code{FALSE} if
+\code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast one vote for
+one party).}
 
 \item{method}{Defines which method is used to assign seats. The following methods are
 recommended:
@@ -49,6 +50,8 @@ apportionment (which uses the Sainte-Laguë/Webster method). See
 It is also possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}. If you want to
 use a different method for the upper and lower apportionment, provide a list with two
 entries.}
+
+\item{...}{ignored (available for backwards compability)}
 }
 \value{
 Matrix with the same dimension as \code{votes_matrix} containing the number of seats

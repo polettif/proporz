@@ -181,13 +181,13 @@ districts.
 With that being said, let's assume our data set is properly modeled already. We 
 need to consider that voters in Finland can only vote for _one_ person in each 
 district. They can't distribute as many votes as there are seats in their 
-district among candidates/parties. Thus we need to use `use_list_votes=FALSE` 
+district among candidates/parties. Thus we need to use `weight_votes = FALSE` 
 as a parameter in `biproporz`.
 
 ```{r biprop, results="hide"}
 seats_biproportional = biproporz(votes_matrix, 
                                  district_seats, 
-                                 use_list_votes = FALSE)
+                                 weight_votes = FALSE)
 
 # show only parties with seats
 seats_biproportional[rowSums(seats_biproportional) > 0,]
@@ -228,7 +228,7 @@ total number of seats for the `district_seats` parameter.
 ```{r biprop_seats}
 full_biproportional = biproporz(votes_matrix, 
                                 district_seats = sum(district_seats),
-                                use_list_votes = FALSE)
+                                weight_votes = FALSE)
 
 # party seat distribution has not changed
 rowSums(full_biproportional) - rowSums(seats_biproportional)

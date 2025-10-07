@@ -50,15 +50,16 @@ district_seats = setNames(c(5, 5, 14, 1, 1), colnames(votes_matrix))
 ### Analyzing the Votes Matrix
 
 In our example `votes_matrix`, each voter casts as many votes as there are seats in the district.
-To understand the party strength across districts, we calculate the number of *voters* per party and district by weighting the votes matrix with `weight_list_votes()`:
+To understand the party strength across districts, we calculate the number of *voters* per party 
+and district by weighting the votes matrix with `weight_votes_matrix()`:
 
 ```{r weight_votes}
 votes_matrix
 
-(voters = weight_list_votes(votes_matrix, district_seats))
+(voters = weight_votes_matrix(votes_matrix, district_seats))
 ```
 
-This step is performed within `biproporz()` with the parameter `use_list_votes = TRUE`.
+This step is performed within `biproporz()` with the parameter `weight_votes = TRUE`.
 The result is a matrix with fractional voter counts, as votes can be split between multiple parties.
 
 ## Standard Biproportional Apportionment
@@ -214,7 +215,7 @@ This is a non-standard approach and the function should be adapted as needed.
 
 ```{r absolute_wto_function}
 biproporz_absolute_wto = function(votes_matrix, district_seats,
-                                  quorum = NULL, use_list_votes = TRUE) {
+                                  quorum = NULL, weight_votes = TRUE) {
     # 1) Identify unambiguous district winners
     # Note: This step could also happen after the quorum has been applied
     # (depending on the desired method implementation)
@@ -228,7 +229,7 @@ biproporz_absolute_wto = function(votes_matrix, district_seats,
     
     # 3) Assign party seats in upper apportionment
     ua = upper_apportionment(votes_matrix, district_seats, 
-                             use_list_votes, method = "round")
+                             weight_votes, method = "round")
 
     # 4.1) Assign seats to district winners without 
     # enough upper apportionment seats

@@ -87,10 +87,10 @@ prep_district_seats_df = function(district_seats_df) {
 }
 
 check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
-                                   use_list_votes, winner_take_one,
+                                   weight_votes, winner_take_one,
                                    .votes_df, .district_seats_df) {
     assert(is.character(new_seats_col) && length(new_seats_col) == 1)
-    assert(is.logical(use_list_votes) && !is.na(use_list_votes) && length(use_list_votes) == 1)
+    assert(is.logical(weight_votes) && !is.na(weight_votes) && length(weight_votes) == 1)
     assert(is.logical(winner_take_one) && !is.na(winner_take_one) && length(winner_take_one) == 1)
 
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
@@ -191,4 +191,16 @@ is_flow_criterion_pair = function(x, base) {
     assert(is.logical(base) && !is.matrix(x))
     x_districts_not_covered_by_base = setdiff(which(x), which(base))
     return(any(x) && length(x_districts_not_covered_by_base) == 0)
+}
+
+catch_deprecated_use_list_votes = function(weight_votes, ...) {
+    dots = list(...)
+    if("use_list_votes" %in% names(dots)) {
+        if(getOption("proporz_use_list_votes_info", TRUE)) {
+            message("The parameter `use_list_votes` has been renamed to `weight_votes`")
+            options("proporz_use_list_votes_info" = FALSE)
+        }
+        weight_votes <- dots[["use_list_votes"]]
+    }
+    return(weight_votes)
 }

@@ -48,21 +48,21 @@ test_that("biproporz", {
     expect_is(act, "matrix")
 })
 
-test_that("weight_list_votes", {
+test_that("weight_votes_matrix", {
     vm = matrix(c(110,50,20,10), 2)
-    vmw = weight_list_votes(vm, c(10, 2))
-    expect_error(weight_list_votes(vm, 1),
+    vmw = weight_votes_matrix(vm, c(10, 2))
+    expect_error(weight_votes_matrix(vm, 1),
                  "`length(district_seats)` must be the same as `ncol(votes_matrix)`",
                  fixed = TRUE)
     expect_equal(vmw, matrix(c(110/10,50/10,20/2,10/2), 2), tolerance = 1e-14)
     colnames(vm) <- c("A", "B")
     ds = setNames(c(1,1), c("B", "X"))
-    expect_error_fixed(weight_list_votes(vm, ds),
+    expect_error_fixed(weight_votes_matrix(vm, ds),
                        "`district_seats` must have the same names as the columns in `votes_matrix`")
     ds = setNames(c(1,1), c("B", "A"))
-    expect_no_error(weight_list_votes(vm, ds))
-    expect_no_error(weight_list_votes(vm, ds[2:1]))
-    expect_error_fixed(weight_list_votes(vm, unname(ds)),
+    expect_no_error(weight_votes_matrix(vm, ds))
+    expect_no_error(weight_votes_matrix(vm, ds[2:1]))
+    expect_error_fixed(weight_votes_matrix(vm, unname(ds)),
                        "`district_seats` must have the same names as the columns in `votes_matrix`")
 })
 
@@ -181,14 +181,14 @@ test_that("expand divisor range", {
     expect_identical(sum(suomi19_listvotes$seats), sum(suomi19_distr_seats$election_mandates))
 })
 
-test_that("use_list_votes=FALSE", {
+test_that("weight_votes=FALSE", {
     # divisor round with sainte-lague
     vm_19 = pivot_to_matrix(suomi19_votes)
     votes_vec = rowSums(vm_19)
     seats_vec = divisor_round(votes_vec, 30)
 
     # compare with pukelsheim using raw voter data
-    seats_df = pukelsheim(suomi19_votes, suomi19_distr_seats, use_list_votes = FALSE)
+    seats_df = pukelsheim(suomi19_votes, suomi19_distr_seats, weight_votes = FALSE)
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
     expect_equal(seats_vec, rowSums(seats_mtrx))
 })
@@ -196,16 +196,17 @@ test_that("use_list_votes=FALSE", {
 test_that("different method for upper and lower app", {
     vm_19 = pivot_to_matrix(suomi19_votes)
     bip19 = biproporz(vm_19, suomi19_distr_seats,
-                      use_list_votes = FALSE,
+                      weight_votes = FALSE,
                       method = c("floor", "round"))
     dhondt19 = proporz(rowSums(vm_19), 30, "d'hondt")
     expect_equal(rowSums(bip19), dhondt19)
     bip19_list = biproporz(vm_19, suomi19_distr_seats,
-                           use_list_votes = FALSE,
+                           weight_votes = FALSE,
                            method = list("floor", "round"))
     expect_identical(bip19_list, bip19)
 })
 
+# return type ####
 test_that("non-data.frames", {
     # tibble
     grouped_tibble = structure(
@@ -241,4 +242,22 @@ test_that("non-data.frames", {
 
     p3 = pukelsheim(dt, seats_tibble)
     expect_identical(class(p3), "data.frame")
+})
+
+# deprecated vote weight methods ####
+test_that("catch use_list_votes in ...", {
+    expect_message(
+        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE),
+        "The parameter `use_list_votes` has been renamed to `weight_votes`")
+    expect_no_message(biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
+    b1 = suppressMessages(
+        biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
+    b2 = biproporz(uri2020$votes_matrix, uri2020$seats_vector, weight_votes = FALSE)
+    expect_identical(b1, b2)
+})
+
+test_that("deprecated weight_list_votes", {
+    expect_warning(
+        weight_list_votes(M1, 1:3), class = "deprecatedWarning",
+        "weight_list_votes has been renamed to weight_votes_matrix")
 })
