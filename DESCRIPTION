@@ -13,7 +13,7 @@ Description: Calculate seat apportionment for legislative bodies with
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Depends: 
     R (>= 3.6.0)

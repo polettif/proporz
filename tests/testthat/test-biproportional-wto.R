@@ -59,6 +59,11 @@ test_that("two with ties and enough seats", {
                    "Not enough seats for tied parties with the most votes in: 'B'")
     expect_error(biproporz(vm3, seats2, method = "wto"),
                  "Not enough upper apportionment seats to give district winner seats to party: '3'")
+
+    vm4 = matrix(c(9999,11,0,10,0,11,0,5,0), 3, dimnames = list(as.character(1:3), c("A", "B", "C")))
+    seats4 = setNames(c(2,1,1), colnames(vm4))
+    expect_error(biproporz(vm4, seats4, method = "wto"),
+                 "Not enough upper apportionment seats to give district winner seats to parties: '2', '3'")
 })
 
 test_that("district_winner_matrix", {

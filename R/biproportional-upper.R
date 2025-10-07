@@ -10,13 +10,13 @@
 #'   are named. If the number of seats per district should be calculated according to the number
 #'   of votes (not the general use case), a single number for the total number of seats can be
 #'   used.
-#' @param weight_votes By default (`TRUE`) it's assumed that each voter in a district has
+#' @param weight_votes By default (`TRUE`) it is assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Thus, votes are weighted according to
 #'   the number of available district seats with [weight_votes_matrix()]. Set to `FALSE` if
-#'   `votes_matrix` shows the number of _voters_ (e.g. because they can only cast one vote for
-#'   one party).
+#'   the argument `votes_matrix` shows the number of _voters_ (e.g. because they can only cast
+#'   one vote for one party).
 #' @param method Apportion method that defines how seats are assigned, see [proporz()]. Default
-#'   is the Saintë-Lague/Webster method.
+#'   is the Sainte-Laguë/Webster method.
 #'
 #' @seealso [biproporz()], [lower_apportionment()]
 #'
@@ -71,7 +71,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 
 #' Create weighted votes matrix
 #'
-#' Weight list votes by dividing the votes matrix entries by the number
+#' Weight votes by dividing the votes matrix entries by the number
 #' of seats per district. This method is used in [upper_apportionment()] if
 #' `weight_votes` is `TRUE` (default).
 #'

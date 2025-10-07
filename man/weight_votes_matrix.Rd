@@ -19,7 +19,7 @@ as \code{ncol(votes_matrix)} and names as \code{colnames(votes_matrix)}}
 the weighted \code{votes_matrix} which contains the number of voters (not rounded)
 }
 \description{
-Weight list votes by dividing the votes matrix entries by the number
+Weight votes by dividing the votes matrix entries by the number
 of seats per district. This method is used in \code{\link[=upper_apportionment]{upper_apportionment()}} if
 \code{weight_votes} is \code{TRUE} (default).
 }

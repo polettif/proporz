@@ -191,7 +191,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 #'   * For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
 #'   or a logical vector with the same length as the number of `votes` rows.
 #'
-#' @return Vector or matrix with same dimension as `votes`. Parties that failed to reach the
+#' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
 #'   specified quorum have their votes set to zero.
 #'
 #' @seealso \code{\link[=quorum_functions]{quorum_functions}} for more matrix examples.

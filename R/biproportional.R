@@ -23,7 +23,7 @@
 #'   vector that denotes for each party/row whether they reached the quorum (i.e. are
 #'   eligible for seats). The easiest way to do this is via [quorum_any()] or
 #'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
-#'   vector. No quorum is applied if parameter is missing or `NULL`.
+#'   vector. No quorum is applied if this parameter is missing or `NULL`.
 #' @param method Defines which method is used to assign seats. The following methods are
 #'   recommended:
 #'   \itemize{
@@ -39,7 +39,7 @@
 #'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
 #'   use a different method for the upper and lower apportionment, provide a list with two
 #'   entries.
-#' @param ... ignored (available for backwards compability)
+#' @param ... ignored (available for backwards compatibility)
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'   with the default Sainte-Laguë/Webster method.
@@ -118,31 +118,31 @@ biproporz = function(votes_matrix,
 #' If you want to use other apportion methods than Sainte-Laguë use [biproporz()].
 #'
 #' @param votes_df data.frame (long format) with 3 columns (actual colnames can differ):
-#'                 \itemize{
-#'                   \item party id/name
-#'                   \item district id/name
-#'                   \item votes
+#'                 \enumerate{
+#'                   \item party id/name (character)
+#'                   \item district id/name (character)
+#'                   \item votes (numeric)
 #'                   }
 #' @param district_seats_df data.frame with 2 columns (actual colnames can differ):
-#'                          \itemize{
-#'                            \item district id/name
-#'                            \item number of seats for a district
+#'                          \enumerate{
+#'                            \item district id/name (character)
+#'                            \item number of seats for a district (numeric)
 #'                          }
 #' @inheritParams biproporz
 #' @param new_seats_col name of the new column
-#' @param weight_votes By default (`TRUE`) it's assumed that each voter in a district has
+#' @param weight_votes By default (`TRUE`) it is assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_df` shows the
 #'   number of _voters_ (e.g. because they can only vote for one party).
 #' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
 #'   must get _at least_ one seat ('Majorzbedingung') in this district. This only applies if
-#'   they are entitled to a seat in the upper apportionment. Default is `FALSE`.
-#' @param ... ignored (available for backwards compability)
+#'   the district winnig party is entitled to a seat in the upper apportionment. Default is `FALSE`.
+#' @param ... ignored (available for backwards compatibility)
 #'
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
-#' @returns A data.frame like `votes_df` with a new column denoting the number seats per
+#' @returns A data.frame like `votes_df` with a new column denoting the number of seats per
 #'   party and district. Party and district divisors stored in attributes (hidden from print,
-#'   see [get_divisors()]). A ungrouped tibble is returned if `votes_df` is a tibble.
+#'   see [get_divisors()]). An ungrouped tibble is returned if `votes_df` is a tibble.
 #'
 #' @examples
 #' # Zug 2018

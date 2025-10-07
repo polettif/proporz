@@ -38,7 +38,7 @@ remotes::install_github("polettif/proporz")
 [`proporz()`](https://polettif.github.io/proporz/reference/proporz.html) distributes 
 seats proportionally for a vector of votes according to the following methods:
 
-- **Divisor methods** ([Wikipedia](https://en.wikipedia.org/wiki/Highest_averages_method))
+- **Divisor methods** ([Wikipedia](https://en.wikipedia.org/wiki/Divisor_method))
     - D'Hondt, Jefferson, Hagenbach-Bischoff
     - Sainte-Laguë, Webster
     - Adams
@@ -52,11 +52,11 @@ library(proporz)
 votes = c("Party A" = 651, "Party B" = 349, "Party C" = 50)
 
 proporz(votes, n_seats = 10, method = "sainte-lague")
-#> Party A Party B Party C 
+#> Party A Party B Party C
 #>       7       3       0
 
 proporz(votes, 10, "huntington-hill", quorum = 0.05)
-#> Party A Party B Party C 
+#> Party A Party B Party C
 #>       6       4       0
 ```
 
@@ -92,9 +92,9 @@ biproporz(votes_matrix, district_seats)
 ```
 
 You can use [`pukelsheim()`](https://polettif.github.io/proporz/reference/pukelsheim.html) 
-for dataframes in long format as input data. It is a wrapper for `biproporz()`. [`zug2018`](https://polettif.github.io/proporz/reference/zug2018.html) shows an actual election 
-result for the Canton of Zug in a dataframe. We use this data set to create input data for 
-`pukelsheim()`. The other parameters are set to reflect the actual election system.
+for dataframes in long format as input data. It is a wrapper for `biproporz()`. [`zug2018`](https://polettif.github.io/proporz/reference/zug2018.html) 
+shows an election result for the Canton of Zug in a dataframe. We use this data set to create 
+input data for `pukelsheim()`. The other parameters are set to reflect the actual election system.
 
 ``` r
 # In this data set, parties are called 'lists' and districts 'entities'.
@@ -133,7 +133,7 @@ and `shinyMatrix` installed.
 # install.packages("shinyMatrix")
 proporz::run_app()
 ```
-<img src="man/figures/shinyapp-example.gif" style = "width:70%;" alt = "shiny app gif">
+<img src="man/figures/shinyapp-example.gif" style = "width:75%;" alt = "shiny app gif">
 
 
 ## Function details
@@ -149,27 +149,27 @@ votes = c("Party A" = 690, "Party B" = 370, "Party C" = 210, "Party D" = 10)
 
 # D'Hondt, Jefferson or Hagenbach-Bischoff method
 divisor_floor(votes, 10)
-#> Party A Party B Party C Party D 
+#> Party A Party B Party C Party D
 #>       6       3       1       0
 
 # Sainte-Laguë or Webster method
 divisor_round(votes, 10)
-#> Party A Party B Party C Party D 
+#> Party A Party B Party C Party D
 #>       5       3       2       0
 
 # Adams method
 divisor_ceiling(votes, 10)
-#> Party A Party B Party C Party D 
+#> Party A Party B Party C Party D
 #>       4       3       2       1
 
 # Dean method
 divisor_harmonic(votes, 10)
-#> Party A Party B Party C Party D 
+#> Party A Party B Party C Party D
 #>       5       2       2       1
 
 # Huntington-Hill method
 divisor_geometric(votes, 10)
-#> Party A Party B Party C Party D 
+#> Party A Party B Party C Party D
 #>       5       3       1       1
 ```
 
@@ -182,7 +182,7 @@ votes = c("I" = 16200, "II" = 47000, "III" = 12700)
 
 # Hamilton, Hare-Niemeyer or Vinton method
 largest_remainder_method(votes, 20)
-#>   I  II III 
+#>   I  II III
 #>   4  13   3
 ```
 

@@ -85,8 +85,9 @@ test_that("pukelsheim wrapper", {
         "`x` must be a data frame with 3 columns in the following order:\nparty, district and votes (names can differ)")
 
     x = pklshm[,c(2,1,3)]
-    expect_error_fixed(pukelsheim(x, pklshm_seats),
-                       "District ids not found in second column of `x`. Are columns in the correct order (party, district, votes)?")
+    expect_error_fixed(
+        pukelsheim(x, pklshm_seats),
+        "District ids not found in second column of `x`. Are columns in the correct order (party, district, votes)?")
 
     result = pukelsheim(pklshm, pklshm_seats, new_seats_col = "Sitze")
     expect_identical(class(result), "data.frame")
@@ -190,7 +191,7 @@ test_that("weight_votes=FALSE", {
     # compare with pukelsheim using raw voter data
     seats_df = pukelsheim(suomi19_votes, suomi19_distr_seats, weight_votes = FALSE)
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
-    expect_equal(seats_vec, rowSums(seats_mtrx))
+    expect_equal(seats_vec, rowSums(seats_mtrx), tolerance = 1e-14)
 })
 
 test_that("different method for upper and lower app", {
@@ -199,11 +200,11 @@ test_that("different method for upper and lower app", {
                       weight_votes = FALSE,
                       method = c("floor", "round"))
     dhondt19 = proporz(rowSums(vm_19), 30, "d'hondt")
-    expect_equal(rowSums(bip19), dhondt19)
+    expect_equal(rowSums(bip19), dhondt19, tolerance = 1e-14)
     bip19_list = biproporz(vm_19, suomi19_distr_seats,
                            weight_votes = FALSE,
                            method = list("floor", "round"))
-    expect_identical(bip19_list, bip19)
+    expect_equal(bip19_list, bip19, tolerance = 1e-14)
 })
 
 # return type ####

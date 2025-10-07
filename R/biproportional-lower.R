@@ -260,7 +260,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 #' @param target_seats number of seats to distribute (single number)
 #' @param round_func rounding function
 #'
-#' @return divisor
+#' @returns divisor
 #' @keywords internal
 find_divisor = function(votes,
                         divisor_from, divisor_to,

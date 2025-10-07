@@ -38,7 +38,7 @@ get_proporz_method = function(bazi_data) {
 
 # Neue Zürcher Zuteilungsmethode
 nzz = function(vm, ds) {
-    weighted_votes_matrix = weight_list_votes(vm, ds)
+    weighted_votes_matrix = weight_votes_matrix(vm, ds)
     # weighted votes are rounded with the nzz method
     rounded_matrix = ceil_at(weighted_votes_matrix, 0.5)
     seats_party = proporz(rowSums(rounded_matrix), sum(ds), "round")
@@ -52,7 +52,7 @@ pukelsheim_bazi = function(bazi_data) {
     method = get_proporz_method(bazi_data)
 
     # datasets using voter counts are not described in the data files
-    use_list_vote_false = c(
+    no_vote_weighting = c(
         "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi",
         "data/zTest_data/NZZ_problems/Tied_cases/AH2.bazi",
         "data/zTest_data/Biproportional_problems/Tied_cases/FP6.bazi",
@@ -61,7 +61,7 @@ pukelsheim_bazi = function(bazi_data) {
         "data/zTest_data/Biproportional_problems/Nonexistence/Gassner2000-62Exemple24.bazi",
         "data/zTest_data/NZZ_problems/AH1-AH14/AH14.bazi"
     )
-    weight_votes = !bazi_data$filename %in% use_list_vote_false
+    weight_votes = !bazi_data$filename %in% no_vote_weighting
 
     # run biproporz
     vm = pivot_to_matrix(bazi_data$data[,c(2,1,3)])

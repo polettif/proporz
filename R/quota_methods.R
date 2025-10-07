@@ -1,7 +1,7 @@
 #' Largest remainder method
 #'
 #' Allocate seats based on the largest fractional remainder. The largest remainder method is
-#' also known as: Hamilton, Hare-Niemeyer or Vinton method.
+#' also known as Hamilton, Hare-Niemeyer or Vinton method.
 #'
 #' The numbers of votes for each party is divided by a quota representing the number of
 #' votes required for a seat. Then, each party receives the rounded down quota value as

@@ -16,40 +16,40 @@ pukelsheim(
 }
 \arguments{
 \item{votes_df}{data.frame (long format) with 3 columns (actual colnames can differ):
-\itemize{
-\item party id/name
-\item district id/name
-\item votes
+\enumerate{
+\item party id/name (character)
+\item district id/name (character)
+\item votes (numeric)
 }}
 
 \item{district_seats_df}{data.frame with 2 columns (actual colnames can differ):
-\itemize{
-\item district id/name
-\item number of seats for a district
+\enumerate{
+\item district id/name (character)
+\item number of seats for a district (numeric)
 }}
 
 \item{quorum}{Optional list of functions which take the votes_matrix and return a logical
 vector that denotes for each party/row whether they reached the quorum (i.e. are
 eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
-vector. No quorum is applied if parameter is missing or \code{NULL}.}
+vector. No quorum is applied if this parameter is missing or \code{NULL}.}
 
 \item{new_seats_col}{name of the new column}
 
-\item{weight_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
+\item{weight_votes}{By default (\code{TRUE}) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_df} shows the
 number of \emph{voters} (e.g. because they can only vote for one party).}
 
 \item{winner_take_one}{Set to \code{TRUE} if the party that got the most votes in a district
 must get \emph{at least} one seat ('Majorzbedingung') in this district. This only applies if
-they are entitled to a seat in the upper apportionment. Default is \code{FALSE}.}
+the district winnig party is entitled to a seat in the upper apportionment. Default is \code{FALSE}.}
 
-\item{...}{ignored (available for backwards compability)}
+\item{...}{ignored (available for backwards compatibility)}
 }
 \value{
-A data.frame like \code{votes_df} with a new column denoting the number seats per
+A data.frame like \code{votes_df} with a new column denoting the number of seats per
 party and district. Party and district divisors stored in attributes (hidden from print,
-see \code{\link[=get_divisors]{get_divisors()}}). A ungrouped tibble is returned if \code{votes_df} is a tibble.
+see \code{\link[=get_divisors]{get_divisors()}}). An ungrouped tibble is returned if \code{votes_df} is a tibble.
 }
 \description{
 Method to proportionally allocate seats among parties/lists and

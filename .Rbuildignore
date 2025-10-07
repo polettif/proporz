@@ -13,3 +13,4 @@
 ^pkgdown$
 ^\.github$
 ^inst/bazi/data/
+^man/figures/shinyapp-example-2.gif

@@ -107,7 +107,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                                 shiny::numericInput("quorum_districts", "Quorum (districts)", 0, min = 0),
                                 shiny::numericInput("quorum_total", "Quorum (total)", 0, min = 0),
                                 shiny::checkboxInput("quorum_all", "Both quorums necessary", FALSE),
-                                shiny::checkboxInput("weight_votes", "Use list votes", TRUE),
+                                shiny::checkboxInput("weight_votes", "Weight votes", TRUE),
                                 shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE)
                    )
             )

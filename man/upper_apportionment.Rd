@@ -21,14 +21,14 @@ are named. If the number of seats per district should be calculated according to
 of votes (not the general use case), a single number for the total number of seats can be
 used.}
 
-\item{weight_votes}{By default (\code{TRUE}) it's assumed that each voter in a district has
+\item{weight_votes}{By default (\code{TRUE}) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
 the number of available district seats with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}}. Set to \code{FALSE} if
-\code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast one vote for
-one party).}
+the argument \code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast
+one vote for one party).}
 
 \item{method}{Apportion method that defines how seats are assigned, see \code{\link[=proporz]{proporz()}}. Default
-is the Saintë-Lague/Webster method.}
+is the Sainte-Laguë/Webster method.}
 }
 \value{
 A named list with \code{district} seats (for \code{votes_matrix} columns) and \code{party} seats
