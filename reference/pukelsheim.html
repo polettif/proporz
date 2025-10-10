@@ -9,7 +9,7 @@ districts/regions/entities ('Doppelter Pukelsheim')."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">proporz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1.900</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@ districts/regions/entities ('Doppelter Pukelsheim')."><meta property="og:image" 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Biproportional apportionment with data frames</h1>
-      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/master/R/biproportional.R" class="external-link"><code>R/biproportional.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.2/R/biproportional.R" class="external-link"><code>R/biproportional.R</code></a></small>
       <div class="d-none name"><code>pukelsheim.Rd</code></div>
     </div>
 
@@ -51,8 +51,9 @@ districts/regions/entities ('Doppelter Pukelsheim').</p>
 <span>  <span class="va">district_seats_df</span>,</span>
 <span>  <span class="va">quorum</span>,</span>
 <span>  new_seats_col <span class="op">=</span> <span class="st">"seats"</span>,</span>
-<span>  use_list_votes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  winner_take_one <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  weight_votes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  winner_take_one <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -61,16 +62,16 @@ districts/regions/entities ('Doppelter Pukelsheim').</p>
 
 
 <dl><dt id="arg-votes-df">votes_df<a class="anchor" aria-label="anchor" href="#arg-votes-df"></a></dt>
-<dd><p>data.frame (long format) with 3 columns (actual colnames can differ):</p><ul><li><p>party id/name</p></li>
-<li><p>district id/name</p></li>
-<li><p>votes</p></li>
-</ul></dd>
+<dd><p>data.frame (long format) with 3 columns (actual colnames can differ):</p><ol><li><p>party id/name (character)</p></li>
+<li><p>district id/name (character)</p></li>
+<li><p>votes (numeric)</p></li>
+</ol></dd>
 
 
 <dt id="arg-district-seats-df">district_seats_df<a class="anchor" aria-label="anchor" href="#arg-district-seats-df"></a></dt>
-<dd><p>data.frame with 2 columns (actual colnames can differ):</p><ul><li><p>district id/name</p></li>
-<li><p>number of seats for a district</p></li>
-</ul></dd>
+<dd><p>data.frame with 2 columns (actual colnames can differ):</p><ol><li><p>district id/name (character)</p></li>
+<li><p>number of seats for a district (numeric)</p></li>
+</ol></dd>
 
 
 <dt id="arg-quorum">quorum<a class="anchor" aria-label="anchor" href="#arg-quorum"></a></dt>
@@ -78,30 +79,34 @@ districts/regions/entities ('Doppelter Pukelsheim').</p>
 vector that denotes for each party/row whether they reached the quorum (i.e. are
 eligible for seats). The easiest way to do this is via <code><a href="quorum_functions.html">quorum_any()</a></code> or
 <code><a href="quorum_functions.html">quorum_all()</a></code>, see examples. Alternatively you can pass a precalculated logical
-vector. No quorum is applied if parameter is missing or <code>NULL</code>.</p></dd>
+vector. No quorum is applied if this parameter is missing or <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-new-seats-col">new_seats_col<a class="anchor" aria-label="anchor" href="#arg-new-seats-col"></a></dt>
 <dd><p>name of the new column</p></dd>
 
 
-<dt id="arg-use-list-votes">use_list_votes<a class="anchor" aria-label="anchor" href="#arg-use-list-votes"></a></dt>
-<dd><p>By default (<code>TRUE</code>) it's assumed that each voter in a district has
+<dt id="arg-weight-votes">weight_votes<a class="anchor" aria-label="anchor" href="#arg-weight-votes"></a></dt>
+<dd><p>By default (<code>TRUE</code>) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Set to <code>FALSE</code> if <code>votes_df</code> shows the
-number of voters (e.g. they can only vote for one party).</p></dd>
+number of <em>voters</em> (e.g. because they can only vote for one party).</p></dd>
 
 
 <dt id="arg-winner-take-one">winner_take_one<a class="anchor" aria-label="anchor" href="#arg-winner-take-one"></a></dt>
 <dd><p>Set to <code>TRUE</code> if the party that got the most votes in a district
 must get <em>at least</em> one seat ('Majorzbedingung') in this district. This only applies if
-they are entitled to a seat in the upper apportionment. Default is <code>FALSE</code>.</p></dd>
+the district winnig party is entitled to a seat in the upper apportionment. Default is <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>ignored (available for backwards compatibility)</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame like <code>votes_df</code> with a new column denoting the number seats per
-party and district. Party and district divisors stored in attributes in attributes
-(hidden from print, see <code><a href="get_divisors.html">get_divisors()</a></code>).</p>
+    <p>A data.frame like <code>votes_df</code> with a new column denoting the number of seats per
+party and district. Party and district divisors stored in attributes (hidden from print,
+see <code><a href="get_divisors.html">get_divisors()</a></code>). An ungrouped tibble is returned if <code>votes_df</code> is a tibble.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -145,7 +150,7 @@ assignment to candidates.</p>
 <span class="r-in"><span><span class="va">finland19_result</span> <span class="op">=</span> <span class="fu">pukelsheim</span><span class="op">(</span><span class="va">finland2019</span><span class="op">$</span><span class="va">votes_df</span>,</span></span>
 <span class="r-in"><span>                             <span class="va">finland2019</span><span class="op">$</span><span class="va">district_seats_df</span>,</span></span>
 <span class="r-in"><span>                             new_seats_col <span class="op">=</span> <span class="st">"mandates"</span>,</span></span>
-<span class="r-in"><span>                             use_list_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                             weight_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">finland19_result</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">finland19_result</span><span class="op">$</span><span class="va">mandates</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   party_name district_name  votes mandates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4         PS           UUS  86691        5</span>

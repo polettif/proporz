@@ -9,7 +9,7 @@ entities, regions), thus bi-proportional."><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">proporz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1.900</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@ entities, regions), thus bi-proportional."><meta property="og:image" content="ht
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Biproportional apportionment</h1>
-      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/master/R/biproportional.R" class="external-link"><code>R/biproportional.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.2/R/biproportional.R" class="external-link"><code>R/biproportional.R</code></a></small>
       <div class="d-none name"><code>biproporz.Rd</code></div>
     </div>
 
@@ -50,8 +50,9 @@ entities, regions), thus bi-proportional.</p>
 <span>  <span class="va">votes_matrix</span>,</span>
 <span>  <span class="va">district_seats</span>,</span>
 <span>  <span class="va">quorum</span>,</span>
-<span>  use_list_votes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"round"</span></span>
+<span>  weight_votes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"round"</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -77,15 +78,15 @@ used.</p></dd>
 vector that denotes for each party/row whether they reached the quorum (i.e. are
 eligible for seats). The easiest way to do this is via <code><a href="quorum_functions.html">quorum_any()</a></code> or
 <code><a href="quorum_functions.html">quorum_all()</a></code>, see examples. Alternatively you can pass a precalculated logical
-vector. No quorum is applied if parameter is missing or <code>NULL</code>.</p></dd>
+vector. No quorum is applied if this parameter is missing or <code>NULL</code>.</p></dd>
 
 
-<dt id="arg-use-list-votes">use_list_votes<a class="anchor" aria-label="anchor" href="#arg-use-list-votes"></a></dt>
-<dd><p>By default (<code>TRUE</code>) it's assumed that each voter in a district has
+<dt id="arg-weight-votes">weight_votes<a class="anchor" aria-label="anchor" href="#arg-weight-votes"></a></dt>
+<dd><p>By default (<code>TRUE</code>) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
-the number of available district seats with <code><a href="weight_list_votes.html">weight_list_votes()</a></code>. Set to <code>FALSE</code> if
-<code>votes_matrix</code> shows the number of voters (i.e. they can only cast one vote for one
-party).</p></dd>
+the number of available district seats with <code><a href="weight_votes_matrix.html">weight_votes_matrix()</a></code>. Set to <code>FALSE</code> if
+the argument <code>votes_matrix</code> shows the number of <em>voters</em> (e.g. because they can only cast
+one vote for one party).</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -101,6 +102,10 @@ apportionment (which uses the Sainte-Laguë/Webster method). See
 </ul><p>It is also possible to use any divisor method name listed in <code><a href="proporz.html">proporz()</a></code>. If you want to
 use a different method for the upper and lower apportionment, provide a list with two
 entries.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>ignored (available for backwards compatibility)</p></dd>
 
 </dl></div>
     <div class="section level2">

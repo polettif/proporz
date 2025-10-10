@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">proporz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.1.900</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@ Poletti</h4>
             
             <h4 data-toc-skip class="date">2024-02-22</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/master/vignettes/apportionment_scenarios.Rmd" class="external-link"><code>vignettes/apportionment_scenarios.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.2/vignettes/apportionment_scenarios.Rmd" class="external-link"><code>vignettes/apportionment_scenarios.Rmd</code></a></small>
       <div class="d-none name"><code>apportionment_scenarios.Rmd</code></div>
     </div>
 
@@ -372,17 +372,17 @@ number of seats per party and district as a matrix. The user can specify
 the apportionment method and a quorum threshold.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">apply_proporz</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>, <span class="va">method</span>, <span class="va">quorum</span> <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">seats_matrix</span> <span class="op">=</span> <span class="va">votes_matrix</span></span>
-<span>    <span class="va">seats_matrix</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
-<span>    </span>
-<span>    <span class="co"># calculate proportional apportionment for each district (matrix column)</span></span>
-<span>    <span class="kw">for</span><span class="op">(</span><span class="va">district</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">district_seats</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>        <span class="va">seats_matrix</span><span class="op">[</span>,<span class="va">district</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes_matrix</span><span class="op">[</span>,<span class="va">district</span><span class="op">]</span>,</span>
-<span>                                           <span class="va">district_seats</span><span class="op">[</span><span class="va">district</span><span class="op">]</span>,</span>
-<span>                                           quorum <span class="op">=</span> <span class="va">quorum</span>,</span>
-<span>                                           method <span class="op">=</span> <span class="va">method</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">seats_matrix</span><span class="op">)</span></span>
+<span>  <span class="va">seats_matrix</span> <span class="op">=</span> <span class="va">votes_matrix</span></span>
+<span>  <span class="va">seats_matrix</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span>  </span>
+<span>  <span class="co"># calculate proportional apportionment for each district (matrix column)</span></span>
+<span>  <span class="kw">for</span><span class="op">(</span><span class="va">district</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">district_seats</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">seats_matrix</span><span class="op">[</span>,<span class="va">district</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/proporz.html">proporz</a></span><span class="op">(</span><span class="va">votes_matrix</span><span class="op">[</span>,<span class="va">district</span><span class="op">]</span>,</span>
+<span>                                       <span class="va">district_seats</span><span class="op">[</span><span class="va">district</span><span class="op">]</span>,</span>
+<span>                                       quorum <span class="op">=</span> <span class="va">quorum</span>,</span>
+<span>                                       method <span class="op">=</span> <span class="va">method</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">seats_matrix</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -418,19 +418,19 @@ quorum, otherwise all parties with more than zero votes get at least one
 seat. In this example, the quorum is 3% of votes in a district.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bydistrict_v1</span> <span class="op">=</span> <span class="fu">apply_proporz</span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>,</span>
-<span>                                      method <span class="op">=</span> <span class="st">"sainte-lague"</span><span class="op">)</span></span>
+<span>                              method <span class="op">=</span> <span class="st">"sainte-lague"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">bydistrict_v2</span> <span class="op">=</span> <span class="fu">apply_proporz</span><span class="op">(</span><span class="va">votes_matrix</span>, <span class="va">district_seats</span>,</span>
-<span>                                      method <span class="op">=</span> <span class="st">"huntington-hill"</span>, </span>
-<span>                                      quorum <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span></code></pre></div>
+<span>                              method <span class="op">=</span> <span class="st">"huntington-hill"</span>, </span>
+<span>                              quorum <span class="op">=</span> <span class="fl">0.03</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s compare the seat distributions for these three methods. We get
 the number of party seats on the national level with
 <code>rowSums</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df_bydistrict</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    D.Hondt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v0</span><span class="op">)</span>,</span>
-<span>    Sainte.Lague <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v1</span><span class="op">)</span>,</span>
-<span>    Huntington.Hill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v2</span><span class="op">)</span></span>
+<span>  D.Hondt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v0</span><span class="op">)</span>,</span>
+<span>  Sainte.Lague <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v1</span><span class="op">)</span>,</span>
+<span>  Huntington.Hill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># sort table by D'Hondt seats</span></span>
@@ -534,8 +534,8 @@ actual distribution method.</p>
 <code class="sourceCode R"><span><span class="va">vote_shares</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">votes_matrix</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">votes_matrix</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">shares</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    seats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v0</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">district_seats</span><span class="op">)</span>,</span>
-<span>    votes <span class="op">=</span> <span class="va">vote_shares</span> </span>
+<span>  seats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">bydistrict_v0</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">district_seats</span><span class="op">)</span>,</span>
+<span>  votes <span class="op">=</span> <span class="va">vote_shares</span> </span>
 <span><span class="op">)</span></span>
 <span><span class="va">shares</span><span class="op">$</span><span class="va">difference</span> <span class="op">&lt;-</span> <span class="va">shares</span><span class="op">$</span><span class="va">seats</span><span class="op">-</span><span class="va">shares</span><span class="op">$</span><span class="va">votes</span></span>
 <span><span class="va">shares</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">shares</span>, <span class="fl">4</span><span class="op">)</span></span>
@@ -579,12 +579,12 @@ districts.</p>
 already. We need to consider that voters in Finland can only vote for
 <em>one</em> person in each district. They can’t distribute as many
 votes as there are seats in their district among candidates/parties.
-Thus we need to use <code>use_list_votes=FALSE</code> as a parameter in
+Thus we need to use <code>weight_votes = FALSE</code> as a parameter in
 <code>biproporz</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seats_biproportional</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, </span>
 <span>                                 <span class="va">district_seats</span>, </span>
-<span>                                 use_list_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                                 weight_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># show only parties with seats</span></span>
 <span><span class="va">seats_biproportional</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seats_biproportional</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span></span></code></pre></div>
@@ -833,9 +833,11 @@ representation compared to a priority on national vote shares is not
 within the scope of this vignette. The following chunk shows the seat
 changes.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seat_changes</span> <span class="op">=</span> <span class="va">seats_biproportional</span><span class="op">-</span><span class="va">bydistrict_v0</span></span>
+<code class="sourceCode R"><span><span class="va">seat_changes</span> <span class="op">=</span> <span class="va">seats_biproportional</span> <span class="op">-</span> <span class="va">bydistrict_v0</span></span>
 <span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">seat_changes</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">seat_changes</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">seat_changes</span><span class="op">)</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">.parties_w_changes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">seat_changes</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span><span class="va">.districts_w_changes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">seat_changes</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">seat_changes</span><span class="op">[</span><span class="va">.parties_w_changes</span>, <span class="va">.districts_w_changes</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left"></th>
@@ -1063,7 +1065,7 @@ its vote share. To do this, we use the total number of seats for the
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">full_biproportional</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, </span>
 <span>                                district_seats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">district_seats</span><span class="op">)</span>,</span>
-<span>                                use_list_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                                weight_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># party seat distribution has not changed</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">full_biproportional</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seats_biproportional</span><span class="op">)</span></span>
@@ -1097,11 +1099,13 @@ municipalities. Previously, these four municipalities used the
 <em>Hagenbach-Bischoff</em> method. We’ll ignore all other
 municipalities which use a majoritarian electoral system.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seats_old_system</span> <span class="op">=</span> <span class="fu">apply_proporz</span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span>, <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span>, <span class="st">"hagenbach-bischoff"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">seats_old_system</span> <span class="op">=</span> <span class="fu">apply_proporz</span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span>, </span>
+<span>                                 <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span>, </span>
+<span>                                 <span class="st">"hagenbach-bischoff"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">seats_new_system</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span>, <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">seats_new_system</span><span class="op">-</span><span class="va">seats_old_system</span></span>
+<span><span class="va">seats_new_system</span> <span class="op">-</span> <span class="va">seats_old_system</span></span>
 <span><span class="co">#&gt;      Altdorf Bürglen Erstfeld Schattdorf</span></span>
 <span><span class="co">#&gt; CVP        1       0        0          0</span></span>
 <span><span class="co">#&gt; SPGB      -1       0        0          0</span></span>
