@@ -1,2 +1,3 @@
-This patch release contains a new vignette and improved documentation. 
-Fixed a function shorthand `\(...)` to comply with R >= 3.6
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+This patch release contains bugfixes and improved documentation.

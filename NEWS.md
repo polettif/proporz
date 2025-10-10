@@ -1,10 +1,9 @@
-# proporz (dev)
+# proporz 1.5.2
 
-* renamed weight_list_votes() to `weight_votes_matrix()`
-* Parameter `use_list_votes` in `biproporz()` renamed to `weight_votes`. `use_list_votes` will continue to work, a deprecation message will be shown.
+* weight_list_votes() is deprecated, renamed  to `weight_votes_matrix()`
+* Parameter `use_list_votes` in `biproporz()`/`pukelsheim()` is deprecated, renamed to `weight_votes`
 * `proporz::proporz()` can now be used without calling `library(proporz)`
 * `pukelsheim()` returns tibbles for tibble input
-* Additional checks and error messages
 
 # proporz 1.5.1
 
