@@ -38,6 +38,15 @@ test_that("lower apportionment", {
     vm0.5 = matrix(c(10, 10, 20, 10), 2, 2)
     sm0.5 = lower_apportionment(vm0.5, c(1, 1), c(1,1))
     expect_identical(sum(sm0.5), 2L)
+
+    # named vectors
+    d1n = setNames(d1, c("A", "B", "C"))[c(1,3,2)]
+    p1n = setNames(p1, c("I", "II", "III"))[c(3,2,1)]
+    M1n = M1
+    colnames(M1n) <- c("A", "B", "C")
+    rownames(M1n) <- c("I", "II", "III")
+    x1n = lower_apportionment(M1n, d1n, p1n)
+    expect_identical(c(x1n), c(x1))
 })
 
 test_that("biproporz", {

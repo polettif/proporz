@@ -1,3 +1,7 @@
+# proporz (dev)
+
+* assert vector-matrix name matching in `lower_apportionment()`
+
 # proporz 1.5.2
 
 * weight_list_votes() is deprecated, renamed  to `weight_votes_matrix()`

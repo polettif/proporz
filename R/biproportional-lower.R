@@ -86,7 +86,10 @@ lower_apportionment = function(votes_matrix, seats_cols,
     assert(all((seats_cols %% 1) == 0))
     assert(all((seats_rows %% 1) == 0))
     assert(sum(seats_cols) == sum(seats_rows))
-    assert(length(seats_cols) == ncol(M) && length(seats_rows) == nrow(M))
+    assert(length(seats_cols) == ncol(M))
+    assert(length(seats_rows) == nrow(M))
+    seats_cols <- prep_seats_cols(seats_cols, votes_matrix)
+    seats_rows <- prep_seats_rows(seats_rows, votes_matrix)
 
     # rounding function from method
     if(is.function(method)) {
@@ -313,4 +316,24 @@ bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
         }
     }
     stop("Exceeded maximum number of bisection iterations (", max_iterations, ")") # nocov
+}
+
+prep_seats_cols = function(seats_cols, votes_matrix) {
+    if(!identical(sort(colnames(votes_matrix)), sort(names(seats_cols)))) {
+        stop("seats_cols must have the same names as the votes_matrix column", call. = FALSE)
+    }
+    if(!is.null(names(seats_cols))) {
+        seats_cols <- seats_cols[colnames(votes_matrix)]
+    }
+    return(seats_cols)
+}
+
+prep_seats_rows = function(seats_rows, votes_matrix) {
+    if(!identical(sort(rownames(votes_matrix)), sort(names(seats_rows)))) {
+        stop("seats_rows must have the same names as the votes_matrix rows", call. = FALSE)
+    }
+    if(!is.null(names(seats_rows))) {
+        seats_rows <- seats_rows[rownames(votes_matrix)]
+    }
+    return(seats_rows)
 }

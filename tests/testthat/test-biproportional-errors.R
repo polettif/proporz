@@ -256,3 +256,21 @@ test_that("unique name checks", {
     expect_error_fixed(prep_district_seats(ds_dupl, vm_names, "distrdupl", "xy"),
                        "`distrdupl` must have unique names without NA's")
 })
+
+test_that("lower_apportionment name-matching", {
+    M = matrix(c(60, 30, 4, 70, 50, 40),
+               nrow = 3L, ncol = 2L,
+               dimnames = list(c("I", "II", "III"), c("A", "B")))
+    ds = c("B" = 5, "A" = 3)
+    ps = c("III" = 1, "I" = 4, "II" = 3)
+    expect_no_error(lower_apportionment(M, ds, ps))
+    expect_true(!identical(c(lower_apportionment(M, ds, ps)),
+                           c(lower_apportionment(unname(M), unname(ds), unname(ps)))))
+    expect_error(lower_apportionment(M, unname(ds), unname(ps)),
+                 "seats_cols must have the same names as the votes_matrix column")
+    expect_error(lower_apportionment(M, ds, unname(ps)),
+                 "seats_rows must have the same names as the votes_matrix rows")
+    names(ps)[2] <- "IV"
+    expect_error(lower_apportionment(M, ds, ps),
+                 "seats_rows must have the same names as the votes_matrix rows")
+})
