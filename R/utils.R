@@ -1,7 +1,8 @@
 # simpler and marginally faster version of stopifnot
 assert = function(check) {
     if(length(check) == 0 || !isTRUE(all(check))) {
-        .x = deparse(substitute(check))
+        .x = deparse(substitute(check), width.cutoff = 120L)
+        .x <- paste(.x, collapse = "")
         stop(.x, " is not TRUE", call. = FALSE)
     }
     invisible(TRUE)
@@ -33,6 +34,14 @@ collapse_names = function(x, x_names = NULL) {
     }
 
     return(out)
+}
+
+trim_deparse_substitute = function(x) {
+    x <- x[1]
+    if(nchar(x) > 33) {
+        return(paste0(substring(x, 1, 30), "..."))
+    }
+    return(x)
 }
 
 num_word = function(singular, plural, i) {

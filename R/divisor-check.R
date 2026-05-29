@@ -29,6 +29,7 @@ check_enough_seats = function(votes, n_seats, method) {
 
 check_seats_number = function(n_seats, n_seats.name) {
     if(length(n_seats) == 1 && !is.null(n_seats) && !is.na(n_seats) &&
+       is.numeric(n_seats) &&
        (n_seats %% 1 == 0) &&
        n_seats >= 0) {
         return(invisible(TRUE))
@@ -38,7 +39,9 @@ check_seats_number = function(n_seats, n_seats.name) {
 
 check_votes_vector = function(votes, .votes) {
     assert(!missing(.votes))
-    if(is.numeric(votes) && all(!is.na(votes)) &&
+    if(is.numeric(votes) &&
+       length(votes) > 0 &&
+       all(!is.na(votes)) &&
        all(votes >= 0) && is.vector(votes)) {
         return(invisible(TRUE))
     }

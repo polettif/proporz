@@ -27,11 +27,11 @@ ceil_at = function(x, threshold) {
             stop("Threshold argument must be in [0,1]", call. = FALSE)
         }
         threshold <- floor(values) + threshold
-    } else if(threshold == "harmonic") {
+    } else if(identical(threshold, "harmonic")) {
         threshold <- threshold_harmonic(values)
-    } else if(threshold == "geometric") {
+    } else if(identical(threshold, "geometric")) {
         threshold <- threshold_geometric(values)
-    } else if(threshold == "0.5_at_least_one") { # not documented
+    } else if(identical(threshold, "0.5_at_least_one")) { # not documented
         threshold <- threshold_0.5_at_least_one(values)
     } else {
         stop('Numeric value, "harmonic" or "geometric" expected for threshold argument.',

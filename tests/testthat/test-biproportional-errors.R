@@ -217,7 +217,7 @@ test_that("error messages", {
     expect_error_fixed(biproporz(vm, seats, method = c("round", "floor", "ceiling")),
                        "Only one or two methods allowed")
     expect_error_fixed(biproporz(vm, seats, method = round),
-                       "Method must be a character or a list")
+                       "Method must be a single character or a list of two characters")
     expect_error_fixed(biproporz(vm, vm),
                        "`vm` must be a numeric vector, data.frame or a single number")
 

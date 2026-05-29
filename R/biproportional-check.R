@@ -1,5 +1,5 @@
 prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
-    vmn = paste0("`", votes_matrix.name, "`")
+    vmn = paste0("`", trim_deparse_substitute(votes_matrix.name), "`")
     if(!is.matrix(votes_matrix)) {
         stop(vmn, " must be a matrix", call. = FALSE)
     }
@@ -19,8 +19,8 @@ prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
 }
 
 prep_method = function(method) {
-    if(!is.vector(method)) {
-        stop("Method must be a character or a list", call. = FALSE)
+    if(!is.vector(method) || anyNA(method)) {
+        stop("Method must be a single character or a list of two characters", call. = FALSE)
     }
     if(!length(method) %in% c(1L, 2L)) {
         stop("Only one or two methods allowed", call. = FALSE)
@@ -43,7 +43,7 @@ prep_method = function(method) {
 prep_district_seats = function(district_seats, votes_matrix,
                                .district_seats.name, .votes_matrix.name) {
     if(!(is.vector(district_seats, "numeric") || is.data.frame(district_seats))) {
-        stop("`", .district_seats.name, "` must be a numeric vector, data.frame or a single number.",
+        stop("`", .district_seats.name, "` must be a numeric vector, data.frame or a single number",
              call. = FALSE)
     }
 
@@ -52,8 +52,8 @@ prep_district_seats = function(district_seats, votes_matrix,
             district_seats <- setNames(district_seats[[2]], district_seats[[1]])
         }
         if(ncol(votes_matrix) != length(district_seats)) {
-            stop("`", .votes_matrix.name,
-                 "` must have districts as columns and parties as rows.",
+            stop("`", trim_deparse_substitute(.votes_matrix.name),
+                 "` must have districts as columns and parties as rows",
                  call. = FALSE)
         }
 
@@ -71,7 +71,7 @@ prep_district_seats = function(district_seats, votes_matrix,
             district_seats <- district_seats[colnames(votes_matrix)]
         }
     }
-    if(sum(district_seats %% 1) != 0) {
+    if(anyNA(district_seats) || sum(district_seats %% 1) != 0) {
         stop("`", .district_seats.name, "` must be integers", call. = FALSE)
     }
     assert(is.atomic(district_seats))
@@ -89,9 +89,9 @@ prep_district_seats_df = function(district_seats_df) {
 check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
                                    weight_votes, winner_take_one,
                                    .votes_df, .district_seats_df) {
-    assert(is.character(new_seats_col) && length(new_seats_col) == 1)
-    assert(is.logical(weight_votes) && !is.na(weight_votes) && length(weight_votes) == 1)
-    assert(is.logical(winner_take_one) && !is.na(winner_take_one) && length(winner_take_one) == 1)
+    assert(is.character(new_seats_col) && length(new_seats_col) == 1 && !is.na(new_seats_col))
+    assert(is.logical(weight_votes) && length(weight_votes) == 1 && !is.na(weight_votes))
+    assert(is.logical(winner_take_one) && length(winner_take_one) == 1 && !is.na(winner_take_one))
 
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
         stop("`", .votes_df, "` must be a data frame with 3 columns in the ",
@@ -104,7 +104,8 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
              "`s third column must be numbers >= 0", call. = FALSE)
     }
 
-    if(!is.data.frame(district_seats_df)) {
+    if(!is.data.frame(district_seats_df) ||
+       (is.data.frame(district_seats_df) && nrow(district_seats_df) == 0)) {
         stop("`", .district_seats_df, "` must be a data.frame", call. = FALSE)
     }
     if(length(unique(district_seats_df[[1]])) != nrow(district_seats_df)) {
@@ -132,7 +133,6 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
     }
     invisible(TRUE)
 }
-
 
 # The flow-criterion is violated if the total number of seats of some set of parties exceeds
 # the number of seats that are rewarded to the districts in which these parties campaign.

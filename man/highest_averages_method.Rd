@@ -11,7 +11,7 @@ highest_averages_method(votes, n_seats, divisors)
 
 \item{n_seats}{total number of seats}
 
-\item{divisors}{sequence of divisors (length equal to the number of seats).
+\item{divisors}{Sequence of divisors (length equal to the number of seats).
 If it is a single number (e.g. 0.5), a sequence is generated
 starting with it, increasing by 1.}
 }

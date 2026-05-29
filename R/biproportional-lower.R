@@ -83,15 +83,12 @@ lower_apportionment = function(votes_matrix, seats_cols,
                                seats_rows, method = "round") {
     # check parameters
     M = prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
-    assert(all((seats_cols %% 1) == 0))
-    assert(all((seats_rows %% 1) == 0))
-    assert(sum(seats_cols) == sum(seats_rows))
-    assert(length(seats_cols) == ncol(M))
-    assert(length(seats_rows) == nrow(M))
     seats_cols <- prep_seats_cols(seats_cols, votes_matrix)
     seats_rows <- prep_seats_rows(seats_rows, votes_matrix)
+    assert(sum(seats_cols) == sum(seats_rows))
 
     # rounding function from method
+    assert(is.function(method) || (is.character(method) && length(method) == 1) && !is.na(method))
     if(is.function(method)) {
         round_func = method
     } else if(method == "round") {
@@ -319,6 +316,10 @@ bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
 }
 
 prep_seats_cols = function(seats_cols, votes_matrix) {
+    assert(is.numeric(seats_cols) && is.atomic(seats_cols))
+    assert(all((seats_cols %% 1) == 0))
+    assert(length(seats_cols) == ncol(votes_matrix))
+
     if(!identical(sort(colnames(votes_matrix)), sort(names(seats_cols)))) {
         stop("seats_cols must have the same names as the votes_matrix column", call. = FALSE)
     }
@@ -329,6 +330,10 @@ prep_seats_cols = function(seats_cols, votes_matrix) {
 }
 
 prep_seats_rows = function(seats_rows, votes_matrix) {
+    assert(is.numeric(seats_rows) && is.atomic(seats_rows))
+    assert(all((seats_rows %% 1) == 0))
+    assert(length(seats_rows) == nrow(votes_matrix))
+
     if(!identical(sort(rownames(votes_matrix)), sort(names(seats_rows)))) {
         stop("seats_rows must have the same names as the votes_matrix rows", call. = FALSE)
     }

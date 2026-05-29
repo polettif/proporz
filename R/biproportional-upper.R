@@ -44,7 +44,9 @@ upper_apportionment = function(votes_matrix, district_seats,
     .dsn = deparse(substitute(district_seats))
     votes_matrix <- prep_votes_matrix(votes_matrix, .vmn)
     district_seats <- prep_district_seats(district_seats, votes_matrix, .dsn, .vmn)
-    assert(length(weight_votes) == 1 && is.logical(weight_votes))
+    if(!(length(weight_votes) == 1 && is.logical(weight_votes) && !is.na(weight_votes))) {
+        stop("`weight_votes` must be TRUE or FALSE", call. = FALSE)
+    }
 
     # district seats
     if(length(district_seats) == 1) {
@@ -93,12 +95,12 @@ NULL
 #' @rdname weight_votes_matrix
 #' @export
 weight_votes_matrix = function(votes_matrix, district_seats) {
+    votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
+    district_seats <- prep_district_seats(district_seats, votes_matrix, "district_seats", "votes_matrix")
     assert(all(district_seats >= 0))
     if(ncol(votes_matrix) != length(district_seats)) {
         stop("`length(district_seats)` must be the same as `ncol(votes_matrix)`", call. = FALSE)
     }
-    votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
-    district_seats <- prep_district_seats(district_seats, votes_matrix, "district_seats", "votes_matrix")
 
     M_seats_district = matrix(
         rep(district_seats, nrow(votes_matrix)),

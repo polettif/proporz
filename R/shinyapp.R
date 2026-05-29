@@ -155,7 +155,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             if(input$show_seat_totals) {
                 bpt <- matrix(NA, nrow = nrow(bp)+1, ncol = ncol(bp)+1)
                 bpt[2:nrow(bpt),2:ncol(bpt)] <- bp
-                bpt[1,1:ncol(bpt)] <- c(sum(bp), colSums(bp))
+                bpt[1,seq_len(ncol(bpt))] <- c(sum(bp), colSums(bp))
                 bpt[2:nrow(bpt),1] <- rowSums(bp)
                 colnames(bpt) <- c("TOTAL", colnames(bp))
                 rownames(bpt) <- c("TOTAL", rownames(bp))

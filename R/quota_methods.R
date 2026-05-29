@@ -23,6 +23,7 @@
 largest_remainder_method = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
     check_seats_number(n_seats, deparse(substitute(n_seats)))
+    check_quorum_param_vector(quorum)
 
     if(length(votes) == 1) {
         return(n_seats)
