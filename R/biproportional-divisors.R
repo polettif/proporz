@@ -72,7 +72,7 @@ n_digits = function(vec) {
         x1 = (vec*10^k)
         x2 = floor(x1)
         digits[(x1-x2) < 1e-8 & is.na(digits)] <- k
-        if(all(!is.na(digits))) break
+        if(!anyNA(digits)) break
     }
     return(digits)
 }

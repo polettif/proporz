@@ -28,7 +28,7 @@ highest_averages_method = function(votes, n_seats, divisors) {
 
     # catch trivial cases
     if(length(votes) == 1) { return(n_seats) }
-    assert(all(!is.na(votes)))
+    assert(!anyNA(votes))
     if(n_seats == 0) { return(rep(0L, length(votes))) }
 
     # setup params
@@ -143,7 +143,7 @@ prep_divisor_param = function(divisors, n_seats) {
     assert(is.null(dim(divisors)))
     assert(is.numeric(divisors))
     assert(divisors >= 0)
-    if(length(divisors) == 1) {
+    if(length(divisors) == 1L) {
         divisors <- seq(from = divisors, by = 1, length.out = n_seats)
     } else if(length(divisors) != n_seats) {
         stop("Number of divisors is not equal to the number of seats", call. = FALSE)

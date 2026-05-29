@@ -3,7 +3,7 @@ prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
     if(!is.matrix(votes_matrix)) {
         stop(vmn, " must be a matrix", call. = FALSE)
     }
-    if(any(is.na(votes_matrix)) || any(votes_matrix < 0) || !is.numeric(votes_matrix)) {
+    if(anyNA(votes_matrix) || any(votes_matrix < 0) || !is.numeric(votes_matrix)) {
         stop("Votes in ", vmn, " must be numbers >= 0", call. = FALSE)
     }
     if(!is.null(rownames(votes_matrix)) &&
@@ -25,7 +25,7 @@ prep_method = function(method) {
     if(!length(method) %in% c(1L, 2L)) {
         stop("Only one or two methods allowed", call. = FALSE)
     }
-    if(length(method) == 1) {
+    if(length(method) == 1L) {
         if(method == "wto") {
             method = list("round", "wto")
         } else {
@@ -89,9 +89,9 @@ prep_district_seats_df = function(district_seats_df) {
 check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
                                    weight_votes, winner_take_one,
                                    .votes_df, .district_seats_df) {
-    assert(is.character(new_seats_col) && length(new_seats_col) == 1 && !is.na(new_seats_col))
-    assert(is.logical(weight_votes) && length(weight_votes) == 1 && !is.na(weight_votes))
-    assert(is.logical(winner_take_one) && length(winner_take_one) == 1 && !is.na(winner_take_one))
+    assert_char1(new_seats_col)
+    assert_bool1(weight_votes)
+    assert_bool1(winner_take_one)
 
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
         stop("`", .votes_df, "` must be a data frame with 3 columns in the ",

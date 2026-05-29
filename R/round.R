@@ -19,7 +19,7 @@
 #' @export
 ceil_at = function(x, threshold) {
     assert(length(threshold) == 1 && !is.na(threshold))
-    assert(all(!is.na(x)) && all(is.numeric(x)) && all(x >= 0))
+    assert(!anyNA(x) && all(is.numeric(x)) && all(x >= 0))
     values = c(x)
 
     if(is.numeric(threshold)) {

@@ -88,7 +88,7 @@ lower_apportionment = function(votes_matrix, seats_cols,
     assert(sum(seats_cols) == sum(seats_rows))
 
     # rounding function from method
-    assert(is.function(method) || (is.character(method) && length(method) == 1) && !is.na(method))
+    assert(is.function(method) || is_char1(method))
     if(is.function(method)) {
         round_func = method
     } else if(method == "round") {
@@ -267,8 +267,8 @@ find_divisor = function(votes,
                         target_seats, round_func) {
     assert(is.matrix(votes))
     assert(any(dim(votes) == 1))
-    assert(length(target_seats) == 1)
-    assert(all(!is.infinite(votes)) && all(!is.na(votes)))
+    assert(length(target_seats) == 1L)
+    assert(all(!is.infinite(votes)) && !anyNA(votes))
     assert(!is.na(divisor_from) && !is.na(divisor_to))
     assert(divisor_from > 0)
 
@@ -295,7 +295,7 @@ find_divisor = function(votes,
 }
 
 bisect = function(f, x1, x2, tol = 1e-9, max_iterations = 1000) {
-    assert(length(x1) == 1 && length(x2) == 1 && length(tol) == 1)
+    assert(length(x1) == 1L && length(x2) == 1L && length(tol) == 1L)
     assert((f(x1) <= 0 && f(x2) >= 0) || (f(x1) >= 0 && f(x2) <= 0))
     assert(x1 >= 0 && x2 >= 0 && x1 < x2)
     assert(!is.infinite(x1) && !is.infinite(x2))

@@ -207,7 +207,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 
         update_seatsMatrix = function(.seats) {
             if(!is.matrix(.seats)) {
-                if(length(.seats) == 1) {
+                if(length(.seats) == 1L) {
                     .seats <- matrix(.seats, 1, 1,
                                      dimnames = list("seats", "total"))
                 } else {
@@ -286,9 +286,10 @@ shiny_create_empty_votes_matrix = function(nrows, ncols) {
     return(m)
 }
 
-shiny_create_seats_matrix = function(votes_matrix,
-                                     district_seats = setNames(rep(0, ncol(votes_matrix)), colnames(votes_matrix))) {
-    if(length(district_seats) == 1) {
+shiny_create_seats_matrix = function(
+        votes_matrix,
+        district_seats = setNames(rep(0, ncol(votes_matrix)), colnames(votes_matrix))) {
+    if(length(district_seats) == 1L) {
         district_seats_matrix = matrix(district_seats, 1, 1,
                                        dimnames = list("seats", "total"))
     } else {

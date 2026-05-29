@@ -60,3 +60,37 @@ div0 = function(x, div) {
     d[is.nan(d) | is.infinite(d) | is.na(d)] <- 0
     d
 }
+
+# type checks, single value objects, no NAs
+is_bool1 = function(x) {
+    length(x) == 1L && !is.na(x) && is.logical(x) # length(NULL) is 0
+}
+
+is_num1 = function(x) {
+    length(x) == 1L && !is.na(x) && is.numeric(x)
+}
+
+is_char1 = function(x) {
+    length(x) == 1L && !is.na(x) && is.character(x)
+}
+
+assert_bool1 = function(x) {
+    if(!is_bool1(x)) {
+        stop("`", deparse(substitute(x)), "` must be TRUE or FALSE", call. = FALSE)
+    }
+    invisible(TRUE)
+}
+
+assert_char1 = function(x) {
+    if(!is_char1(x)) {
+        stop("`", deparse(substitute(x)), "` must be a single string", call. = FALSE)
+    }
+    invisible(TRUE)
+}
+
+assert_num1 = function(x) {
+    if(!is_num1(x)) {
+        stop("`", deparse(substitute(x)), "` must be a single number", call. = FALSE)
+    }
+    invisible(TRUE)
+}

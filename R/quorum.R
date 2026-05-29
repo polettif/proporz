@@ -66,14 +66,14 @@ create_quorum_function_list = function(type, any_district, total) {
     quorum_funcs = list()
 
     if(!missing(any_district)) {
-        assert(length(any_district) == 1 && is.numeric(any_district) && !is.na(any_district))
+        assert_num1(any_district)
         quorum_funcs <- append(quorum_funcs, function(votes_matrix) {
             reached_quorum_any_district(votes_matrix, any_district)
         })
     }
 
     if(!missing(total)) {
-        assert(length(total) == 1 && is.numeric(total) && !is.na(total))
+        assert_num1(total)
         quorum_funcs <- append(quorum_funcs, function(votes_matrix) {
             reached_quorum_total(votes_matrix, total)
         })
@@ -107,7 +107,7 @@ create_quorum_function_list = function(type, any_district, total) {
 #' reached_quorum_total(vm, 35)
 #' @export
 reached_quorum_total = function(votes_matrix, quorum_total) {
-    assert(is.numeric(quorum_total) && length(quorum_total) == 1 && !is.na(quorum_total))
+    assert_num1(quorum_total)
     assert(quorum_total > 0)
     if(quorum_total < 1) {
         quorum_total <- sum(votes_matrix)*quorum_total
@@ -134,7 +134,7 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #' reached_quorum_any_district(vm, 25)
 #' @export
 reached_quorum_any_district = function(votes_matrix, quorum_districts) {
-    assert(is.numeric(quorum_districts) && length(quorum_districts) == 1 && !is.na(quorum_districts))
+    assert_num1(quorum_districts)
     assert(quorum_districts > 0)
     if(quorum_districts < 1) {
         quorum_districts <- colSums(votes_matrix)*quorum_districts
@@ -170,7 +170,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
         qf(votes_matrix)
     })
 
-    if(length(quorum_funcs) == 1) {
+    if(length(quorum_funcs) == 1L) {
         return(quorum_funcs[[1]](votes_matrix))
     }
 
@@ -247,8 +247,6 @@ apply_quorum_matrix = function(votes_matrix, quorum) {
 }
 
 check_quorum_param_matrix = function(quorum) {
-    # TODO add is_logical_noNA()
-    # TODO add assert_nonNA_single_value()
     if(!(is_quorum_function_list(quorum) || (is.atomic(quorum) && is.logical(quorum) && !anyNA(quorum)))) {
         stop("Quorum parameter must be a logical vector or a list of quorum functions (see ?quorum_functions)",
              call. = FALSE)
@@ -274,7 +272,7 @@ apply_quorum_vector = function(votes_vector, quorum) {
 }
 
 check_quorum_param_vector = function(quorum) {
-    if(!(length(quorum) == 1 && is.numeric(quorum) && quorum >= 0 && !is.na(quorum))) {
+    if(!(is_num1(quorum) && quorum >= 0)) {
         stop("Quorum parameter must be a single number >= 0",
              call. = FALSE)
     }

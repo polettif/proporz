@@ -75,14 +75,14 @@ proporz_methods = list(
     "divisor_geometric" = "divisor_geometric"
 )
 
-get_method_implementation = function(method_name) {
-    assert(is.character(method_name) && length(method_name) == 1)
-    method_name <- tolower(method_name)
-    if(!method_name %in% names(proporz_methods)) {
-        stop("Unknown apportion method: ", method_name, ".\nAvailable: ",
+get_method_implementation = function(method) {
+    assert_char1(method)
+    method <- tolower(method)
+    if(!method %in% names(proporz_methods)) {
+        stop("Unknown apportion method: ", method, ".\nAvailable: ",
              paste0(names(proporz_methods), collapse=", "), call. = FALSE)
     }
-    return(proporz_methods[[method_name]])
+    return(proporz_methods[[method]])
 }
 
 # function to create the list of method names for the proporz documentation

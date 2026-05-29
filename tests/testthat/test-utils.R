@@ -13,7 +13,7 @@ test_that("stupid pivot functions", {
     matrix1 = pivot_to_matrix(df0)
     expect_identical(pivot_to_matrix(df0[c(2,1,3)]),
                      t(pivot_to_matrix(df0)))
-    expect_true(all(!is.na(matrix1)))
+    expect_true(!anyNA(matrix1))
     expect_is(matrix1, "matrix")
     expect_identical(rownames(matrix1), unique(df0[,1]))
     expect_identical(colnames(matrix1), unique(df0[,2]))

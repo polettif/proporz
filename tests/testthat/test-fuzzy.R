@@ -36,7 +36,7 @@ test_that("fuzzy params proporz", {
     em = fuzzy_errors(function(method) proporz(votes, n_seats, method, quorum))
     expect_identical(
         unique(sapply(strsplit(em, ": "), getElement, 1)),
-        c("is.character(method_name) && length(method_name) == 1 is not TRUE",
+        c("`method` must be a single string",
           "Unknown apportion method"))
 
     em = fuzzy_errors(function(quorum) proporz(votes, n_seats, method, quorum))
@@ -94,7 +94,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
     expect_identical(em, "`weight_votes` must be TRUE or FALSE")
 
     em = fuzzy_errors(function(method) biproporz(votes_matrix, district_seats, quorum, weight_votes, method))
-    expect_true(all(em %in% c("is.character(method_name) && length(method_name) == 1 is not TRUE",
+    expect_true(all(em %in% c("`method` must be a single string",
                               "Method must be a single character or a list of two characters",
                               "Only one or two methods allowed") | startsWith(em, "Unknown apportion method:")))
 
@@ -122,19 +122,13 @@ test_that("fuzzy params biproporz/pukelsheim", {
           "length(quorum) == nrow(votes_matrix) is not TRUE"))
 
     em = fuzzy_errors(function(new_seats_col) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
-    expect_identical(
-        em,
-        "is.character(new_seats_col) && length(new_seats_col) == 1 && !is.na(new_seats_col) is not TRUE")
+    expect_identical(em, "`new_seats_col` must be a single string")
 
     em = fuzzy_errors(function(weight_votes) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
-    expect_identical(
-        em,
-        "is.logical(weight_votes) && length(weight_votes) == 1 && !is.na(weight_votes) is not TRUE")
+    expect_identical(em, "`weight_votes` must be TRUE or FALSE")
 
     em = fuzzy_errors(function(winner_take_one) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
-    expect_identical(
-        em,
-        "is.logical(winner_take_one) && length(winner_take_one) == 1 && !is.na(winner_take_one) is not TRUE")
+    expect_identical(em, "`winner_take_one` must be TRUE or FALSE")
 
     # upper_apportionment
     votes_matrix = matrix(c(123, 912, 312, 45, 714, 255, 815, 414, 215), nrow = 3)
@@ -159,7 +153,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
     expect_identical(em, "`weight_votes` must be TRUE or FALSE")
 
     em = fuzzy_errors(function(method) upper_apportionment(votes_matrix, district_seats, weight_votes, method))
-    expect_true(all(startsWith(em, "is.character(method") | startsWith(em, "Unknown apportion method: ")))
+    expect_true(all(em == "`method` must be a single string" | startsWith(em, "Unknown apportion method: ")))
 
     # lower_apportionment
     votes_matrix = matrix(c(123, 912, 312, 45, 714, 255, 815, 414, 215), nrow = 3)
@@ -198,16 +192,16 @@ test_that("fuzzy params quorum", {
 
     expect_identical(
         fuzzy_errors(function(any_district) quorum_all(any_district, total)),
-        "length(any_district) == 1 && is.numeric(any_district) && !is.na(any_district) is not TRUE")
+        "`any_district` must be a single number")
     expect_identical(
         fuzzy_errors(function(any_district) quorum_any(any_district, total)),
-        "length(any_district) == 1 && is.numeric(any_district) && !is.na(any_district) is not TRUE")
+        "`any_district` must be a single number")
     expect_identical(
         fuzzy_errors(function(total) quorum_all(any_district, total)),
-        "length(total) == 1 && is.numeric(total) && !is.na(total) is not TRUE")
+        "`total` must be a single number")
     expect_identical(
         fuzzy_errors(function(total) quorum_any(any_district, total)),
-        "length(total) == 1 && is.numeric(total) && !is.na(total) is not TRUE")
+         "`total` must be a single number")
 
     # apply_quorum
     votes = c(81, 9, 10)
@@ -278,7 +272,7 @@ test_that("fuzzy params helpers", {
     em = fuzzy_errors(function(x) ceil_at(x, threshold))
     expect_identical(
         em,
-        "all(!is.na(x)) && all(is.numeric(x)) && all(x >= 0) is not TRUE")
+        "!anyNA(x) && all(is.numeric(x)) && all(x >= 0) is not TRUE")
     em = fuzzy_errors(function(threshold) ceil_at(x, threshold))
     expect_identical(
         em,

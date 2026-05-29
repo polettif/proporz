@@ -44,12 +44,10 @@ upper_apportionment = function(votes_matrix, district_seats,
     .dsn = deparse(substitute(district_seats))
     votes_matrix <- prep_votes_matrix(votes_matrix, .vmn)
     district_seats <- prep_district_seats(district_seats, votes_matrix, .dsn, .vmn)
-    if(!(length(weight_votes) == 1 && is.logical(weight_votes) && !is.na(weight_votes))) {
-        stop("`weight_votes` must be TRUE or FALSE", call. = FALSE)
-    }
+    assert_bool1(weight_votes)
 
     # district seats
-    if(length(district_seats) == 1) {
+    if(length(district_seats) == 1L) {
         seats_district = proporz(colSums(votes_matrix), district_seats, method)
     } else {
         assert(length(district_seats) == ncol(votes_matrix))
