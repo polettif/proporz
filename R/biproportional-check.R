@@ -61,13 +61,14 @@ prep_district_seats = function(district_seats, votes_matrix,
             stop("`", .district_seats.name, "` must have unique names without NA's", call. = FALSE)
         }
 
-        # Either both are named (then check names) or one of them is NULL
-        if(!identical(sort(colnames(votes_matrix)), sort(names(district_seats)))) {
+        # Either both are named or both are unnamed
+        if(!equal_names(colnames(votes_matrix), names(district_seats))) {
             stop("`", .district_seats.name,
                  "` must have the same names as the columns in `",
                  .votes_matrix.name, "`", call. = FALSE)
         }
-        if(!is.null(colnames(votes_matrix))) { # seats vector is named/unnamed like matrix
+        if(!is.null(colnames(votes_matrix))) {
+            # seats vector is named like matrix
             district_seats <- district_seats[colnames(votes_matrix)]
         }
     }
@@ -99,7 +100,7 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
              call. = FALSE)
     }
 
-    if(!is.numeric(votes_df[[3]]) || any(votes_df[[3]] < 0)) {
+    if(!is.numeric(votes_df[[3]]) || any(votes_df[[3]] < 0) || anyNA(votes_df[[3]])) {
         stop("Vote values in `", .votes_df,
              "`s third column must be numbers >= 0", call. = FALSE)
     }
@@ -107,6 +108,10 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
     if(!is.data.frame(district_seats_df) ||
        (is.data.frame(district_seats_df) && nrow(district_seats_df) == 0)) {
         stop("`", .district_seats_df, "` must be a data.frame", call. = FALSE)
+    }
+    if(!is.numeric(district_seats_df[[2]]) || any(district_seats_df[[2]] < 0) || anyNA(district_seats_df[[2]])) {
+        stop("Seat values in `", .district_seats_df,
+             "`s second column must be numbers >= 0", call. = FALSE)
     }
     if(length(unique(district_seats_df[[1]])) != nrow(district_seats_df)) {
         stop("District ids in `", .district_seats_df,

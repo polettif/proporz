@@ -13,7 +13,7 @@ has_duplicates_or_NA = function(x) {
 }
 
 assert_no_duplicates = function(vec) {
-    stopifnot(anyDuplicated(vec) == 0L)
+    assert(anyDuplicated(vec) == 0L)
     invisible(TRUE)
 }
 
@@ -93,4 +93,8 @@ assert_num1 = function(x) {
         stop("`", deparse(substitute(x)), "` must be a single number", call. = FALSE)
     }
     invisible(TRUE)
+}
+
+equal_names = function(x, y) {
+    setequal(x, y) && !has_duplicates_or_NA(x) && !has_duplicates_or_NA(y)
 }

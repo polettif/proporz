@@ -320,7 +320,7 @@ prep_seats_cols = function(seats_cols, votes_matrix) {
     assert(all((seats_cols %% 1) == 0))
     assert(length(seats_cols) == ncol(votes_matrix))
 
-    if(!identical(sort(colnames(votes_matrix)), sort(names(seats_cols)))) {
+    if(!equal_names(colnames(votes_matrix), names(seats_cols))) {
         stop("seats_cols must have the same names as the votes_matrix column", call. = FALSE)
     }
     if(!is.null(names(seats_cols))) {
@@ -334,7 +334,7 @@ prep_seats_rows = function(seats_rows, votes_matrix) {
     assert(all((seats_rows %% 1) == 0))
     assert(length(seats_rows) == nrow(votes_matrix))
 
-    if(!identical(sort(rownames(votes_matrix)), sort(names(seats_rows)))) {
+    if(!equal_names(rownames(votes_matrix), names(seats_rows))) {
         stop("seats_rows must have the same names as the votes_matrix rows", call. = FALSE)
     }
     if(!is.null(names(seats_rows))) {

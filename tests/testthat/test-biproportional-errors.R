@@ -193,6 +193,12 @@ test_that("error messages", {
     expect_error_fixed(pukelsheim(vdf_non_num, seats_df),
                        "Vote values in `vdf_non_num`s third column must be numbers >= 0")
 
+    seats_df_non_num = seats_df
+    seats_df_non_num$seats <- as.character(seats_df_non_num$seats)
+    expect_error_fixed(
+        pukelsheim(vdf, seats_df_non_num),
+        "Seat values in `seats_df_non_num`s second column must be numbers >= 0")
+
     # negative votes
     vdf_neg = vdf
     vdf_neg$votes <- vdf_neg$votes-500
