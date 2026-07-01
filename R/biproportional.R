@@ -72,7 +72,8 @@ biproporz = function(votes_matrix,
                      weight_votes = TRUE,
                      method = "round",
                      ...) {
-    weight_votes <- catch_deprecated_use_list_votes(weight_votes, ...)
+    assert_empty_dots("use_list_votes", list(...))
+    weight_votes <- catch_deprecated_use_list_votes(weight_votes, list(...))
 
     # check parameters
     .vmn = deparse(substitute(votes_matrix))
@@ -170,7 +171,8 @@ pukelsheim = function(votes_df, district_seats_df,
                       weight_votes = TRUE,
                       winner_take_one = FALSE,
                       ...) {
-    weight_votes <- catch_deprecated_use_list_votes(weight_votes, ...)
+    assert_empty_dots("use_list_votes", list(...))
+    weight_votes <- catch_deprecated_use_list_votes(weight_votes, list(...))
 
     check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, weight_votes, winner_take_one,
                             deparse(substitute(votes_df)), deparse(substitute(district_seats_df)))

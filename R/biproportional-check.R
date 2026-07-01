@@ -198,8 +198,7 @@ is_flow_criterion_pair = function(x, base) {
     return(any(x) && length(x_districts_not_covered_by_base) == 0)
 }
 
-catch_deprecated_use_list_votes = function(weight_votes, ...) {
-    dots = list(...)
+catch_deprecated_use_list_votes = function(weight_votes, dots) {
     if("use_list_votes" %in% names(dots)) {
         if(getOption("proporz_use_list_votes_info", TRUE)) {
             message("The parameter `use_list_votes` has been renamed to `weight_votes`")
@@ -208,4 +207,20 @@ catch_deprecated_use_list_votes = function(weight_votes, ...) {
         weight_votes <- dots[["use_list_votes"]]
     }
     return(weight_votes)
+}
+
+assert_empty_dots = function(allowed_params, dots) {
+    if(length(dots) > 0) {
+        unknown = setdiff(names(dots), allowed_params)
+        unknown <- unknown[unknown != ""]
+        if(length(unknown) > 0) {
+            stop("Unknown argument (", collapse_names(unknown),
+                 "). `...` must be empty.",
+                 call. = FALSE)
+        }
+        if(any(is.null(names(dots)))) {
+            stop("`...` must be empty.", call. = FALSE)
+        }
+    }
+    invisible(TRUE)
 }

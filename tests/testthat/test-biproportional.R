@@ -266,6 +266,26 @@ test_that("catch use_list_votes in ...", {
     expect_identical(b1, b2)
 })
 
+test_that("empty ...", {
+    expect_error(
+        biproporz(NULL, NULL, dummy = FALSE),
+        "Unknown argument ('dummy'). `...` must be empty.", fixed = TRUE)
+    expect_error(
+        pukelsheim(NULL, NULL, dummy1 = FALSE, dummy2 = NA),
+        "Unknown argument ('dummy1', 'dummy2'). `...` must be empty.", fixed = TRUE)
+    expect_error(
+        biproporz(NULL, NULL, dummy = FALSE, use_list_votes = FALSE),
+        "Unknown argument ('dummy'). `...` must be empty.", fixed = TRUE)
+
+    biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE, weight_votes = FALSE)
+
+    expect_error(
+        biproporz(uri2020$votes_matrix, uri2020$seats_vector,
+                  quorum_all(any_district = 0.1, total = 0.25), TRUE, "round",
+                  "more_args", list("even more")),
+        "`...` must be empty")
+})
+
 test_that("deprecated weight_list_votes", {
     expect_warning(
         weight_list_votes(M1, 1:3), class = "deprecatedWarning",
