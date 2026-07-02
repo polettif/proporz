@@ -85,10 +85,10 @@ test_that("highest_averages_method", {
     expect_error(highest_averages_method(v, 3, c(0.5, 1.5)),
                  "Number of divisors is not equal to the number of seats")
 
-    expect_error(highest_averages_method(v, 3, "geometric"),
-                 "is.numeric(divisors) is not TRUE", fixed = TRUE)
-    expect_error(highest_averages_method(v, 3, -c(0.5, 1.5)),
-                 "divisors >= 0 is not TRUE", fixed = TRUE)
-    expect_error(highest_averages_method(v, 3, matrix(c(0.5, 1.5))),
-                 "is.null(dim(divisors)) is not TRUE", fixed = TRUE)
+    expect_error_fixed(highest_averages_method(v, 3, "geometric"),
+                 "is.numeric(divisors) is not TRUE")
+    expect_error_fixed(highest_averages_method(v, 3, -c(0.5, 1.5)),
+                 "divisors >= 0 is not TRUE")
+    expect_error_fixed(highest_averages_method(v, 3, matrix(c(0.5, 1.5))),
+                 "is.null(dim(divisors)) is not TRUE")
 })

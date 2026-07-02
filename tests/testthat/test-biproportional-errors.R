@@ -1,5 +1,3 @@
-expect_error_fixed = function(...) testthat::expect_error(..., fixed = TRUE)
-
 test_that("undefined result biproportional", {
     seats = c(10, 20, 1, 1)
     set.seed(1284)

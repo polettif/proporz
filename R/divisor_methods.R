@@ -19,7 +19,8 @@
 #' @examples
 #' highest_averages_method(c(5200, 1700, 3100), 15, 0.5)
 #'
-#' highest_averages_method(votes = c(50, 0, 30), n_seats = 3,
+#' highest_averages_method(votes = c(A = 50, B = 0, C = 30),
+#'                         n_seats = 3,
 #'                         divisors = c(0, 1.3333, 2.4))
 #' @export
 highest_averages_method = function(votes, n_seats, divisors) {

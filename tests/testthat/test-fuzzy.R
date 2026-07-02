@@ -296,3 +296,5 @@ test_that("fuzzy params pivot", {
     em = fuzzy_errors(function(matrix_wide) pivot_to_df(matrix_wide, value_colname))
     expect_identical(em, "is.matrix(matrix_wide) is not TRUE")
 })
+
+rm(fuzz_params, fuzzy_errors)

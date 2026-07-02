@@ -1,12 +1,9 @@
-expect_error_fixed = function(...) testthat::expect_error(..., fixed = TRUE)
-
 # proportional ####
 test_that("quorum proporz", {
     method_list = unique(unlist(proporz_methods, use.names = FALSE))
 
     for(method in method_list) {
-        expect_error(proporz(c(50, 30), 3, method, 60), "No party reached the quorum",
-                     fixed = TRUE)
+        expect_error_fixed(proporz(c(50, 30), 3, method, 60), "No party reached the quorum")
     }
 })
 
@@ -170,8 +167,8 @@ test_that("apply_quorum", {
     expect_identical(sum(apply_quorum(vm, c(FALSE, FALSE))), 0)
     expect_error_fixed(apply_quorum(vm, c(FALSE)), "length(quorum) == nrow(votes_matrix) is not TRUE")
 
-    expect_error(apply_quorum(vc, quorum_all(0.5)),
-                 "Quorum parameter must be a single number >= 0", fixed = TRUE)
-    expect_error(apply_quorum(vc, -1),
-                 "Quorum parameter must be a single number >= 0", fixed = TRUE)
+    expect_error_fixed(apply_quorum(vc, quorum_all(0.5)),
+                 "Quorum parameter must be a single number >= 0")
+    expect_error_fixed(apply_quorum(vc, -1),
+                 "Quorum parameter must be a single number >= 0")
 })

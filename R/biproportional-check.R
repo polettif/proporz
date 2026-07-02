@@ -49,7 +49,7 @@ prep_district_seats = function(district_seats, votes_matrix,
 
     if(length(district_seats) > 1) {
         if(is.data.frame(district_seats)) {
-            district_seats <- setNames(district_seats[[2]], district_seats[[1]])
+            district_seats <- stats::setNames(district_seats[[2]], district_seats[[1]])
         }
         if(ncol(votes_matrix) != length(district_seats)) {
             stop("`", trim_deparse_substitute(.votes_matrix.name),

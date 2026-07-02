@@ -22,11 +22,10 @@ test_that("proporz parameter range", {
                        method_impl %in% c("divisor_ceiling", "divisor_geometric", "divisor_harmonic") &&
                        n_seats > 0) {
                         .method_impl = gsub("divisor_", "", method_impl, fixed = TRUE)
-                        expect_error(
+                        expect_error_fixed(
                             proporz(votes, n_seats, method_impl),
                             paste0("With ", .method_impl, " rounding there must be at ",
-                                   "least as many seats as there are parties with non-zero votes"),
-                            fixed = TRUE)
+                                   "least as many seats as there are parties with non-zero votes"))
                     } else {
                         seats = proporz(votes, n_seats, method_impl)
                         assert(is.integer(seats))
@@ -47,12 +46,12 @@ test_that("proporz parameter range", {
     # unsupported values
     for(method_impl in method_list) {
         for(n_seats in list(NA, NULL, -1, 1.1, c(1, 1))) {
-            expect_error(proporz(c(100, 10, 5), n_seats, method_impl), "`n_seats` must be an integer >= 0")
+            expect_error_fixed(proporz(c(100, 10, 5), n_seats, method_impl), "`n_seats` must be an integer >= 0")
         }
     }
     for(method_impl in method_list) {
         for(votes in list(NA, NULL, -1)) {
-            expect_error(proporz(votes, 3, method_impl), "`votes` must be a numeric vector >= 0", fixed = TRUE)
+            expect_error_fixed(proporz(votes, 3, method_impl), "`votes` must be a numeric vector >= 0")
         }
     }
 })

@@ -2,12 +2,11 @@
 #'
 #' Calculate seat apportionment for legislative bodies.
 #'
-#' @param votes numeric vector with number of votes for each party
-#' @param n_seats total number of seats
+#' @param votes numeric vector with the number of votes for each party
+#' @param n_seats total number of seats (integer)
 #' @param method Apportionment method to use, as character. Not case sensitive. See details.
 #' @param quorum Vote threshold a party must reach. Used as fraction of total
-#'               votes within if less than 1 otherwise as number
-#'               of votes.
+#'               votes if less than 1, otherwise as number of votes.
 #'
 #' @details The following methods are available: `r .doc_proporz_methods()`
 #'
@@ -43,12 +42,7 @@ proporz = function(votes, n_seats, method, quorum = 0) {
     proporz_func(votes, n_seats, quorum)
 }
 
-#' List of method names and their implementation
-#'
-#' Names can be used in [proporz()] or [biproporz()], the list entries
-#' denote the name of the implementation function.
-#' @returns Named list of methods
-#' @keywords internal
+# List of method names and their implementation
 proporz_methods = list(
     "d'hondt" = "divisor_floor",
     "jefferson" = "divisor_floor",

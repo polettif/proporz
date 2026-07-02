@@ -38,8 +38,8 @@
 #'   }
 #'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
 #'   use a different method for the upper and lower apportionment, provide a list with two
-#'   entries.
-#' @param ... ignored (available for backwards compatibility)
+#'   method names.
+#' @param ... ignored (used for backwards compatibility)
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'   with the default Sainte-Laguë/Webster method.
@@ -50,9 +50,9 @@
 #'
 #' @seealso [pukelsheim()] for biproportional apportionment with `data.frames` as inputs.
 #'
-#' @returns Matrix with the same dimension as `votes_matrix` containing the number of seats
-#'   with the row and column divisors stored in attributes (hidden from print, see
-#'   [get_divisors()]).
+#' @returns Matrix with the same dimension as `votes_matrix` containing the number of seats.
+#'   Row/party and column/district divisors are stored in attributes (hidden from print(),
+#'   use [get_divisors()] or [summary()]).
 #'
 #' @examples
 #' votes_matrix = uri2020$votes_matrix
@@ -64,7 +64,10 @@
 #' biproporz(votes_matrix, district_seats,
 #'           quorum_all(any_district = 0.1, total = 0.25))
 #'
-#' @importFrom stats setNames
+#' # print divisors and seat sums with summary
+#' bp = biproporz(votes_matrix, district_seats, weight_votes = FALSE)
+#' summary(bp)
+#'
 #' @export
 biproporz = function(votes_matrix,
                      district_seats,
@@ -137,7 +140,7 @@ biproporz = function(votes_matrix,
 #' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
 #'   must get _at least_ one seat ('Majorzbedingung') in this district. This only applies if
 #'   the district winnig party is entitled to a seat in the upper apportionment. Default is `FALSE`.
-#' @param ... ignored (available for backwards compatibility)
+#' @param ... ignored (used for backwards compatibility)
 #'
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'

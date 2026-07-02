@@ -145,16 +145,15 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
     return(passed_any_distr_quor)
 }
 
-#' Apply a list of quorum functions to a votes matrix
+#' Apply a list of quorum functions to rows in a votes matrix
 #'
 #' @param votes_matrix votes matrix
-#' @param quorum_funcs List of quorum functions. If list, the attribute "type"
+#' @param quorum_funcs function or list of quorum functions. For lists, the attribute "type"
 #'                     must be set which indicates whether `ALL` or `ANY`
-#'                     (i.e. at least one) quorum must be reached.
+#'                     (i.e. at least one) quorums must be reached.
 #'
-#' This is a low-level implementation for quorum calculations and is
-#' called within [biproporz()]. There's generally no need to call it
-#' directly.
+#' This is a internal, low-level implementation for quorum calculations and is
+#' called within [biproporz()].
 #'
 #' @seealso \code{\link[=quorum_functions]{quorum_functions}} to create a list of quorum
 #'   functions.

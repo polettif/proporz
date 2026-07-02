@@ -13,6 +13,7 @@
 #'     # It's possible to load a matrix with the app
 #'     run_app(uri2020$votes_matrix, uri2020$seats_vector)
 #' }
+#' @importFrom stats setNames
 #' @export
 run_app = function(votes_matrix = NULL, district_seats = NULL) {
     # load packages / "import" ####
@@ -278,17 +279,22 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
     shiny::shinyApp(ui = ui, server = server)
 }
 
+# nocov end
+
 # helper functions ####
 shiny_create_empty_votes_matrix = function(nrows, ncols) {
+    assert(nrows >= 0)
+    assert(ncols >= 0)
     m = matrix(0, nrows, ncols)
-    colnames(m) <- paste("District ", 1:ncols)
-    rownames(m) <- paste("Party ", 1:nrows)
+    colnames(m) <- paste0("District ", 1:ncols)
+    rownames(m) <- paste0("Party ", 1:nrows)
     return(m)
 }
 
-shiny_create_seats_matrix = function(
-        votes_matrix,
-        district_seats = setNames(rep(0, ncol(votes_matrix)), colnames(votes_matrix))) {
+shiny_create_seats_matrix = function(votes_matrix,
+                                     district_seats = setNames(rep(0, ncol(votes_matrix)), colnames(votes_matrix))) {
+    assert(is.matrix(votes_matrix))
+    assert(is.numeric(district_seats))
     if(length(district_seats) == 1L) {
         district_seats_matrix = matrix(district_seats, 1, 1,
                                        dimnames = list("seats", "total"))
@@ -300,7 +306,10 @@ shiny_create_seats_matrix = function(
 }
 
 shiny_get_quorum_function = function(q_districts, q_total, q_all) {
+    assert_num1(q_districts)
+    assert_num1(q_total)
     if(q_districts > 0 && q_total > 0) {
+        assert_bool1(q_all)
         if(q_all) {
             return(quorum_all(any_district = q_districts, total = q_total))
         } else {
@@ -313,6 +322,5 @@ shiny_get_quorum_function = function(q_districts, q_total, q_all) {
     if(q_total > 0) {
         return(quorum_any(total = q_total))
     }
+    return(NULL)
 }
-
-# nocov end

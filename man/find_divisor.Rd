@@ -19,7 +19,7 @@ within \code{round_func})}
 \item{round_func}{rounding function}
 }
 \value{
-divisor
+divisor (single number)
 }
 \description{
 Find a divisor between \code{divisor_from} and \code{divisor_to} such that

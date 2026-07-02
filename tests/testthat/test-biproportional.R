@@ -1,5 +1,3 @@
-expect_error_fixed = function(...) testthat::expect_error(..., fixed = TRUE)
-
 # basic apportionment steps ####
 
 # https://en.wikipedia.org/wiki/biproporz_apportionment
@@ -60,9 +58,8 @@ test_that("biproporz", {
 test_that("weight_votes_matrix", {
     vm = matrix(c(110,50,20,10), 2)
     vmw = weight_votes_matrix(vm, c(10, 2))
-    expect_error(weight_votes_matrix(vm, 1),
-                 "`length(district_seats)` must be the same as `ncol(votes_matrix)`",
-                 fixed = TRUE)
+    expect_error_fixed(weight_votes_matrix(vm, 1),
+                 "`length(district_seats)` must be the same as `ncol(votes_matrix)`")
     expect_equal(vmw, matrix(c(110/10,50/10,20/2,10/2), 2), tolerance = 1e-14)
     colnames(vm) <- c("A", "B")
     ds = setNames(c(1,1), c("B", "X"))
@@ -259,27 +256,28 @@ test_that("catch use_list_votes in ...", {
     expect_message(
         biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE),
         "The parameter `use_list_votes` has been renamed to `weight_votes`")
+    expect_false(getOption("proporz_use_list_votes_info"))
     expect_no_message(biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
     b1 = suppressMessages(
         biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE))
     b2 = biproporz(uri2020$votes_matrix, uri2020$seats_vector, weight_votes = FALSE)
     expect_identical(b1, b2)
+    options("proporz_use_list_votes_info" = NULL)
 })
 
 test_that("empty ...", {
-    expect_error(
+    expect_error_fixed(
         biproporz(NULL, NULL, dummy = FALSE),
-        "Unknown argument ('dummy'). `...` must be empty.", fixed = TRUE)
-    expect_error(
+        "Unknown argument ('dummy'). `...` must be empty.")
+    expect_error_fixed(
         pukelsheim(NULL, NULL, dummy1 = FALSE, dummy2 = NA),
-        "Unknown argument ('dummy1', 'dummy2'). `...` must be empty.", fixed = TRUE)
-    expect_error(
+        "Unknown argument ('dummy1', 'dummy2'). `...` must be empty.")
+    expect_error_fixed(
         biproporz(NULL, NULL, dummy = FALSE, use_list_votes = FALSE),
-        "Unknown argument ('dummy'). `...` must be empty.", fixed = TRUE)
+        "Unknown argument ('dummy'). `...` must be empty.")
+    expect_true(is.null(getOption("proporz_use_list_votes_info")))
 
-    biproporz(uri2020$votes_matrix, uri2020$seats_vector, use_list_votes = FALSE, weight_votes = FALSE)
-
-    expect_error(
+    expect_error_fixed(
         biproporz(uri2020$votes_matrix, uri2020$seats_vector,
                   quorum_all(any_district = 0.1, total = 0.25), TRUE, "round",
                   "more_args", list("even more")),
@@ -291,3 +289,5 @@ test_that("deprecated weight_list_votes", {
         weight_list_votes(M1, 1:3), class = "deprecatedWarning",
         "weight_list_votes has been renamed to weight_votes_matrix")
 })
+
+rm(M1, M2, suomi19_distr_seats, suomi19_votes, d1, d2, p1, p2)

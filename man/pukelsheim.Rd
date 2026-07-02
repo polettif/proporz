@@ -44,7 +44,7 @@ number of \emph{voters} (e.g. because they can only vote for one party).}
 must get \emph{at least} one seat ('Majorzbedingung') in this district. This only applies if
 the district winnig party is entitled to a seat in the upper apportionment. Default is \code{FALSE}.}
 
-\item{...}{ignored (available for backwards compatibility)}
+\item{...}{ignored (used for backwards compatibility)}
 }
 \value{
 A data.frame like \code{votes_df} with a new column denoting the number of seats per

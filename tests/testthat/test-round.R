@@ -16,12 +16,12 @@ test_that("ceil_at", {
     expect_identical(ceil_at(M, 0), ceiling(M))
     expect_identical(ceil_at(M, 1), floor(M))
 
-    expect_error(proporz(1,1, "unkown method"))
-    expect_error(ceil_at(1.6, NA), "is.na")
-    expect_error(ceil_at(1.6, -1), "Threshold argument must be in [0,1]", fixed = TRUE)
-    expect_error(ceil_at(0.5, "x"), 'Numeric value, "harmonic" or "geometric" expected for threshold argument')
-    expect_error(ceil_at(-1, 0))
-    expect_error(ceil_at(NA, 0))
+    expect_error_fixed(proporz(1,1, "unkown method"))
+    expect_error_fixed(ceil_at(1.6, NA), "is.na")
+    expect_error_fixed(ceil_at(1.6, -1), "Threshold argument must be in [0,1]")
+    expect_error_fixed(ceil_at(0.5, "x"), 'Numeric value, "harmonic" or "geometric" expected for threshold argument')
+    expect_error_fixed(ceil_at(-1, 0))
+    expect_error_fixed(ceil_at(NA, 0))
 })
 
 test_that("ceil_at harmonic/geometric", {

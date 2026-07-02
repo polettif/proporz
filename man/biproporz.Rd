@@ -49,14 +49,14 @@ apportionment (which uses the Sainte-Laguë/Webster method). See
 }
 It is also possible to use any divisor method name listed in \code{\link[=proporz]{proporz()}}. If you want to
 use a different method for the upper and lower apportionment, provide a list with two
-entries.}
+method names.}
 
-\item{...}{ignored (available for backwards compatibility)}
+\item{...}{ignored (used for backwards compatibility)}
 }
 \value{
-Matrix with the same dimension as \code{votes_matrix} containing the number of seats
-with the row and column divisors stored in attributes (hidden from print, see
-\code{\link[=get_divisors]{get_divisors()}}).
+Matrix with the same dimension as \code{votes_matrix} containing the number of seats.
+Row/party and column/district divisors are stored in attributes (hidden from print(),
+use \code{\link[=get_divisors]{get_divisors()}} or \code{\link[=summary]{summary()}}).
 }
 \description{
 Method to proportionally allocate seats among parties (or lists) and districts (or
@@ -91,6 +91,10 @@ biproporz(votes_matrix, district_seats)
 # apply quorum (high values for illustrative purposes)
 biproporz(votes_matrix, district_seats,
           quorum_all(any_district = 0.1, total = 0.25))
+
+# print divisors and seat sums with summary
+bp = biproporz(votes_matrix, district_seats, weight_votes = FALSE)
+summary(bp)
 
 }
 \references{
