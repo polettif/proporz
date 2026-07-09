@@ -1,6 +1,16 @@
 # Read a bazi data file
 read_bazi_data = function(file.bazi) {
-	lines = readLines(file.bazi, warn = FALSE, encoding = "UTF-8")
+    lines = tryCatch({
+        con = file(file.bazi, encoding = "windows-1252")
+        readLines(con)
+    }, warning = \(w) {
+        if(startsWith(w$message, "incomplete final line found")) {
+            con = file(file.bazi, encoding = "windows-1252")
+            return(readLines(con, warn = FALSE))
+        }
+        readLines(file.bazi, warn = FALSE)
+    })
+	Encoding(lines) <- "UTF-8"
 	stopifnot(all(!grepl("::TOKEN::", lines)))
 
 	vals = .get_token_values(lines)

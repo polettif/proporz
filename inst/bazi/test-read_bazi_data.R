@@ -11,5 +11,5 @@ bazi_files = list.files("data",
                         pattern = "\\.bazi$")
 
 for(.bazi_file in bazi_files) {
-    testthat::expect_no_error(read_bazi_data(.bazi_file))
+    testthat::expect_no_condition(read_bazi_data(.bazi_file))
 }
