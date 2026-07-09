@@ -80,7 +80,7 @@ load_bazi_dir = function(path) {
     stopifnot(dir.exists(path))
     stopifnot(!endsWith(path, "/"))
     bazi_data_list = list.files(path, full.names = T, recursive = T, pattern = "bazi")
-    bazi_data_list <- lapply(bazi_data_list, read_bazi_data)
+    bazi_data_list <- lapply(bazi_data_list, read_bazi)
     names(bazi_data_list) <- lapply(bazi_data_list, getElement, "filename")
     bazi_data_list
 }
@@ -91,7 +91,7 @@ bazi_examples = c(
     load_bazi_dir("data/zTest_data/NZZ_problems/Diverse"),
     load_bazi_dir("data/zTest_data/NZZ_problems/AH1-AH14"),
     # tied votes are actually broken in alternate scaling
-    "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(read_bazi_data("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
+    "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(read_bazi("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
     )
 
 # Fix/remove datasets with issues ####

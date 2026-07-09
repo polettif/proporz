@@ -12,6 +12,6 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^\.github$
-^inst/bazi/data/
+^inst/test-bazi/data/
 ^inst/test-shinyapp
 ^man/figures/shinyapp-example-2.gif

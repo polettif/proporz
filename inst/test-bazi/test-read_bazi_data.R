@@ -9,7 +9,7 @@ bazi_files = list.files("data",
                         pattern = "\\.bazi$")
 
 for(.bazi_file in bazi_files) {
-    bd = testthat::expect_no_condition(read_bazi_data(.bazi_file))
+    bd = testthat::expect_no_condition(read_bazi(.bazi_file))
     testthat::expect_s3_class(bd$data, "data.frame")
     testthat::expect_true(length(bd$seats) >= 1)
 }
