@@ -27,6 +27,18 @@ read_bazi_data = function(file.bazi) {
         vals <- .parse_bazi_multiple_districts(vals)
     }
 
+    # reorder tokens
+    assert(!has_duplicates_or_NA(names(vals)))
+
+    token_order = c("TITLE", "METHOD", "INPUT", "OUTPUT", "ENCODING", "ACCURACY", "PATTS",
+                    "DISTRICT", "DISTRICTOPTION", "SEATS", "DATA", "INFO", "filename",
+                    "district_seats_data",
+                    "data", "seats")
+    assert(names(vals) %in% token_order)
+    vals <- vals[intersect(token_order, names(vals))]
+
+    assert(!anyNA(names(vals)) && all(names(vals) != ""))
+
     class(vals) <- c("bazi_data", "list")
 
     return(vals)
@@ -113,7 +125,11 @@ read_bazi_data = function(file.bazi) {
     vals$data <- .read.table_bazi(vals[["DATA"]])
     cns = trimws(strsplit1(vals[["INPUT"]], ","))
     colnames(vals$data) <- cns[seq(1, ncol(vals$data))]
-    vals$seats <- suppressWarnings(as.integer(vals[["SEATS"]]))
+    if(is.null(vals[["SEATS"]])) {
+        vals$seats <- NA
+    } else {
+        vals$seats <- suppressWarnings(as.integer(vals[["SEATS"]]))
+    }
     vals
 }
 
@@ -137,12 +153,15 @@ read_bazi_data = function(file.bazi) {
 
 .parse_bazi_multiple_districts = function(vals) {
     # more than one disctrict data
-    distrikt_mandate_daten = vals[names(vals) %in% c("DISTRICT", "SEATS", "DATA")]
-    stopifnot(length(unique(table(names(distrikt_mandate_daten)))) == 1)
+    district_seats_data = vals[names(vals) %in% c("DISTRICT", "SEATS", "DATA")]
+    stopifnot(length(unique(table(names(district_seats_data)))) == 1)
+
+    assert(identical(names(district_seats_data),
+                     rep(c("DISTRICT", "SEATS", "DATA"), length(district_seats_data) / 3)))
 
     # split into sets of three
-    district_data_list = split(distrikt_mandate_daten,
-                               rep(seq_len(length(distrikt_mandate_daten) / 3), each = 3))
+    district_data_list = split(district_seats_data,
+                               rep(seq_len(length(district_seats_data) / 3), each = 3))
 
     trimquotes = function(y) {
         if(startsWith(y, '"') || startsWith(y, "'")) y <- substring(y, 2, nchar(y))
@@ -180,6 +199,16 @@ read_bazi_data = function(file.bazi) {
                    SEATS = as.integer(dmd[["SEATS"]]))
     })
     vals$seats <- do.call(rbind, vals$seats)
+
+    # move mulitple district data to sublist
+    vals <- vals[!names(vals) %in% c("DISTRICT", "SEATS", "DATA")]
+    vals$DISTRICT <- unlist(unname(district_seats_data[seq(1, length(district_seats_data), 3)]))
+    vals$SEATS <- unlist(unname(district_seats_data[seq(2, length(district_seats_data), 3)]))
+    vals$DATA <- unlist(unname(district_seats_data[seq(3, length(district_seats_data), 3)]))
+
+    vals[["INPUT2"]] <- unique(vals[c("INPUT", "INPUT")])[[1]]
+    vals <- vals[!names(vals) %in% c("INPUT")]
+    names(vals)[names(vals) == "INPUT2"] <- "INPUT"
 
     vals
 }
