@@ -7,8 +7,6 @@
 # with biproporz(). The apportionment results are not validated, this
 # script is intended to find unexpected errors.
 
-source("bazi.R")
-
 library(proporz)
 
 # Setup functions ####
@@ -83,8 +81,8 @@ pukelsheim_bazi = function(bazi_data) {
 load_bazi_dir = function(path) {
     stopifnot(dir.exists(path))
     stopifnot(!endsWith(path, "/"))
-    bazi_data_list = list.files(path, full.names = T, recursive = T, pattern = "bazi") |>
-        lapply(read_bazi_data)
+    bazi_data_list = list.files(path, full.names = T, recursive = T, pattern = "bazi")
+    bazi_data_list <- lapply(bazi_data_list, proporz:::read_bazi_data)
     names(bazi_data_list) <- lapply(bazi_data_list, getElement, "filename")
     bazi_data_list
 }
@@ -95,7 +93,7 @@ bazi_examples = c(
     load_bazi_dir("data/zTest_data/NZZ_problems/Diverse"),
     load_bazi_dir("data/zTest_data/NZZ_problems/AH1-AH14"),
     # tied votes are actually broken in alternate scaling
-    "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(read_bazi_data("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
+    "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(proporz:::read_bazi_data("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
     )
 
 # Remove datasets with issues ####

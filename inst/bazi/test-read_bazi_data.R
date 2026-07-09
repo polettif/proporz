@@ -3,9 +3,7 @@
 # Direct URL: https://www.tha.de/Binaries/Binary78393/data.zip
 # Extract to "data/" folder
 
-source("bazi.R")
-
-bazi_files = list.files("data",
+bazi_files = list.files("./inst/bazi/data",
                         full.names = TRUE,
                         recursive = TRUE,
                         pattern = "\\.bazi$")
