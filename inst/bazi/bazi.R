@@ -37,6 +37,9 @@ read_bazi_data = function(file.bazi) {
 	lines <- trimws(lines)
 
 	# rename tokens
+	gsub. = function(x, pattern, replacement, ignore.case = TRUE) {
+	    gsub(pattern, replacement, x, ignore.case = ignore.case)
+	}
 	lines <- lines |>
 		gsub.("=TITEL=", "=TITLE=") |>
 		gsub.("=METHODE=", "=METHOD=") |>
@@ -146,7 +149,7 @@ read_bazi_data = function(file.bazi) {
 	data_list = district_data_list |>
 		lapply(\(dmd) {
 			x = strsplit1(dmd[["DATA"]], "\n")
-			x <- gsub.(x, "^\\+", "")
+			x <- gsub("^\\+", "", x)
 			x <- lapply(x, \(x) {
 				if(!grepl('"', dmd[["DISTRICT"]])) {
 					return(paste0('"', dmd[["DISTRICT"]], '" ', x))
@@ -162,15 +165,15 @@ read_bazi_data = function(file.bazi) {
 		lapply(\(txt) {
 			read.table(text = txt, fill = TRUE,
 					   col.names = c("DISTRIKT", trimws(strsplit1(vals[["INPUT"]], ","))))
-		}) |>
-		rbind_list()
+		})
+	vals$data <- do.call(rbind, vals$data)
 
 	# district seats
 	vals$seats <- district_data_list |>
 		lapply(\(dmd) {
 			data.frame(district = dmd[["DISTRICT"]], seats = as.integer(dmd[["SEATS"]]))
-		}) |>
-		rbind_list()
+		})
+	vals$seats <- do.call(rbind, vals$seats)
 
 	vals
 }
@@ -184,12 +187,8 @@ strsplit1 = function(x, split, fixed = FALSE) {
 	strsplit(x, split, fixed = fixed)[[1]]
 }
 
-rbind_list = function(l) {
-	do.call(rbind, l)
-}
-
-gsub. = function(x, pattern, replacement, ignore.case = TRUE) {
-	gsub(pattern, replacement, x, ignore.case = ignore.case)
+strcount = function(x, pattern) {
+	length(gregexpr(pattern, x)[[1]])
 }
 
 fill_plus = function(x) {
@@ -199,8 +198,4 @@ fill_plus = function(x) {
 	lvls = cumsum(y)
 
 	values[lvls]
-}
-
-strcount = function(x, pattern) {
-	length(gregexpr(pattern, x)[[1]])
 }
