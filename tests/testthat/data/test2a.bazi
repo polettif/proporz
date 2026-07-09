@@ -1,0 +1,13 @@
+=TITLE= seat vector as table
+=METHOD= DivStd
+=OUTPUT= output
+=INPUT= party, votes, X, ---
+=DISTRICT= distrname
+=SEATS= 10
+=DATA= 
+"Party 1"  651 x
+"Party 2"  349 x 
+"Party 3"   50 x
+=INFO=
+Example from readme
+=END=

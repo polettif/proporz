@@ -7,17 +7,13 @@
 # with biproporz(). The apportionment results are not validated, this
 # script is intended to find unexpected errors.
 
-source("bazi.R")
-
-library(proporz)
-
 # Setup functions ####
 get_proporz_method = function(bazi_data) {
-    if(!is.null(bazi_data$DISTRIKTOPTION) && tolower(bazi_data$DISTRIKTOPTION) == "nzz") {
+    if(!is.null(bazi_data$DISTRICTOPTION) && tolower(bazi_data$DISTRICTOPTION) == "nzz") {
         return("nzz")
     }
 
-    data_method = tolower(gsub(" ", "", bazi_data$METHODE))
+    data_method = tolower(gsub(" ", "", bazi_data$METHOD))
     if(data_method == "divstd") {
         method = list("round", "round")
     } else if(data_method == "divauf") {
@@ -31,7 +27,7 @@ get_proporz_method = function(bazi_data) {
     } else if(data_method == "divabr,divstd") {
         method = list("divisor_floor", "divisor_round")
     } else {
-        stop(bazi_data$METHODE)
+        stop(bazi_data$METHOD)
     }
     return(method)
 }
@@ -42,6 +38,7 @@ nzz = function(vm, ds) {
     # weighted votes are rounded with the nzz method
     rounded_matrix = ceil_at(weighted_votes_matrix, 0.5)
     seats_party = proporz(rowSums(rounded_matrix), sum(ds), "round")
+    names(seats_party) <- rownames(vm)
 
     seats_matrix = lower_apportionment(vm, ds, seats_party)
     t(seats_matrix)
@@ -64,8 +61,8 @@ pukelsheim_bazi = function(bazi_data) {
     weight_votes = !bazi_data$filename %in% no_vote_weighting
 
     # run biproporz
-    vm = pivot_to_matrix(bazi_data$data[,c(2,1,3)])
-    ds = setNames(bazi_data$seats$seats, bazi_data$seats$district)
+    vm = pivot_to_matrix(bazi_data$data[, c(2,1,3)])
+    ds = setNames(bazi_data$seats[["SEATS"]], bazi_data$seats[["DISTRICT"]])
 
     if("nzz" %in% unlist(method)) {
         if(!weight_votes) {
@@ -82,8 +79,8 @@ pukelsheim_bazi = function(bazi_data) {
 load_bazi_dir = function(path) {
     stopifnot(dir.exists(path))
     stopifnot(!endsWith(path, "/"))
-    bazi_data_list = list.files(path, full.names = T, recursive = T, pattern = "bazi") |>
-        lapply(read_bazi_data)
+    bazi_data_list = list.files(path, full.names = T, recursive = T, pattern = "bazi")
+    bazi_data_list <- lapply(bazi_data_list, read_bazi)
     names(bazi_data_list) <- lapply(bazi_data_list, getElement, "filename")
     bazi_data_list
 }
@@ -94,18 +91,22 @@ bazi_examples = c(
     load_bazi_dir("data/zTest_data/NZZ_problems/Diverse"),
     load_bazi_dir("data/zTest_data/NZZ_problems/AH1-AH14"),
     # tied votes are actually broken in alternate scaling
-    "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(read_bazi_data("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
+    "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(read_bazi("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
     )
 
-# Remove datasets with issues ####
+# Fix/remove datasets with issues ####
 # typo: XI as district name instead of IX
-bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/MLB-michigan.bazi"]] <- NULL
+bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/MLB-michigan.bazi"]]$data$DISTRICT[17:18] <- "=District IX="
+bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/MLB-michigan.bazi"]]$seats$DISTRICT[9] <- "=District IX="
+
+# parsing: additional undefined column between party and votes
+bazi_examples[["data/zTest_data/NZZ_problems/Diverse/FP1.bazi"]]$data$Parteist. <- NULL
 
 # typo: EINGABE only with 2 instead of 3 values (missing ",")
 bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/Swiss2003Sim5006M.bazi"]] <- NULL
 
-# parsing: additional undefined column between party and votes
-bazi_examples[["data/zTest_data/NZZ_problems/Diverse/FP1.bazi"]] <- NULL
+# "Numerischer Problemfall zum Testen des NZZ-Algorithmus" (2 gleichberechtigte Unterzuteilungen)
+bazi_examples[["data/zTest_data/NZZ_problems/AH1-AH14/AH2.bazi"]] <- NULL
 
 # Run workable datasets, expecting no errors ####
 for(bazi_data in bazi_examples) {

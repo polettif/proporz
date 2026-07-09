@@ -1,5 +1,5 @@
 # based on fuzzr package
-fuzz_params = readRDS(test_path("test-fuzzy.rds"))
+fuzz_params = readRDS(test_path("data/test-fuzzy.rds"))
 
 fuzzy_errors = function(fun) {
     msg = lapply(fuzz_params,
