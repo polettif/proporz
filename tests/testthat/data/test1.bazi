@@ -1,0 +1,29 @@
+=TITEL= Beispieldatei 1
+=METHODE= DivStd
+=AUSGABE= Ausgabemethode
+=EINGABE= Liste, Parteistimmen
+=DISTRIKTOPTION= biprop
+=DISTRICT= "Region 1"
+=MANDATE= 10
+=DATEN=
+"01"	11500
+"02"	10900
+"03"	9000
+"04"	7000
+=DISTRIKT= Region 2"
+=MANDATE= 6
+=DATEN=
+"01"	2800
+"02"	1600
+"03"	1500
+"04"	2900
+=DISTRIKT= 'Region 3
+=MANDATE= 4
+=DATEN=
+"01"	2300
+"02"	1700
+"03"	950
+"04"	1500
+=INFO=
+Testdatei
+=ENDE=

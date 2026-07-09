@@ -8,7 +8,7 @@ read_bazi_data = function(file.bazi) {
             con = file(file.bazi, encoding = "windows-1252")
             return(readLines(con, warn = FALSE))
         }
-        readLines(file.bazi, warn = FALSE)
+        readLines(file.bazi, warn = FALSE) # nocov
     })
     Encoding(lines) <- "UTF-8"
     stopifnot(all(!grepl("::TOKEN::", lines)))
@@ -144,15 +144,23 @@ read_bazi_data = function(file.bazi) {
     district_data_list = split(distrikt_mandate_daten,
                                rep(seq_len(length(distrikt_mandate_daten) / 3), each = 3))
 
+    trimquotes = function(y) {
+        if(startsWith(y, '"') || startsWith(y, "'")) y <- substring(y, 2, nchar(y))
+        if(endsWith(y, '"') || endsWith(y, '"')) y <- substring(y, 1, nchar(y) - 1)
+        y
+    }
+
     # data votes
     data_list = lapply(district_data_list, function(dmd) {
+        distr = trimquotes(dmd[["DISTRICT"]])
         x = strsplit1(dmd[["DATA"]], "\n")
         x <- gsub("^\\+", "", x)
+        # add district name as first element
         x <- lapply(x, function(x) {
             if(!grepl('"', dmd[["DISTRICT"]])) {
-                return(paste0('"', dmd[["DISTRICT"]], '" ', x))
+                return(paste0('"', distr, '" ', x))
             } else if(!grepl("'", dmd[["DISTRICT"]])) {
-                return(paste0("'", dmd[["DISTRICT"]], "' ", x))
+                return(paste0("'", distr, "' ", x))
             }
             stop() # nocov
         })
@@ -162,13 +170,14 @@ read_bazi_data = function(file.bazi) {
 
     vals$data <- lapply(data_list, function(txt) {
         utils::read.table(text = txt, fill = TRUE,
-                          col.names = c("DISTRIKT", trimws(strsplit1(vals[["INPUT"]], ","))))
+                          col.names = c("DISTRICT", trimws(strsplit1(vals[["INPUT"]], ","))))
     })
     vals$data <- do.call(rbind, vals$data)
 
     # district seats
     vals$seats <- lapply(district_data_list, function(dmd) {
-        data.frame(district = dmd[["DISTRICT"]], seats = as.integer(dmd[["SEATS"]]))
+        data.frame(DISTRICT = trimquotes(dmd[["DISTRICT"]]),
+                   SEATS = as.integer(dmd[["SEATS"]]))
     })
     vals$seats <- do.call(rbind, vals$seats)
 

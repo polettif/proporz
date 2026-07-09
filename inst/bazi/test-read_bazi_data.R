@@ -3,11 +3,12 @@
 # Direct URL: https://www.tha.de/Binaries/Binary78393/data.zip
 # Extract to "data/" folder
 
-bazi_files = list.files("./inst/bazi/data",
+bazi_files = list.files("data",
                         full.names = TRUE,
                         recursive = TRUE,
                         pattern = "\\.bazi$")
 
 for(.bazi_file in bazi_files) {
-    testthat::expect_no_condition(read_bazi_data(.bazi_file))
+    bd = testthat::expect_no_condition(proporz:::read_bazi_data(.bazi_file))
+    testthat::expect_s3_class(bd$data, "data.frame")
 }

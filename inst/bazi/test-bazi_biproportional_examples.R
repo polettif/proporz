@@ -63,8 +63,8 @@ pukelsheim_bazi = function(bazi_data) {
     weight_votes = !bazi_data$filename %in% no_vote_weighting
 
     # run biproporz
-    vm = pivot_to_matrix(bazi_data$data[,c(2,1,3)])
-    ds = setNames(bazi_data$seats$seats, bazi_data$seats$district)
+    vm = pivot_to_matrix(bazi_data$data[, c(2,1,3)])
+    ds = setNames(bazi_data$seats[["SEATS"]], bazi_data$seats[["DISTRICT"]])
 
     if("nzz" %in% unlist(method)) {
         if(!weight_votes) {
@@ -96,15 +96,19 @@ bazi_examples = c(
     "data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi" = list(proporz:::read_bazi_data("data/zTest_data/NZZ_problems/Tied_cases/AS1.bazi"))
     )
 
-# Remove datasets with issues ####
+# Fix/remove datasets with issues ####
 # typo: XI as district name instead of IX
-bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/MLB-michigan.bazi"]] <- NULL
+bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/MLB-michigan.bazi"]]$data$DISTRICT[17:18] <- "=District IX="
+bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/MLB-michigan.bazi"]]$seats$DISTRICT[9] <- "=District IX="
+
+# parsing: additional undefined column between party and votes
+bazi_examples[["data/zTest_data/NZZ_problems/Diverse/FP1.bazi"]]$data$Parteist. <- NULL
 
 # typo: EINGABE only with 2 instead of 3 values (missing ",")
 bazi_examples[["data/zTest_data/Biproportional_problems/Diverse/Swiss2003Sim5006M.bazi"]] <- NULL
 
-# parsing: additional undefined column between party and votes
-bazi_examples[["data/zTest_data/NZZ_problems/Diverse/FP1.bazi"]] <- NULL
+# "Numerischer Problemfall zum Testen des NZZ-Algorithmus" (2 gleichberechtigte Unterzuteilungen)
+bazi_examples[["data/zTest_data/NZZ_problems/AH1-AH14/AH2.bazi"]] <- NULL
 
 # Run workable datasets, expecting no errors ####
 for(bazi_data in bazi_examples) {
