@@ -17,7 +17,7 @@ read_bazi_data = function(file.bazi) {
 	vals$filename <- file.bazi
 
 	if(length(unique(names(vals))) == length(vals)) {
-		if(strcount(vals$DATEN, "\n\\+") <= 2) {
+		if(strcount(vals[["DATA"]], "\n\\+") <= 2) {
 			vals <- .parse_bazi_single_district(vals)
 		} else {
 			# district data per party
@@ -38,27 +38,28 @@ read_bazi_data = function(file.bazi) {
 
 	# rename tokens
 	lines <- lines |>
-		gsub.("=TITLE=", "=TITEL=") |>
-		gsub.("=METHOD=", "=METHODE=") |>
-		gsub.("=INPUT=", "=EINGABE=") |>
-		gsub.("=OUTPUT=", "=AUSGABE=") |>
-		gsub.("=DISTRICT=", "=DISTRIKT=") |>
-		gsub.("=DISTRICTOPTION=", "=DISTRIKTOPTION=") |>
-		gsub.("=SEATS=", "=MANDATE=") |>
-		gsub.("=DATA=", "=DATEN=") |>
-		gsub.("=END=", "=ENDE=") |>
-		gsub.("=ENCODING=", "=KODIERUNG=") |>
-		gsub.("=ACCURACY=", "=GENAUIGKEIT=")
+		gsub.("=TITEL=", "=TITLE=") |>
+		gsub.("=METHODE=", "=METHOD=") |>
+		gsub.("=EINGABE=", "=INPUT=") |>
+		gsub.("=AUSGABE=", "=OUTPUT=") |>
+		gsub.("=DISTRIKT=", "=DISTRICT=") |>
+		gsub.("=DISTRIKTOPTION=", "=DISTRICTOPTION=") |>
+		gsub.("=MANDATE=", "=SEATS=") |>
+        gsub.("=MANDATES=", "=SEATS=") |>
+		gsub.("=DATEN=", "=DATA=") |>
+		gsub.("=ENDE=", "=END=") |>
+		gsub.("=KODIERUNG=", "=ENCODING=") |>
+		gsub.("=GENAUIGKEIT=", "=ACCURACY=")
 
 	# trim to end
-	end_index = which(lines == "=ENDE=")
+	end_index = which(lines == "=END=")
 	stopifnot(length(end_index) == 1)
 	lines <- lines[1:end_index]
 
 	# all tokens
-	tokens = c("TITEL", "METHODE", "AUSGABE", "EINGABE", "DISTRIKTOPTION",
-			   "DISTRIKT", "MANDATE", "MANDATES",
-			   "DATEN", "INFO", "PATTS", "KODIERUNG", "GENAUIGKEIT")
+	tokens = c("TITLE", "METHOD", "OUTPUT", "INPUT", "DISTRICTOPTION",
+			   "DISTRICT", "SEATS",
+			   "DATA", "INFO", "PATTS", "ENCODING", "ACCURACY")
 
 	# sanitize info
 	info_index = which(startsWith(lines, "=INFO="))
@@ -79,13 +80,13 @@ read_bazi_data = function(file.bazi) {
 					paste0("::TOKEN::",token,"\n"),
 					txt, ignore.case = TRUE)
 	}
-	stopifnot(!any(grepl("\n=[A-Z]+=", gsub("=ENDE=", "", txt))))
+	stopifnot(!any(grepl("\n=[A-Z]+=", gsub("=END=", "", txt))))
 	tokenized_lines = strsplit1(txt, "\n")
 
 	# create list from tokens
 	token_index = which(startsWith(tokenized_lines, "::TOKEN::"))
 	token_index <- c(token_index, length(tokenized_lines))
-	stopifnot(tokenized_lines[length(tokenized_lines)] == "=ENDE=")
+	stopifnot(tokenized_lines[length(tokenized_lines)] == "=END=")
 
 	token_data_list = list()
 	token_names = list()
@@ -107,34 +108,34 @@ read_bazi_data = function(file.bazi) {
 }
 
 .parse_bazi_single_district = function(vals) {
-	vals$data <- .read.table_bazi(vals$DATEN)
-	cns = trimws(strsplit1(vals$EINGABE, ","))
+	vals$data <- .read.table_bazi(vals[["DATA"]])
+	cns = trimws(strsplit1(vals[["INPUT"]], ","))
 	colnames(vals$data) <- cns[seq(1,ncol(vals$data))]
-	vals$seats <- suppressWarnings(as.integer(vals$MANDATE))
+	vals$seats <- suppressWarnings(as.integer(vals[["SEATS"]]))
 	vals
 }
 
 .parse_bazi_single_district_party_fill = function(vals) {
-	vals$DATEN <- gsub("\n\\+", "\n\\+ ", vals$DATEN)
-	vals$data <- .read.table_bazi(vals$DATEN)
+	vals[["DATA"]] <- gsub("\n\\+", "\n\\+ ", vals[["DATA"]])
+	vals$data <- .read.table_bazi(vals[["DATA"]])
 
 	vals$data[[1]] <- fill_plus(vals$data[[1]])
-	cns = trimws(strsplit1(vals$EINGABE, ","))
+	cns = trimws(strsplit1(vals[["INPUT"]], ","))
 	if(length(cns) == ncol(vals$data) && cns[length(cns)] == "---") {
 		cns <- cns[-length(cns)]
 	}
 
-	colnames(vals$data) <- c(cns[1], "DISTRIKT",
+	colnames(vals$data) <- c(cns[1], "DISTRICT",
 							 cns[2:length(cns)])
 
-	vals$seats <- suppressWarnings(as.integer(vals$MANDATE))
+	vals$seats <- suppressWarnings(as.integer(vals[["SEATS"]]))
 
 	vals
 }
 
 .parse_bazi_multiple_districts = function(vals) {
 	# more than one disctrict data
-	distrikt_mandate_daten = vals[names(vals) %in% c("DISTRIKT", "MANDATE", "DATEN")]
+	distrikt_mandate_daten = vals[names(vals) %in% c("DISTRICT", "SEATS", "DATA")]
 	stopifnot(length(unique(table(names(distrikt_mandate_daten)))) == 1)
 
 	# split into sets of three
@@ -144,13 +145,13 @@ read_bazi_data = function(file.bazi) {
 	# data votes
 	data_list = district_data_list |>
 		lapply(\(dmd) {
-			x = strsplit1(dmd$DATEN, "\n")
+			x = strsplit1(dmd[["DATA"]], "\n")
 			x <- gsub.(x, "^\\+", "")
 			x <- lapply(x, \(x) {
-				if(!grepl('"', dmd$DISTRIKT)) {
-					return(paste0('"', dmd$DISTRIKT, '" ', x))
-				} else if(!grepl("'", dmd$DISTRIKT)) {
-					return(paste0("'", dmd$DISTRIKT, "' ", x))
+				if(!grepl('"', dmd[["DISTRICT"]])) {
+					return(paste0('"', dmd[["DISTRICT"]], '" ', x))
+				} else if(!grepl("'", dmd[["DISTRICT"]])) {
+					return(paste0("'", dmd[["DISTRICT"]], "' ", x))
 				}
 				stop() # nocov
 			})
@@ -160,14 +161,14 @@ read_bazi_data = function(file.bazi) {
 	vals$data <- data_list |>
 		lapply(\(txt) {
 			read.table(text = txt, fill = TRUE,
-					   col.names = c("DISTRIKT", trimws(strsplit1(vals$EINGABE, ","))))
+					   col.names = c("DISTRIKT", trimws(strsplit1(vals[["INPUT"]], ","))))
 		}) |>
 		rbind_list()
 
 	# district seats
 	vals$seats <- district_data_list |>
 		lapply(\(dmd) {
-			data.frame(district = dmd$DISTRIKT, seats = as.integer(dmd$MANDATE))
+			data.frame(district = dmd[["DISTRICT"]], seats = as.integer(dmd[["SEATS"]]))
 		}) |>
 		rbind_list()
 

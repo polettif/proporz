@@ -13,11 +13,11 @@ library(proporz)
 
 # Setup functions ####
 get_proporz_method = function(bazi_data) {
-    if(!is.null(bazi_data$DISTRIKTOPTION) && tolower(bazi_data$DISTRIKTOPTION) == "nzz") {
+    if(!is.null(bazi_data$DISTRICTOPTION) && tolower(bazi_data$DISTRICTOPTION) == "nzz") {
         return("nzz")
     }
 
-    data_method = tolower(gsub(" ", "", bazi_data$METHODE))
+    data_method = tolower(gsub(" ", "", bazi_data$METHOD))
     if(data_method == "divstd") {
         method = list("round", "round")
     } else if(data_method == "divauf") {
@@ -31,7 +31,7 @@ get_proporz_method = function(bazi_data) {
     } else if(data_method == "divabr,divstd") {
         method = list("divisor_floor", "divisor_round")
     } else {
-        stop(bazi_data$METHODE)
+        stop(bazi_data$METHOD)
     }
     return(method)
 }
@@ -42,6 +42,7 @@ nzz = function(vm, ds) {
     # weighted votes are rounded with the nzz method
     rounded_matrix = ceil_at(weighted_votes_matrix, 0.5)
     seats_party = proporz(rowSums(rounded_matrix), sum(ds), "round")
+    names(seats_party) <- rownames(vm)
 
     seats_matrix = lower_apportionment(vm, ds, seats_party)
     t(seats_matrix)
