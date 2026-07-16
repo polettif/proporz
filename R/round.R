@@ -3,9 +3,9 @@
 #' Round `x` up to `ceiling(x)` if `x-floor(x) >= threshold`,
 #' otherwise round down to `floor(x)`.
 #'
-#' @param x numeric vector or matrix >= 0 (`NaN` is not supported)
-#' @param threshold threshold in \[0,1\] or "harmonic"/"geometric" to use
-#'   harmonic or geometric mean thresholds
+#' @param x Numeric atomic vector or matrix with values >= 0 (`NaN` is not supported)
+#' @param threshold Numeric threshold value in \[0,1\] or "harmonic"/"geometric" to use
+#'   harmonic or geometric mean thresholds.
 #'
 #' @returns the rounded vector or matrix
 #'

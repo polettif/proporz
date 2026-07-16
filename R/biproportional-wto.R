@@ -74,7 +74,7 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
 #'   are named. If a single value is supplied (like `1` as default), it is used as the number of
 #'   seats for every district.
 #'
-#' @returns logical matrix with the same dimensions and names as `votes_matrix`
+#' @returns Logical matrix with the same dimensions and names as `votes_matrix`
 #'
 #' @details If two or more parties are tied and there are not enough seats for each tied party,
 #'   the matrix value is `NA`.

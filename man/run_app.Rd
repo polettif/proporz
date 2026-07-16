@@ -7,9 +7,9 @@
 run_app(votes_matrix = NULL, district_seats = NULL)
 }
 \arguments{
-\item{votes_matrix}{optional votes_matrix to load upon start}
+\item{votes_matrix}{Optional votes_matrix to load upon start}
 
-\item{district_seats}{optional district_seats to load upon start}
+\item{district_seats}{Optional district_seats to load upon start}
 }
 \value{
 Calling the function starts the shiny app

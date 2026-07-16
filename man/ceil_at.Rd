@@ -7,10 +7,10 @@
 ceil_at(x, threshold)
 }
 \arguments{
-\item{x}{numeric vector or matrix >= 0 (\code{NaN} is not supported)}
+\item{x}{Numeric atomic vector or matrix with values >= 0 (\code{NaN} is not supported)}
 
-\item{threshold}{threshold in [0,1] or "harmonic"/"geometric" to use
-harmonic or geometric mean thresholds}
+\item{threshold}{Numeric threshold value in [0,1] or "harmonic"/"geometric" to use
+harmonic or geometric mean thresholds.}
 }
 \value{
 the rounded vector or matrix

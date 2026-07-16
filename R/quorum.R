@@ -5,20 +5,22 @@
 #' applied prior to seat distributions.
 #'
 #' @param any_district Vote threshold a party must reach in \emph{at least} one
-#'   district. Used as share of total votes within a district if less than 1
-#'   otherwise as number of votes. Must be greater than 0. Uses
-#'   [reached_quorum_any_district()].
+#'   district. Used as share of total votes within a district if less than 1,
+#'   otherwise as number of votes.
+#'   Must be > 0 if provided.
+#'   Uses [reached_quorum_any_district()].
 #' @param total Vote threshold a party must reach for all votes cast. Used as
-#'   share of total votes if less than 1. Otherwise as number of votes. Note that
-#'   votes are not weighted with [weight_votes_matrix()] across districts. Must be
-#'   greater than 0. Uses [reached_quorum_total()].
+#'   share of total votes if less than 1, otherwise as number of votes. Note that
+#'   votes are not weighted with [weight_votes_matrix()] across districts.
+#'   Must be > 0 if provided.
+#'   Uses [reached_quorum_total()].
 #'
-#' @details There's a difference in how the functions work. With `quorum_any`,
+#' @details There is a difference in how the two functions work. With `quorum_any`,
 #'   \emph{at least one} quorum must be reached. With `quorum_all` \emph{all}
 #'   (i.e. both) quorums must be reached. If you only use one parameter,
 #'   `quorum_any()` and `quorum_all()` are identical.
 #'
-#' @returns a function which, when called with `function(votes_matrix)`, returns
+#' @returns A function which, when called with `function(votes_matrix)`, returns
 #'   a boolean vector with length equal to the number of lists/parties
 #'   (`votes_matrix` rows). The vector shows whether a party has reached any/all
 #'   quorums.
@@ -87,7 +89,7 @@ create_quorum_function_list = function(type, any_district, total) {
 #'
 #' Base implementation, used by \code{\link[=quorum_functions]{quorum_functions}}.
 #'
-#' @param votes_matrix votes matrix
+#' @param votes_matrix Votes matrix
 #' @param quorum_total Vote threshold a party must reach for all votes cast.
 #'                     Used as fraction of total votes if less than 1, otherwise
 #'                     as number of votes. Must be greater than 0.
@@ -121,7 +123,7 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #'
 #' Base implementation, used by \code{\link[=quorum_functions]{quorum_functions}}.
 #'
-#' @param votes_matrix votes matrix
+#' @param votes_matrix Votes matrix
 #' @param quorum_districts Vote threshold a party must reach in \emph{at least}
 #'                         one district. Used as fraction of total votes within a
 #'                         district if less than 1, otherwise as number of votes.
@@ -147,12 +149,12 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 
 #' Apply a list of quorum functions to rows in a votes matrix
 #'
-#' @param votes_matrix votes matrix
-#' @param quorum_funcs function or list of quorum functions. For lists, the attribute "type"
-#'                     must be set which indicates whether `ALL` or `ANY`
-#'                     (i.e. at least one) quorums must be reached.
+#' @param votes_matrix Votes matrix
+#' @param quorum_funcs A function or a list of quorum functions. For lists, the attribute
+#'   "type" must be set which indicates whether `ALL` or `ANY` (i.e. at least one) quorums
+#'   must be reached.
 #'
-#' This is a internal, low-level implementation for quorum calculations and is
+#' This is an internal, low-level implementation for quorum calculations and is
 #' called within [biproporz()].
 #'
 #' @seealso \code{\link[=quorum_functions]{quorum_functions}} to create a list of quorum
@@ -185,9 +187,9 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 #' Apply quorum to votes vector or matrix
 #'
 #' This quorum calculation implementation is called within [proporz()], [biproporz()] and
-#' related functions. Generally, there's no need to call `apply_quorum` directly.
+#' related functions. Generally, there is no need to call `apply_quorum` directly.
 #'
-#' @param votes votes vector or votes matrix
+#' @param votes Votes vector or votes matrix
 #' @param quorum Depending on `votes`:
 #'   * For a vector: Vote threshold a party must reach. Used as fraction of total
 #'   votes if less than 1 otherwise as number of votes.

@@ -36,7 +36,7 @@ collapse_names = function(x, x_names = NULL) {
     return(out)
 }
 
-trim_deparse_substitute = function(x) {
+trim_varname = function(x) {
     x <- x[1]
     if(nchar(x) > 33) {
         return(paste0(substring(x, 1, 30), "..."))

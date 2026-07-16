@@ -7,7 +7,7 @@
 apply_quorum(votes, quorum)
 }
 \arguments{
-\item{votes}{votes vector or votes matrix}
+\item{votes}{Votes vector or votes matrix}
 
 \item{quorum}{Depending on \code{votes}:
 \itemize{
@@ -23,7 +23,7 @@ specified quorum have their votes set to zero.
 }
 \description{
 This quorum calculation implementation is called within \code{\link[=proporz]{proporz()}}, \code{\link[=biproporz]{biproporz()}} and
-related functions. Generally, there's no need to call \code{apply_quorum} directly.
+related functions. Generally, there is no need to call \code{apply_quorum} directly.
 }
 \examples{
 # vector

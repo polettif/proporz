@@ -7,16 +7,16 @@
 find_divisor(votes, divisor_from, divisor_to, target_seats, round_func)
 }
 \arguments{
-\item{votes}{votes (matrix with only one column or vector, allows to use row/colnames
+\item{votes}{Votes (matrix with only one column or vector, allows to use row/colnames
 within \code{round_func})}
 
-\item{divisor_from}{lower bound for divisor search range (is decreased if necessary)}
+\item{divisor_from}{Lower bound for divisor search range (is decreased if necessary)}
 
-\item{divisor_to}{upper bound for divisor search range (is increased if necessary)}
+\item{divisor_to}{Upper bound for divisor search range (is increased if necessary)}
 
-\item{target_seats}{number of seats to distribute (single number)}
+\item{target_seats}{Number of seats to distribute (single number)}
 
-\item{round_func}{rounding function}
+\item{round_func}{Rounding function}
 }
 \value{
 divisor (single number)

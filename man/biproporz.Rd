@@ -55,7 +55,7 @@ It is also possible to use any divisor method name listed in \code{\link[=propor
 use a different method for the upper and lower apportionment, provide a list with two
 method names.}
 
-\item{...}{ignored (used for backwards compatibility)}
+\item{...}{Ignored (used for backwards compatibility)}
 }
 \value{
 Matrix with the same dimension as \code{votes_matrix} containing the number of seats.

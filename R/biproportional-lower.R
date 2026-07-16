@@ -21,10 +21,10 @@
 #'     region is correct with the chosen rounding method.
 #' }
 #'
-#' @param votes_matrix matrix with votes by party in rows and votes by district in columns.
-#' @param seats_cols number of seats per column (districts/regions), predetermined or
+#' @param votes_matrix Matrix with votes by party in rows and votes by district in columns.
+#' @param seats_cols Number of seats per column (districts/regions), predetermined or
 #'   calculated with [upper_apportionment()].
-#' @param seats_rows number of seats per row (parties/lists), calculated with
+#' @param seats_rows Number of seats per row (parties/lists), calculated with
 #'   [upper_apportionment()].
 #' @param method Apportion method that defines how seats are assigned. The
 #'   following methods are supported:
@@ -121,11 +121,11 @@ lower_apportionment = function(votes_matrix, seats_cols,
 #'
 #' Apply row and column divisors to matrix to get non-rounded seat values.
 #'
-#' @param M matrix
-#' @param col_divisors divisors to apply to columns
-#' @param row_divisors divisors to apply to rows
+#' @param M Matrix
+#' @param col_divisors Divisors to apply to columns
+#' @param row_divisors Divisors to apply to rows
 #'
-#' @returns matrix with the same dimension as `M` containing non-rounded seat values
+#' @returns A matrix with the same dimension as `M` containing non-rounded seat values
 #' @keywords internal
 divide_votes_matrix = function(M, col_divisors, row_divisors) {
     M_district = row_as_matrix(col_divisors, M)
@@ -139,9 +139,9 @@ divide_votes_matrix = function(M, col_divisors, row_divisors) {
 #' Find divisors for a matrix with alternate scaling
 #'
 #' @param M votes_matrix
-#' @param seats_cols target seats for each column
-#' @param seats_rows target seats for each row
-#' @param round_func rounding function. Called like
+#' @param seats_cols Target seats for each column
+#' @param seats_rows Target seats for each row
+#' @param round_func Rounding function. Called like
 #'   `round_func(M/row_divisors/col_divisors)`, divisors are applied row/col-wise with
 #'   [divide_votes_matrix()].
 #'
@@ -254,12 +254,12 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 #' Find a divisor between `divisor_from` and `divisor_to` such that
 #' `sum(round_func(votes/divisor))` equals `target_seats`
 #'
-#' @param votes votes (matrix with only one column or vector, allows to use row/colnames
+#' @param votes Votes (matrix with only one column or vector, allows to use row/colnames
 #'   within `round_func`)
-#' @param divisor_from lower bound for divisor search range (is decreased if necessary)
-#' @param divisor_to upper bound for divisor search range (is increased if necessary)
-#' @param target_seats number of seats to distribute (single number)
-#' @param round_func rounding function
+#' @param divisor_from Lower bound for divisor search range (is decreased if necessary)
+#' @param divisor_to Upper bound for divisor search range (is increased if necessary)
+#' @param target_seats Number of seats to distribute (single number)
+#' @param round_func Rounding function
 #'
 #' @returns divisor (single number)
 #' @keywords internal

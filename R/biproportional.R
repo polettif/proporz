@@ -39,7 +39,7 @@
 #'   It is also possible to use any divisor method name listed in [proporz()]. If you want to
 #'   use a different method for the upper and lower apportionment, provide a list with two
 #'   method names.
-#' @param ... ignored (used for backwards compatibility)
+#' @param ... Ignored (used for backwards compatibility)
 #'
 #' @note The iterative process in the lower apportionment is only guaranteed to terminate
 #'   with the default Sainte-Laguë/Webster method.
@@ -117,30 +117,31 @@ biproporz = function(votes_matrix,
 #' }
 #'
 #' Parties failing to reach quorums cannot get seats. This function does not handle seat
-#' assignment to candidates.
+#' assignment to candidates within party lists.
 #'
 #' If you want to use other apportion methods than Sainte-Laguë use [biproporz()].
 #'
-#' @param votes_df data.frame (long format) with 3 columns (actual colnames can differ):
+#' @param votes_df `data.frame` (long format) with 3 columns (actual colnames can differ):
 #'                 \enumerate{
 #'                   \item party id/name (character)
 #'                   \item district id/name (character)
 #'                   \item votes (numeric)
 #'                   }
-#' @param district_seats_df data.frame with 2 columns (actual colnames can differ):
+#' @param district_seats_df `data.frame` with 2 columns (actual colnames can differ):
 #'                          \enumerate{
 #'                            \item district id/name (character)
 #'                            \item number of seats for a district (numeric)
 #'                          }
 #' @inheritParams biproporz
-#' @param new_seats_col name of the new column
+#' @param new_seats_col Name of the new column
 #' @param weight_votes By default (`TRUE`) it is assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Set to `FALSE` if `votes_df` shows the
 #'   number of _voters_ (e.g. because they can only vote for one party).
 #' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
 #'   must get _at least_ one seat ('Majorzbedingung') in this district. This only applies if
-#'   the district winnig party is entitled to a seat in the upper apportionment. Default is `FALSE`.
-#' @param ... ignored (used for backwards compatibility)
+#'   the district winnig party is entitled to a seat in the upper apportionment.
+#'   Default is `FALSE`.
+#' @param ... Ignored (used for backwards compatibility)
 #'
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
@@ -177,8 +178,9 @@ pukelsheim = function(votes_df, district_seats_df,
     assert_empty_dots("use_list_votes", list(...))
     weight_votes <- catch_deprecated_use_list_votes(weight_votes, list(...))
 
-    check_params.pukelsheim(votes_df, district_seats_df, new_seats_col, weight_votes, winner_take_one,
-                            deparse(substitute(votes_df)), deparse(substitute(district_seats_df)))
+    check_params.pukelsheim(
+        votes_df, district_seats_df, new_seats_col, weight_votes, winner_take_one,
+        deparse(substitute(votes_df)), deparse(substitute(district_seats_df)))
 
     # Create votes matrix
     votes_matrix = pivot_to_matrix(votes_df) # list_ids must be rows

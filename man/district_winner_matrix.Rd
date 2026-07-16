@@ -16,7 +16,7 @@ are named. If a single value is supplied (like \code{1} as default), it is used 
 seats for every district.}
 }
 \value{
-logical matrix with the same dimensions and names as \code{votes_matrix}
+Logical matrix with the same dimensions and names as \code{votes_matrix}
 }
 \description{
 Create a logical matrix that shows whether a party got the most votes in a district or not.

@@ -4,7 +4,7 @@
 #' This method provides easier access to divisors stored in
 #' `attributes(...)$divisors`.
 #'
-#' @param biproporz_result a matrix created by [biproporz()] or a
+#' @param biproporz_result A matrix created by [biproporz()] or a
 #'   data.frame created by [pukelsheim()]
 #'
 #' @returns The district and party divisors (named "districts" and "parties") in a list, each

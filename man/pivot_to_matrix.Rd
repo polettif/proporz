@@ -10,12 +10,11 @@ pivot_to_matrix(df_long)
 pivot_to_df(matrix_wide, value_colname = "values")
 }
 \arguments{
-\item{df_long}{data.frame in long format with exactly 3 columns}
+\item{df_long}{\code{data.frame} in long format with exactly 3 columns}
 
-\item{matrix_wide}{matrix in wide format}
+\item{matrix_wide}{Matrix in wide format}
 
-\item{value_colname}{name for the new value column in the
-resulting data.frame}
+\item{value_colname}{Name for the new value column in the resulting data.frame}
 }
 \value{
 A data.frame with 3 columns or a matrix. Note that the results are

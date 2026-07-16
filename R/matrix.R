@@ -9,10 +9,9 @@
 #' customization. They mainly exist because reshape is hard to handle and the
 #' package should have no dependencies.
 #
-#' @param df_long data.frame in long format with exactly 3 columns
-#' @param matrix_wide matrix in wide format
-#' @param value_colname name for the new value column in the
-#'                      resulting data.frame
+#' @param df_long `data.frame` in long format with exactly 3 columns
+#' @param matrix_wide Matrix in wide format
+#' @param value_colname Name for the new value column in the resulting data.frame
 #'
 #' @returns A data.frame with 3 columns or a matrix. Note that the results are
 #'          sorted by the first and second column (data.frame) or row/column

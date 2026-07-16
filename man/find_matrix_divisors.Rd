@@ -9,11 +9,11 @@ find_matrix_divisors(M, seats_cols, seats_rows, round_func)
 \arguments{
 \item{M}{votes_matrix}
 
-\item{seats_cols}{target seats for each column}
+\item{seats_cols}{Target seats for each column}
 
-\item{seats_rows}{target seats for each row}
+\item{seats_rows}{Target seats for each row}
 
-\item{round_func}{rounding function. Called like
+\item{round_func}{Rounding function. Called like
 \code{round_func(M/row_divisors/col_divisors)}, divisors are applied row/col-wise with
 \code{\link[=divide_votes_matrix]{divide_votes_matrix()}}.}
 }

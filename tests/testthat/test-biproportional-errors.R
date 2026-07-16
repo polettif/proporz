@@ -164,7 +164,7 @@ test_that("error messages", {
     # unique party ids
     vdf_dupl = rbind(vdf, vdf[9:12,])
     expect_error_fixed(pukelsheim(vdf_dupl, seats_df),
-                       "There are duplicate party-district pairs in `vdf_dupl`.")
+                       "There are duplicate party-district pairs in `vdf_dupl`")
 
     # unique district ids
     expect_error_fixed(pukelsheim(vdf_dupl, rbind(seats_df, seats_df)),

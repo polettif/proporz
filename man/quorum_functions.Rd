@@ -12,17 +12,19 @@ quorum_any(any_district, total)
 }
 \arguments{
 \item{any_district}{Vote threshold a party must reach in \emph{at least} one
-district. Used as share of total votes within a district if less than 1
-otherwise as number of votes. Must be greater than 0. Uses
-\code{\link[=reached_quorum_any_district]{reached_quorum_any_district()}}.}
+district. Used as share of total votes within a district if less than 1,
+otherwise as number of votes.
+Must be > 0 if provided.
+Uses \code{\link[=reached_quorum_any_district]{reached_quorum_any_district()}}.}
 
 \item{total}{Vote threshold a party must reach for all votes cast. Used as
-share of total votes if less than 1. Otherwise as number of votes. Note that
-votes are not weighted with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}} across districts. Must be
-greater than 0. Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}}.}
+share of total votes if less than 1, otherwise as number of votes. Note that
+votes are not weighted with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}} across districts.
+Must be > 0 if provided.
+Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}}.}
 }
 \value{
-a function which, when called with \verb{function(votes_matrix)}, returns
+A function which, when called with \verb{function(votes_matrix)}, returns
 a boolean vector with length equal to the number of lists/parties
 (\code{votes_matrix} rows). The vector shows whether a party has reached any/all
 quorums.
@@ -33,7 +35,7 @@ quorums.
 applied prior to seat distributions.
 }
 \details{
-There's a difference in how the functions work. With \code{quorum_any},
+There is a difference in how the two functions work. With \code{quorum_any},
 \emph{at least one} quorum must be reached. With \code{quorum_all} \emph{all}
 (i.e. both) quorums must be reached. If you only use one parameter,
 \code{quorum_any()} and \code{quorum_all()} are identical.

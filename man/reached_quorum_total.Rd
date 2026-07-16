@@ -7,7 +7,7 @@
 reached_quorum_total(votes_matrix, quorum_total)
 }
 \arguments{
-\item{votes_matrix}{votes matrix}
+\item{votes_matrix}{Votes matrix}
 
 \item{quorum_total}{Vote threshold a party must reach for all votes cast.
 Used as fraction of total votes if less than 1, otherwise

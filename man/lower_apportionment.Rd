@@ -7,12 +7,12 @@
 lower_apportionment(votes_matrix, seats_cols, seats_rows, method = "round")
 }
 \arguments{
-\item{votes_matrix}{matrix with votes by party in rows and votes by district in columns.}
+\item{votes_matrix}{Matrix with votes by party in rows and votes by district in columns.}
 
-\item{seats_cols}{number of seats per column (districts/regions), predetermined or
+\item{seats_cols}{Number of seats per column (districts/regions), predetermined or
 calculated with \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
-\item{seats_rows}{number of seats per row (parties/lists), calculated with
+\item{seats_rows}{Number of seats per row (parties/lists), calculated with
 \code{\link[=upper_apportionment]{upper_apportionment()}}.}
 
 \item{method}{Apportion method that defines how seats are assigned. The

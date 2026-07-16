@@ -7,9 +7,9 @@
 highest_averages_method(votes, n_seats, divisors)
 }
 \arguments{
-\item{votes}{numeric vector with the number of votes for each party}
+\item{votes}{Numeric vector with the number of votes for each party}
 
-\item{n_seats}{total number of seats (integer)}
+\item{n_seats}{Total number of seats (integer)}
 
 \item{divisors}{Sequence of divisors (length equal to the number of seats).
 If it is a single number (e.g. 0.5), a sequence is generated

@@ -1,5 +1,5 @@
 prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
-    vmn = paste0("`", trim_deparse_substitute(votes_matrix.name), "`")
+    vmn = paste0("`", trim_varname(votes_matrix.name), "`")
     if(!is.matrix(votes_matrix)) {
         stop(vmn, " must be a matrix", call. = FALSE)
     }
@@ -42,6 +42,8 @@ prep_method = function(method) {
 
 prep_district_seats = function(district_seats, votes_matrix,
                                .district_seats.name, .votes_matrix.name) {
+    .district_seats.name <- trim_varname(.district_seats.name)
+    .votes_matrix.name <- trim_varname(.votes_matrix.name)
     if(!(is.vector(district_seats, "numeric") || is.data.frame(district_seats))) {
         stop("`", .district_seats.name, "` must be a numeric vector, data.frame or a single number",
              call. = FALSE)
@@ -52,7 +54,7 @@ prep_district_seats = function(district_seats, votes_matrix,
             district_seats <- stats::setNames(district_seats[[2]], district_seats[[1]])
         }
         if(ncol(votes_matrix) != length(district_seats)) {
-            stop("`", trim_deparse_substitute(.votes_matrix.name),
+            stop("`", .votes_matrix.name,
                  "` must have districts as columns and parties as rows",
                  call. = FALSE)
         }
@@ -94,9 +96,12 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
     assert_bool1(weight_votes)
     assert_bool1(winner_take_one)
 
+    .votes_df <- trim_varname(.votes_df)
+    .district_seats_df <- trim_varname(.district_seats_df)
+
     if(!is.data.frame(votes_df) || ncol(votes_df) != 3) {
         stop("`", .votes_df, "` must be a data frame with 3 columns in the ",
-             "following order:\nparty, district and votes (names can differ).",
+             "following order:\nparty, district and votes (names can differ)",
              call. = FALSE)
     }
 
@@ -118,7 +123,7 @@ check_params.pukelsheim = function(votes_df, district_seats_df, new_seats_col,
              "` are not unique", call. = FALSE)
     }
     if(nrow(votes_df[,c(1,2)]) != nrow(unique(votes_df[,c(1,2)]))) {
-        stop("There are duplicate party-district pairs in `", .votes_df, "`.",
+        stop("There are duplicate party-district pairs in `", .votes_df, "`",
              call. = FALSE)
     }
 
@@ -215,11 +220,11 @@ assert_empty_dots = function(allowed_params, dots) {
         unknown <- unknown[unknown != ""]
         if(length(unknown) > 0) {
             stop("Unknown argument (", collapse_names(unknown),
-                 "). `...` must be empty.",
+                 "). `...` must be empty",
                  call. = FALSE)
         }
         if(any(is.null(names(dots)))) {
-            stop("`...` must be empty.", call. = FALSE)
+            stop("`...` must be empty", call. = FALSE)
         }
     }
     invisible(TRUE)

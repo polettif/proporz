@@ -270,13 +270,13 @@ test_that("catch use_list_votes in ...", {
 test_that("empty ...", {
     expect_error_fixed(
         biproporz(NULL, NULL, dummy = FALSE),
-        "Unknown argument ('dummy'). `...` must be empty.")
+        "Unknown argument ('dummy'). `...` must be empty")
     expect_error_fixed(
         pukelsheim(NULL, NULL, dummy1 = FALSE, dummy2 = NA),
-        "Unknown argument ('dummy1', 'dummy2'). `...` must be empty.")
+        "Unknown argument ('dummy1', 'dummy2'). `...` must be empty")
     expect_error_fixed(
         biproporz(NULL, NULL, dummy = FALSE, use_list_votes = FALSE),
-        "Unknown argument ('dummy'). `...` must be empty.")
+        "Unknown argument ('dummy'). `...` must be empty")
     expect_true(is.null(getOption("proporz_use_list_votes_info")))
 
     expect_error_fixed(

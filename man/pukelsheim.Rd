@@ -15,14 +15,14 @@ pukelsheim(
 )
 }
 \arguments{
-\item{votes_df}{data.frame (long format) with 3 columns (actual colnames can differ):
+\item{votes_df}{\code{data.frame} (long format) with 3 columns (actual colnames can differ):
 \enumerate{
 \item party id/name (character)
 \item district id/name (character)
 \item votes (numeric)
 }}
 
-\item{district_seats_df}{data.frame with 2 columns (actual colnames can differ):
+\item{district_seats_df}{\code{data.frame} with 2 columns (actual colnames can differ):
 \enumerate{
 \item district id/name (character)
 \item number of seats for a district (numeric)
@@ -34,7 +34,7 @@ eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if this parameter is missing or \code{NULL}.}
 
-\item{new_seats_col}{name of the new column}
+\item{new_seats_col}{Name of the new column}
 
 \item{weight_votes}{By default (\code{TRUE}) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Set to \code{FALSE} if \code{votes_df} shows the
@@ -42,9 +42,10 @@ number of \emph{voters} (e.g. because they can only vote for one party).}
 
 \item{winner_take_one}{Set to \code{TRUE} if the party that got the most votes in a district
 must get \emph{at least} one seat ('Majorzbedingung') in this district. This only applies if
-the district winnig party is entitled to a seat in the upper apportionment. Default is \code{FALSE}.}
+the district winnig party is entitled to a seat in the upper apportionment.
+Default is \code{FALSE}.}
 
-\item{...}{ignored (used for backwards compatibility)}
+\item{...}{Ignored (used for backwards compatibility)}
 }
 \value{
 A data.frame like \code{votes_df} with a new column denoting the number of seats per
@@ -68,7 +69,7 @@ from the upper apportionment.
 }
 
 Parties failing to reach quorums cannot get seats. This function does not handle seat
-assignment to candidates.
+assignment to candidates within party lists.
 
 If you want to use other apportion methods than Sainte-Laguë use \code{\link[=biproporz]{biproporz()}}.
 }

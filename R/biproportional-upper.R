@@ -87,8 +87,8 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' @seealso This method is used in [upper_apportionment()] if
 #' `weight_votes` is `TRUE` (default).
 #'
-#' @param votes_matrix votes matrix
-#' @param district_seats seats per district, vector with same length
+#' @param votes_matrix Votes matrix
+#' @param district_seats Seats per district, vector with same length
 #'   as `ncol(votes_matrix)` and names as `colnames(votes_matrix)`
 #'
 #' @note `weight_list_votes()` has been renamed to [weight_votes_matrix()]

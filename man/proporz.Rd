@@ -7,14 +7,14 @@
 proporz(votes, n_seats, method, quorum = 0)
 }
 \arguments{
-\item{votes}{numeric vector with the number of votes for each party}
+\item{votes}{Numeric vector with the number of votes for each party}
 
-\item{n_seats}{total number of seats (integer)}
+\item{n_seats}{Total number of seats (integer)}
 
 \item{method}{Apportionment method to use, as character. Not case sensitive. See details.}
 
-\item{quorum}{Vote threshold a party must reach. Used as fraction of total
-votes if less than 1, otherwise as number of votes.}
+\item{quorum}{Vote threshold a party must reach. Used as fraction of total votes if less
+than 1, otherwise as number of votes.}
 }
 \value{
 The number of seats per party as a vector

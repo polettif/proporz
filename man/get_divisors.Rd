@@ -7,7 +7,7 @@
 get_divisors(biproporz_result)
 }
 \arguments{
-\item{biproporz_result}{a matrix created by \code{\link[=biproporz]{biproporz()}} or a
+\item{biproporz_result}{A matrix created by \code{\link[=biproporz]{biproporz()}} or a
 data.frame created by \code{\link[=pukelsheim]{pukelsheim()}}}
 }
 \value{

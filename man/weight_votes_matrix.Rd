@@ -10,9 +10,9 @@ weight_votes_matrix(votes_matrix, district_seats)
 weight_list_votes(votes_matrix, district_seats)
 }
 \arguments{
-\item{votes_matrix}{votes matrix}
+\item{votes_matrix}{Votes matrix}
 
-\item{district_seats}{seats per district, vector with same length
+\item{district_seats}{Seats per district, vector with same length
 as \code{ncol(votes_matrix)} and names as \code{colnames(votes_matrix)}}
 }
 \value{

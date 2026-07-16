@@ -7,13 +7,13 @@
 reached_quorums(votes_matrix, quorum_funcs)
 }
 \arguments{
-\item{votes_matrix}{votes matrix}
+\item{votes_matrix}{Votes matrix}
 
-\item{quorum_funcs}{function or list of quorum functions. For lists, the attribute "type"
-must be set which indicates whether \code{ALL} or \code{ANY}
-(i.e. at least one) quorums must be reached.
+\item{quorum_funcs}{A function or a list of quorum functions. For lists, the attribute
+"type" must be set which indicates whether \code{ALL} or \code{ANY} (i.e. at least one) quorums
+must be reached.
 
-This is a internal, low-level implementation for quorum calculations and is
+This is an internal, low-level implementation for quorum calculations and is
 called within \code{\link[=biproporz]{biproporz()}}.}
 }
 \value{

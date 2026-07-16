@@ -7,14 +7,14 @@
 divide_votes_matrix(M, col_divisors, row_divisors)
 }
 \arguments{
-\item{M}{matrix}
+\item{M}{Matrix}
 
-\item{col_divisors}{divisors to apply to columns}
+\item{col_divisors}{Divisors to apply to columns}
 
-\item{row_divisors}{divisors to apply to rows}
+\item{row_divisors}{Divisors to apply to rows}
 }
 \value{
-matrix with the same dimension as \code{M} containing non-rounded seat values
+A matrix with the same dimension as \code{M} containing non-rounded seat values
 }
 \description{
 Apply row and column divisors to matrix to get non-rounded seat values.
