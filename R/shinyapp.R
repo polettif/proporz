@@ -6,7 +6,7 @@
 #' @param district_seats Optional district_seats to load upon start
 #' @returns Calling the function starts the shiny app
 #' @examples
-#' if(interactive()){
+#' if(interactive()) {
 #'     # You need to have the packages 'shiny' and 'shinyMatrix' installed to run the app
 #'     run_app()
 #'
@@ -52,87 +52,97 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
         # UI input ####
         fluidRow(
             # input matrix ####
-            column(9,
-                   tags$h3(tags$strong("Input")),
-                   shinyMatrix::matrixInput(
-                       inputId = "votesMatrix",
-                       label = "Vote Matrix (click into matrix to edit votes and names)",
-                       value = base_votes_matrix,
-                       class = "numeric",
-                       cols = list(
-                           names = TRUE,
-                           editableNames = TRUE
-                       ),
-                       rows = list(
-                           names = TRUE,
-                           editableNames = TRUE
-                       )
-                   ),
-                   shinyMatrix::matrixInput(
-                       inputId = "seatsMatrix",
-                       label = "Seats per district",
-                       value = base_district_seats_mtrx,
-                       class = "numeric",
-                       cols = list(
-                           names = TRUE
-                       ),
-                       rows = list(
-                           names = TRUE
-                       )
-                   )),
+            column(
+                width = 9,
+                tags$h3(tags$strong("Input")),
+                shinyMatrix::matrixInput(
+                    inputId = "votesMatrix",
+                    label = "Vote Matrix (click into matrix to edit votes and names)",
+                    value = base_votes_matrix,
+                    class = "numeric",
+                    cols = list(
+                        names = TRUE,
+                        editableNames = TRUE
+                    ),
+                    rows = list(
+                        names = TRUE,
+                        editableNames = TRUE
+                    )
+                ),
+                shinyMatrix::matrixInput(
+                    inputId = "seatsMatrix",
+                    label = "Seats per district",
+                    value = base_district_seats_mtrx,
+                    class = "numeric",
+                    cols = list(
+                        names = FALSE
+                    ),
+                    rows = list(
+                        names = TRUE
+                    )
+                )),
             # input options ####
-            column(width = 3,
-                   sidebarPanel(width = 12,
-                                shiny::selectInput("load_example", "Load example", c("...", "Zug 2018", "Uri 2020", "Wikipedia EN", "Wikipedia DE")),
-                                tags$hr(),
-                                tags$h4(tags$strong("Edit input table"), style = "margin-bottom:1em"),
-                                shiny::numericInput("n_cols", "number of district", 4, min = 2),
-                                shiny::numericInput("n_rows", "number of parties", 3, min = 2),
-                                shiny::actionButton("run_update_matrix", "set table dimensions"),
-                                shiny::checkboxInput("set_seats_per_district", "define seats per district", TRUE)
-                   )
+            column(
+                width = 3,
+                sidebarPanel(
+                    width = 12,
+                    shiny::selectInput("load_example", "Load example", c("...", "Zug 2018", "Uri 2020", "Wikipedia EN", "Wikipedia DE")),
+                    tags$hr(),
+                    tags$h4(tags$strong("Edit input table"), style = "margin-bottom:1em"),
+                    shiny::numericInput("n_cols", "number of district", 4, min = 2),
+                    shiny::numericInput("n_rows", "number of parties", 3, min = 2),
+                    shiny::actionButton("run_update_matrix", "set table dimensions"),
+                    shiny::checkboxInput("set_seats_per_district", "define seats per district", TRUE)
+                )
             )),
         tags$hr(),
         # UI output ####
         fluidRow(
             # output matrix ####
-            column(9,
-                   tags$h3(tags$strong("Output")),
-                   tags$p(shiny::checkboxInput("show_seat_totals", "Show seat totals", FALSE)),
-                   tags$div(shiny::tableOutput("biproporz_result"))
+            column(
+                width = 9,
+                tags$h3(tags$strong("Output")),
+                tags$p(shiny::checkboxInput("show_seat_totals", "Show seat totals", FALSE)),
+                tags$div(shiny::tableOutput("biproporz_result"))
             ),
             # output options ####
-            column(3,
-                   sidebarPanel(width = 12,
-                                tags$h4(tags$strong("Apportionment parameters"), style = "margin-bottom:1em"),
-                                shiny::numericInput("quorum_districts", "Quorum (districts)", 0, min = 0),
-                                shiny::numericInput("quorum_total", "Quorum (total)", 0, min = 0),
-                                shiny::checkboxInput("quorum_all", "Both quorums necessary", FALSE),
-                                shiny::checkboxInput("weight_votes", "Weight votes", TRUE),
-                                shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE)
-                   )
+            column(
+                width = 3,
+                sidebarPanel(
+                    width = 12,
+                    tags$h4(tags$strong("Apportionment parameters"), style = "margin-bottom:1em"),
+                    shiny::numericInput("quorum_districts", "Quorum (districts)", 0, min = 0),
+                    shiny::numericInput("quorum_total", "Quorum (total)", 0, min = 0),
+                    shiny::checkboxInput("quorum_all", "Both quorums necessary", FALSE),
+                    shiny::checkboxInput("weight_votes", "Weight votes", TRUE),
+                    shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE)
+                )
             )
         )
     )
 
     # server ####
     server = function(input, output, session) {
-
         vals = shiny::reactiveValues(votes_matrix = base_votes_matrix,
-                                     seats_districts = base_district_seats,
-                                     seats_total = sum(base_district_seats))
+                                     seats_vector = base_district_seats)
 
         # run biproportional apportionment ####
         output$biproporz_result <- shiny::renderTable(
-            run_biproporz(),
+            result(),
             digits = 0,
             rownames = TRUE)
 
-        run_biproporz = function() {
-            if(sum(vals$votes_matrix) == 0) return(NULL)
-            if(sum(vals$seats_districts) == 0) return(NULL)
-            if(sum(vals$seats_total) == 0) return(NULL)
-            if(any(nchar(colnames(input$votesMatrix)) == 0)) return(NULL)
+        result = eventReactive({
+            c(vals$votes_matrix, vals$seats_vector,
+              input$weight_votes, input$show_seat_totals, input$set_seats_per_district,
+              input$quorum_districts, input$quorum_total, input$quorum_all)
+        }, {
+            if(sum(vals$votes_matrix) == 0 ||
+               sum(vals$seats_vector) == 0 ||
+               (length(vals$seats_vector) > 1 && length(vals$seats_vector) != NCOL(vals$votes_matrix)) ||
+               (any(nchar(colnames(vals$votesMatrix)) == 0))) { # TODO why input$ ?
+                return(NULL)
+            }
             .quorum = shiny_get_quorum_function(input$quorum_districts, input$quorum_total, input$quorum_all)
 
             if(!input$wto) {
@@ -142,65 +152,61 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             }
 
             if(input$set_seats_per_district) {
-                .seats = vals$seats_districts
+                .seats = vals$seats_vector
             } else {
-                .seats = vals$seats_total
+                .seats = sum(vals$seats_vector)
             }
 
-            bp = biproporz(vals$votes_matrix, .seats,
-                           quorum = .quorum,
-                           weight_votes = input$weight_votes,
-                           method = .method)
+            if(length(.seats) > 1) {
+                names(.seats) <- colnames(vals$votes_matrix)
+            }
+
+            bp = tryCatch(
+                biproporz(vals$votes_matrix, .seats,
+                          quorum = .quorum,
+                          weight_votes = input$weight_votes,
+                          method = .method),
+                error = function(e) {
+                    em = matrix(e$message)
+                    colnames(em) <- "Error"
+                    rownames(em) <- " "
+                    em
+                })
 
             # add seat totals
-            if(input$show_seat_totals) {
-                bpt <- matrix(NA, nrow = nrow(bp)+1, ncol = ncol(bp)+1)
-                bpt[2:nrow(bpt),2:ncol(bpt)] <- bp
-                bpt[1,seq_len(ncol(bpt))] <- c(sum(bp), colSums(bp))
-                bpt[2:nrow(bpt),1] <- rowSums(bp)
+            if(!is.character(bp) && input$show_seat_totals) {
+                bpt <- matrix(NA, nrow = nrow(bp) + 1, ncol = ncol(bp) + 1)
+                bpt[2:nrow(bpt), 2:ncol(bpt)] <- bp
+                bpt[1, seq_len(ncol(bpt))] <- c(sum(bp), colSums(bp))
+                bpt[2:nrow(bpt), 1] <- rowSums(bp)
                 colnames(bpt) <- c("TOTAL", colnames(bp))
                 rownames(bpt) <- c("TOTAL", rownames(bp))
                 bp <- bpt
             }
 
             return(bp)
-        }
+        })
 
         # convert reactive matrix inputs ####
         observeEvent(input$seatsMatrix, {
-            if(input$set_seats_per_district) {
-                vals$seats_districts <- setNames(c(input$seatsMatrix),
-                                                 colnames(input$seatsMatrix))
-            } else {
-                vals$seats_total <- sum(input$seatsMatrix)
-            }
+            vals$seats_vector <- c(input$seatsMatrix)
+            result()
         }, ignoreInit = TRUE)
 
         observeEvent(input$votesMatrix, {
             vals$votes_matrix <- input$votesMatrix
-
-            if(input$set_seats_per_district) {
-                vals$seats_districts <- setNames(vals$seats_districts, colnames(vals$votes_matrix))
-                update_seatsMatrix(vals$seats_districts)
-            }
+            result()
         }, ignoreInit = TRUE)
 
         # update inputs ####
         observeEvent(input$run_update_matrix, {
             vals$votes_matrix <- shiny_create_empty_votes_matrix(input$n_rows, input$n_cols)
-            vals$seats_districts <- setNames(rep(0, input$n_cols), colnames(vals$votes_matrix))
+            vals$seats_vector <- setNames(rep(0, input$n_cols), colnames(vals$votes_matrix))
             shiny::updateSelectInput(session, "load_example", selected = "...")
-            update_input_matrices()
-        }, ignoreInit = TRUE)
 
-        update_input_matrices = function() {
             update_votesMatrix(vals$votes_matrix)
-            if(input$set_seats_per_district) {
-                update_seatsMatrix(vals$seats_districts)
-            } else {
-                update_seatsMatrix(vals$seats_total)
-            }
-        }
+            update_seatsMatrix(vals$seats_vector)
+        }, ignoreInit = TRUE)
 
         update_votesMatrix = function(.votes_matrix) {
             shinyMatrix::updateMatrixInput(session, "votesMatrix", .votes_matrix)
@@ -210,10 +216,10 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             if(!is.matrix(.seats)) {
                 if(length(.seats) == 1L) {
                     .seats <- matrix(.seats, 1, 1,
-                                     dimnames = list("seats", "total"))
+                                     dimnames = list("seats (total)", NULL))
                 } else {
                     .seats = matrix(.seats, nrow = 1,
-                                    dimnames = list("seats", names(.seats)))
+                                    dimnames = list("seats", NULL))
                 }
             }
             shinyMatrix::updateMatrixInput(session, "seatsMatrix", .seats)
@@ -222,9 +228,13 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
         # seats per district option ####
         observeEvent(input$set_seats_per_district, {
             if(input$set_seats_per_district) {
-                update_seatsMatrix(vals$seats_districts)
+                if(length(vals$seats_vector) == 1) {
+                    update_seatsMatrix(rep(0, ncol(vals$votes_matrix)))
+                }
             } else {
-                update_seatsMatrix(vals$seats_total)
+                if(length(vals$seats_vector) > 1) {
+                    update_seatsMatrix(sum(vals$seats_vector))
+                }
             }
         }, ignoreInit = TRUE)
 
@@ -233,34 +243,21 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             if(input$load_example == "...") {
                 return()
             } else if(input$load_example == "Zug 2018") {
-                vals$votes_matrix <- shinyapp_examples$zug_2018$votes
-                vals$seats_districts <- shinyapp_examples$zug_2018$seats
-                vals$seats_total <- sum(vals$seats_districts)
+                update_votesMatrix(shinyapp_examples$zug_2018$votes)
+                update_seatsMatrix(shinyapp_examples$zug_2018$seats)
                 set_inputs(quorum_districts = 0.05, quorum_total = 0.03, wto = TRUE)
-                update_votesMatrix(vals$votes_matrix)
-                update_seatsMatrix(vals$seats_districts)
             } else if(input$load_example == "Uri 2020") {
-                vals$votes_matrix <- shinyapp_examples$uri_2020$votes
-                vals$seats_districts <- shinyapp_examples$uri_2020$seats
-                vals$seats_total <- sum(vals$seats_districts)
+                update_votesMatrix(shinyapp_examples$uri_2020$votes)
+                update_seatsMatrix(shinyapp_examples$uri_2020$seats)
                 set_inputs()
-                update_votesMatrix(vals$votes_matrix)
-                update_seatsMatrix(vals$seats_districts)
             } else if(input$load_example == "Wikipedia EN") {
-                vals$votes_matrix <- shinyapp_examples$wikipedia_en$votes
-                vals$seats_total <- shinyapp_examples$wikipedia_en$seats
-                vals$seats_districts <- divisor_round(colSums(shinyapp_examples$wikipedia_en$votes),
-                                                      shinyapp_examples$wikipedia_en$seats)
+                update_votesMatrix(shinyapp_examples$wikipedia_en$votes)
+                update_seatsMatrix(shinyapp_examples$wikipedia_en$seats)
                 set_inputs(weight_votes = FALSE, set_seats_per_district = FALSE)
-                update_votesMatrix(vals$votes_matrix)
-                update_seatsMatrix(vals$seats_total)
             } else if(input$load_example == "Wikipedia DE") {
-                vals$votes_matrix <- shinyapp_examples$wikipedia_de$votes
-                vals$seats_districts <- shinyapp_examples$wikipedia_de$seats
-                vals$seats_total <- sum(vals$seats_districts)
+                update_votesMatrix(shinyapp_examples$wikipedia_de$votes)
+                update_seatsMatrix(shinyapp_examples$wikipedia_de$seats)
                 set_inputs()
-                update_votesMatrix(vals$votes_matrix)
-                update_seatsMatrix(vals$seats_districts)
             }
         }, ignoreInit = TRUE)
 
