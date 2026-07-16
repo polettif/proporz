@@ -14,6 +14,7 @@
 #'     run_app(uri2020$votes_matrix, uri2020$seats_vector)
 #' }
 #' @importFrom stats setNames
+#' @importFrom utils read.csv write.csv
 #' @export
 run_app = function(votes_matrix = NULL, district_seats = NULL) {
     # load packages / "import" ####
@@ -48,7 +49,8 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 
     # UI ####
     ui = shiny::fluidPage(
-        tags$head(tags$style(type = "text/css", "#CSVerrors {color: red; font-weight: bold}")),
+        tags$head(tags$style(type = "text/css",
+                             "#CSVerrors {color: red; font-weight: bold} #downloadInput { margin-left: 5px;}")),
         shiny::titlePanel("Biproportional Apportionment"),
         # UI input ####
         fluidRow(
@@ -94,8 +96,16 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                     shiny::fileInput("uploadCSV", "... or upload a CSV file with votes", accept = ".csv"),
                     tags$hr(),
                     tags$h5(tags$strong("... or create an empty table"), style = "margin-bottom:1em"),
-                    shiny::numericInput("n_cols", "number of district", 4, min = 2),
-                    shiny::numericInput("n_rows", "number of parties", 3, min = 2),
+                    fluidRow(
+                        column(
+                            width = 6,
+                            shiny::numericInput("n_rows", "parties", 3, min = 2)
+                        ),
+                        column(
+                            width = 6,
+                            shiny::numericInput("n_cols", "districts", 4, min = 2)
+                        )
+                    ),
                     shiny::actionButton("run_update_matrix", "set table dimensions"),
                     shiny::checkboxInput("set_seats_per_district", "define seats per district", TRUE)
                 )
@@ -120,7 +130,13 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                     shiny::numericInput("quorum_total", "Quorum (total)", 0, min = 0),
                     shiny::checkboxInput("quorum_all", "Both quorums necessary", FALSE),
                     shiny::checkboxInput("weight_votes", "Weight votes", TRUE),
-                    shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE)
+                    shiny::checkboxInput("wto", "district winner must have at least one seat", FALSE),
+                    tags$hr(),
+                    tags$h4(tags$strong("Download data"), style = "margin-bottom:1em"),
+                    shiny::downloadButton("downloadResult", "Result CSV"),
+                    shiny::downloadButton("downloadInput", "Input CSV"),
+                    tags$p(tags$em("Input data csv does not contain parameters"),
+                           style = "size: 80%; margin-top:10px")
                 )
             )
         )
@@ -137,7 +153,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             digits = 0,
             rownames = TRUE)
 
-        result = eventReactive({
+        result = shiny::eventReactive({
             c(vals$votes_matrix, vals$seats_vector,
               input$weight_votes, input$show_seat_totals, input$set_seats_per_district,
               input$quorum_districts, input$quorum_total, input$quorum_all)
@@ -280,17 +296,17 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             shiny::updateCheckboxInput(session, "wto", value = wto)
         }
 
-        set_dim_input = function(n_row, n_col) {
-            shiny::updateNumericInput(session, "n_row", value = n_row)
-            shiny::updateNumericInput(session, "n_col", value = n_col)
+        set_dim_input = function(n_rows, n_cols) {
+            shiny::updateNumericInput(session, "n_rows", value = n_rows)
+            shiny::updateNumericInput(session, "n_cols", value = n_cols)
         }
 
-        uploaded_data <- reactive({
-            req(input$uploadCSV)
-            check_uploaded_csv(read.csv(input$uploadCSV$datapath))
+        uploaded_data <- shiny::reactive({
+            shiny::req(input$uploadCSV)
+            shiny_read_input_csv(input$uploadCSV$datapath)
         })
 
-        output$CSVerrors <- renderText({
+        output$CSVerrors <- shiny::renderText({
             csv = uploaded_data()
             if(is.character(csv)) {
                 return(csv)
@@ -304,35 +320,31 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                 return(NULL)
             }
 
-            votes = as.matrix(csv[, 2:ncol(csv)])
-            pnames = csv[[1]]
-            if(pnames[length(pnames)] != "") {
-                seats = setNames(rep(0, ncol(votes)), colnames(votes))
-                rownames(votes) <- pnames
-            } else {
-                seats = votes[nrow(votes), ]
-                votes <- votes[-nrow(votes), ]
-                rownames(votes) <- pnames[-length(pnames)]
-            }
-
-            vals$votes_matrix <- votes
-            vals$seats_districts <- seats
-
+            vals$votes_matrix <- csv$votes
+            vals$seats_districts <- csv$seats
             update_votesMatrix(vals$votes_matrix)
             update_seatsMatrix(vals$seats_districts)
-            set_dim_input(nrow(votes), ncol(votes))
+            set_dim_input(nrow(csv$votes), ncol(csv$seats))
             shiny::updateSelectInput(session, "load_example", selected = "...")
             result()
             return(NULL)
         })
 
         # download file ####
-        output$download_csv <- shiny::downloadHandler(
+        output$downloadResult <- shiny::downloadHandler(
             filename = function() {
                 paste0("biproportional-", Sys.Date(), ".csv")
             },
             content = function(file) {
-                write.csv(run_biproporz(), file)
+                write.csv(result(), file)
+            })
+
+        output$downloadInput <- shiny::downloadHandler(
+            filename = function() {
+                paste0("input-", Sys.Date(), ".csv")
+            },
+            content = function(file) {
+                shiny_write_input_csv(vals$votes_matrix, vals$seats_vector, file)
             })
     }
 
@@ -367,11 +379,11 @@ shiny_create_seats_matrix = function(votes_matrix,
 }
 
 shiny_get_quorum_function = function(q_districts, q_total, q_all) {
-    if(length(q_districts) == 0) q_districts <- 0
-    if(length(q_total) == 0) q_total <- 0
-    if(length(q_all) == 0) q_all <- TRUE
+    if(is.null(q_districts)) q_districts <- 0
+    if(is.null(q_total)) q_total <- 0
     assert_num1(q_districts)
     assert_num1(q_total)
+
     if(q_districts > 0 && q_total > 0) {
         assert_bool1(q_all)
         if(q_all) {
@@ -389,18 +401,47 @@ shiny_get_quorum_function = function(q_districts, q_total, q_all) {
     return(NULL)
 }
 
-check_uploaded_csv = function(csv) {
-    if(nrow(csv) < 2) {
+shiny_check_uploaded_csv = function(df) {
+    if(nrow(df) < 2) {
         return("Input CSV must have at least 2 rows (excluding header with district names)")
     }
-    if(nrow(csv) < 2) {
+    if(ncol(df) < 2) {
         return("Input CSV must have at least 2 columns (one of them party names)")
     }
-    if(sum(csv[[1]] == "") > 1) {
+    if(anyNA(df[[1]]) || sum(df[[1]] == "") > 1) {
         return("Input CSV must have party names in first column")
     }
-    if(anyNA(csv[2:ncol(csv)])) {
-        return("Input CSV cannot have missing values")
+    if(anyNA(df[2:ncol(df)])) {
+        return("Input CSV must not have missing values")
     }
-    return(csv)
+    return(df)
+}
+
+shiny_read_input_csv = function(csv_file) {
+    csv = read.csv(csv_file)
+
+    csv <- shiny_check_uploaded_csv(csv)
+    if(is.character(csv)) {
+        return(csv)
+    }
+
+    votes = as.matrix(csv[, 2:ncol(csv)])
+    pnames = csv[[1]]
+    if(pnames[length(pnames)] != "") {
+        seats = setNames(rep(0, ncol(votes)), colnames(votes))
+        rownames(votes) <- pnames
+    } else {
+        seats = votes[nrow(votes), ]
+        votes <- votes[-nrow(votes), ]
+        rownames(votes) <- pnames[-length(pnames)]
+    }
+
+    list(votes = votes, seats = seats)
+}
+
+shiny_write_input_csv = function(votes, seats, csv_file) {
+    out_df = as.data.frame(votes)
+    out_df <- rbind(out_df, seats)
+    rownames(out_df)[nrow(out_df)] <- ""
+    write.csv(out_df, csv_file)
 }
