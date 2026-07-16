@@ -48,6 +48,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
 
     # UI ####
     ui = shiny::fluidPage(
+        tags$head(tags$style(type = "text/css", "#CSVerrors {color: red; font-weight: bold}")),
         shiny::titlePanel("Biproportional Apportionment"),
         # UI input ####
         fluidRow(
@@ -80,15 +81,19 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                     rows = list(
                         names = TRUE
                     )
-                )),
+                ),
+                shiny::textOutput("CSVerrors")),
             # input options ####
             column(
                 width = 3,
                 sidebarPanel(
                     width = 12,
-                    shiny::selectInput("load_example", "Load example", c("...", "Zug 2018", "Uri 2020", "Wikipedia EN", "Wikipedia DE")),
+                    shiny::selectInput("load_example", "Load an example",
+                                       c("...", "Zug 2018", "Uri 2020", "Wikipedia EN", "Wikipedia DE")),
                     tags$hr(),
-                    tags$h4(tags$strong("Edit input table"), style = "margin-bottom:1em"),
+                    shiny::fileInput("uploadCSV", "... or upload a CSV file with votes", accept = ".csv"),
+                    tags$hr(),
+                    tags$h5(tags$strong("... or create an empty table"), style = "margin-bottom:1em"),
                     shiny::numericInput("n_cols", "number of district", 4, min = 2),
                     shiny::numericInput("n_rows", "number of parties", 3, min = 2),
                     shiny::actionButton("run_update_matrix", "set table dimensions"),
@@ -140,7 +145,7 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             if(sum(vals$votes_matrix) == 0 ||
                sum(vals$seats_vector) == 0 ||
                (length(vals$seats_vector) > 1 && length(vals$seats_vector) != NCOL(vals$votes_matrix)) ||
-               (any(nchar(colnames(vals$votesMatrix)) == 0))) { # TODO why input$ ?
+               (any(nchar(colnames(vals$votesMatrix)) == 0))) {
                 return(NULL)
             }
             .quorum = shiny_get_quorum_function(input$quorum_districts, input$quorum_total, input$quorum_all)
@@ -246,18 +251,22 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                 update_votesMatrix(shinyapp_examples$zug_2018$votes)
                 update_seatsMatrix(shinyapp_examples$zug_2018$seats)
                 set_inputs(quorum_districts = 0.05, quorum_total = 0.03, wto = TRUE)
+                set_dim_input(8, 11)
             } else if(input$load_example == "Uri 2020") {
                 update_votesMatrix(shinyapp_examples$uri_2020$votes)
                 update_seatsMatrix(shinyapp_examples$uri_2020$seats)
                 set_inputs()
+                set_dim_input(4, 4)
             } else if(input$load_example == "Wikipedia EN") {
                 update_votesMatrix(shinyapp_examples$wikipedia_en$votes)
                 update_seatsMatrix(shinyapp_examples$wikipedia_en$seats)
                 set_inputs(weight_votes = FALSE, set_seats_per_district = FALSE)
+                set_dim_input(3, 3)
             } else if(input$load_example == "Wikipedia DE") {
                 update_votesMatrix(shinyapp_examples$wikipedia_de$votes)
                 update_seatsMatrix(shinyapp_examples$wikipedia_de$seats)
                 set_inputs()
+                set_dim_input(3, 3)
             }
         }, ignoreInit = TRUE)
 
@@ -270,6 +279,61 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
             shiny::updateCheckboxInput(session, "set_seats_per_district", value = set_seats_per_district)
             shiny::updateCheckboxInput(session, "wto", value = wto)
         }
+
+        set_dim_input = function(n_row, n_col) {
+            shiny::updateNumericInput(session, "n_row", value = n_row)
+            shiny::updateNumericInput(session, "n_col", value = n_col)
+        }
+
+        uploaded_data <- reactive({
+            req(input$uploadCSV)
+            check_uploaded_csv(read.csv(input$uploadCSV$datapath))
+        })
+
+        output$CSVerrors <- renderText({
+            csv = uploaded_data()
+            if(is.character(csv)) {
+                return(csv)
+            }
+            NULL
+        })
+
+        observeEvent(uploaded_data(), {
+            csv = uploaded_data()
+            if(is.character(csv)) {
+                return(NULL)
+            }
+
+            votes = as.matrix(csv[, 2:ncol(csv)])
+            pnames = csv[[1]]
+            if(pnames[length(pnames)] != "") {
+                seats = setNames(rep(0, ncol(votes)), colnames(votes))
+                rownames(votes) <- pnames
+            } else {
+                seats = votes[nrow(votes), ]
+                votes <- votes[-nrow(votes), ]
+                rownames(votes) <- pnames[-length(pnames)]
+            }
+
+            vals$votes_matrix <- votes
+            vals$seats_districts <- seats
+
+            update_votesMatrix(vals$votes_matrix)
+            update_seatsMatrix(vals$seats_districts)
+            set_dim_input(nrow(votes), ncol(votes))
+            shiny::updateSelectInput(session, "load_example", selected = "...")
+            result()
+            return(NULL)
+        })
+
+        # download file ####
+        output$download_csv <- shiny::downloadHandler(
+            filename = function() {
+                paste0("biproportional-", Sys.Date(), ".csv")
+            },
+            content = function(file) {
+                write.csv(run_biproporz(), file)
+            })
     }
 
     # Run the application ####
@@ -303,6 +367,9 @@ shiny_create_seats_matrix = function(votes_matrix,
 }
 
 shiny_get_quorum_function = function(q_districts, q_total, q_all) {
+    if(length(q_districts) == 0) q_districts <- 0
+    if(length(q_total) == 0) q_total <- 0
+    if(length(q_all) == 0) q_all <- TRUE
     assert_num1(q_districts)
     assert_num1(q_total)
     if(q_districts > 0 && q_total > 0) {
@@ -320,4 +387,20 @@ shiny_get_quorum_function = function(q_districts, q_total, q_all) {
         return(quorum_any(total = q_total))
     }
     return(NULL)
+}
+
+check_uploaded_csv = function(csv) {
+    if(nrow(csv) < 2) {
+        return("Input CSV must have at least 2 rows (excluding header with district names)")
+    }
+    if(nrow(csv) < 2) {
+        return("Input CSV must have at least 2 columns (one of them party names)")
+    }
+    if(sum(csv[[1]] == "") > 1) {
+        return("Input CSV must have party names in first column")
+    }
+    if(anyNA(csv[2:ncol(csv)])) {
+        return("Input CSV cannot have missing values")
+    }
+    return(csv)
 }
