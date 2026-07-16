@@ -1,5 +1,6 @@
 # proporz (dev)
 
+* `biproporz()` and `upper_apportionment()`: `weight_votes` is ignored if number of seats is a single number
 * assert vector-matrix name matching in `lower_apportionment()`
 * improved error handling and messages for input parameters
 

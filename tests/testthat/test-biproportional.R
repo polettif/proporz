@@ -104,7 +104,7 @@ test_that("pukelsheim wrapper", {
 })
 
 test_that("free apportionment for districts", {
-    # https://en.wikipedia.org/wiki/biproporz_apportionment#Specific_example
+    # https://en.wikipedia.org/wiki/Biproportional_apportionment#Specific_example
     input_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
     mtrx_exp = matrix(as.integer(c(1,4,2,0,4,1,4,3,1)), nrow = 3)
     mtrx_act = biproporz(input_matrix, 20)
@@ -114,7 +114,9 @@ test_that("free apportionment for districts", {
     # pukelsheim
     votes_df = unique(zug2018[c("list_id", "entity_name", "list_votes")])
     votes_matrix = pivot_to_matrix(votes_df)
-    x = biproporz(votes_matrix, 80)
+    x = biproporz(votes_matrix, 80, weight_votes = FALSE)
+    y = biproporz(votes_matrix, 80, weight_votes = TRUE)
+    expect_identical(x, y)
     expect_identical(sum(x), 80L)
 })
 

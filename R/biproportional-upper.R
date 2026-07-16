@@ -5,11 +5,14 @@
 #'
 #' @param votes_matrix Vote count matrix with votes by party in rows and votes by district
 #'   in columns.
-#' @param district_seats Vector defining the number of seats per district. Must be the same
+#' @param district_seats
+#'   - Vector defining the number of seats per district. Must be the same
 #'   length as `ncol(votes_matrix)`. Values are name-matched to `votes_matrix` columns if both
-#'   are named. If the number of seats per district should be calculated according to the number
-#'   of votes (not the general use case), a single number for the total number of seats can be
-#'   used.
+#'   are named.
+#'   - If the number of seats per district should be calculated according to the number
+#'   of votes, a single number for the total number of seats can be used. `weight_votes` will be
+#'   ignored, as `votes_matrix` shows the number of voters.
+#'   Note that apportioning district seats according to votes is not the general use case.
 #' @param weight_votes By default (`TRUE`) it is assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Thus, votes are weighted according to
 #'   the number of available district seats with [weight_votes_matrix()]. Set to `FALSE` if
@@ -49,6 +52,7 @@ upper_apportionment = function(votes_matrix, district_seats,
     # district seats
     if(length(district_seats) == 1L) {
         seats_district = proporz(colSums(votes_matrix), district_seats, method)
+        weight_votes <- FALSE
     } else {
         assert(length(district_seats) == ncol(votes_matrix))
         seats_district = district_seats
@@ -77,7 +81,10 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' Create weighted votes matrix
 #'
 #' Weight votes by dividing the votes matrix entries by the number
-#' of seats per district. This method is used in [upper_apportionment()] if
+#' of seats per district. Votes in districts without seats are set
+#' to zero.
+#'
+#' @seealso This method is used in [upper_apportionment()] if
 #' `weight_votes` is `TRUE` (default).
 #'
 #' @param votes_matrix votes matrix
@@ -87,7 +94,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 #' @note `weight_list_votes()` has been renamed to [weight_votes_matrix()]
 #' in `v1.5.2` and is deprecated.
 #'
-#' @returns the weighted `votes_matrix` which contains the number of voters (not rounded)
+#' @returns The weighted `votes_matrix` with the number of voters (not rounded).
 #'
 #' @examples
 #' weight_votes_matrix(uri2020$votes_matrix, uri2020$seats_vector)

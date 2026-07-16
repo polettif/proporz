@@ -17,11 +17,15 @@ biproporz(
 \item{votes_matrix}{Vote count matrix with votes by party in rows and votes by district
 in columns.}
 
-\item{district_seats}{Vector defining the number of seats per district. Must be the same
+\item{district_seats}{\itemize{
+\item Vector defining the number of seats per district. Must be the same
 length as \code{ncol(votes_matrix)}. Values are name-matched to \code{votes_matrix} columns if both
-are named. If the number of seats per district should be calculated according to the number
-of votes (not the general use case), a single number for the total number of seats can be
-used.}
+are named.
+\item If the number of seats per district should be calculated according to the number
+of votes, a single number for the total number of seats can be used. \code{weight_votes} will be
+ignored, as \code{votes_matrix} shows the number of voters.
+Note that apportioning district seats according to votes is not the general use case.
+}}
 
 \item{quorum}{Optional list of functions which take the votes_matrix and return a logical
 vector that denotes for each party/row whether they reached the quorum (i.e. are

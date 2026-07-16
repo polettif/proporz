@@ -93,6 +93,13 @@ test_that("flow criterion check for almost empty matrix", {
         biproporz(matrix(c(1000,10,0,1), 2), c(1,1)),
         "Not enough seats for party 1 in district 1\n(2 seats necessary, 1 available)")
 
+    vm2b = matrix(c(0, 10, 0, 50, 0, 10, 40, 50, 0, 78, 54, 45), nrow = 3)
+    expect_no_condition(biproporz(vm2b, c(4, 3, 1, 0), weight_votes = TRUE))
+    expect_error_fixed(
+        biproporz(vm2b, c(4, 3, 1, 0), weight_votes = FALSE),
+        "Not enough seats for parties 1, 3 in districts 2, 3, 4\n(5 seats necessary, 4 available)"
+    )
+
     vm3a = matrix(c(4,3,0,20,1,0), nrow = 2)
     expect_error_fixed(
         biproporz(vm3a, c(1,3,4)),
