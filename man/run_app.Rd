@@ -18,7 +18,7 @@ Calling the function starts the shiny app
 Use biproportional apportionment interactively in a shiny app
 }
 \examples{
-if(interactive()){
+if(interactive()) {
     # You need to have the packages 'shiny' and 'shinyMatrix' installed to run the app
     run_app()
 
