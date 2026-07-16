@@ -58,12 +58,17 @@ upper_apportionment = function(votes_matrix, district_seats,
     if(weight_votes) {
         votes_matrix <- weight_votes_matrix(votes_matrix, seats_district)
     }
-    seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
 
-    # check enough votes in districts
-    if(!identical(colSums(votes_matrix) > 0, seats_district > 0)) {
-        stop("No votes in a district with at least one seat", call. = FALSE)
+    # check enough votes in districts and vice-versa
+    .novotes_check = colSums(votes_matrix)[seats_district > 0] == 0
+    if(any(.novotes_check)) {
+        stop("No votes in ", num_word("a district", "districts", .novotes_check),
+             " with at least one seat: ",
+             collapse_names(.novotes_check, names(.novotes_check)),
+             call. = FALSE)
     }
+
+    seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
 
     # return values
     list(district = seats_district, party = seats_party)

@@ -20,6 +20,18 @@ fuzzy_errors = function(fun) {
     unique(unlist(msg))
 }
 
+.startsWith = function(x, prefix) {
+    y = base::startsWith(x, prefix)
+    assert(any(y))
+    y
+}
+
+.endsWith = function(x, prefix) {
+    y = base::endsWith(x, prefix)
+    assert(any(y))
+    y
+}
+
 test_that("fuzzy params proporz", {
     # proporz
     votes = c(10, 30, 40)
@@ -77,9 +89,9 @@ test_that("fuzzy params biproporz/pukelsheim", {
                            "`district_seats` must have the same names as the columns in `votes_matrix`"))
 
     em = fuzzy_errors(function(district_seats) biproporz(votes_matrix, district_seats, quorum, weight_votes, method))
-    expect_true(all(endsWith(em, "numeric vector, data.frame or a single number") |
-                        endsWith(em, "must be integers") |
-                        endsWith(em, "districts as columns and parties as rows") |
+    expect_true(all(.endsWith(em, "numeric vector, data.frame or a single number") |
+                        .endsWith(em, "must be integers") |
+                        .endsWith(em, "districts as columns and parties as rows") |
                         em %in% c("length(district_seats) == ncol(votes_matrix) is not TRUE", "is.atomic(district_seats) is not TRUE")))
 
     em = fuzzy_errors(function(quorum) biproporz(votes_matrix, district_seats, quorum, weight_votes, method))
@@ -96,7 +108,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
     em = fuzzy_errors(function(method) biproporz(votes_matrix, district_seats, quorum, weight_votes, method))
     expect_true(all(em %in% c("`method` must be a single string",
                               "Method must be a single character or a list of two characters",
-                              "Only one or two methods allowed") | startsWith(em, "Unknown apportion method:")))
+                              "Only one or two methods allowed") | .startsWith(em, "Unknown apportion method:")))
 
     # pukelsheim
     votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
@@ -107,7 +119,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
     winner_take_one = FALSE
 
     em = fuzzy_errors(function(votes_df) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
-    expect_true(startsWith(em, "`votes_df` must be a data frame with 3 columns in the following order"))
+    expect_true(.startsWith(em, "`votes_df` must be a data frame with 3 columns in the following order"))
 
     em = fuzzy_errors(function(district_seats_df) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
     expect_identical(
@@ -145,7 +157,8 @@ test_that("fuzzy params biproporz/pukelsheim", {
     expect_identical(
         em,
         c("`district_seats` must be a numeric vector, data.frame or a single number",
-          "length(district_seats) == ncol(votes_matrix) is not TRUE", "`district_seats` must be integers",
+          "length(district_seats) == ncol(votes_matrix) is not TRUE",
+          "`district_seats` must be integers",
           "`votes_matrix` must have districts as columns and parties as rows",
           "is.atomic(district_seats) is not TRUE"))
 
@@ -153,7 +166,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
     expect_identical(em, "`weight_votes` must be TRUE or FALSE")
 
     em = fuzzy_errors(function(method) upper_apportionment(votes_matrix, district_seats, weight_votes, method))
-    expect_true(all(em == "`method` must be a single string" | startsWith(em, "Unknown apportion method: ")))
+    expect_true(all(em == "`method` must be a single string" | .startsWith(em, "Unknown apportion method: ")))
 
     # lower_apportionment
     votes_matrix = matrix(c(123, 912, 312, 45, 714, 255, 815, 414, 215), nrow = 3)
@@ -182,7 +195,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
           "all((seats_rows%%1) == 0) is not TRUE"))
 
     em = fuzzy_errors(function(method) lower_apportionment(votes_matrix, district_seats, party_seats, method))
-    expect_true(all(startsWith(em, "is.function(method) ") | startsWith(em, "Unknown apportion method: ")))
+    expect_true(all(.startsWith(em, "is.function(method) ") | .startsWith(em, "Unknown apportion method: ")))
 })
 
 test_that("fuzzy params quorum", {
@@ -263,8 +276,8 @@ test_that("fuzzy params helpers", {
     expect_true(all(
         em == "is.atomic(district_seats) && is.numeric(district_seats) && length(district_seats) >= 1 is not TRUE" |
             em == "`votes_matrix` must have districts as columns and parties as rows" |
-            endsWith(em, "must be integers") |
-            endsWith(em, "must be a numeric vector, data.frame or a single number")))
+            .endsWith(em, "must be integers") |
+            .endsWith(em, "must be a numeric vector, data.frame or a single number")))
 
     # ceil_at
     x = c(0.5, 1.5, 2.5, 3)
@@ -297,4 +310,4 @@ test_that("fuzzy params pivot", {
     expect_identical(em, "is.matrix(matrix_wide) is not TRUE")
 })
 
-rm(fuzz_params, fuzzy_errors)
+rm(fuzz_params, fuzzy_errors, .startsWith, .endsWith)
