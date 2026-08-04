@@ -11,10 +11,7 @@ reached_quorums(votes_matrix, quorum_funcs)
 
 \item{quorum_funcs}{A function or a list of quorum functions. For lists, the attribute
 "type" must be set which indicates whether \code{ALL} or \code{ANY} (i.e. at least one) quorums
-must be reached.
-
-This is an internal, low-level implementation for quorum calculations and is
-called within \code{\link[=biproporz]{biproporz()}}.}
+must be reached.}
 }
 \value{
 Logical vector with length equal to the number of lists/parties (\code{votes_matrix}
@@ -23,8 +20,7 @@ rows) showing whether they reached the quorum or not.
 \description{
 Apply a list of quorum functions to rows in a votes matrix
 }
-\seealso{
-\code{\link[=quorum_functions]{quorum_functions}} to create a list of quorum
-functions.
+\note{
+This is an internal function for quorum calculations in \code{\link[=biproporz]{biproporz()}}.
 }
 \keyword{internal}

@@ -25,4 +25,7 @@ divisor (single number)
 Find a divisor between \code{divisor_from} and \code{divisor_to} such that
 \code{sum(round_func(votes/divisor))} equals \code{target_seats}
 }
+\note{
+This is an internal function for \code{\link[=find_matrix_divisors]{find_matrix_divisors()}}.
+}
 \keyword{internal}

@@ -23,4 +23,7 @@ list of divisors (column and row)
 \description{
 Find divisors for a matrix with alternate scaling
 }
+\note{
+This is an internal function for \code{\link[=lower_apportionment]{lower_apportionment()}}.
+}
 \keyword{internal}

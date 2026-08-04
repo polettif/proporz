@@ -15,4 +15,7 @@ list of bazi tokens with a parsed \code{data} data.frame and \code{seat} data.fr
 \description{
 Read a .bazi file
 }
+\note{
+This function is experimental and not exported.
+}
 \keyword{internal}

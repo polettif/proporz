@@ -4,6 +4,7 @@
 #'
 #' @return list of bazi tokens with a parsed `data` data.frame and `seat` data.frame or number
 #'
+#' @note This function is experimental and not exported.
 #' @keywords internal
 read_bazi = function(file.bazi) {
     lines = tryCatch({

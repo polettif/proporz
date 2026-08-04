@@ -18,5 +18,9 @@ A matrix with the same dimension as \code{M} containing non-rounded seat values
 }
 \description{
 Apply row and column divisors to matrix to get non-rounded seat values.
+Resulting \code{NA}, \code{NaN} or \code{Inf} values are set to zero.
+}
+\note{
+This is an internal function for \code{\link[=lower_apportionment]{lower_apportionment()}}.
 }
 \keyword{internal}

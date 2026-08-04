@@ -1,3 +1,5 @@
+# Create quorum input functions ####
+
 #' Create quorum functions for biproportional apportionment
 #'
 #' `quorum_any()` and `quorum_all()` are used for the `quorum` parameter in
@@ -85,6 +87,18 @@ create_quorum_function_list = function(type, any_district, total) {
     return(quorum_funcs)
 }
 
+is_quorum_function_list = function(q) {
+    if(!is.list(q) || is.data.frame(q)) {
+        return(FALSE)
+    }
+    if(length(setdiff(c("ANY", "ALL"), attributes(q)[["type"]])) != 1) {
+        return(FALSE)
+    }
+    all(vapply(q, is.function, logical(1)))
+}
+
+# check quorum ####
+
 #' Check if parties reached the quorum for all votes
 #'
 #' Base implementation, used by \code{\link[=quorum_functions]{quorum_functions}}.
@@ -131,6 +145,7 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #'
 #' @inherit reached_quorum_total return
 #' @seealso [reached_quorum_total()]
+#'
 #' @examples
 #' (vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
 #' reached_quorum_any_district(vm, 25)
@@ -154,13 +169,9 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #'   "type" must be set which indicates whether `ALL` or `ANY` (i.e. at least one) quorums
 #'   must be reached.
 #'
-#' This is an internal, low-level implementation for quorum calculations and is
-#' called within [biproporz()].
-#'
-#' @seealso \code{\link[=quorum_functions]{quorum_functions}} to create a list of quorum
-#'   functions.
-#'
 #' @inherit reached_quorum_total return
+#'
+#' @note This is an internal function for quorum calculations in [biproporz()].
 #' @keywords internal
 reached_quorums = function(votes_matrix, quorum_funcs) {
     assert(is.matrix(votes_matrix) && !anyNA(votes_matrix))
@@ -183,6 +194,8 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
     }
     return(quorum_bool)
 }
+
+# apply quorum functions to votes ####
 
 #' Apply quorum to votes vector or matrix
 #'
@@ -278,14 +291,4 @@ check_quorum_param_vector = function(quorum) {
              call. = FALSE)
     }
     invisible(TRUE)
-}
-
-is_quorum_function_list = function(q) {
-    if(!is.list(q) || is.data.frame(q)) {
-        return(FALSE)
-    }
-    if(length(setdiff(c("ANY", "ALL"), attributes(q)[["type"]])) != 1) {
-        return(FALSE)
-    }
-    all(vapply(q, is.function, logical(1)))
 }

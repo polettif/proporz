@@ -120,18 +120,21 @@ lower_apportionment = function(votes_matrix, seats_cols,
 #' Calculate raw seat matrix
 #'
 #' Apply row and column divisors to matrix to get non-rounded seat values.
+#' Resulting `NA`, `NaN` or `Inf` values are set to zero.
 #'
 #' @param M Matrix
 #' @param col_divisors Divisors to apply to columns
 #' @param row_divisors Divisors to apply to rows
 #'
 #' @returns A matrix with the same dimension as `M` containing non-rounded seat values
+#'
+#' @note This is an internal function for [lower_apportionment()].
 #' @keywords internal
 divide_votes_matrix = function(M, col_divisors, row_divisors) {
     M_district = row_as_matrix(col_divisors, M)
     M_party = col_as_matrix(row_divisors, M)
 
-    d = M/M_district/M_party
+    d = M / M_district / M_party
     d[is.nan(d) | is.infinite(d) | is.na(d)] <- 0
     return(d)
 }
@@ -146,6 +149,8 @@ divide_votes_matrix = function(M, col_divisors, row_divisors) {
 #'   [divide_votes_matrix()].
 #'
 #' @returns list of divisors (column and row)
+#'
+#' @note This is an internal function for [lower_apportionment()].
 #' @keywords internal
 find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
     assert(is.matrix(M))
@@ -262,6 +267,8 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 #' @param round_func Rounding function
 #'
 #' @returns divisor (single number)
+#'
+#' @note This is an internal function for [find_matrix_divisors()].
 #' @keywords internal
 find_divisor = function(votes,
                         divisor_from, divisor_to,
