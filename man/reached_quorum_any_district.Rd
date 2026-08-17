@@ -22,7 +22,7 @@ rows) showing whether they reached the quorum or not.
 Base implementation, used by \code{\link[=quorum_functions]{quorum_functions}}.
 }
 \examples{
-(vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
+(vm <- matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
 reached_quorum_any_district(vm, 25)
 }
 \seealso{

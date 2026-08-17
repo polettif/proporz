@@ -27,7 +27,7 @@
 #'
 #' proporz(votes, 10, "jefferson", quorum = 70)
 #'
-#'@export
+#' @export
 proporz = function(votes, n_seats, method, quorum = 0) {
     proporz_method = get_method_implementation(method)
     proporz_func = list(
@@ -74,7 +74,7 @@ get_method_implementation = function(method) {
     method <- tolower(method)
     if(!method %in% names(proporz_methods)) {
         stop("Unknown apportion method: ", method, ".\nAvailable: ",
-             paste0(names(proporz_methods), collapse=", "), call. = FALSE)
+             paste0(names(proporz_methods), collapse = ", "), call. = FALSE)
     }
     return(proporz_methods[[method]])
 }

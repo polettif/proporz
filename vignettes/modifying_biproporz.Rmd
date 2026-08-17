@@ -59,12 +59,12 @@ votes_matrix
 (voters = weight_votes_matrix(votes_matrix, district_seats))
 ```
 
-This step is performed within `biproporz()` with the parameter `weight_votes = TRUE`.
+This step is performed within `biproporz` with the parameter `weight_votes = TRUE`.
 The result is a matrix with fractional voter counts, as votes can be split between multiple parties.
 
 ## 2) Standard Biproportional Apportionment
 
-The default `biproporz()` method allocates seats based on the votes matrix and district seats using standard rounding for both the upper and lower apportionments.
+The default `biproporz` method allocates seats based on the votes matrix and district seats using standard rounding for both the upper and lower apportionments.
 
 ```{r standard}
 seats_biproporz_standard = biproporz(votes_matrix, district_seats)
@@ -73,14 +73,8 @@ seats_biproporz_standard = biproporz(votes_matrix, district_seats)
 rowSums(seats_biproporz_standard)
 ```
 
-Key observations from the standard apportionment:
-
-- *Party D* did not receive enough votes across all districts to win a seat.
-- In *City 3*, *Party B* receives the most seats despite having fewer total votes than two other parties.
-- *Party E*'s strongest district is *City 1* (122 voters), but it does not win a seat there.
-
-The `biproporz()` function returns the seat allocation as a matrix with divisors as hidden attributes (see `get_divisors()`).
-You can print the marginal sums (total seats per party and district) and divisors with `summary()`.
+`biproporz` returns the seat allocation as a matrix with divisors as hidden attributes (see `get_divisors()`).
+You can print the marginal sums (total seats per party and district) and divisors with `summary`.
 
 ```{r summary}
 summary(seats_biproporz_standard)
@@ -88,6 +82,11 @@ summary(seats_biproporz_standard)
 # You can transpose the matrix
 # summary(t(seats_biproporz_standard))
 ```
+Key observations from the standard apportionment:
+
+- *Party D* did not receive enough votes across all districts to win a seat.
+- In *City 3*, *Party B* receives the most seats despite having fewer total votes than two other parties.
+- *Party E*'s strongest district is *City 1* (122 voters), but it does not win a seat there.
 
 ## 3) Modifying biproporz with Parameters
 
@@ -104,7 +103,7 @@ This does not actually change the seat distribution compared to the standard met
 
 ### Alternative Apportionment Methods
 
-`biproporz()` allows you to specify different methods for the upper and lower apportionment by passing a list to the `method` parameter.
+`biproporz` allows you to specify different methods for the upper and lower apportionment by passing a list to the `method` parameter.
 For example, we can use the Adams method for the upper apportionment and standard rounding for the lower apportionment.
 
 ```{r alternative_methods}
@@ -181,11 +180,12 @@ try(biproporz(tied_votes, tied_votes_seats, method = "wto"))
 ```
 
 When WTO is suspended in district *2*, tied party *Y* gets a seat in district *1* as this distribution better satisfies the constraints given by the upper apportionment.
-To explicitly break the tie (which might be necessary depending on the actual specifications) you need to modify the votes matrix by adding a very small vote amount to the district winner.
+To explicitly break the tie (which might be necessary depending on the actual election specifications) you need to modify the votes matrix by adding a very small vote amount to the district winner.
 Here is a workflow to break ties randomly:
 
 ```{r wto_tiebreak}
 tied_districts = district_winner_matrix(tied_votes, tied_votes_seats)
+
 set.seed(4)
 for(d in seq_len(ncol(tied_votes))) {
   if(anyNA(tied_districts[,d])) {
@@ -268,7 +268,7 @@ seats_biproporz_absolute_wto = biproporz_absolute_wto(votes_matrix,
                                                       district_seats)
 
 # Show the difference to the standard apportionment
-seats_biproporz_absolute_wto - seats_biproporz_standard
+summary(seats_biproporz_absolute_wto - seats_biproporz_standard)
 ```
 
 In this example, *Party D* gains a seat from *Party B*. To satisfy the new constraints, there are changes in district seat distributions for *Party A* and *Party E*.

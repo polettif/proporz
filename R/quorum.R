@@ -119,14 +119,14 @@ is_quorum_function_list = function(q) {
 #' @seealso [reached_quorum_any_district()]
 #'
 #' @examples
-#' (vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
+#' (vm <- matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
 #' reached_quorum_total(vm, 35)
 #' @export
 reached_quorum_total = function(votes_matrix, quorum_total) {
     assert_num1(quorum_total)
     assert(quorum_total > 0)
     if(quorum_total < 1) {
-        quorum_total <- sum(votes_matrix)*quorum_total
+        quorum_total <- sum(votes_matrix) * quorum_total
     }
 
     passed_total_quor = rowSums(votes_matrix) >= quorum_total
@@ -147,14 +147,14 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #' @seealso [reached_quorum_total()]
 #'
 #' @examples
-#' (vm = matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
+#' (vm <- matrix(c(239, 10, 308, 398, 20, 925), nrow = 3))
 #' reached_quorum_any_district(vm, 25)
 #' @export
 reached_quorum_any_district = function(votes_matrix, quorum_districts) {
     assert_num1(quorum_districts)
     assert(quorum_districts > 0)
     if(quorum_districts < 1) {
-        quorum_districts <- colSums(votes_matrix)*quorum_districts
+        quorum_districts <- colSums(votes_matrix) * quorum_districts
     }
 
     passed_distr_quor = t(apply(votes_matrix, 1, function(x) x >= quorum_districts))
@@ -207,7 +207,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 #'   * For a vector: Vote threshold a party must reach. Used as fraction of total
 #'   votes if less than 1 otherwise as number of votes.
 #'   * For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
-#'   or a logical vector with the same length as the number of `votes` rows.
+#'   or a (named) logical vector with the same length as the number of `votes` rows.
 #'
 #' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
 #'   specified quorum have their votes set to zero.
@@ -218,18 +218,23 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 #'
 #' @examples
 #' # vector
-#' (votes = c(81, 9, 10))
+#' (votes <- c(81, 9, 10))
 #'
 #' apply_quorum(votes, 10)
 #'
 #' apply_quorum(votes, .11)
 #'
 #' # matrix
-#' (votes_matrix = matrix(c(91, 9, 199, 1), nrow = 2))
+#' (votes_matrix <- matrix(c(91, 9, 199, 1), nrow = 2))
 #'
 #' apply_quorum(votes_matrix, quorum_all(total = 0.1))
 #'
 #' apply_quorum(votes_matrix, c(FALSE, TRUE))
+#'
+#' # named matrix needs a named vector
+#' rownames(votes_matrix) <- c("A", "B")
+#' quorum_vec = c(B = TRUE, A = FALSE)
+#' apply_quorum(votes_matrix, quorum_vec)
 apply_quorum = function(votes, quorum) {
     assert(is.matrix(votes) || is.atomic(votes))
     if(is.matrix(votes)) {
@@ -274,7 +279,7 @@ apply_quorum_vector = function(votes_vector, quorum) {
     check_quorum_param_vector(quorum)
 
     if(quorum < 1) {
-        quorum = ceiling(sum(votes_vector)*quorum)
+        quorum = ceiling(sum(votes_vector) * quorum)
     }
 
     if(all(votes_vector < quorum)) {

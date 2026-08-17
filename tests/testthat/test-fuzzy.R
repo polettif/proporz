@@ -47,9 +47,9 @@ test_that("fuzzy params proporz", {
 
     em = fuzzy_errors(function(method) proporz(votes, n_seats, method, quorum))
     expect_identical(
-        unique(sapply(strsplit(em, ": "), getElement, 1)),
+        vapply(strsplit(em, ": "), getElement, character(1), 1),
         c("`method` must be a single string",
-          "Unknown apportion method"))
+          "Unknown apportion method", "Unknown apportion method"))
 
     em = fuzzy_errors(function(quorum) proporz(votes, n_seats, method, quorum))
     expect_identical(em, "Quorum parameter must be a single number >= 0")
@@ -285,7 +285,7 @@ test_that("fuzzy params helpers", {
     em = fuzzy_errors(function(x) ceil_at(x, threshold))
     expect_identical(
         em,
-        "!anyNA(x) && all(is.numeric(x)) && all(x >= 0) is not TRUE")
+        "!anyNA(x) && is.numeric(x) && all(x >= 0) is not TRUE")
     em = fuzzy_errors(function(threshold) ceil_at(x, threshold))
     expect_identical(
         em,

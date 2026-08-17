@@ -2,15 +2,16 @@
 
 #' Use biproportional apportionment interactively in a shiny app
 #'
-#' @param votes_matrix Optional votes_matrix to load upon start
-#' @param district_seats Optional district_seats to load upon start
+#' @param votes_matrix Optional `votes_matrix` to load upon start
+#' @param district_seats Optional `district_seats` to load upon start
 #' @returns Calling the function starts the shiny app
 #' @examples
 #' if(interactive()) {
-#'     # You need to have the packages 'shiny' and 'shinyMatrix' installed to run the app
+#'     # You need to have the packages 'shiny' and
+#'     # shinyMatrix' installed to run the app
 #'     run_app()
 #'
-#'     # It's possible to load a matrix with the app
+#'     # It's possible to load data with the app
 #'     run_app(uri2020$votes_matrix, uri2020$seats_vector)
 #' }
 #' @importFrom stats setNames

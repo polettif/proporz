@@ -47,7 +47,7 @@ pivot_to_df(mtrx)
 dimnames(mtrx) <- list(party = c("A", "B"), region = c("I", "II", "III"))
 pivot_to_df(mtrx, "seats")
 
-# Note that pivot results are sorted
+# pivot results are sorted
 pivot_to_df(pivot_to_matrix(df)) == df[order(df[[1]], df[[2]]),]
 
 }

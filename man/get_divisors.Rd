@@ -24,7 +24,9 @@ seats_matrix = biproporz(uri2020$votes_matrix, uri2020$seats_vector)
 get_divisors(seats_matrix)
 
 seats_df = pukelsheim(pivot_to_df(uri2020$votes_matrix),
-                      data.frame(names(uri2020$seats_vector), uri2020$seats_vector))
+                      data.frame(names(uri2020$seats_vector),
+                      uri2020$seats_vector))
+
 get_divisors(seats_df)
 
 # summary() also prints the divisors for a biproporz matrix

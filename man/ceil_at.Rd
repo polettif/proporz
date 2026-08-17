@@ -10,14 +10,14 @@ ceil_at(x, threshold)
 \item{x}{Numeric atomic vector or matrix with values >= 0 (\code{NaN} is not supported)}
 
 \item{threshold}{Numeric threshold value in [0,1] or "harmonic"/"geometric" to use
-harmonic or geometric mean thresholds.}
+harmonic or geometric mean thresholds}
 }
 \value{
-the rounded vector or matrix
+Rounded vector or matrix
 }
 \description{
 Round \code{x} up to \code{ceiling(x)} if \code{x-floor(x) >= threshold},
-otherwise round down to \code{floor(x)}.
+otherwise round down to \code{floor(x)}. Used for all divisor methods.
 }
 \examples{
 ceil_at(c(0.5, 1.5, 2.49, 2.5, 2.51), 0.5)

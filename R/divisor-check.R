@@ -1,7 +1,7 @@
 # If last party with seat and first without a seat have the same matrix_quotient
 # from highest_averages_method the result is undefined as both parties could get
 # the last seat
-check_edge_quotient = function(mtrx_quotient, n_seats, return_indices = FALSE) {
+check_edge_quotient = function(mtrx_quotient, n_seats) {
     ordered_quotients = order(mtrx_quotient, decreasing = TRUE)
     quotient_last_with = mtrx_quotient[ordered_quotients[n_seats]]
     quotient_first_without = mtrx_quotient[ordered_quotients[n_seats+1]]
@@ -23,7 +23,7 @@ check_enough_seats = function(votes, n_seats, method) {
         # n_seats=0 is explicitly allowed to make modelling scenarios easier
         return(invisible(TRUE))
     }
-    stop("With ", method," rounding there must be at least as many seats as ",
+    stop("With ", method, " rounding there must be at least as many seats as ",
          "there are parties with non-zero votes", call. = FALSE)
 }
 
@@ -36,8 +36,8 @@ check_seats_number = function(n_seats, n_seats.name) {
     stop("`", trim_varname(n_seats.name), "` must be an integer >= 0", call. = FALSE)
 }
 
-check_votes_vector = function(votes, .votes) {
-    assert(!missing(.votes))
+check_votes_vector = function(votes, votes.name) {
+    assert(!missing(votes.name))
     if(is.atomic(votes) &&
        is.numeric(votes) &&
        length(votes) > 0 &&
@@ -45,5 +45,5 @@ check_votes_vector = function(votes, .votes) {
        all(votes >= 0)) {
         return(invisible(TRUE))
     }
-    stop("`", trim_varname(.votes), "` must be a numeric vector >= 0", call. = FALSE)
+    stop("`", trim_varname(votes.name), "` must be a numeric vector >= 0", call. = FALSE)
 }

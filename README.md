@@ -189,9 +189,9 @@ largest_remainder_method(votes, 20)
 ## See also
 There are other R packages available that provide apportionment functions, some with
 more focus on analysis. However, biproportional apportionment is missing from the 
-pure R packages and RBazi needs rJava with an accompanying jar.
+pure R packages and RBazi does not work anymore with current versions of R.
 
-- [RBazi](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html): Package using rJava to access the functions of [BAZI](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html).
+- [RBazi](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/RBazi.html): Defunct package using rJava to access the functions of [BAZI](https://www.math.uni-augsburg.de/htdocs/emeriti/pukelsheim/bazi/welcome.html).
 - [seatdist](https://github.com/jmedzihorsky/seatdist): Package for seat apportionment and disproportionality measurement.
 - [disprr](https://github.com/pierzgal/disprr): Simulate election results and examine disproportionality of apportionment methods.
 - [apportR](https://github.com/jalapic/apportR): Package containing various apportionment methods, with particular relevance for the problem of apportioning seats in the House of Representatives.

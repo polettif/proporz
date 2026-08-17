@@ -27,16 +27,16 @@ ignored, as \code{votes_matrix} shows the number of voters.
 Note that apportioning district seats according to votes is not the general use case.
 }}
 
-\item{quorum}{Optional list of functions which take the votes_matrix and return a logical
-vector that denotes for each party/row whether they reached the quorum (i.e. are
-eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
+\item{quorum}{Optional list of functions which take the votes matrix and return a logical
+vector that shows for each party/row whether they reached the quorum (i.e. are
+eligible for seats). The easiest way to do this is by passing \code{\link[=quorum_any]{quorum_any()}} or
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if this parameter is missing or \code{NULL}.}
 
 \item{weight_votes}{By default (\code{TRUE}) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
 the number of available district seats with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}}. Set to \code{FALSE} if
-the argument \code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast
+\code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast
 one vote for one party).}
 
 \item{method}{Defines which method is used to assign seats. The following methods are
@@ -90,15 +90,14 @@ with the default Sainte-Laguë/Webster method.
 votes_matrix = uri2020$votes_matrix
 district_seats = uri2020$seats_vector
 
-biproporz(votes_matrix, district_seats)
+(bp <- biproporz(votes_matrix, district_seats))
+
+# print divisors and seat sums with summary()
+summary(bp)
 
 # apply quorum (high values for illustrative purposes)
 biproporz(votes_matrix, district_seats,
           quorum_all(any_district = 0.1, total = 0.25))
-
-# print divisors and seat sums with summary
-bp = biproporz(votes_matrix, district_seats, weight_votes = FALSE)
-summary(bp)
 
 }
 \references{

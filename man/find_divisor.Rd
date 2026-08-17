@@ -7,7 +7,7 @@
 find_divisor(votes, divisor_from, divisor_to, target_seats, round_func)
 }
 \arguments{
-\item{votes}{Votes (matrix with only one column or vector, allows to use row/colnames
+\item{votes}{Votes (matrix with only one column or row, allows to use row/colnames
 within \code{round_func})}
 
 \item{divisor_from}{Lower bound for divisor search range (is decreased if necessary)}

@@ -62,7 +62,7 @@ largest_remainder_method = function(votes, n_seats, quorum = 0) {
 
 lr_quota = function(votes, n_seats, method = "hare") {
     if(method %in% c("hare", "hare-niemeyer", "vinton", "simple")) {
-        quota = sum(votes)/n_seats
+        quota = sum(votes) / n_seats
     } else {
         stop("Unknown quota method '", method, "'", call. = FALSE)
     }

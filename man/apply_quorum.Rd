@@ -14,7 +14,7 @@ apply_quorum(votes, quorum)
 \item For a vector: Vote threshold a party must reach. Used as fraction of total
 votes if less than 1 otherwise as number of votes.
 \item For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
-or a logical vector with the same length as the number of \code{votes} rows.
+or a (named) logical vector with the same length as the number of \code{votes} rows.
 }}
 }
 \value{
@@ -27,18 +27,23 @@ related functions. Generally, there is no need to call \code{apply_quorum} direc
 }
 \examples{
 # vector
-(votes = c(81, 9, 10))
+(votes <- c(81, 9, 10))
 
 apply_quorum(votes, 10)
 
 apply_quorum(votes, .11)
 
 # matrix
-(votes_matrix = matrix(c(91, 9, 199, 1), nrow = 2))
+(votes_matrix <- matrix(c(91, 9, 199, 1), nrow = 2))
 
 apply_quorum(votes_matrix, quorum_all(total = 0.1))
 
 apply_quorum(votes_matrix, c(FALSE, TRUE))
+
+# named matrix needs a named vector
+rownames(votes_matrix) <- c("A", "B")
+quorum_vec = c(B = TRUE, A = FALSE)
+apply_quorum(votes_matrix, quorum_vec)
 }
 \seealso{
 \code{\link[=quorum_functions]{quorum_functions}} for more matrix examples.

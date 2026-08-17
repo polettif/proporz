@@ -5,6 +5,10 @@
 #'
 #' @source Kanton Zug (01.07.2022, 10:27:58). Kantonsratswahl 2018 (CSV).
 #'         \url{https://wab.zug.ch/elections/kantonsratswahl-2018/data-csv}
+#'
+#' @examples
+#' str(zug2018)
+#'
 #' @keywords data
 "zug2018"
 
@@ -23,6 +27,11 @@
 #' }
 #'
 #' @source \url{https://www.ur.ch/abstimmungen/termine/9322}
+#' @examples
+#' uri2020$votes_matrix
+#'
+#' uri2020$seats_vector
+#'
 #' @keywords data
 "uri2020"
 

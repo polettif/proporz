@@ -28,6 +28,9 @@ to zero.
 in \code{v1.5.2} and is deprecated.
 }
 \examples{
+(vm <- matrix(c(20, 10, 8, 5), nrow = 2))
+weight_votes_matrix(vm, c(3, 2))
+
 weight_votes_matrix(uri2020$votes_matrix, uri2020$seats_vector)
 
 }

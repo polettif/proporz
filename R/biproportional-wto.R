@@ -56,7 +56,7 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
         # standard rounding for everyone else
         y_others = ceil_at(x_others, 0.5)
 
-        y = y_winners+y_others
+        y = y_winners + y_others
         dimnames(y) <- dimnames(x)
         return(y)
     }
@@ -82,7 +82,8 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
 #' @export
 #'
 #' @examples
-#' (vm = matrix(c(60,30,0,20,10,30), nrow = 3, dimnames = list(1:3, c("A", "B"))))
+#' (vm <- matrix(c(60,30,0,20,10,30),
+#'               nrow = 3, dimnames = list(1:3, c("A", "B"))))
 #'
 #' district_winner_matrix(vm)
 #'

@@ -11,7 +11,7 @@ read_bazi = function(file.bazi) {
         con = file(file.bazi, encoding = "windows-1252")
         readLines(con)
     }, warning = function(w) {
-        if(startsWith(w$message, "incomplete final line found")) {
+        if(startsWith(w[["message"]], "incomplete final line found")) {
             con = file(file.bazi, encoding = "windows-1252")
             return(readLines(con, warn = FALSE))
         }
@@ -21,7 +21,7 @@ read_bazi = function(file.bazi) {
     stopifnot(all(!grepl("::TOKEN::", lines)))
 
     vals = .get_token_values(lines)
-    vals$filename <- file.bazi
+    vals[["filename"]] <- file.bazi
 
     if(length(unique(names(vals))) == length(vals)) {
         if(strcount(vals[["DATA"]], "\n\\+") <= 2) {
@@ -129,31 +129,31 @@ read_bazi = function(file.bazi) {
 }
 
 .parse_bazi_single_district = function(vals) {
-    vals$data <- .read.table_bazi(vals[["DATA"]])
+    vals[["data"]] <- .read.table_bazi(vals[["DATA"]])
     cns = trimws(strsplit1(vals[["INPUT"]], ","))
-    colnames(vals$data) <- cns[seq(1, ncol(vals$data))]
+    colnames(vals[["data"]]) <- cns[seq(1, ncol(vals[["data"]]))]
     if(is.null(vals[["SEATS"]])) {
-        vals$seats <- NA
+        vals[["seats"]] <- NA
     } else {
-        vals$seats <- suppressWarnings(as.integer(vals[["SEATS"]]))
+        vals[["seats"]] <- suppressWarnings(as.integer(vals[["SEATS"]]))
     }
     vals
 }
 
 .parse_bazi_single_district_party_fill = function(vals) {
     vals[["DATA"]] <- gsub("\n\\+", "\n\\+ ", vals[["DATA"]])
-    vals$data <- .read.table_bazi(vals[["DATA"]])
+    vals[["data"]] <- .read.table_bazi(vals[["DATA"]])
 
-    vals$data[[1]] <- fill_plus(vals$data[[1]])
+    vals[["data"]][[1]] <- fill_plus(vals[["data"]][[1]])
     cns = trimws(strsplit1(vals[["INPUT"]], ","))
-    if(length(cns) == ncol(vals$data) && cns[length(cns)] == "---") {
+    if(length(cns) == ncol(vals[["data"]]) && cns[length(cns)] == "---") {
         cns <- cns[-length(cns)]
     }
 
-    colnames(vals$data) <- c(cns[1], "DISTRICT",
-                             cns[2:length(cns)])
+    colnames(vals[["data"]]) <- c(cns[1], "DISTRICT",
+                                  cns[2:length(cns)])
 
-    vals$seats <- suppressWarnings(as.integer(vals[["SEATS"]]))
+    vals[["seats"]] <- suppressWarnings(as.integer(vals[["SEATS"]]))
 
     vals
 }
@@ -192,26 +192,26 @@ read_bazi = function(file.bazi) {
         })
         unlist(x)
     })
-    data_list <- unlist(data_list, use.names = F)
+    data_list <- unlist(data_list, use.names = FALSE)
 
-    vals$data <- lapply(data_list, function(txt) {
+    vals[["data"]] <- lapply(data_list, function(txt) {
         utils::read.table(text = txt, fill = TRUE,
                           col.names = c("DISTRICT", trimws(strsplit1(vals[["INPUT"]], ","))))
     })
-    vals$data <- do.call(rbind, vals$data)
+    vals[["data"]] <- do.call(rbind, vals[["data"]])
 
     # district seats
-    vals$seats <- lapply(district_data_list, function(dmd) {
+    vals[["seats"]] <- lapply(district_data_list, function(dmd) {
         data.frame(DISTRICT = trimquotes(dmd[["DISTRICT"]]),
                    SEATS = as.integer(dmd[["SEATS"]]))
     })
-    vals$seats <- do.call(rbind, vals$seats)
+    vals[["seats"]] <- do.call(rbind, vals[["seats"]])
 
     # move mulitple district data to sublist
     vals <- vals[!names(vals) %in% c("DISTRICT", "SEATS", "DATA")]
-    vals$DISTRICT <- unlist(unname(district_seats_data[seq(1, length(district_seats_data), 3)]))
-    vals$SEATS <- unlist(unname(district_seats_data[seq(2, length(district_seats_data), 3)]))
-    vals$DATA <- unlist(unname(district_seats_data[seq(3, length(district_seats_data), 3)]))
+    vals[["DISTRICT"]] <- unlist(unname(district_seats_data[seq(1, length(district_seats_data), 3)]))
+    vals[["SEATS"]] <- unlist(unname(district_seats_data[seq(2, length(district_seats_data), 3)]))
+    vals[["DATA"]] <- unlist(unname(district_seats_data[seq(3, length(district_seats_data), 3)]))
 
     vals[["INPUT2"]] <- unique(vals[c("INPUT", "INPUT")])[[1]]
     vals <- vals[!names(vals) %in% c("INPUT")]

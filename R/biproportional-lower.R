@@ -259,7 +259,7 @@ find_matrix_divisors = function(M, seats_cols, seats_rows, round_func) {
 #' Find a divisor between `divisor_from` and `divisor_to` such that
 #' `sum(round_func(votes/divisor))` equals `target_seats`
 #'
-#' @param votes Votes (matrix with only one column or vector, allows to use row/colnames
+#' @param votes Votes (matrix with only one column or row, allows to use row/colnames
 #'   within `round_func`)
 #' @param divisor_from Lower bound for divisor search range (is decreased if necessary)
 #' @param divisor_to Upper bound for divisor search range (is increased if necessary)

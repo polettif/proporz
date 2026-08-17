@@ -26,7 +26,8 @@ If two or more parties are tied and there are not enough seats for each tied par
 the matrix value is \code{NA}.
 }
 \examples{
-(vm = matrix(c(60,30,0,20,10,30), nrow = 3, dimnames = list(1:3, c("A", "B"))))
+(vm <- matrix(c(60,30,0,20,10,30),
+              nrow = 3, dimnames = list(1:3, c("A", "B"))))
 
 district_winner_matrix(vm)
 

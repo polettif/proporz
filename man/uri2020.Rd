@@ -24,4 +24,10 @@ Example election data from the 2020 election for the cantonal council
 of Uri (Landrat) in Switzerland. The data has been extracted from the report
 "Landratswahlen 2020: Statistische Auswertung".
 }
+\examples{
+uri2020$votes_matrix
+
+uri2020$seats_vector
+
+}
 \keyword{data}

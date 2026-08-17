@@ -28,9 +28,9 @@ pukelsheim(
 \item number of seats for a district (numeric)
 }}
 
-\item{quorum}{Optional list of functions which take the votes_matrix and return a logical
-vector that denotes for each party/row whether they reached the quorum (i.e. are
-eligible for seats). The easiest way to do this is via \code{\link[=quorum_any]{quorum_any()}} or
+\item{quorum}{Optional list of functions which take the votes matrix and return a logical
+vector that shows for each party/row whether they reached the quorum (i.e. are
+eligible for seats). The easiest way to do this is by passing \code{\link[=quorum_any]{quorum_any()}} or
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if this parameter is missing or \code{NULL}.}
 
@@ -42,7 +42,7 @@ number of \emph{voters} (e.g. because they can only vote for one party).}
 
 \item{winner_take_one}{Set to \code{TRUE} if the party that got the most votes in a district
 must get \emph{at least} one seat ('Majorzbedingung') in this district. This only applies if
-the district winnig party is entitled to a seat in the upper apportionment.
+the district winning party is entitled to a seat in the upper apportionment.
 Default is \code{FALSE}.}
 
 \item{...}{Ignored (used for backwards compatibility)}

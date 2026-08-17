@@ -28,7 +28,7 @@ Note that apportioning district seats according to votes is not the general use 
 \item{weight_votes}{By default (\code{TRUE}) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
 the number of available district seats with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}}. Set to \code{FALSE} if
-the argument \code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast
+\code{votes_matrix} shows the number of \emph{voters} (e.g. because they can only cast
 one vote for one party).}
 
 \item{method}{Apportion method that defines how seats are assigned, see \code{\link[=proporz]{proporz()}}. Default

@@ -70,6 +70,10 @@ test_that("weight_votes_matrix", {
     expect_no_error(weight_votes_matrix(vm, ds[2:1]))
     expect_error_fixed(weight_votes_matrix(vm, unname(ds)),
                        "`district_seats` must have the same names as the columns in `votes_matrix`")
+
+    ds1 = c(3, 5)
+    ds2 = setNames(ds1, c("B", "A"))
+    expect_equal(weight_votes_matrix(unname(vm), ds1[2:1]), unname(weight_votes_matrix(vm, ds2)))
 })
 
 # expanded usage ####

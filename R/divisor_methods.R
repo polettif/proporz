@@ -28,9 +28,9 @@ highest_averages_method = function(votes, n_seats, divisors) {
     check_seats_number(n_seats, deparse(substitute(n_seats)))
 
     # catch trivial cases
-    if(length(votes) == 1) { return(n_seats) }
+    if(length(votes) == 1) return(n_seats)
     assert(!anyNA(votes))
-    if(n_seats == 0) { return(rep(0L, length(votes))) }
+    if(n_seats == 0) return(rep(0L, length(votes)))
 
     # setup params
     divisors <- prep_divisor_param(divisors, n_seats)
@@ -41,7 +41,7 @@ highest_averages_method = function(votes, n_seats, divisors) {
     colnames(mtrx_votes) <- names(votes)
     mtrx_divisors = matrix(rep(divisors, ncol(mtrx_votes)), ncol = n_parties)
 
-    mtrx_quotient = mtrx_votes/mtrx_divisors
+    mtrx_quotient = mtrx_votes / mtrx_divisors
     check_edge_quotient(mtrx_quotient, n_seats)
 
     # assign seats

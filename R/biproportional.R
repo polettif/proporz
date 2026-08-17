@@ -19,9 +19,9 @@
 #' assignment to candidates.
 #'
 #' @inheritParams upper_apportionment
-#' @param quorum Optional list of functions which take the votes_matrix and return a logical
-#'   vector that denotes for each party/row whether they reached the quorum (i.e. are
-#'   eligible for seats). The easiest way to do this is via [quorum_any()] or
+#' @param quorum Optional list of functions which take the votes matrix and return a logical
+#'   vector that shows for each party/row whether they reached the quorum (i.e. are
+#'   eligible for seats). The easiest way to do this is by passing [quorum_any()] or
 #'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
 #'   vector. No quorum is applied if this parameter is missing or `NULL`.
 #' @param method Defines which method is used to assign seats. The following methods are
@@ -58,15 +58,14 @@
 #' votes_matrix = uri2020$votes_matrix
 #' district_seats = uri2020$seats_vector
 #'
-#' biproporz(votes_matrix, district_seats)
+#' (bp <- biproporz(votes_matrix, district_seats))
+#'
+#' # print divisors and seat sums with summary()
+#' summary(bp)
 #'
 #' # apply quorum (high values for illustrative purposes)
 #' biproporz(votes_matrix, district_seats,
 #'           quorum_all(any_district = 0.1, total = 0.25))
-#'
-#' # print divisors and seat sums with summary
-#' bp = biproporz(votes_matrix, district_seats, weight_votes = FALSE)
-#' summary(bp)
 #'
 #' @export
 biproporz = function(votes_matrix,
@@ -94,7 +93,8 @@ biproporz = function(votes_matrix,
     upp_app = upper_apportionment(votes_matrix, district_seats, weight_votes, method[[1]])
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, upp_app$district, upp_app$party, method[[2]])
+    seats_matrix = lower_apportionment(votes_matrix, seats_cols = upp_app[["district"]],
+                                       seats_rows = upp_app[["party"]], method[[2]])
 
     class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)
@@ -139,7 +139,7 @@ biproporz = function(votes_matrix,
 #'   number of _voters_ (e.g. because they can only vote for one party).
 #' @param winner_take_one Set to `TRUE` if the party that got the most votes in a district
 #'   must get _at least_ one seat ('Majorzbedingung') in this district. This only applies if
-#'   the district winnig party is entitled to a seat in the upper apportionment.
+#'   the district winning party is entitled to a seat in the upper apportionment.
 #'   Default is `FALSE`.
 #' @param ... Ignored (used for backwards compatibility)
 #'

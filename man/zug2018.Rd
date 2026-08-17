@@ -18,4 +18,8 @@ zug2018
 Example election data from the 2018 election for the cantonal council
 of Zug (Kantonsrat) in Switzerland.
 }
+\examples{
+str(zug2018)
+
+}
 \keyword{data}
