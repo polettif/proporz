@@ -11,6 +11,7 @@ as.matrix.proporz_matrix = function(x, ...) {
 }
 
 #' @export
+#' @importFrom stats addmargins
 summary.proporz_matrix = function(object, ...) {
     divisors = get_divisors(object)
     divisors_rows = divisors[["parties"]]
@@ -28,31 +29,16 @@ summary.proporz_matrix = function(object, ...) {
         }
     }
 
-    summary_tbl = as.data.frame(as.matrix(object))
-    rownames(summary_tbl) <- NULL
-    summary_tbl <- cbind(X = rownames(object), summary_tbl)
-    summary_tbl[["(sum)"]] <- rowSums(object)
-    summary_tbl[["(divisor)"]] <- divisors_rows
+    summary_mtx = addmargins(object)
+    colnames(summary_mtx)[ncol(summary_mtx)] <- "(sum)"
+    rownames(summary_mtx)[nrow(summary_mtx)] <- "(sum)"
+    mode(summary_mtx) <- "character"
 
-    district_sums_row = cbind(
-        X = "(sum)",
-        as.data.frame(as.list(colSums(object)), check.names = FALSE),
-        "(sum)" = sum(object), "(divisor)" = NA)
+    summary_mtx <- cbind(summary_mtx, `(divisor)` = c(divisors_rows, ""))
+    summary_mtx <- rbind(summary_mtx, `(divisor)` = c(divisors_cols, "", ""))
 
-    district_divisors_row = cbind(
-        X = "(divisor)",
-        as.data.frame(as.list(divisors_cols), check.names = FALSE),
-        "(sum)" = NA, "(divisor)" = NA)
-
-    summary_tbl <- rbind(summary_tbl, district_sums_row)
-    summary_tbl <- rbind(summary_tbl, district_divisors_row)
-
-    for(j in seq_len(ncol(summary_tbl))) {
-        summary_tbl[[j]] <- as.character(summary_tbl[[j]])
-        summary_tbl[[j]][is.na(summary_tbl[[j]])] <- ""
-    }
+    summary_tbl = cbind(X =rownames(summary_mtx), as.data.frame(summary_mtx))
     colnames(summary_tbl)[1] <- ""
-
     class(summary_tbl) <- c("proporz_matrix_summary", "data.frame")
 
     return(summary_tbl)

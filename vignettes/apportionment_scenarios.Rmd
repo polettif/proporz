@@ -126,7 +126,7 @@ df_bydistrict = data.frame(
 )
 
 # sort table by D'Hondt seats
-df_bydistrict <- df_bydistrict[order(df_bydistrict[[1]], decreasing = TRUE),] 
+df_bydistrict <- df_bydistrict[order(df_bydistrict[[1]], decreasing = TRUE),]
 
 # print parties with at least one seat
 knitr::kable(df_bydistrict[rowSums(df_bydistrict) > 0,])
@@ -185,8 +185,8 @@ district among candidates/parties. Thus we need to use `weight_votes = FALSE`
 as a parameter in `biproporz`.
 
 ```{r biprop, results="hide"}
-seats_biproportional = biproporz(votes_matrix, 
-                                 district_seats, 
+seats_biproportional = biproporz(votes_matrix,
+                                 district_seats,
                                  weight_votes = FALSE)
 
 # show only parties with seats
@@ -229,7 +229,7 @@ districts seat share is proportional to its vote share. To do this, we use the
 total number of seats for the `district_seats` parameter.
 
 ```{r biprop_seats}
-full_biproportional = biproporz(votes_matrix, 
+full_biproportional = biproporz(votes_matrix,
                                 district_seats = sum(district_seats),
                                 weight_votes = FALSE)
 
@@ -256,13 +256,13 @@ municipalities used the _Hagenbach-Bischoff_ method. We'll ignore
 all other municipalities which use a majoritarian electoral system.
 
 ```{r uri}
-seats_old_system = apply_proporz(uri2020$votes_matrix, 
-                                 uri2020$seats_vector, 
+seats_old_system = apply_proporz(uri2020$votes_matrix,
+                                 uri2020$seats_vector,
                                  "hagenbach-bischoff")
 
 seats_new_system = biproporz(uri2020$votes_matrix, uri2020$seats_vector)
 
-seats_new_system - seats_old_system
+addmargins(seats_new_system - seats_old_system)
 ```
 
 Compared to the previous election system there was a change of one seat (out of

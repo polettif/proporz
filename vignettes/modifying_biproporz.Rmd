@@ -268,7 +268,7 @@ seats_biproporz_absolute_wto = biproporz_absolute_wto(votes_matrix,
                                                       district_seats)
 
 # Show the difference to the standard apportionment
-summary(seats_biproporz_absolute_wto - seats_biproporz_standard)
+addmargins(seats_biproporz_absolute_wto - seats_biproporz_standard)
 ```
 
 In this example, *Party D* gains a seat from *Party B*. To satisfy the new constraints, there are changes in district seat distributions for *Party A* and *Party E*.
