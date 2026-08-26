@@ -58,8 +58,8 @@ biproporz(votes_matrix, seats, quorum = quorum_any(total = 100))
 
 biproporz(votes_matrix, seats, quorum = quorum_any(total = 0.5))
 
-# the quorum parameter also accepts vectors (e.g. calculated elsewhere)
-biproporz(votes_matrix, seats, quorum = c(FALSE, TRUE, TRUE, TRUE))
+# the quorum parameter also accepts named vectors (e.g. calculated elsewhere)
+biproporz(votes_matrix, seats, quorum = c(A = FALSE, B = TRUE, C = TRUE, D = TRUE))
 
 }
 \seealso{

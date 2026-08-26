@@ -172,3 +172,27 @@ test_that("apply_quorum", {
     expect_error_fixed(apply_quorum(vc, -1),
                  "Quorum parameter must be a single number >= 0")
 })
+
+test_that("quorum in biproporz", {
+    votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+    dimnames(votes_matrix) <- list(party = c("A", "B", "C", "D"), district = c("Z1", "Z2"))
+    seats = c(Z1 = 50, Z2 = 20)
+
+    quorum_vec1 = c(A = FALSE, B = TRUE, C = TRUE, D = FALSE)
+    bp = biproporz(votes_matrix, seats, quorum = quorum_vec1)
+    expect_identical(rowSums(bp) > 0, quorum_vec1)
+    quorum_vec2 = setNames(c(TRUE, TRUE, FALSE, FALSE), c("C", "B", "A", "D"))
+    expect_identical(biproporz(votes_matrix, seats, quorum = quorum_vec2), bp)
+    quorum_vec3 = unname(quorum_vec1)
+    expect_error(
+        biproporz(votes_matrix, seats, quorum = quorum_vec3),
+        "quorum vector must have the same names as the votes_matrix rows")
+
+    votes_df = pivot_to_df(votes_matrix)
+    seats_df = data.frame(district = names(seats), seats = seats)
+    pk = pukelsheim(votes_df, seats_df, quorum = quorum_vec2)
+    expect_identical(sum(pk[pk$party %in% c("A", "D"), "seats"]), 0L)
+    expect_error(
+        pukelsheim(votes_df, seats_df, quorum = quorum_vec3),
+        "quorum vector must have the same names as the votes_matrix rows")
+})

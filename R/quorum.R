@@ -47,8 +47,9 @@
 #'
 #' biproporz(votes_matrix, seats, quorum = quorum_any(total = 0.5))
 #'
-#' # the quorum parameter also accepts vectors (e.g. calculated elsewhere)
-#' biproporz(votes_matrix, seats, quorum = c(FALSE, TRUE, TRUE, TRUE))
+#' # the quorum parameter also accepts named vectors (e.g. calculated elsewhere)
+#' biproporz(votes_matrix, seats,
+#'           quorum = c(A = FALSE, B = TRUE, C = TRUE, D = TRUE))
 #'
 #' @name quorum_functions
 NULL
@@ -255,7 +256,14 @@ apply_quorum_matrix = function(votes_matrix, quorum) {
         quorum_bool = reached_quorums(votes_matrix, quorum)
     } else if(is.vector(quorum) && is.logical(quorum)) {
         assert(length(quorum) == nrow(votes_matrix))
-        quorum_bool = quorum
+        if(!equal_names(rownames(votes_matrix), names(quorum))) {
+            stop("quorum vector must have the same names as the votes_matrix rows (parties)", call. = FALSE)
+        }
+        if(!is.null(rownames(votes_matrix))) {
+            quorum_bool = quorum[rownames(votes_matrix)]
+        } else {
+            quorum_bool = quorum
+        }
     }
 
     if(any(!quorum_bool)) {
@@ -266,7 +274,8 @@ apply_quorum_matrix = function(votes_matrix, quorum) {
 }
 
 check_quorum_param_matrix = function(quorum) {
-    if(!(is_quorum_function_list(quorum) || (is.atomic(quorum) && is.logical(quorum) && !anyNA(quorum)))) {
+    if(!(is_quorum_function_list(quorum) ||
+         (is.atomic(quorum) && is.logical(quorum) && !anyNA(quorum)))) {
         stop("Quorum parameter must be a logical vector or a list of quorum functions (see ?quorum_functions)",
              call. = FALSE)
     }
