@@ -1,4 +1,4 @@
-# proporz (dev)
+# proporz 1.5.3
 
 * feature: enable csv input/output in shiny app (`run_app()`)
 * bugfix: `biproporz()` and `upper_apportionment()`: `weight_votes` is ignored if number of seats is a single number
