@@ -1,0 +1,162 @@
+# Biproportional apportionment
+
+Method to proportionally allocate seats among parties (or lists) and
+districts (or entities, regions), thus bi-proportional.
+
+## Usage
+
+``` r
+biproporz(
+  votes_matrix,
+  district_seats,
+  quorum,
+  weight_votes = TRUE,
+  method = "round",
+  ...
+)
+```
+
+## Arguments
+
+- votes_matrix:
+
+  Vote count matrix with votes by party in rows and votes by district in
+  columns.
+
+- district_seats:
+
+  - Vector defining the number of seats per district. Must be the same
+    length as `ncol(votes_matrix)`. Values are name-matched to
+    `votes_matrix` columns if both are named.
+
+  - If the number of seats per district should be calculated according
+    to the number of votes, a single number for the total number of
+    seats can be used. `weight_votes` will be ignored, as `votes_matrix`
+    shows the number of voters. Note that apportioning district seats
+    according to votes is not the general use case.
+
+- quorum:
+
+  Optional list of functions which take the votes matrix and return a
+  logical vector that shows for each party/row whether they reached the
+  quorum (i.e. are eligible for seats). The easiest way to do this is by
+  passing
+  [`quorum_any()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
+  or
+  [`quorum_all()`](https://polettif.github.io/proporz/reference/quorum_functions.md),
+  see examples. Alternatively you can pass a precalculated logical
+  vector. No quorum is applied if this parameter is missing or `NULL`.
+
+- weight_votes:
+
+  By default (`TRUE`) it is assumed that each voter in a district has as
+  many votes as there are seats in a district. Thus, votes are weighted
+  according to the number of available district seats with
+  [`weight_votes_matrix()`](https://polettif.github.io/proporz/reference/weight_votes_matrix.md).
+  Set to `FALSE` if `votes_matrix` shows the number of *voters* (e.g.
+  because they can only cast one vote for one party).
+
+- method:
+
+  Defines which method is used to assign seats. The following methods
+  are recommended:
+
+  - `round`: Uses the Sainte-Laguë/Webster method (rounding half up) for
+    the upper and lower apportionment which is the standard for
+    biproportional apportionment and the only method guaranteed to
+    terminate.
+
+  - `wto`: "winner take one" works like "round" with a condition that
+    the party that got the most votes in a district must get *at least*
+    one seat ('Majorzbedingung') in said district. This only applies if
+    they got enough seats in the upper apportionment (which uses the
+    Sainte-Laguë/Webster method). See
+    [`lower_apportionment()`](https://polettif.github.io/proporz/reference/lower_apportionment.md)
+    for more details.
+
+  It is also possible to use any divisor method name listed in
+  [`proporz()`](https://polettif.github.io/proporz/reference/proporz.md).
+  If you want to use a different method for the upper and lower
+  apportionment, provide a list with two method names.
+
+- ...:
+
+  Ignored (used for backwards compatibility)
+
+## Value
+
+Matrix with the same dimension as `votes_matrix` containing the number
+of seats. Row/party and column/district divisors are stored in
+attributes (hidden from print(), use
+[`get_divisors()`](https://polettif.github.io/proporz/reference/get_divisors.md)
+or [`summary()`](https://rdrr.io/r/base/summary.html)).
+
+## Details
+
+Each party nominates a candidate list for every district. The voters
+vote for the parties of their district. The seat allocation is
+calculated in two steps:
+
+1.  In the so called
+    [`upper apportionment`](https://polettif.github.io/proporz/reference/upper_apportionment.md)
+    the number of seats for each party (over all districts) is
+    determined. Normally, the number of seats for each region are
+    defined before the election and are independent of the vote counts.
+
+2.  In the so called
+    [`lower apportionment`](https://polettif.github.io/proporz/reference/lower_apportionment.md)
+    the seats are distributed to the regional party list respecting the
+    results from the upper apportionment.
+
+Parties failing to reach quorums cannot get seats. This function does
+not handle seat assignment to candidates.
+
+## Note
+
+The iterative process in the lower apportionment is only guaranteed to
+terminate with the default Sainte-Laguë/Webster method.
+
+## References
+
+Gaffke, Norbert; Pukelsheim, Friedrich (2008): Divisor methods for
+proportional representation systems: An optimization approach to vector
+and matrix apportionment problems. Mathematical Social Sciences, 56 (2),
+166-184.
+
+## See also
+
+[`pukelsheim()`](https://polettif.github.io/proporz/reference/pukelsheim.md)
+for biproportional apportionment with `data.frames` as inputs.
+
+## Examples
+
+``` r
+votes_matrix = uri2020$votes_matrix
+district_seats = uri2020$seats_vector
+
+(bp <- biproporz(votes_matrix, district_seats))
+#>      Altdorf Bürglen Erstfeld Schattdorf
+#> CVP        5       2        2          3
+#> SPGB       4       1        2          2
+#> FDP        3       1        1          2
+#> SVP        3       3        1          2
+
+# print divisors and seat sums with summary()
+summary(bp)
+#>            Altdorf Bürglen Erstfeld Schattdorf (sum) (divisor)
+#>        CVP       5       2        2          3    12     0.946
+#>       SPGB       4       1        2          2     9         1
+#>        FDP       3       1        1          2     7         1
+#>        SVP       3       3        1          2     9      0.97
+#>      (sum)      15       7        6          9    37          
+#>  (divisor)    2689    1194     1088       1539                
+
+# apply quorum (high values for illustrative purposes)
+biproporz(votes_matrix, district_seats,
+          quorum_all(any_district = 0.1, total = 0.25))
+#>      Altdorf Bürglen Erstfeld Schattdorf
+#> CVP        7       5        3          6
+#> SPGB       8       2        3          3
+#> FDP        0       0        0          0
+#> SVP        0       0        0          0
+```

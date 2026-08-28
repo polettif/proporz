@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Modifying biproporz()">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">proporz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@ Poletti</h4>
             
             <h4 data-toc-skip class="date">2025-03-07</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.2/vignettes/modifying_biproporz.Rmd" class="external-link"><code>vignettes/modifying_biproporz.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.3/vignettes/modifying_biproporz.Rmd" class="external-link"><code>vignettes/modifying_biproporz.Rmd</code></a></small>
       <div class="d-none name"><code>modifying_biproporz.Rmd</code></div>
     </div>
 
@@ -133,7 +133,7 @@ per party and district by weighting the votes matrix with
 <span><span class="co">#&gt;     C    280  260.4  307.5       10       80</span></span>
 <span><span class="co">#&gt;     D      0    0.0    0.0       50        0</span></span>
 <span><span class="co">#&gt;     E    122  100.0   71.5       40      120</span></span></code></pre></div>
-<p>This step is performed within <code><a href="../reference/biproporz.html">biproporz()</a></code> with the
+<p>This step is performed within <code>biproporz</code> with the
 parameter <code>weight_votes = TRUE</code>. The result is a matrix with
 fractional voter counts, as votes can be split between multiple
 parties.</p>
@@ -142,7 +142,7 @@ parties.</p>
 <div class="section level2">
 <h2 id="standard-biproportional-apportionment">2) Standard Biproportional Apportionment<a class="anchor" aria-label="anchor" href="#standard-biproportional-apportionment"></a>
 </h2>
-<p>The default <code><a href="../reference/biproporz.html">biproporz()</a></code> method allocates seats based on
+<p>The default <code>biproporz</code> method allocates seats based on
 the votes matrix and district seats using standard rounding for both the
 upper and lower apportionments.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -152,22 +152,10 @@ upper and lower apportionments.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">seats_biproporz_standard</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A B C D E </span></span>
 <span><span class="co">#&gt; 8 9 6 0 3</span></span></code></pre></div>
-<p>Key observations from the standard apportionment:</p>
-<ul>
-<li>
-<em>Party D</em> did not receive enough votes across all districts
-to win a seat.</li>
-<li>In <em>City 3</em>, <em>Party B</em> receives the most seats despite
-having fewer total votes than two other parties.</li>
-<li>
-<em>Party E</em>’s strongest district is <em>City 1</em> (122
-voters), but it does not win a seat there.</li>
-</ul>
-<p>The <code><a href="../reference/biproporz.html">biproporz()</a></code> function returns the seat allocation as
-a matrix with divisors as hidden attributes (see
-<code><a href="../reference/get_divisors.html">get_divisors()</a></code>). You can print the marginal sums (total
-seats per party and district) and divisors with
-<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>.</p>
+<p><code>biproporz</code> returns the seat allocation as a matrix with
+divisors as hidden attributes (see <code><a href="../reference/get_divisors.html">get_divisors()</a></code>). You can
+print the marginal sums (total seats per party and district) and
+divisors with <code>summary</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">seats_biproporz_standard</span><span class="op">)</span></span>
 <span><span class="co">#&gt;            City 1 City 2 City 3 Region 4 Region 5 (sum) (divisor)</span></span>
@@ -181,6 +169,17 @@ seats per party and district) and divisors with
 <span></span>
 <span><span class="co"># You can transpose the matrix</span></span>
 <span><span class="co"># summary(t(seats_biproporz_standard))</span></span></code></pre></div>
+<p>Key observations from the standard apportionment:</p>
+<ul>
+<li>
+<em>Party D</em> did not receive enough votes across all districts
+to win a seat.</li>
+<li>In <em>City 3</em>, <em>Party B</em> receives the most seats despite
+having fewer total votes than two other parties.</li>
+<li>
+<em>Party E</em>’s strongest district is <em>City 1</em> (122
+voters), but it does not win a seat there.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="modifying-biproporz-with-parameters">3) Modifying biproporz with Parameters<a class="anchor" aria-label="anchor" href="#modifying-biproporz-with-parameters"></a>
@@ -207,7 +206,7 @@ quorum” and did not get enough votes for any seat.</p>
 <div class="section level3">
 <h3 id="alternative-apportionment-methods">Alternative Apportionment Methods<a class="anchor" aria-label="anchor" href="#alternative-apportionment-methods"></a>
 </h3>
-<p><code><a href="../reference/biproporz.html">biproporz()</a></code> allows you to specify different methods for
+<p><code>biproporz</code> allows you to specify different methods for
 the upper and lower apportionment by passing a list to the
 <code>method</code> parameter. For example, we can use the Adams method
 for the upper apportionment and standard rounding for the lower
@@ -335,12 +334,13 @@ example:</p>
 <p>When WTO is suspended in district <em>2</em>, tied party <em>Y</em>
 gets a seat in district <em>1</em> as this distribution better satisfies
 the constraints given by the upper apportionment. To explicitly break
-the tie (which might be necessary depending on the actual
+the tie (which might be necessary depending on the actual election
 specifications) you need to modify the votes matrix by adding a very
 small vote amount to the district winner. Here is a workflow to break
 ties randomly:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tied_districts</span> <span class="op">=</span> <span class="fu"><a href="../reference/district_winner_matrix.html">district_winner_matrix</a></span><span class="op">(</span><span class="va">tied_votes</span>, <span class="va">tied_votes_seats</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span>
 <span><span class="kw">for</span><span class="op">(</span><span class="va">d</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">tied_votes</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">anyNA</a></span><span class="op">(</span><span class="va">tied_districts</span><span class="op">[</span>,<span class="va">d</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -426,14 +426,15 @@ modified method, which guarantees district winners a seat.</p>
 <span>                                                      <span class="va">district_seats</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Show the difference to the standard apportionment</span></span>
-<span><span class="va">seats_biproporz_absolute_wto</span> <span class="op">-</span> <span class="va">seats_biproporz_standard</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/addmargins.html" class="external-link">addmargins</a></span><span class="op">(</span><span class="va">seats_biproporz_absolute_wto</span> <span class="op">-</span> <span class="va">seats_biproporz_standard</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      district</span></span>
-<span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5</span></span>
-<span><span class="co">#&gt;     A     -1      0      1        0        0</span></span>
-<span><span class="co">#&gt;     B      0      0     -1        0        0</span></span>
-<span><span class="co">#&gt;     C      0      0      0        0        0</span></span>
-<span><span class="co">#&gt;     D      0      0      0        1        0</span></span>
-<span><span class="co">#&gt;     E      1      0      0       -1        0</span></span></code></pre></div>
+<span><span class="co">#&gt; party City 1 City 2 City 3 Region 4 Region 5 Sum</span></span>
+<span><span class="co">#&gt;   A       -1      0      1        0        0   0</span></span>
+<span><span class="co">#&gt;   B        0      0     -1        0        0  -1</span></span>
+<span><span class="co">#&gt;   C        0      0      0        0        0   0</span></span>
+<span><span class="co">#&gt;   D        0      0      0        1        0   1</span></span>
+<span><span class="co">#&gt;   E        1      0      0       -1        0   0</span></span>
+<span><span class="co">#&gt;   Sum      0      0      0        0        0   0</span></span></code></pre></div>
 <p>In this example, <em>Party D</em> gains a seat from <em>Party B</em>.
 To satisfy the new constraints, there are changes in district seat
 distributions for <em>Party A</em> and <em>Party E</em>.</p>
@@ -455,7 +456,7 @@ may become overly restrictive.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

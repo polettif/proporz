@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Apportionment scenarios">
@@ -26,7 +26,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">proporz</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,7 +68,7 @@ Poletti</h4>
             
             <h4 data-toc-skip class="date">2024-02-22</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.2/vignettes/apportionment_scenarios.Rmd" class="external-link"><code>vignettes/apportionment_scenarios.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/polettif/proporz/blob/v1.5.3/vignettes/apportionment_scenarios.Rmd" class="external-link"><code>vignettes/apportionment_scenarios.Rmd</code></a></small>
       <div class="d-none name"><code>apportionment_scenarios.Rmd</code></div>
     </div>
 
@@ -434,7 +434,7 @@ the number of party seats on the national level with
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># sort table by D'Hondt seats</span></span>
-<span><span class="va">df_bydistrict</span> <span class="op">&lt;-</span> <span class="va">df_bydistrict</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,<span class="op">]</span> </span>
+<span><span class="va">df_bydistrict</span> <span class="op">&lt;-</span> <span class="va">df_bydistrict</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,<span class="op">]</span></span>
 <span></span>
 <span><span class="co"># print parties with at least one seat</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="va">df_bydistrict</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span>,<span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -582,8 +582,8 @@ votes as there are seats in their district among candidates/parties.
 Thus we need to use <code>weight_votes = FALSE</code> as a parameter in
 <code>biproporz</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seats_biproportional</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, </span>
-<span>                                 <span class="va">district_seats</span>, </span>
+<code class="sourceCode R"><span><span class="va">seats_biproportional</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>,</span>
+<span>                                 <span class="va">district_seats</span>,</span>
 <span>                                 weight_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># show only parties with seats</span></span>
@@ -1063,7 +1063,7 @@ every district. This way, each districts seat share is proportional to
 its vote share. To do this, we use the total number of seats for the
 <code>district_seats</code> parameter.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">full_biproportional</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>, </span>
+<code class="sourceCode R"><span><span class="va">full_biproportional</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">votes_matrix</span>,</span>
 <span>                                district_seats <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">district_seats</span><span class="op">)</span>,</span>
 <span>                                weight_votes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -1099,18 +1099,19 @@ municipalities. Previously, these four municipalities used the
 <em>Hagenbach-Bischoff</em> method. We’ll ignore all other
 municipalities which use a majoritarian electoral system.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">seats_old_system</span> <span class="op">=</span> <span class="fu">apply_proporz</span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span>, </span>
-<span>                                 <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span>, </span>
+<code class="sourceCode R"><span><span class="va">seats_old_system</span> <span class="op">=</span> <span class="fu">apply_proporz</span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span>,</span>
+<span>                                 <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span>,</span>
 <span>                                 <span class="st">"hagenbach-bischoff"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">seats_new_system</span> <span class="op">=</span> <span class="fu"><a href="../reference/biproporz.html">biproporz</a></span><span class="op">(</span><span class="va">uri2020</span><span class="op">$</span><span class="va">votes_matrix</span>, <span class="va">uri2020</span><span class="op">$</span><span class="va">seats_vector</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">seats_new_system</span> <span class="op">-</span> <span class="va">seats_old_system</span></span>
-<span><span class="co">#&gt;      Altdorf Bürglen Erstfeld Schattdorf</span></span>
-<span><span class="co">#&gt; CVP        1       0        0          0</span></span>
-<span><span class="co">#&gt; SPGB      -1       0        0          0</span></span>
-<span><span class="co">#&gt; FDP        0       0        0          0</span></span>
-<span><span class="co">#&gt; SVP        0       0        0          0</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/addmargins.html" class="external-link">addmargins</a></span><span class="op">(</span><span class="va">seats_new_system</span> <span class="op">-</span> <span class="va">seats_old_system</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      Altdorf Bürglen Erstfeld Schattdorf Sum</span></span>
+<span><span class="co">#&gt; CVP        1       0        0          0   1</span></span>
+<span><span class="co">#&gt; SPGB      -1       0        0          0  -1</span></span>
+<span><span class="co">#&gt; FDP        0       0        0          0   0</span></span>
+<span><span class="co">#&gt; SVP        0       0        0          0   0</span></span>
+<span><span class="co">#&gt; Sum        0       0        0          0   0</span></span></code></pre></div>
 <p>Compared to the previous election system there was a change of one
 seat (out of 37).</p>
 </div>
@@ -1125,7 +1126,7 @@ seat (out of 37).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
