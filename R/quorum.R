@@ -22,8 +22,8 @@
 #'   (i.e. both) quorums must be reached. If you only use one parameter,
 #'   `quorum_any()` and `quorum_all()` are identical.
 #'
-#' @returns A function which, when called with `function(votes_matrix)`, returns
-#'   a boolean vector with length equal to the number of lists/parties
+#' @returns List of functions. Each function, when called with `function(votes_matrix)`,
+#'   returns a boolean vector with length equal to the number of lists/parties
 #'   (`votes_matrix` rows). The vector shows whether a party has reached any/all
 #'   quorums.
 #'
@@ -156,9 +156,11 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
     assert(quorum_districts > 0)
     if(quorum_districts < 1) {
         quorum_districts <- colSums(votes_matrix) * quorum_districts
+    } else {
+        quorum_districts <- rep(quorum_districts, ncol(votes_matrix))
     }
 
-    passed_distr_quor = t(apply(votes_matrix, 1, function(x) x >= quorum_districts))
+    passed_distr_quor = votes_matrix >= row_as_matrix(quorum_districts, votes_matrix)
     passed_any_distr_quor = rowSums(passed_distr_quor) > 0
     return(passed_any_distr_quor)
 }
@@ -189,9 +191,9 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 
     quorum_matrix = do.call(cbind, has_reached_quorum)
     if(attributes(quorum_funcs)[["type"]] == "ALL") {
-        quorum_bool = apply(quorum_matrix, 1, all)
+        quorum_bool = rowSums(quorum_matrix) == ncol(quorum_matrix)
     } else if(attributes(quorum_funcs)[["type"]] == "ANY") {
-        quorum_bool = apply(quorum_matrix, 1, any)
+        quorum_bool = rowSums(quorum_matrix) > 0
     }
     return(quorum_bool)
 }

@@ -24,8 +24,8 @@ Must be > 0 if provided.
 Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}}.}
 }
 \value{
-A function which, when called with \verb{function(votes_matrix)}, returns
-a boolean vector with length equal to the number of lists/parties
+List of functions. Each function, when called with \verb{function(votes_matrix)},
+returns a boolean vector with length equal to the number of lists/parties
 (\code{votes_matrix} rows). The vector shows whether a party has reached any/all
 quorums.
 }
@@ -59,7 +59,8 @@ biproporz(votes_matrix, seats, quorum = quorum_any(total = 100))
 biproporz(votes_matrix, seats, quorum = quorum_any(total = 0.5))
 
 # the quorum parameter also accepts named vectors (e.g. calculated elsewhere)
-biproporz(votes_matrix, seats, quorum = c(A = FALSE, B = TRUE, C = TRUE, D = TRUE))
+biproporz(votes_matrix, seats,
+          quorum = c(A = FALSE, B = TRUE, C = TRUE, D = TRUE))
 
 }
 \seealso{

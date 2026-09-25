@@ -59,6 +59,18 @@ test_that("quorum with percentages counts", {
     expect_identical(p2,p3)
     p4 = apply_quorum_matrix(vm, quorum_any(total = 0.09))
     expect_identical(p1, p4)
+
+    vm2 = matrix(c(30, 10, 60, 50, 20, 180), nrow = 6)
+    expected = c(FALSE, FALSE, TRUE, TRUE, FALSE, TRUE)
+    expect_identical(quorum_all(any_district = 40)[[1]](vm2), expected)
+    expect_identical(quorum_any(any_district = 40)[[1]](vm2), expected)
+    expect_identical(quorum_all(total = 40)[[1]](vm2), expected)
+    expect_identical(quorum_any(total = 40)[[1]](vm2), expected)
+    expect_identical(reached_quorums(vm2, quorum_all(any_district = 40, total = 40)), expected)
+
+    vm3 = t(vm2)
+    expect_false(quorum_all(total = 351)[[1]](vm3))
+    expect_false(quorum_all(any_district = 40, total = 351)[[2]](vm3))
 })
 
 test_that("quorum param", {
