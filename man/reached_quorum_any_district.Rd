@@ -9,9 +9,8 @@ reached_quorum_any_district(votes_matrix, quorum_districts)
 \arguments{
 \item{votes_matrix}{Votes matrix}
 
-\item{quorum_districts}{Vote threshold a party must reach in \emph{at least}
-one district. Used as fraction of total votes within a
-district if less than 1, otherwise as number of votes.
+\item{quorum_districts}{Vote threshold a party (row) must reach in \emph{at least} one district.
+Used as fraction of total votes within a district if less than 1, otherwise as number of votes.
 Must be greater than 0.}
 }
 \value{

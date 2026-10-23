@@ -198,6 +198,11 @@ test_that("fuzzy params biproporz/pukelsheim", {
     expect_true(all(.startsWith(em, "is.function(method) ") | .startsWith(em, "Unknown apportion method: ")))
 })
 
+test_that("old quorum param names", {
+    skip()
+    quorum_all(votes_any_district = 1)
+})
+
 test_that("fuzzy params quorum", {
     # quorum_all/any
     any_district = 0
@@ -205,16 +210,16 @@ test_that("fuzzy params quorum", {
 
     expect_identical(
         fuzzy_errors(function(any_district) quorum_all(any_district, total)),
-        "`any_district` must be a single number")
+        "`votes_any_district` must be a single number")
     expect_identical(
         fuzzy_errors(function(any_district) quorum_any(any_district, total)),
-        "`any_district` must be a single number")
+        "`votes_any_district` must be a single number")
     expect_identical(
         fuzzy_errors(function(total) quorum_all(any_district, total)),
-        "`total` must be a single number")
+        "`votes_total` must be a single number")
     expect_identical(
         fuzzy_errors(function(total) quorum_any(any_district, total)),
-         "`total` must be a single number")
+         "`votes_total` must be a single number")
 
     # apply_quorum
     votes = c(81, 9, 10)
@@ -230,7 +235,7 @@ test_that("fuzzy params quorum", {
     expect_identical(em, "Quorum parameter must be a single number >= 0")
 
     votes_matrix = matrix(c(91, 9, 199, 1), nrow = 2)
-    quorum = quorum_all(any_district = 0.1)
+    quorum = quorum_all(votes_any_district = 0.1)
 
     em = fuzzy_errors(function(votes_matrix) apply_quorum(votes_matrix, quorum))
     expect_identical(

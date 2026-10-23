@@ -6,16 +6,26 @@
 #' [biproporz()]/[pukelsheim()] and help describe how quorums should be
 #' applied prior to seat distributions.
 #'
-#' @param any_district Vote threshold a party must reach in \emph{at least} one
-#'   district. Used as share of total votes within a district if less than 1,
-#'   otherwise as number of votes.
+#' @param votes_any_district Vote threshold a party must reach in \emph{at least} one district.
+#'   Used as share of total votes within a district if less than 1, otherwise as number of votes.
 #'   Must be > 0 if provided.
 #'   Uses [reached_quorum_any_district()].
-#' @param total Vote threshold a party must reach for all votes cast. Used as
-#'   share of total votes if less than 1, otherwise as number of votes. Note that
-#'   votes are not weighted with [weight_votes_matrix()] across districts.
+#' @param votes_total Vote threshold a party must reach for all votes cast.
+#'   Used as share of total votes if less than 1, otherwise as number of votes.
+#'   Note that votes are not weighted with [weight_votes_matrix()] across districts, the
+#'   usual and theoretically sound application for a total quroum is `total_voters`.
 #'   Must be > 0 if provided.
 #'   Uses [reached_quorum_total()].
+#' @param any_district_voters Weighted vote (voters) threshold a party must reach in \emph{at least} one district.
+#'   Used as share of total weighted votes (voters) within a district if less than 1, otherwise as number of voters.
+#'   Must be > 0 if provided.
+#'   Uses [reached_quorum_any_district()] with a weighted votes matrix.
+#' @param total_voters Vote threshold a party must reach for all weighted votes (voters).
+#'   Used as share of total weighted votes (voters) if less than 1, otherwise as number of voters.
+#'   Must be > 0 if provided.
+#'   Uses [reached_quorum_total()] with a weighted votes matrix.
+#' @param total Replaced by `total_voters` (recommended) or `votes_total`
+#' @param any_district Replaced by `votes_any_district` (recommended) or `any_district_voters`
 #'
 #' @details There is a difference in how the two functions work. With `quorum_any`,
 #'   \emph{at least one} quorum must be reached. With `quorum_all` \emph{all}
@@ -36,16 +46,16 @@
 #'
 #' # use as parameter in biproporz or pukelsheim (general use case)
 #' biproporz(votes_matrix, seats,
-#'           quorum = quorum_any(any_district = 0.1, total = 100))
+#'           quorum = quorum_any(votes_any_district = 0.1, votes_total = 100))
 #'
 #' biproporz(votes_matrix, seats,
-#'           quorum = quorum_all(any_district = 0.1, total = 100))
+#'           quorum = quorum_all(votes_any_district = 0.1, votes_total = 100))
 #'
-#' biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1))
+#' biproporz(votes_matrix, seats, quorum = quorum_any(votes_any_district = 0.1))
 #'
-#' biproporz(votes_matrix, seats, quorum = quorum_any(total = 100))
+#' biproporz(votes_matrix, seats, quorum = quorum_any(votes_total = 100))
 #'
-#' biproporz(votes_matrix, seats, quorum = quorum_any(total = 0.5))
+#' biproporz(votes_matrix, seats, quorum = quorum_any(votes_total = 0.5))
 #'
 #' # the quorum parameter also accepts named vectors (e.g. calculated elsewhere)
 #' biproporz(votes_matrix, seats,
@@ -56,31 +66,63 @@ NULL
 
 #' @rdname quorum_functions
 #' @export
-quorum_all = function(any_district, total) {
-    create_quorum_function_list("ALL", any_district, total)
+quorum_all = function(votes_any_district,
+                      votes_total,
+                      any_district_voters,
+                      total_voters,
+                      total = NULL, any_district = NULL) {
+    catch_replaced_quorum_params(total, any_district)
+
+    create_quorum_function_list("ALL", votes_any_district, votes_total,
+                                any_district_voters, total_voters)
 }
 
 #' @rdname quorum_functions
 #' @export
-quorum_any = function(any_district, total) {
-    create_quorum_function_list("ANY", any_district, total)
+quorum_any = function(votes_any_district, votes_total,
+                      any_district_voters, total_voters,
+                      total = NULL, any_district = NULL) {
+    catch_replaced_quorum_params(total, any_district)
+
+    create_quorum_function_list("ANY", votes_any_district, votes_total,
+                                any_district_voters, total_voters)
 }
 
-create_quorum_function_list = function(type, any_district, total) {
+# TODO check order, reorder
+create_quorum_function_list = function(type,
+                                       votes_any_district, # any_district
+                                       votes_total, # total
+                                       any_district_voters,
+                                       total_voters
+                                       ) {
     assert(type %in% c("ANY", "ALL"))
     quorum_funcs = list()
 
-    if(!missing(any_district)) {
-        assert_num1(any_district)
-        quorum_funcs <- append(quorum_funcs, function(votes_matrix) {
-            reached_quorum_any_district(votes_matrix, any_district)
+    if(!missing(votes_any_district) && !is.null(votes_any_district)) {
+        assert_num1(votes_any_district)
+        quorum_funcs <- append(quorum_funcs, function(votes_matrix, weighted_votes_matrix) {
+            reached_quorum_any_district(votes_matrix, votes_any_district)
         })
     }
 
-    if(!missing(total)) {
-        assert_num1(total)
-        quorum_funcs <- append(quorum_funcs, function(votes_matrix) {
-            reached_quorum_total(votes_matrix, total)
+    if(!missing(votes_total) && !is.null(votes_total)) {
+        assert_num1(votes_total)
+        quorum_funcs <- append(quorum_funcs, function(votes_matrix, weighted_votes_matrix) {
+            reached_quorum_total(votes_matrix, votes_total)
+        })
+    }
+
+    if(!missing(any_district_voters) && !is.null(any_district_voters)) {
+        assert_num1(any_district_voters)
+        quorum_funcs <- append(quorum_funcs, function(votes_matrix, weighted_votes_matrix) {
+            reached_quorum_any_district(weighted_votes_matrix, any_district_voters)
+        })
+    }
+
+    if(!missing(total_voters) && !is.null(total_voters)) {
+        assert_num1(total_voters)
+        quorum_funcs <- append(quorum_funcs, function(votes_matrix, weighted_votes_matrix) {
+            reached_quorum_total(weighted_votes_matrix, total_voters)
         })
     }
 
@@ -105,9 +147,9 @@ is_quorum_function_list = function(q) {
 #' Base implementation, used by \code{\link[=quorum_functions]{quorum_functions}}.
 #'
 #' @param votes_matrix Votes matrix
-#' @param quorum_total Vote threshold a party must reach for all votes cast.
-#'                     Used as fraction of total votes if less than 1, otherwise
-#'                     as number of votes. Must be greater than 0.
+#' @param quorum_total Vote threshold a party (row) must reach for all votes cast.
+#'   Used as fraction of total votes if less than 1, otherwise as number of votes.
+#'   Must be greater than 0.
 #'
 #' @returns Logical vector with length equal to the number of lists/parties (`votes_matrix`
 #'   rows) showing whether they reached the quorum or not.
@@ -139,10 +181,9 @@ reached_quorum_total = function(votes_matrix, quorum_total) {
 #' Base implementation, used by \code{\link[=quorum_functions]{quorum_functions}}.
 #'
 #' @param votes_matrix Votes matrix
-#' @param quorum_districts Vote threshold a party must reach in \emph{at least}
-#'                         one district. Used as fraction of total votes within a
-#'                         district if less than 1, otherwise as number of votes.
-#'                         Must be greater than 0.
+#' @param quorum_districts Vote threshold a party (row) must reach in \emph{at least} one district.
+#'   Used as fraction of total votes within a district if less than 1, otherwise as number of votes.
+#'   Must be greater than 0.
 #'
 #' @inherit reached_quorum_total return
 #' @seealso [reached_quorum_total()]
@@ -176,13 +217,13 @@ reached_quorum_any_district = function(votes_matrix, quorum_districts) {
 #'
 #' @note This is an internal function for quorum calculations in [biproporz()].
 #' @keywords internal
-reached_quorums = function(votes_matrix, quorum_funcs) {
+reached_quorums = function(votes_matrix, quorum_funcs, weighted_votes_matrix) {
     assert(is.matrix(votes_matrix) && !anyNA(votes_matrix))
     assert(is_quorum_function_list(quorum_funcs))
 
     # list of vector whether quorum was reached for each party
     has_reached_quorum = lapply(quorum_funcs, function(qf) {
-        qf(votes_matrix)
+        qf(votes_matrix, weighted_votes_matrix)
     })
 
     if(length(quorum_funcs) == 1L) {
@@ -211,6 +252,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 #'   votes if less than 1 otherwise as number of votes.
 #'   * For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
 #'   or a (named) logical vector with the same length as the number of `votes` rows.
+#' @param ... arguments passed on to the `quorum_function` (only for votes matrix)
 #'
 #' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
 #'   specified quorum have their votes set to zero.
@@ -230,7 +272,7 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 #' # matrix
 #' (votes_matrix <- matrix(c(91, 9, 199, 1), nrow = 2))
 #'
-#' apply_quorum(votes_matrix, quorum_all(total = 0.1))
+#' apply_quorum(votes_matrix, quorum_all(votes_total = 0.1))
 #'
 #' apply_quorum(votes_matrix, c(FALSE, TRUE))
 #'
@@ -238,10 +280,18 @@ reached_quorums = function(votes_matrix, quorum_funcs) {
 #' rownames(votes_matrix) <- c("A", "B")
 #' quorum_vec = c(B = TRUE, A = FALSE)
 #' apply_quorum(votes_matrix, quorum_vec)
-apply_quorum = function(votes, quorum) {
+apply_quorum = function(votes, quorum, ...) {
     assert(is.matrix(votes) || is.atomic(votes))
     if(is.matrix(votes)) {
-        return(apply_quorum_matrix(votes, quorum))
+        qm = withCallingHandlers(
+            apply_quorum_matrix(votes, quorum, ...),
+            error = function(e) {
+                if(inherits(e, "missingArgError")) {
+                    stop(e$message, call. = FALSE)
+                }
+                e
+            })
+        return(qm)
     }
     apply_quorum_vector(votes, quorum)
 }
@@ -250,7 +300,8 @@ apply_quorum = function(votes, quorum) {
 # functions like reached_any_district need the threshold as parameter which
 # won't work with only votes_matrix. So it's easier to simply restrict params
 # and hopefully reduce misunderstandings
-apply_quorum_matrix = function(votes_matrix, quorum) {
+# Always returns votes_matrix with rows set to zero
+apply_quorum_matrix = function(votes_matrix, quorum, weighted_votes) {
     assert(is.matrix(votes_matrix))
     check_quorum_param_matrix(quorum)
 
@@ -259,7 +310,8 @@ apply_quorum_matrix = function(votes_matrix, quorum) {
     } else if(is.vector(quorum) && is.logical(quorum)) {
         assert(length(quorum) == nrow(votes_matrix))
         if(!equal_names(rownames(votes_matrix), names(quorum))) {
-            stop("quorum vector must have the same names as the votes_matrix rows (parties)", call. = FALSE)
+            stop("quorum vector must have the same names as the votes_matrix rows (parties)",
+                 call. = FALSE)
         }
         if(!is.null(rownames(votes_matrix))) {
             quorum_bool = quorum[rownames(votes_matrix)]
@@ -307,4 +359,19 @@ check_quorum_param_vector = function(quorum) {
              call. = FALSE)
     }
     invisible(TRUE)
+}
+
+# can't catch total/any_district via ... because partial argument
+# matching (total to votes_total) happens first, dots are not even evaluated
+catch_replaced_quorum_params = function(total, any_district) {
+    if(!is.null(total)) {
+        stop("The argument `total` is deprecated, ",
+             "please specify total_voters (recommended) or `votes_total`",
+             call. = FALSE)
+    }
+    if(!is.null(any_district)) {
+        stop("The argument `any_district` is deprecated, ",
+             "please specify `votes_any_district` (recommended) or `any_district_voters`",
+             call. = FALSE)
+    }
 }

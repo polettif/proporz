@@ -74,6 +74,8 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
 
+    # TODO return votes_matrix (after quorum) and weighted_votes_matrix as attributes
+
     # return values
     list(district = seats_district, party = seats_party)
 }

@@ -9,9 +9,9 @@ reached_quorum_total(votes_matrix, quorum_total)
 \arguments{
 \item{votes_matrix}{Votes matrix}
 
-\item{quorum_total}{Vote threshold a party must reach for all votes cast.
-Used as fraction of total votes if less than 1, otherwise
-as number of votes. Must be greater than 0.}
+\item{quorum_total}{Vote threshold a party (row) must reach for all votes cast.
+Used as fraction of total votes if less than 1, otherwise as number of votes.
+Must be greater than 0.}
 }
 \value{
 Logical vector with length equal to the number of lists/parties (\code{votes_matrix}

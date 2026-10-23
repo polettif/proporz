@@ -65,7 +65,7 @@
 #'
 #' # apply quorum (high values for illustrative purposes)
 #' biproporz(votes_matrix, district_seats,
-#'           quorum_all(any_district = 0.1, total = 0.25))
+#'           quorum_all(votes_any_district = 0.1, votes_total = 0.25))
 #'
 #' @export
 biproporz = function(votes_matrix,
@@ -90,7 +90,8 @@ biproporz = function(votes_matrix,
     }
 
     # upper apportionment (Oberzuteilung)
-    upp_app = upper_apportionment(votes_matrix, district_seats, weight_votes, method[[1]])
+    upp_app = upper_apportionment(votes_matrix, district_seats,
+                                  weight_votes, method[[1]])
 
     # lower apportionment (Unterzuteilung)
     seats_matrix = lower_apportionment(votes_matrix, seats_cols = upp_app[["district"]],
@@ -156,7 +157,7 @@ biproporz = function(votes_matrix,
 #'
 #' seats_df = pukelsheim(votes_df,
 #'                       district_seats_df,
-#'                       quorum_any(any_district = 0.05, total = 0.03),
+#'                       quorum_any(votes_any_district = 0.05, votes_total = 0.03),
 #'                       winner_take_one = TRUE)
 #'
 #' head(seats_df)

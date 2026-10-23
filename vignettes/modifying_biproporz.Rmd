@@ -96,7 +96,7 @@ A quorum can ensure that only parties with a minimum percentage or number of vot
 In this example, we impose a 5% quorum on the total votes.
 
 ```{r standard_quorum}
-biproporz(votes_matrix, district_seats, quorum_any(total = 0.05))
+biproporz(votes_matrix, district_seats, quorum_any(votes_total = 0.05))
 ```
 
 This does not actually change the seat distribution compared to the standard method, as *Party D* is already below the "natural quorum" and did not get enough votes for any seat.
@@ -154,7 +154,7 @@ To prevent this case, a quorum is usually applied to ensure that only large enou
 
 ```{r wto_quorum}
 biproporz(votes_matrix, district_seats, method = "wto",
-          quorum = quorum_any(total = 0.01))
+          quorum = quorum_any(votes_total = 0.01))
 ```
 
 ### WTO with an Alternative Upper Apportionment Method

@@ -4,7 +4,7 @@
 \alias{reached_quorums}
 \title{Apply a list of quorum functions to rows in a votes matrix}
 \usage{
-reached_quorums(votes_matrix, quorum_funcs)
+reached_quorums(votes_matrix, quorum_funcs, weighted_votes_matrix)
 }
 \arguments{
 \item{votes_matrix}{Votes matrix}

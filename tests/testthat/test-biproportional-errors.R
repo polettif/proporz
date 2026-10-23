@@ -11,7 +11,7 @@ test_that("undefined result biproportional", {
     expect_error_fixed(upper_apportionment(vm, seats),
                        "Result is undefined, equal quotient for parties: 4, 6")
 
-    expect_error_fixed(biproporz(uri2020$votes_matrix, uri2020$seats_vector, quorum_any(any_district = 0.7)),
+    expect_error_fixed(biproporz(uri2020$votes_matrix, uri2020$seats_vector, quorum_any(votes_any_district = 0.7)),
                        "No votes in districts with at least one seat: 'Altdorf', 'Bürglen', 'Erstfeld', 'Schattdorf'")
 
     vm5 = matrix(c(10, 10, 10, 10), 2, 2)

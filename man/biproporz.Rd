@@ -97,7 +97,7 @@ summary(bp)
 
 # apply quorum (high values for illustrative purposes)
 biproporz(votes_matrix, district_seats,
-          quorum_all(any_district = 0.1, total = 0.25))
+          quorum_all(votes_any_district = 0.1, votes_total = 0.25))
 
 }
 \references{
