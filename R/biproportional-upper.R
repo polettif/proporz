@@ -13,6 +13,11 @@
 #'   of votes, a single number for the total number of seats can be used. `weight_votes` will be
 #'   ignored, as `votes_matrix` shows the number of voters.
 #'   Note that apportioning district seats according to votes is not the general use case.
+#' @param quorum Optional list of functions which take the votes matrix and return a logical
+#'   vector that shows for each party/row whether they reached the quorum (i.e. are
+#'   eligible for seats). The easiest way to do this is by passing [quorum_any()] or
+#'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
+#'   vector. No quorum is applied if this parameter is missing or `NULL`.
 #' @param weight_votes By default (`TRUE`) it is assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Thus, votes are weighted according to
 #'   the number of available district seats with [weight_votes_matrix()]. Set to `FALSE` if
@@ -24,7 +29,7 @@
 #' @seealso [biproporz()], [lower_apportionment()]
 #'
 #' @returns A named list with `district` seats (for `votes_matrix` columns) and `party` seats
-#'   (for rows).
+#'   (for rows). The votes_matrix after the quorum has been applied is returned as `votes_matrix_quorum`.
 #'
 #' @note The results from the upper apportionment define the number of seats for each party and
 #'   the number of seats for each district for the whole voting area. The lower apportionment
@@ -43,7 +48,6 @@ upper_apportionment = function(votes_matrix, district_seats,
                                quorum,
                                weight_votes = TRUE,
                                method = "round") {
-    upp_app = list()
     # check parameters
     .vmn = deparse(substitute(votes_matrix))
     .dsn = deparse(substitute(district_seats))
@@ -82,17 +86,8 @@ upper_apportionment = function(votes_matrix, district_seats,
     if(weight_votes) {
         V <- weighted_votes_matrix
     }
-    V[!party_reached_quorum,] <- 0
-
-    # check enough votes in districts and vice-versa
-    # TODO separate function
-    .novotes_check = colSums(V)[seats_district > 0] == 0
-    if(any(.novotes_check)) {
-        stop("No votes in ", num_word("a district", "districts", .novotes_check),
-             " with at least one seat: ",
-             collapse_names(.novotes_check, names(.novotes_check)),
-             call. = FALSE)
-    }
+    V <- set_zero(V, !party_reached_quorum)
+    check_no_votes_in_districts(V, seats_district)
 
     # apportion party seats
     seats_party = proporz(rowSums(V), sum(seats_district), method)
@@ -100,11 +95,8 @@ upper_apportionment = function(votes_matrix, district_seats,
     # return values
     upp_app = list(
         district = seats_district,
-        party = seats_party)
-
-    attributes(upp_app)$votes_matrix <- votes_matrix
-    attributes(upp_app)$weighted_votes_matrix <- weighted_votes_matrix
-    attributes(upp_app)$V <- V # relevant (weighted/unweighted) matrix, after quorum application
+        party = seats_party,
+        votes_matrix_quorum = set_zero(votes_matrix, !party_reached_quorum))
 
     return(upp_app)
 }
@@ -164,4 +156,20 @@ weight_list_votes = function(votes_matrix, district_seats) {
         new = "weight_votes_matrix",
         msg = "weight_list_votes has been renamed to weight_votes_matrix")
     weight_votes_matrix(votes_matrix, district_seats)
+}
+
+set_zero = function(M, bool) {
+    assert(length(bool) == nrow(M))
+    M[bool,] <- 0
+    M
+}
+
+check_no_votes_in_districts = function(vm, seats_district) {
+    .novotes_check = colSums(vm)[seats_district > 0] == 0
+    if(any(.novotes_check)) {
+        stop("No votes in ", num_word("a district", "districts", .novotes_check),
+             " with at least one seat: ",
+             collapse_names(.novotes_check, names(.novotes_check)),
+             call. = FALSE)
+    }
 }

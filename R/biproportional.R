@@ -19,11 +19,6 @@
 #' assignment to candidates.
 #'
 #' @inheritParams upper_apportionment
-#' @param quorum Optional list of functions which take the votes matrix and return a logical
-#'   vector that shows for each party/row whether they reached the quorum (i.e. are
-#'   eligible for seats). The easiest way to do this is by passing [quorum_any()] or
-#'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
-#'   vector. No quorum is applied if this parameter is missing or `NULL`.
 #' @param method Defines which method is used to assign seats. The following methods are
 #'   recommended:
 #'   \itemize{
@@ -89,10 +84,10 @@ biproporz = function(votes_matrix,
                                   quorum, weight_votes, method[[1]])
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(attr(upp_app, "votes_matrix"),
+    seats_matrix = lower_apportionment(upp_app[["votes_matrix_quorum"]],
                                        seats_cols = upp_app[["district"]],
                                        seats_rows = upp_app[["party"]],
-                                       method[[2]])
+                                       method = method[[2]])
 
     class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)

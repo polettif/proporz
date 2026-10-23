@@ -23,7 +23,6 @@ create_wto_round_function = function(votes_matrix, district_seats, seats_parties
                                           district_seats > 0) # ignore districts without any seats
     if(length(not_enough_district_seats) > 0) {
         DISTRICT_WINNERS[,not_enough_district_seats] <- FALSE
-
         warning("Not enough seats for tied parties with the most votes in: ",
                 collapse_names(names(not_enough_district_seats)),
                 "\nWinner take one condition is not applied in ",
