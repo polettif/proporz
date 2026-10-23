@@ -40,8 +40,10 @@
 #'
 #' @export
 upper_apportionment = function(votes_matrix, district_seats,
+                               quorum,
                                weight_votes = TRUE,
                                method = "round") {
+    upp_app = list()
     # check parameters
     .vmn = deparse(substitute(votes_matrix))
     .dsn = deparse(substitute(district_seats))
@@ -49,7 +51,14 @@ upper_apportionment = function(votes_matrix, district_seats,
     district_seats <- prep_district_seats(district_seats, votes_matrix, .dsn, .vmn)
     assert_bool1(weight_votes)
 
-    # district seats
+    # catch logical quorum as it is in the old/deprecated position of weight_votes
+    if(!missing(quorum) && is_bool1(quorum) && nrow(votes_matrix) > 1) {
+        stop("`quorum` cannot be TRUE/FALSE.\n",
+             "Argument order has changed, do you need to set `weight_votes=`",
+             quorum, "` explicitly?", call. = FALSE)
+    }
+
+    # apportion district seats
     if(length(district_seats) == 1L) {
         seats_district = proporz(colSums(votes_matrix), district_seats, method)
         weight_votes <- FALSE
@@ -58,13 +67,26 @@ upper_apportionment = function(votes_matrix, district_seats,
         seats_district = district_seats
     }
 
-    # party seats
-    if(weight_votes) {
-        votes_matrix <- weight_votes_matrix(votes_matrix, seats_district)
+    # weight votes
+    weighted_votes_matrix = weight_votes_matrix(votes_matrix, seats_district)
+
+    # quorum
+    if(!missing(quorum) && !is.null(quorum)) {
+        party_reached_quorum = apply_quorum_matrix(votes_matrix, quorum, weighted_votes_matrix, TRUE)
+    } else {
+        party_reached_quorum = rep(TRUE, nrow(votes_matrix))
     }
 
+    # define relevant matrix, apply quorum
+    V = votes_matrix
+    if(weight_votes) {
+        V <- weighted_votes_matrix
+    }
+    V[!party_reached_quorum,] <- 0
+
     # check enough votes in districts and vice-versa
-    .novotes_check = colSums(votes_matrix)[seats_district > 0] == 0
+    # TODO separate function
+    .novotes_check = colSums(V)[seats_district > 0] == 0
     if(any(.novotes_check)) {
         stop("No votes in ", num_word("a district", "districts", .novotes_check),
              " with at least one seat: ",
@@ -72,12 +94,19 @@ upper_apportionment = function(votes_matrix, district_seats,
              call. = FALSE)
     }
 
-    seats_party = proporz(rowSums(votes_matrix), sum(seats_district), method)
-
-    # TODO return votes_matrix (after quorum) and weighted_votes_matrix as attributes
+    # apportion party seats
+    seats_party = proporz(rowSums(V), sum(seats_district), method)
 
     # return values
-    list(district = seats_district, party = seats_party)
+    upp_app = list(
+        district = seats_district,
+        party = seats_party)
+
+    attributes(upp_app)$votes_matrix <- votes_matrix
+    attributes(upp_app)$weighted_votes_matrix <- weighted_votes_matrix
+    attributes(upp_app)$V <- V # relevant (weighted/unweighted) matrix, after quorum application
+
+    return(upp_app)
 }
 
 #' Create weighted votes matrix

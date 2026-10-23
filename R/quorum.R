@@ -227,7 +227,7 @@ reached_quorums = function(votes_matrix, quorum_funcs, weighted_votes_matrix) {
     })
 
     if(length(quorum_funcs) == 1L) {
-        return(quorum_funcs[[1]](votes_matrix))
+        return(quorum_funcs[[1]](votes_matrix, weighted_votes_matrix))
     }
 
     quorum_matrix = do.call(cbind, has_reached_quorum)
@@ -301,12 +301,13 @@ apply_quorum = function(votes, quorum, ...) {
 # won't work with only votes_matrix. So it's easier to simply restrict params
 # and hopefully reduce misunderstandings
 # Always returns votes_matrix with rows set to zero
-apply_quorum_matrix = function(votes_matrix, quorum, weighted_votes) {
+apply_quorum_matrix = function(votes_matrix, quorum, weighted_votes_matrix, return_bool = FALSE) {
     assert(is.matrix(votes_matrix))
     check_quorum_param_matrix(quorum)
+    assert_bool1(return_bool)
 
     if(is.list(quorum)) {
-        quorum_bool = reached_quorums(votes_matrix, quorum)
+        quorum_bool = reached_quorums(votes_matrix, quorum, weighted_votes_matrix)
     } else if(is.vector(quorum) && is.logical(quorum)) {
         assert(length(quorum) == nrow(votes_matrix))
         if(!equal_names(rownames(votes_matrix), names(quorum))) {
@@ -322,6 +323,10 @@ apply_quorum_matrix = function(votes_matrix, quorum, weighted_votes) {
 
     if(any(!quorum_bool)) {
         votes_matrix[!quorum_bool,] <- 0
+    }
+
+    if(return_bool) {
+        return(quorum_bool)
     }
 
     return(votes_matrix)

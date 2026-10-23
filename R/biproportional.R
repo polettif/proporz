@@ -84,18 +84,15 @@ biproporz = function(votes_matrix,
     district_seats <- prep_district_seats(district_seats, votes_matrix, .dsn, .vmn)
     method <- prep_method(method)
 
-    # quorum
-    if(!missing(quorum) && !is.null(quorum)) {
-        votes_matrix <- apply_quorum_matrix(votes_matrix, quorum)
-    }
-
     # upper apportionment (Oberzuteilung)
     upp_app = upper_apportionment(votes_matrix, district_seats,
-                                  weight_votes, method[[1]])
+                                  quorum, weight_votes, method[[1]])
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, seats_cols = upp_app[["district"]],
-                                       seats_rows = upp_app[["party"]], method[[2]])
+    seats_matrix = lower_apportionment(attr(upp_app, "votes_matrix"),
+                                       seats_cols = upp_app[["district"]],
+                                       seats_rows = upp_app[["party"]],
+                                       method[[2]])
 
     class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)

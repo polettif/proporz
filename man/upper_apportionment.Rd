@@ -7,6 +7,7 @@
 upper_apportionment(
   votes_matrix,
   district_seats,
+  quorum,
   weight_votes = TRUE,
   method = "round"
 )
