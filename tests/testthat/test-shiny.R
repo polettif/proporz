@@ -29,26 +29,26 @@ test_that("shiny_create_seats_matrix", {
 
 test_that("shiny_get_quorum_function", {
     q1 = shiny_get_quorum_function(q_districts = 0.1, q_total = 0.2, q_all = TRUE)
-    expect_true(is_quorum_function_list(q1))
+    expect_true(is_quorum_param_list(q1))
     expect_length(q1, 2)
 
     q2 = shiny_get_quorum_function(q_districts = 0.1, q_total = 0.2, q_all = FALSE)
-    expect_true(is_quorum_function_list(q2))
+    expect_true(is_quorum_param_list(q2))
     expect_length(q2, 2)
 
     q3 = shiny_get_quorum_function(q_districts = 0.1, q_total = 0, q_all = TRUE)
-    expect_true(is_quorum_function_list(q3))
+    expect_true(is_quorum_param_list(q3))
     expect_length(q3, 1)
 
     q4 = shiny_get_quorum_function(q_districts = 0, q_total = 0.2)
-    expect_true(is_quorum_function_list(q4))
+    expect_true(is_quorum_param_list(q4))
     expect_length(q4, 1)
 
     q5 = shiny_get_quorum_function(q_districts = 0, q_total = 0, q_all = TRUE)
     expect_identical(q5, NULL)
 
-    expect_true(is_quorum_function_list(shiny_get_quorum_function(q_districts = NULL, q_total = 0.1)))
-    expect_true(is_quorum_function_list(shiny_get_quorum_function(q_districts = 0.1, q_total = NULL)))
+    expect_true(is_quorum_param_list(shiny_get_quorum_function(q_districts = NULL, q_total = 0.1)))
+    expect_true(is_quorum_param_list(shiny_get_quorum_function(q_districts = 0.1, q_total = NULL)))
 })
 
 test_that("shiny_check_uploaded_csv", {

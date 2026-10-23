@@ -76,7 +76,10 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # quorum
     if(!missing(quorum) && !is.null(quorum)) {
-        party_reached_quorum = apply_quorum_matrix(votes_matrix, quorum, weighted_votes_matrix, TRUE)
+        party_reached_quorum = apply_quorum_params(
+            quorum,
+            votes_matrix = votes_matrix,
+            weighted_votes_matrix = weighted_votes_matrix)
     } else {
         party_reached_quorum = rep(TRUE, nrow(votes_matrix))
     }
@@ -158,6 +161,7 @@ weight_list_votes = function(votes_matrix, district_seats) {
     weight_votes_matrix(votes_matrix, district_seats)
 }
 
+# TODO flip bool, rename to zero_failed_quorums?
 set_zero = function(M, bool) {
     assert(length(bool) == nrow(M))
     M[bool,] <- 0

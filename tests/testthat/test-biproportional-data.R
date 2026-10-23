@@ -34,8 +34,7 @@ test_that("Zug 2018", {
     votes_df = unique(zug2018[c("list_id", "entity_name", "list_votes")])
     district_seats_df = unique(zug2018[c("entity_name", "election_mandates")])
 
-    seats_df = pukelsheim_zug(votes_df,
-                              district_seats_df)
+    seats_df = pukelsheim_zug(votes_df, district_seats_df)
 
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
     expect_identical(seats_mtrx[,colnames(seats_matrix_expected)], seats_matrix_expected)

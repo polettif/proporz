@@ -92,4 +92,5 @@ test_that("num_word", {
 
 test_that("assert", {
     expect_error(assert(NA), "NA is not TRUE")
+    expect_error(assert_num1(NA), "`NA` must be a single number")
 })
