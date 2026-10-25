@@ -64,14 +64,15 @@ apply_quorum_boolvector = function(votes_vector, quorum) {
     check_quorum_param_vector(quorum)
 
     if(quorum < 1) {
-        quorum = ceiling(sum(votes_vector) * quorum)
+        quorum = sum(votes_vector) * quorum
     }
 
-    if(all(votes_vector < quorum)) {
+    b = votes_vector < quorum
+    if(all(b)) {
         stop("No party reached the quorum", call. = FALSE)
     }
 
-    votes_vector[votes_vector < quorum] <- 0
+    votes_vector[b] <- 0
     return(votes_vector)
 }
 
