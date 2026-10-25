@@ -100,7 +100,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
         c(
             "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
             "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?",
-            "length(quorum_params) == nrow(votes_matrix) is not TRUE"
+            "length(quorum) == nrow(votes_matrix) is not TRUE"
         ))
 
     em = fuzzy_errors(function(weight_votes) biproporz(votes_matrix, district_seats, quorum, weight_votes, method))
@@ -133,7 +133,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
         em,
         c("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
           "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?",
-          "length(quorum_params) == nrow(votes_matrix) is not TRUE"))
+          "length(quorum) == nrow(votes_matrix) is not TRUE"))
 
     em = fuzzy_errors(function(new_seats_col) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
     expect_identical(em, "`new_seats_col` must be a single string")
@@ -263,7 +263,7 @@ test_that("fuzzy params quorum", {
     expect_identical(
         em,
         c("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
-          "length(quorum_params) == nrow(votes_matrix) is not TRUE"))
+          "length(quorum) == nrow(votes_matrix) is not TRUE"))
 })
 
 test_that("fuzzy params helpers", {

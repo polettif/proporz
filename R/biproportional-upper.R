@@ -89,7 +89,7 @@ upper_apportionment = function(votes_matrix, district_seats,
     if(weight_votes) {
         V <- weighted_votes_matrix
     }
-    V <- set_zero(V, !party_reached_quorum)
+    V <- zero_failed_quorums(V, party_reached_quorum)
     check_no_votes_in_districts(V, seats_district)
 
     # apportion party seats
@@ -99,7 +99,7 @@ upper_apportionment = function(votes_matrix, district_seats,
     upp_app = list(
         district = seats_district,
         party = seats_party,
-        votes_matrix_quorum = set_zero(votes_matrix, !party_reached_quorum))
+        votes_matrix_quorum = zero_failed_quorums(votes_matrix, party_reached_quorum))
 
     return(upp_app)
 }
@@ -159,13 +159,6 @@ weight_list_votes = function(votes_matrix, district_seats) {
         new = "weight_votes_matrix",
         msg = "weight_list_votes has been renamed to weight_votes_matrix")
     weight_votes_matrix(votes_matrix, district_seats)
-}
-
-# TODO flip bool, rename to zero_failed_quorums?
-set_zero = function(M, bool) {
-    assert(length(bool) == nrow(M))
-    M[bool,] <- 0
-    M
 }
 
 check_no_votes_in_districts = function(vm, seats_district) {

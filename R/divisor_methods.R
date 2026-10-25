@@ -90,7 +90,7 @@ NULL
 divisor_round = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
     check_seats_number(n_seats, deparse(substitute(n_seats)))
-    votes <- apply_quorum_vector(votes, quorum)
+    votes <- apply_quorum_boolvector(votes, quorum)
     highest_averages_method(votes, n_seats, 0.5)
 }
 
@@ -99,7 +99,7 @@ divisor_round = function(votes, n_seats, quorum = 0) {
 divisor_floor = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
     check_seats_number(n_seats, deparse(substitute(n_seats)))
-    votes <- apply_quorum_vector(votes, quorum)
+    votes <- apply_quorum_boolvector(votes, quorum)
     highest_averages_method(votes, n_seats, 1)
 }
 
@@ -111,7 +111,7 @@ divisor_harmonic = function(votes, n_seats, quorum = 0) {
 
     divisors = seq_harmonic(seq(1, n_seats))
 
-    votes <- apply_quorum_vector(votes, quorum)
+    votes <- apply_quorum_boolvector(votes, quorum)
     check_enough_seats(votes, n_seats, "harmonic")
     highest_averages_method(votes, n_seats, divisors)
 }
@@ -124,7 +124,7 @@ divisor_geometric = function(votes, n_seats, quorum = 0) {
 
     divisors = seq_geometric(seq(1, n_seats))
 
-    votes <- apply_quorum_vector(votes, quorum)
+    votes <- apply_quorum_boolvector(votes, quorum)
     check_enough_seats(votes, n_seats, "geometric")
     highest_averages_method(votes, n_seats, divisors)
 }
@@ -135,7 +135,7 @@ divisor_ceiling = function(votes, n_seats, quorum = 0) {
     check_votes_vector(votes, deparse(substitute(votes)))
     check_seats_number(n_seats, deparse(substitute(n_seats)))
 
-    votes <- apply_quorum_vector(votes, quorum)
+    votes <- apply_quorum_boolvector(votes, quorum)
     check_enough_seats(votes, n_seats, "ceiling")
     highest_averages_method(votes, n_seats, 0)
 }

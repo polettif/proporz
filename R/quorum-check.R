@@ -1,4 +1,4 @@
-is_quorum_param_list = function(.quorum) {
+is_quorum_paramlist = function(.quorum) {
     if(!is.list(.quorum) || is.data.frame(.quorum)) {
         return(FALSE)
     }
@@ -13,7 +13,7 @@ is_quorum_param_list = function(.quorum) {
     return(all(vapply(.quorum, is.atomic, logical(1))))
 }
 
-is_quorum_vector = function(.quorum) {
+is_quorum_boolvector = function(.quorum) {
     if(length(.quorum) == 0 || !is.atomic(.quorum) || !is.logical(.quorum) || anyNA(.quorum)) {
         return(FALSE)
     }
@@ -21,7 +21,7 @@ is_quorum_vector = function(.quorum) {
 }
 
 assert_viable_quorum = function(quorum) {
-    if(!is_quorum_param_list(quorum) && !is_quorum_vector(quorum)) {
+    if(!is_quorum_paramlist(quorum) && !is_quorum_boolvector(quorum)) {
         stop("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
              call. = FALSE)
     }

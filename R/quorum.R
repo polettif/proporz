@@ -70,12 +70,12 @@ quorum_all = function(votes_any_district, votes_total,
     catch_replaced_quorum_params(total, any_district)
     rm(total, any_district)
 
-    quorum_params = c(as.list(environment()))
-    quorum_params <- quorum_params[!sapply(quorum_params, is.symbol)]
-    check_quorum_params_num1(quorum_params)
+    quorum = c(as.list(environment()))
+    quorum <- quorum[!sapply(quorum, is.symbol)]
+    check_quorum_params_num1(quorum)
 
-    attributes(quorum_params)[["type"]] <- "ALL"
-    return(quorum_params)
+    attributes(quorum)[["type"]] <- "ALL"
+    return(quorum)
 }
 
 #' @rdname quorum_functions
@@ -86,74 +86,74 @@ quorum_any = function(votes_any_district, votes_total,
     catch_replaced_quorum_params(total, any_district)
     rm(total, any_district)
 
-    quorum_params = c(as.list(environment()))
-    quorum_params <- quorum_params[!sapply(quorum_params, is.symbol)]
-    check_quorum_params_num1(quorum_params)
+    quorum = c(as.list(environment()))
+    quorum <- quorum[!sapply(quorum, is.symbol)]
+    check_quorum_params_num1(quorum)
 
-    attributes(quorum_params)[["type"]] <- "ANY"
-    return(quorum_params)
+    attributes(quorum)[["type"]] <- "ANY"
+    return(quorum)
 }
 
-eval_quorum = function(quorum_params, votes_matrix, weighted_votes_matrix, ...) {
+eval_quorum = function(quorum, votes_matrix, weighted_votes_matrix, ...) {
     assert_empty_dots(list(...))
-    assert_viable_quorum(quorum_params)
+    assert_viable_quorum(quorum)
 
-    if(is_quorum_param_list(quorum_params)) {
-        quorum_bool = eval_quorum_params_list(quorum_params, votes_matrix, weighted_votes_matrix, ...)
-    } else if(is_quorum_vector(quorum_params)) {
-        quorum_bool = eval_quorum_vector(quorum_params, votes_matrix)
+    if(is_quorum_paramlist(quorum)) {
+        quorum_bool = eval_quorum_paramlist(quorum, votes_matrix, weighted_votes_matrix, ...)
+    } else if(is_quorum_boolvector(quorum)) {
+        quorum_bool = eval_quorum_boolvector(quorum, votes_matrix)
     }
 
     return(quorum_bool)
 }
 
-eval_quorum_params_list = function(quorum_params, votes_matrix, weighted_votes_matrix, ...) {
+eval_quorum_paramlist = function(quorum, votes_matrix, weighted_votes_matrix, ...) {
     ql = list()
 
     # votes_
-    if(!is.null(quorum_params$votes_any_district)) {
+    if(!is.null(quorum$votes_any_district)) {
         if(missing(votes_matrix)) missing_arg_error("votes_matrix", "votes_any_district")
         votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
-        ql[[length(ql)+1]] <- reached_quorum_any_district(votes_matrix, quorum_params$votes_any_district)
+        ql[[length(ql)+1]] <- reached_quorum_any_district(votes_matrix, quorum$votes_any_district)
     }
 
-    if(!is.null(quorum_params$votes_total)) {
+    if(!is.null(quorum$votes_total)) {
         if(missing(votes_matrix)) missing_arg_error("votes_matrix", "votes_total")
         votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
-        ql[[length(ql)+1]] <- reached_quorum_total(votes_matrix, quorum_params$votes_total)
+        ql[[length(ql)+1]] <- reached_quorum_total(votes_matrix, quorum$votes_total)
     }
 
     # _voters
-    if(!is.null(quorum_params$any_district_voters)) {
+    if(!is.null(quorum$any_district_voters)) {
         if(missing(weighted_votes_matrix)) missing_arg_error("weighted_votes_matrix", "any_district_voters")
         weighted_votes_matrix <- prep_votes_matrix(weighted_votes_matrix, deparse(substitute(weighted_votes_matrix)))
-        ql[[length(ql)+1]] <- reached_quorum_any_district(weighted_votes_matrix, quorum_params$any_district_voters)
+        ql[[length(ql)+1]] <- reached_quorum_any_district(weighted_votes_matrix, quorum$any_district_voters)
     }
 
-    if(!is.null(quorum_params$total_voters)) {
+    if(!is.null(quorum$total_voters)) {
         if(missing(weighted_votes_matrix)) missing_arg_error("weighted_votes_matrix", "total_voters")
         weighted_votes_matrix <- prep_votes_matrix(weighted_votes_matrix, deparse(substitute(weighted_votes_matrix)))
-        ql[[length(ql)+1]] <- reached_quorum_total(weighted_votes_matrix, quorum_params$total_voters)
+        ql[[length(ql)+1]] <- reached_quorum_total(weighted_votes_matrix, quorum$total_voters)
     }
 
     quorum_matrix = do.call(cbind, ql)
 
-    if(attr(quorum_params, "type") == "ALL") {
+    if(attr(quorum, "type") == "ALL") {
         quorum_bool = rowSums(quorum_matrix) == ncol(quorum_matrix)
-    } else if(attr(quorum_params, "type") == "ANY") {
+    } else if(attr(quorum, "type") == "ANY") {
         quorum_bool = rowSums(quorum_matrix) > 0
     }
 }
 
-eval_quorum_vector = function(quorum_params, votes_matrix) {
-    assert(length(quorum_params) == nrow(votes_matrix))
-    if(!equal_names(rownames(votes_matrix), names(quorum_params))) {
+eval_quorum_boolvector = function(quorum, votes_matrix) {
+    assert(length(quorum) == nrow(votes_matrix))
+    if(!equal_names(rownames(votes_matrix), names(quorum))) {
         stop("quorum vector must have the same names as the votes_matrix rows (parties)",
              call. = FALSE)
     }
     if(!is.null(rownames(votes_matrix))) {
-        quorum_bool = quorum_params[rownames(votes_matrix)]
+        quorum_bool = quorum[rownames(votes_matrix)]
     } else {
-        quorum_bool = quorum_params
+        quorum_bool = quorum
     }
 }

@@ -7,12 +7,12 @@ test_that("quorum proporz", {
     }
 })
 
-test_that("apply_quorum_vector", {
+test_that("apply_quorum_boolvector", {
     votes = c(49, 38, 13)
-    expect_equal(apply_quorum_vector(votes, 0), c(49, 38, 13), tolerance = 1e-14)
-    expect_equal(apply_quorum_vector(votes, 0.13), c(49, 38, 13), tolerance = 1e-14)
-    expect_equal(apply_quorum_vector(votes, 0.135), c(49, 38, 0), tolerance = 1e-14)
-    expect_equal(apply_quorum_vector(votes, 15), c(49, 38, 0), tolerance = 1e-14)
+    expect_equal(apply_quorum_boolvector(votes, 0), c(49, 38, 13), tolerance = 1e-14)
+    expect_equal(apply_quorum_boolvector(votes, 0.13), c(49, 38, 13), tolerance = 1e-14)
+    expect_equal(apply_quorum_boolvector(votes, 0.135), c(49, 38, 0), tolerance = 1e-14)
+    expect_equal(apply_quorum_boolvector(votes, 15), c(49, 38, 0), tolerance = 1e-14)
 })
 
 test_that("check seats number after quorum", {
@@ -42,8 +42,8 @@ test_that("quorum with vote counts", {
     expect_identical(reached_quorum_any_district(vm, 35), q1)
     expect_identical(reached_quorum_total(vm, 45), q2)
 
-    expect_identical(sum(set_zero(vm, !c(FALSE,FALSE,FALSE))), 0)
-    expect_identical(sum(set_zero(vm, !c(FALSE,TRUE,FALSE))), 30)
+    expect_identical(sum(zero_failed_quorums(vm, c(FALSE,FALSE,FALSE))), 0)
+    expect_identical(sum(zero_failed_quorums(vm, c(FALSE,TRUE,FALSE))), 30)
 })
 
 test_that("quorum with percentages counts", {
@@ -133,7 +133,7 @@ test_that("eval_quorum", {
     expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
     attributes(dummy_list)$type <- c("ALL", "ANY")
     expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
-    # TODO change names/doc for reached_quorum to apply_quorum_params
+    # TODO change names/doc for reached_quorum to eval_quorum
 })
 
 test_that("quorum_all/quorum_any in biproporz", {
@@ -200,9 +200,9 @@ test_that("quorum_all/quorum_any in biproporz", {
 
 test_that("apply_quorum", {
     vc = c(91, 9)
-    expect_identical(apply_quorum(vc, 0), apply_quorum_vector(vc, 0))
-    expect_identical(apply_quorum(vc, 0.1), apply_quorum_vector(vc, 0.1))
-    expect_identical(apply_quorum(vc, 10), apply_quorum_vector(vc, 10))
+    expect_identical(apply_quorum(vc, 0), apply_quorum_boolvector(vc, 0))
+    expect_identical(apply_quorum(vc, 0.1), apply_quorum_boolvector(vc, 0.1))
+    expect_identical(apply_quorum(vc, 10), apply_quorum_boolvector(vc, 10))
 
     vm = matrix(c(89, 11, 199, 1), 2)
     expect_identical(rowSums(apply_quorum(vm, quorum_any(votes_any_district = 0.1))) > 0,
@@ -214,12 +214,16 @@ test_that("apply_quorum", {
         apply_quorum(vm, 0),
         "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
     expect_identical(sum(apply_quorum(vm, c(FALSE, FALSE))), 0)
-    expect_error_fixed(apply_quorum(vm, c(FALSE)), "length(quorum_params) == nrow(votes_matrix) is not TRUE")
+    expect_error_fixed(
+        apply_quorum(vm, c(FALSE)),
+        "length(quorum) == nrow(votes_matrix) is not TRUE")
 
-    expect_error_fixed(apply_quorum(vc, quorum_all(0.5)),
-                       "Quorum parameter must be a single number >= 0")
-    expect_error_fixed(apply_quorum(vc, -1),
-                       "Quorum parameter must be a single number >= 0")
+    expect_error_fixed(
+        apply_quorum(vc, quorum_all(0.5)),
+        "Quorum parameter must be a single number >= 0")
+    expect_error_fixed(
+        apply_quorum(vc, -1),
+        "Quorum parameter must be a single number >= 0")
 
     expect_error_fixed(
         apply_quorum(vm, quorum_all(total_voters = 0.1)),
@@ -272,9 +276,9 @@ test_that("renamend quorum parameters", {
         "Cannot handle unweighted matrix with method: total_voters")
 })
 
-test_that("is_quorum_param_list", {
-    expect_false(is_quorum_param_list(list()))
-    expect_false(is_quorum_param_list(list("votes2_total" = NA)))
-    expect_false(is_quorum_param_list(list("votes_total" = data.frame())))
-    expect_false(is_quorum_param_list(data.frame()))
+test_that("is_quorum_paramlist", {
+    expect_false(is_quorum_paramlist(list()))
+    expect_false(is_quorum_paramlist(list("votes2_total" = NA)))
+    expect_false(is_quorum_paramlist(list("votes_total" = data.frame())))
+    expect_false(is_quorum_paramlist(data.frame()))
 })

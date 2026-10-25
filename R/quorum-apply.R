@@ -39,11 +39,11 @@
 apply_quorum = function(votes, quorum) {
     assert(is.matrix(votes) || is.vector(votes))
     if(is.vector(votes)) {
-        return(apply_quorum_vector(votes, quorum))
+        return(apply_quorum_boolvector(votes, quorum))
     }
 
     assert_viable_quorum(quorum)
-    if(is_quorum_param_list(quorum)) {
+    if(is_quorum_paramlist(quorum)) {
         methods_using_weighted_mtx = names(quorum)[endsWith(names(quorum), "_voters")]
         if(length(methods_using_weighted_mtx) > 0) {
             stop("Cannot handle unweighted matrix with ",
@@ -52,12 +52,12 @@ apply_quorum = function(votes, quorum) {
                  call. = FALSE) # TODO link to eval_quorum
         }
     }
-    b = eval_quorum(votes_matrix = votes, quorum_params = quorum)
-    return(set_zero(votes, !b))
+    b = eval_quorum(votes_matrix = votes, quorum = quorum)
+    return(zero_failed_quorums(votes, b))
 }
 
 # quorum for single vector for proporz() methods
-apply_quorum_vector = function(votes_vector, quorum) {
+apply_quorum_boolvector = function(votes_vector, quorum) {
     check_votes_vector(votes_vector, deparse(substitute(votes)))
     check_quorum_param_vector(quorum)
 
@@ -71,4 +71,12 @@ apply_quorum_vector = function(votes_vector, quorum) {
 
     votes_vector[votes_vector < quorum] <- 0
     return(votes_vector)
+}
+
+zero_failed_quorums = function(M, quorum_bool) {
+    assert(is.matrix(M))
+    assert(is.logical(quorum_bool))
+    assert(length(quorum_bool) == nrow(M))
+    M[!quorum_bool,] <- 0L
+    M
 }

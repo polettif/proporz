@@ -33,7 +33,7 @@ largest_remainder_method = function(votes, n_seats, quorum = 0) {
     }
 
     # apply quorum
-    votes <- apply_quorum_vector(votes, quorum)
+    votes <- apply_quorum_boolvector(votes, quorum)
 
     # get LR-quota and assign seats
     quota = lr_quota(votes, n_seats)
