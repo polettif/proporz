@@ -69,22 +69,20 @@ There is a difference in how the two functions work. With \code{quorum_any},
 \code{quorum_any()} and \code{quorum_all()} are identical.
 }
 \examples{
-votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+votes_matrix = matrix(c(5020, 550, 800, 100, 1040, 550, 0, 10), ncol = 2)
 dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 seats = c(Z1 = 50, Z2 = 20)
 
 # use as parameter in biproporz or pukelsheim (general use case)
 biproporz(votes_matrix, seats,
-          quorum = quorum_any(votes_any_district = 0.1, votes_total = 100))
+          quorum = quorum_any(votes_any_district = 0.1, total_voters = 20))
 
 biproporz(votes_matrix, seats,
-          quorum = quorum_all(votes_any_district = 0.1, votes_total = 100))
+          quorum = quorum_all(votes_any_district = 0.1, total_voters = 20))
 
 biproporz(votes_matrix, seats, quorum = quorum_any(votes_any_district = 0.1))
 
-biproporz(votes_matrix, seats, quorum = quorum_any(votes_total = 100))
-
-biproporz(votes_matrix, seats, quorum = quorum_any(votes_total = 0.5))
+biproporz(votes_matrix, seats, quorum = quorum_any(total_voters = 0.05))
 
 # the quorum parameter also accepts named vectors (e.g. calculated elsewhere)
 biproporz(votes_matrix, seats,

@@ -40,22 +40,20 @@
 #' @seealso [apply_quorum()] for standalone quorum calculations
 #'
 #' @examples
-#' votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+#' votes_matrix = matrix(c(5020, 550, 800, 100, 1040, 550, 0, 10), ncol = 2)
 #' dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 #' seats = c(Z1 = 50, Z2 = 20)
 #'
 #' # use as parameter in biproporz or pukelsheim (general use case)
 #' biproporz(votes_matrix, seats,
-#'           quorum = quorum_any(votes_any_district = 0.1, votes_total = 100))
+#'           quorum = quorum_any(votes_any_district = 0.1, total_voters = 20))
 #'
 #' biproporz(votes_matrix, seats,
-#'           quorum = quorum_all(votes_any_district = 0.1, votes_total = 100))
+#'           quorum = quorum_all(votes_any_district = 0.1, total_voters = 20))
 #'
 #' biproporz(votes_matrix, seats, quorum = quorum_any(votes_any_district = 0.1))
 #'
-#' biproporz(votes_matrix, seats, quorum = quorum_any(votes_total = 100))
-#'
-#' biproporz(votes_matrix, seats, quorum = quorum_any(votes_total = 0.5))
+#' biproporz(votes_matrix, seats, quorum = quorum_any(total_voters = 0.05))
 #'
 #' # the quorum parameter also accepts named vectors (e.g. calculated elsewhere)
 #' biproporz(votes_matrix, seats,
@@ -66,22 +64,15 @@ NULL
 
 #' @rdname quorum_functions
 #' @export
-quorum_all = function(votes_any_district,
-                      votes_total,
-                      any_district_voters,
-                      total_voters,
+quorum_all = function(votes_any_district, votes_total,
+                      any_district_voters, total_voters,
                       total = NULL, any_district = NULL) {
     catch_replaced_quorum_params(total, any_district)
     rm(total, any_district)
 
     quorum_params = c(as.list(environment()))
     quorum_params <- quorum_params[!sapply(quorum_params, is.symbol)]
-
-    for(q_name in names(quorum_params)) {
-        if(!is_num1(quorum_params[[q_name]]) || quorum_params[[q_name]] <= 0) {
-            stop("`", q_name, "` must be a single number > 0", call. = FALSE)
-        }
-    }
+    check_quorum_params_num1(quorum_params)
 
     attributes(quorum_params)[["type"]] <- "ALL"
     return(quorum_params)
@@ -95,98 +86,74 @@ quorum_any = function(votes_any_district, votes_total,
     catch_replaced_quorum_params(total, any_district)
     rm(total, any_district)
 
-    # TODO explicit names?
     quorum_params = c(as.list(environment()))
     quorum_params <- quorum_params[!sapply(quorum_params, is.symbol)]
-
-    for(q_name in names(quorum_params)) {
-        if(!is_num1(quorum_params[[q_name]]) || quorum_params[[q_name]] <= 0) {
-        stop("`", q_name, "` must be a single number > 0", call. = FALSE)
-
-        }
-    }
+    check_quorum_params_num1(quorum_params)
 
     attributes(quorum_params)[["type"]] <- "ANY"
     return(quorum_params)
 }
 
-# TODO rename to reached_quorum_...
-apply_quorum_params = function(quorum_params, votes_matrix, weighted_votes_matrix) {
+eval_quorum = function(quorum_params, votes_matrix, weighted_votes_matrix, ...) {
+    assert_empty_dots(list(...))
+    assert_viable_quorum(quorum_params)
+
     if(is_quorum_param_list(quorum_params)) {
-        # quorum params list
-        ql = list()
-        if(!is.null(quorum_params$votes_any_district)) {
-            ql[[length(ql)+1]] <- reached_quorum_any_district(votes_matrix, quorum_params$votes_any_district)
-        }
-        if(!is.null(quorum_params$votes_total)) {
-            ql[[length(ql)+1]] <- reached_quorum_total(votes_matrix, quorum_params$votes_total)
-        }
-        if(!is.null(quorum_params$any_district_voters)) {
-            # TODO: error if weighted_votes matrix was not supplied
-            ql[[length(ql)+1]] <- reached_quorum_any_district(weighted_votes_matrix, quorum_params$any_district_voters)
-        }
-        if(!is.null(quorum_params$total_voters)) {
-            ql[[length(ql)+1]] <- reached_quorum_total(weighted_votes_matrix, quorum_params$total_voters)
-        }
-        quorum_matrix = do.call(cbind, ql)
-
-        if(attr(quorum_params, "type") == "ALL") {
-            quorum_bool = rowSums(quorum_matrix) == ncol(quorum_matrix)
-        } else if(attr(quorum_params, "type") == "ANY") {
-            quorum_bool = rowSums(quorum_matrix) > 0
-        }
-
+        quorum_bool = eval_quorum_params_list(quorum_params, votes_matrix, weighted_votes_matrix, ...)
     } else if(is_quorum_vector(quorum_params)) {
-        # vector
-        assert(length(quorum_params) == nrow(votes_matrix))
-        if(!equal_names(rownames(votes_matrix), names(quorum_params))) {
-            stop("quorum vector must have the same names as the votes_matrix rows (parties)",
-                 call. = FALSE)
-        }
-        if(!is.null(rownames(votes_matrix))) {
-            quorum_bool = quorum_params[rownames(votes_matrix)]
-        } else {
-            quorum_bool = quorum_params
-        }
-    } else {
-        stop("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
-             call. = FALSE)
+        quorum_bool = eval_quorum_vector(quorum_params, votes_matrix)
     }
+
     return(quorum_bool)
 }
 
-is_quorum_param_list = function(.quorum) {
-    quorum_names = c("votes_any_district", "votes_total", "any_district_voters", "total_voters")
-    if(!is.list(.quorum) || is.data.frame(.quorum)) {
-        return(FALSE)
+eval_quorum_params_list = function(quorum_params, votes_matrix, weighted_votes_matrix, ...) {
+    ql = list()
+
+    # votes_
+    if(!is.null(quorum_params$votes_any_district)) {
+        if(missing(votes_matrix)) missing_arg_error("votes_matrix", "votes_any_district")
+        votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
+        ql[[length(ql)+1]] <- reached_quorum_any_district(votes_matrix, quorum_params$votes_any_district)
     }
-    if(!all(names(.quorum) %in% quorum_names)) {
-        return(FALSE)
+
+    if(!is.null(quorum_params$votes_total)) {
+        if(missing(votes_matrix)) missing_arg_error("votes_matrix", "votes_total")
+        votes_matrix <- prep_votes_matrix(votes_matrix, deparse(substitute(votes_matrix)))
+        ql[[length(ql)+1]] <- reached_quorum_total(votes_matrix, quorum_params$votes_total)
     }
-    if(length(setdiff(c("ANY", "ALL"), attributes(.quorum)[["type"]])) != 1) {
-        return(FALSE)
+
+    # _voters
+    if(!is.null(quorum_params$any_district_voters)) {
+        if(missing(weighted_votes_matrix)) missing_arg_error("weighted_votes_matrix", "any_district_voters")
+        weighted_votes_matrix <- prep_votes_matrix(weighted_votes_matrix, deparse(substitute(weighted_votes_matrix)))
+        ql[[length(ql)+1]] <- reached_quorum_any_district(weighted_votes_matrix, quorum_params$any_district_voters)
     }
-    return(TRUE)
+
+    if(!is.null(quorum_params$total_voters)) {
+        if(missing(weighted_votes_matrix)) missing_arg_error("weighted_votes_matrix", "total_voters")
+        weighted_votes_matrix <- prep_votes_matrix(weighted_votes_matrix, deparse(substitute(weighted_votes_matrix)))
+        ql[[length(ql)+1]] <- reached_quorum_total(weighted_votes_matrix, quorum_params$total_voters)
+    }
+
+    quorum_matrix = do.call(cbind, ql)
+
+    if(attr(quorum_params, "type") == "ALL") {
+        quorum_bool = rowSums(quorum_matrix) == ncol(quorum_matrix)
+    } else if(attr(quorum_params, "type") == "ANY") {
+        quorum_bool = rowSums(quorum_matrix) > 0
+    }
 }
 
-is_quorum_vector = function(.quorum) {
-    if(!is.atomic(.quorum) || !is.logical(.quorum) || anyNA(.quorum)) {
-        return(FALSE)
-    }
-    return(TRUE)
-}
-
-# can't catch total/any_district via ... because partial argument
-# matching (total to votes_total) happens first, dots are not even evaluated
-catch_replaced_quorum_params = function(total, any_district) {
-    if(!is.null(total)) {
-        stop("The argument `total` is deprecated, ",
-             "please specify total_voters (recommended) or `votes_total`",
+eval_quorum_vector = function(quorum_params, votes_matrix) {
+    assert(length(quorum_params) == nrow(votes_matrix))
+    if(!equal_names(rownames(votes_matrix), names(quorum_params))) {
+        stop("quorum vector must have the same names as the votes_matrix rows (parties)",
              call. = FALSE)
     }
-    if(!is.null(any_district)) {
-        stop("The argument `any_district` is deprecated, ",
-             "please specify `votes_any_district` (recommended) or `any_district_voters`",
-             call. = FALSE)
+    if(!is.null(rownames(votes_matrix))) {
+        quorum_bool = quorum_params[rownames(votes_matrix)]
+    } else {
+        quorum_bool = quorum_params
     }
 }

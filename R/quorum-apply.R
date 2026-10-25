@@ -1,6 +1,3 @@
-
-# apply quorum functions to votes ####
-
 #' Apply quorum to votes vector or matrix
 #'
 #' This quorum calculation implementation is called within [proporz()], [biproporz()] and
@@ -8,14 +5,13 @@
 #'
 #' @param votes Votes vector or votes matrix
 #' @param quorum Depending on `votes`:
-#'   * For a vector: Vote threshold a party must reach. Used as fraction of total
-#'   votes if less than 1 otherwise as number of votes.
-#'   * For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
-#'   or a (named) logical vector with the same length as the number of `votes` rows.
-#' @param ... arguments passed on to the `quorum_function` (only for votes matrix)
+#' * For a vector: Vote threshold a party must reach. Used as fraction of total
+#' votes if less than 1 otherwise as number of votes.
+#' * For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
+#' or a (named) logical vector with the same length as the number of `votes` rows.
 #'
 #' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
-#'   specified quorum have their votes set to zero.
+#' specified quorum have their votes set to zero.
 #'
 #' @seealso \code{\link[=quorum_functions]{quorum_functions}} for more matrix examples.
 #'
@@ -40,14 +36,24 @@
 #' rownames(votes_matrix) <- c("A", "B")
 #' quorum_vec = c(B = TRUE, A = FALSE)
 #' apply_quorum(votes_matrix, quorum_vec)
-apply_quorum = function(votes, quorum, ...) {
-    # TODO deprecate/info
-    assert(is.matrix(votes) || is.atomic(votes))
-    if(is.matrix(votes)) {
-        b = apply_quorum_params(votes_matrix = votes, quorum_params = quorum, ...)
-        return(set_zero(votes, !b))
+apply_quorum = function(votes, quorum) {
+    assert(is.matrix(votes) || is.vector(votes))
+    if(is.vector(votes)) {
+        return(apply_quorum_vector(votes, quorum))
     }
-    apply_quorum_vector(votes, quorum)
+
+    assert_viable_quorum(quorum)
+    if(is_quorum_param_list(quorum)) {
+        methods_using_weighted_mtx = names(quorum)[endsWith(names(quorum), "_voters")]
+        if(length(methods_using_weighted_mtx) > 0) {
+            stop("Cannot handle unweighted matrix with ",
+                 num_word("method", "methods", methods_using_weighted_mtx), ": ",
+                 toString(methods_using_weighted_mtx),
+                 call. = FALSE) # TODO link to eval_quorum
+        }
+    }
+    b = eval_quorum(votes_matrix = votes, quorum_params = quorum)
+    return(set_zero(votes, !b))
 }
 
 # quorum for single vector for proporz() methods
@@ -65,12 +71,4 @@ apply_quorum_vector = function(votes_vector, quorum) {
 
     votes_vector[votes_vector < quorum] <- 0
     return(votes_vector)
-}
-
-check_quorum_param_vector = function(quorum) {
-    if(!(is_num1(quorum) && quorum >= 0)) {
-        stop("Quorum parameter must be a single number >= 0",
-             call. = FALSE)
-    }
-    invisible(TRUE)
 }

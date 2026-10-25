@@ -87,5 +87,5 @@ reprex::reprex({
     votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
 
     quorum_functions = quorum_any(votes_any_district = 0.1, votes_total = 100)
-    reached_quorums(votes_matrix, quorum_functions)
+    eval_quorum(quorum_functions, votes_matrix)
 })

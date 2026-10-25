@@ -13,7 +13,6 @@ fuzzy_errors = function(fun) {
                          if(startsWith(e$message, "argument is of length zero")) browser()
                          if(startsWith(e$message, "invalid 'times' argument")) browser()
                          if(startsWith(e$message, "character string is not in a standard")) browser()
-                         if(startsWith(e$message, "$ operator is invalid for atomic vectors")) browser()
 
                          e$message
                      })
@@ -100,8 +99,8 @@ test_that("fuzzy params biproporz/pukelsheim", {
         em,
         c(
             "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
-            "length(quorum_params) == nrow(votes_matrix) is not TRUE",
-            "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?"
+            "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?",
+            "length(quorum_params) == nrow(votes_matrix) is not TRUE"
         ))
 
     em = fuzzy_errors(function(weight_votes) biproporz(votes_matrix, district_seats, quorum, weight_votes, method))
@@ -133,8 +132,8 @@ test_that("fuzzy params biproporz/pukelsheim", {
     expect_identical(
         em,
         c("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
-          "length(quorum_params) == nrow(votes_matrix) is not TRUE",
-          "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?"))
+          "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?",
+          "length(quorum_params) == nrow(votes_matrix) is not TRUE"))
 
     em = fuzzy_errors(function(new_seats_col) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
     expect_identical(em, "`new_seats_col` must be a single string")
@@ -242,7 +241,7 @@ test_that("fuzzy params quorum", {
     expect_identical(
         em,
         c("`votes` must be a numeric vector >= 0",
-          "is.matrix(votes) || is.atomic(votes) is not TRUE",
+          "is.matrix(votes) || is.vector(votes) is not TRUE",
           "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)"))
 
     em = fuzzy_errors(function(quorum) apply_quorum(votes, quorum))
@@ -256,7 +255,8 @@ test_that("fuzzy params quorum", {
         em,
         c("`votes` must be a numeric vector >= 0",
           "Quorum parameter must be a single number >= 0",
-          "is.matrix(votes) || is.atomic(votes) is not TRUE"
+          "is.matrix(votes) || is.vector(votes) is not TRUE",
+          "Votes in `votes_matrix` must be numbers >= 0"
         ))
 
     em = fuzzy_errors(function(quorum) apply_quorum(votes_matrix, quorum))

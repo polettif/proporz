@@ -4,7 +4,7 @@
 \alias{apply_quorum}
 \title{Apply quorum to votes vector or matrix}
 \usage{
-apply_quorum(votes, quorum, ...)
+apply_quorum(votes, quorum)
 }
 \arguments{
 \item{votes}{Votes vector or votes matrix}
@@ -16,8 +16,6 @@ votes if less than 1 otherwise as number of votes.
 \item For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
 or a (named) logical vector with the same length as the number of \code{votes} rows.
 }}
-
-\item{...}{arguments passed on to the \code{quorum_function} (only for votes matrix)}
 }
 \value{
 Vector or matrix with same dimension as \code{votes}. Parties that failed to reach the

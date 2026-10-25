@@ -76,7 +76,7 @@ upper_apportionment = function(votes_matrix, district_seats,
 
     # quorum
     if(!missing(quorum) && !is.null(quorum)) {
-        party_reached_quorum = apply_quorum_params(
+        party_reached_quorum = eval_quorum(
             quorum,
             votes_matrix = votes_matrix,
             weighted_votes_matrix = weighted_votes_matrix)

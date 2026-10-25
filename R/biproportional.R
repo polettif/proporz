@@ -69,7 +69,7 @@ biproporz = function(votes_matrix,
                      weight_votes = TRUE,
                      method = "round",
                      ...) {
-    assert_empty_dots("use_list_votes", list(...))
+    assert_empty_dots(list(...), "use_list_votes")
     weight_votes <- catch_deprecated_use_list_votes(weight_votes, list(...))
 
     # check parameters
@@ -168,7 +168,7 @@ pukelsheim = function(votes_df, district_seats_df,
                       weight_votes = TRUE,
                       winner_take_one = FALSE,
                       ...) {
-    assert_empty_dots("use_list_votes", list(...))
+    assert_empty_dots(list(...), "use_list_votes")
     weight_votes <- catch_deprecated_use_list_votes(weight_votes, list(...))
 
     check_params.pukelsheim(
