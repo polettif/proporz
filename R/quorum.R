@@ -1,10 +1,8 @@
-# Create quorum input functions ####
-
-#' Create quorum functions for biproportional apportionment
+#' Create quorum parameter list for biproportional apportionment
 #'
 #' `quorum_any()` and `quorum_all()` are used for the `quorum` parameter in
-#' [biproporz()]/[pukelsheim()] and help describe how quorums should be
-#' applied prior to seat distributions.
+#' [upper_apportionment()] (and thus [biproporz()]/[pukelsheim()]) and describe how
+#' quorums should be applied prior to seat distributions.
 #'
 #' @param votes_any_district Vote threshold a party must reach in \emph{at least} one district.
 #'   Used as share of total votes within a district if less than 1, otherwise as number of votes.
@@ -13,7 +11,7 @@
 #' @param votes_total Vote threshold a party must reach for all votes cast.
 #'   Used as share of total votes if less than 1, otherwise as number of votes.
 #'   Note that votes are not weighted with [weight_votes_matrix()] across districts, the
-#'   usual and theoretically sound application for a total quroum is `total_voters`.
+#'   usual and theoretically sound application for a total quorum is `total_voters`.
 #'   Must be > 0 if provided.
 #'   Uses [reached_quorum_total()].
 #' @param any_district_voters Weighted vote (voters) threshold a party must reach in \emph{at least} one district.
@@ -32,12 +30,8 @@
 #'   (i.e. both) quorums must be reached. If you only use one parameter,
 #'   `quorum_any()` and `quorum_all()` are identical.
 #'
-#' @returns List of functions. Each function, when called with `function(votes_matrix)`,
-#'   returns a boolean vector with length equal to the number of lists/parties
-#'   (`votes_matrix` rows). The vector shows whether a party has reached any/all
-#'   quorums.
-#'
-#' @seealso [apply_quorum()] for standalone quorum calculations
+#' @returns List of parameters that describe which quorum methods and threshold values
+#'   should be used. The list is handled in [upper_apportionment()] by [eval_quorum()].
 #'
 #' @examples
 #' votes_matrix = matrix(c(5020, 550, 800, 100, 1040, 550, 0, 10), ncol = 2)
@@ -59,6 +53,9 @@
 #' biproporz(votes_matrix, seats,
 #'           quorum = c(A = FALSE, B = TRUE, C = TRUE, D = TRUE))
 #'
+#' # quorum specifications are checked with eval_quorum
+#' eval_quorum(quorum_any(votes_any_district = 0.2), votes_matrix)
+#'
 #' @name quorum_functions
 NULL
 
@@ -72,7 +69,7 @@ quorum_all = function(votes_any_district, votes_total,
 
     quorum = c(as.list(environment()))
     quorum <- quorum[!sapply(quorum, is.symbol)]
-    check_quorum_params_num1(quorum)
+    check_quorum_paramlist(quorum)
 
     attributes(quorum)[["type"]] <- "ALL"
     return(quorum)
@@ -88,18 +85,34 @@ quorum_any = function(votes_any_district, votes_total,
 
     quorum = c(as.list(environment()))
     quorum <- quorum[!sapply(quorum, is.symbol)]
-    check_quorum_params_num1(quorum)
+    check_quorum_paramlist(quorum)
 
     attributes(quorum)[["type"]] <- "ANY"
     return(quorum)
 }
 
-eval_quorum = function(quorum, votes_matrix, weighted_votes_matrix, ...) {
-    assert_empty_dots(list(...))
-    assert_viable_quorum(quorum)
+#' Evaluate a quorum
+#'
+#' Check which parties (votes matrix rows) reached the quorum specificiations and thresholds
+#' given by [quorum_any()] or [quorum_all()].
+#'
+#' @param quorum Quorum parameter list created by [quorum_any()] or [quorum_all()]. It is also
+#'   possible to pass a pre-calculated logical vector indicating which parties meet the quorum
+#'   which is name-matched to `votes_matrix`.
+#' @param votes_matrix A matrix of unweighted votes. Required when the quorum
+#'   uses `votes_any_district` or `votes_total`, and when `quorum` is a logical
+#'   vector.
+#' @param weighted_votes_matrix A matrix of weighted votes (voters). Required
+#'   when the quorum uses `any_district_voters` or `total_voters`.
+#'
+#' @return A logical vector indicating which parties meet the quorum.
+#'
+#' @export
+eval_quorum = function(quorum, votes_matrix, weighted_votes_matrix) {
+    assert_viable_quorum(quorum) # TODO pass votes_matrix
 
     if(is_quorum_paramlist(quorum)) {
-        quorum_bool = eval_quorum_paramlist(quorum, votes_matrix, weighted_votes_matrix, ...)
+        quorum_bool = eval_quorum_paramlist(quorum, votes_matrix, weighted_votes_matrix)
     } else if(is_quorum_boolvector(quorum)) {
         quorum_bool = eval_quorum_boolvector(quorum, votes_matrix)
     }
@@ -107,7 +120,7 @@ eval_quorum = function(quorum, votes_matrix, weighted_votes_matrix, ...) {
     return(quorum_bool)
 }
 
-eval_quorum_paramlist = function(quorum, votes_matrix, weighted_votes_matrix, ...) {
+eval_quorum_paramlist = function(quorum, votes_matrix, weighted_votes_matrix) {
     ql = list()
 
     # votes_

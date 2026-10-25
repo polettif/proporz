@@ -4,7 +4,7 @@
 \alias{quorum_functions}
 \alias{quorum_all}
 \alias{quorum_any}
-\title{Create quorum functions for biproportional apportionment}
+\title{Create quorum parameter list for biproportional apportionment}
 \usage{
 quorum_all(
   votes_any_district,
@@ -33,7 +33,7 @@ Uses \code{\link[=reached_quorum_any_district]{reached_quorum_any_district()}}.}
 \item{votes_total}{Vote threshold a party must reach for all votes cast.
 Used as share of total votes if less than 1, otherwise as number of votes.
 Note that votes are not weighted with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}} across districts, the
-usual and theoretically sound application for a total quroum is \code{total_voters}.
+usual and theoretically sound application for a total quorum is \code{total_voters}.
 Must be > 0 if provided.
 Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}}.}
 
@@ -52,15 +52,13 @@ Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}} with a weighted
 \item{any_district}{Replaced by \code{votes_any_district} (recommended) or \code{any_district_voters}}
 }
 \value{
-List of functions. Each function, when called with \verb{function(votes_matrix)},
-returns a boolean vector with length equal to the number of lists/parties
-(\code{votes_matrix} rows). The vector shows whether a party has reached any/all
-quorums.
+List of parameters that describe which quorum methods and threshold values
+should be used. The list is handled in \code{\link[=upper_apportionment]{upper_apportionment()}} by \code{\link[=eval_quorum]{eval_quorum()}}.
 }
 \description{
 \code{quorum_any()} and \code{quorum_all()} are used for the \code{quorum} parameter in
-\code{\link[=biproporz]{biproporz()}}/\code{\link[=pukelsheim]{pukelsheim()}} and help describe how quorums should be
-applied prior to seat distributions.
+\code{\link[=upper_apportionment]{upper_apportionment()}} (and thus \code{\link[=biproporz]{biproporz()}}/\code{\link[=pukelsheim]{pukelsheim()}}) and describe how
+quorums should be applied prior to seat distributions.
 }
 \details{
 There is a difference in how the two functions work. With \code{quorum_any},
@@ -88,7 +86,7 @@ biproporz(votes_matrix, seats, quorum = quorum_any(total_voters = 0.05))
 biproporz(votes_matrix, seats,
           quorum = c(A = FALSE, B = TRUE, C = TRUE, D = TRUE))
 
-}
-\seealso{
-\code{\link[=apply_quorum]{apply_quorum()}} for standalone quorum calculations
+# quorum specifications are checked with eval_quorum
+eval_quorum(quorum_any(votes_any_district = 0.2), votes_matrix)
+
 }

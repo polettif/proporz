@@ -13,9 +13,8 @@
 #'   of votes, a single number for the total number of seats can be used. `weight_votes` will be
 #'   ignored, as `votes_matrix` shows the number of voters.
 #'   Note that apportioning district seats according to votes is not the general use case.
-#' @param quorum Optional list of functions which take the votes matrix and return a logical
-#'   vector that shows for each party/row whether they reached the quorum (i.e. are
-#'   eligible for seats). The easiest way to do this is by passing [quorum_any()] or
+#' @param quorum Optional list of quorum parameters that describe how quorums should be applied
+#'   prior to seat distributions. The easiest way to do this is by passing [quorum_any()] or
 #'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
 #'   vector. No quorum is applied if this parameter is missing or `NULL`.
 #' @param weight_votes By default (`TRUE`) it is assumed that each voter in a district has

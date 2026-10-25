@@ -27,9 +27,8 @@ ignored, as \code{votes_matrix} shows the number of voters.
 Note that apportioning district seats according to votes is not the general use case.
 }}
 
-\item{quorum}{Optional list of functions which take the votes matrix and return a logical
-vector that shows for each party/row whether they reached the quorum (i.e. are
-eligible for seats). The easiest way to do this is by passing \code{\link[=quorum_any]{quorum_any()}} or
+\item{quorum}{Optional list of quorum parameters that describe how quorums should be applied
+prior to seat distributions. The easiest way to do this is by passing \code{\link[=quorum_any]{quorum_any()}} or
 \code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
 vector. No quorum is applied if this parameter is missing or \code{NULL}.}
 

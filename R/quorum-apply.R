@@ -1,17 +1,19 @@
 #' Apply quorum to votes vector or matrix
 #'
-#' This quorum calculation implementation is called within [proporz()], [biproporz()] and
-#' related functions. Generally, there is no need to call `apply_quorum` directly.
+#' This quorum calculation implementation is called within [proporz()], there's generally
+#' no need to call it directly. [biproporz()] uses [eval_quorum()].
 #'
 #' @param votes Votes vector or votes matrix
 #' @param quorum Depending on `votes`:
-#' * For a vector: Vote threshold a party must reach. Used as fraction of total
-#' votes if less than 1 otherwise as number of votes.
-#' * For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
-#' or a (named) logical vector with the same length as the number of `votes` rows.
+#'   * For a vector: Vote threshold a party must reach. Used as fraction of total
+#'     votes if less than 1 otherwise as number of votes.
+#'   * For a matrix: List of quorum parameters (created with \code{\link[=quorum_functions]{quorum_functions}})
+#'     or a (named) logical vector with the same length as the number of `votes` rows.
+#'     To prevent potential misapplication, using `total_voters` or `any_district_voters`,
+#'     which require a weighted votes matrix, is not permitted.
 #'
 #' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
-#' specified quorum have their votes set to zero.
+#'   specified quorum have their votes set to zero.
 #'
 #' @seealso \code{\link[=quorum_functions]{quorum_functions}} for more matrix examples.
 #'
@@ -73,10 +75,10 @@ apply_quorum_boolvector = function(votes_vector, quorum) {
     return(votes_vector)
 }
 
-zero_failed_quorums = function(M, quorum_bool) {
+zero_failed_quorums = function(M, quorum_vector) {
     assert(is.matrix(M))
-    assert(is.logical(quorum_bool))
-    assert(length(quorum_bool) == nrow(M))
-    M[!quorum_bool,] <- 0L
+    assert(is.logical(quorum_vector))
+    assert(length(quorum_vector) == nrow(M))
+    M[!quorum_vector,] <- 0L
     M
 }

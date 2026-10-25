@@ -22,7 +22,7 @@ is_quorum_boolvector = function(.quorum) {
 
 assert_viable_quorum = function(quorum) {
     if(!is_quorum_paramlist(quorum) && !is_quorum_boolvector(quorum)) {
-        stop("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
+        stop("Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions",
              call. = FALSE)
     }
     invisible(TRUE)
@@ -36,7 +36,10 @@ check_quorum_param_vector = function(quorum) {
     invisible(TRUE)
 }
 
-check_quorum_params_num1 = function(quorum_params) {
+check_quorum_paramlist = function(quorum_params) {
+    if(length(quorum_params) == 0) {
+        stop("No quorum argument given", call. = FALSE)
+    }
     for(q_name in names(quorum_params)) {
         if(!is_num1(quorum_params[[q_name]]) || quorum_params[[q_name]] <= 0) {
             stop("`", q_name, "` must be a single number > 0", call. = FALSE)

@@ -98,7 +98,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
     expect_identical(
         em,
         c(
-            "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
+            "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions",
             "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?",
             "length(quorum) == nrow(votes_matrix) is not TRUE"
         ))
@@ -131,7 +131,7 @@ test_that("fuzzy params biproporz/pukelsheim", {
     em = fuzzy_errors(function(quorum) pukelsheim(votes_df, district_seats_df, quorum, new_seats_col, weight_votes, winner_take_one))
     expect_identical(
         em,
-        c("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
+        c("Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions",
           "`quorum` cannot be TRUE/FALSE.\nArgument order has changed, do you need to set `weight_votes=`TRUE` explicitly?",
           "length(quorum) == nrow(votes_matrix) is not TRUE"))
 
@@ -242,7 +242,7 @@ test_that("fuzzy params quorum", {
         em,
         c("`votes` must be a numeric vector >= 0",
           "is.matrix(votes) || is.vector(votes) is not TRUE",
-          "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)"))
+          "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions"))
 
     em = fuzzy_errors(function(quorum) apply_quorum(votes, quorum))
     expect_identical(em, "Quorum parameter must be a single number >= 0")
@@ -262,7 +262,7 @@ test_that("fuzzy params quorum", {
     em = fuzzy_errors(function(quorum) apply_quorum(votes_matrix, quorum))
     expect_identical(
         em,
-        c("Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)",
+        c("Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions",
           "length(quorum) == nrow(votes_matrix) is not TRUE"))
 })
 

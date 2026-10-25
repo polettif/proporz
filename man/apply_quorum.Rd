@@ -13,8 +13,10 @@ apply_quorum(votes, quorum)
 \itemize{
 \item For a vector: Vote threshold a party must reach. Used as fraction of total
 votes if less than 1 otherwise as number of votes.
-\item For a matrix: List of quorum functions (created with \code{\link[=quorum_functions]{quorum_functions}})
+\item For a matrix: List of quorum parameters (created with \code{\link[=quorum_functions]{quorum_functions}})
 or a (named) logical vector with the same length as the number of \code{votes} rows.
+To prevent potential misapplication, using \code{total_voters} or \code{any_district_voters},
+which require a weighted votes matrix, is not permitted.
 }}
 }
 \value{
@@ -22,8 +24,8 @@ Vector or matrix with same dimension as \code{votes}. Parties that failed to rea
 specified quorum have their votes set to zero.
 }
 \description{
-This quorum calculation implementation is called within \code{\link[=proporz]{proporz()}}, \code{\link[=biproporz]{biproporz()}} and
-related functions. Generally, there is no need to call \code{apply_quorum} directly.
+This quorum calculation implementation is called within \code{\link[=proporz]{proporz()}}, there's generally
+no need to call it directly. \code{\link[=biproporz]{biproporz()}} uses \code{\link[=eval_quorum]{eval_quorum()}}.
 }
 \examples{
 # vector

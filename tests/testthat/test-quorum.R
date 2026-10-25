@@ -59,8 +59,6 @@ test_that("quorum with percentages counts", {
 
     vm2 = matrix(c(30, 10, 60, 50, 20, 180), nrow = 6)
     expected = c(FALSE, FALSE, TRUE, TRUE, FALSE, TRUE)
-    # TODO changed behaviour: quorum_all/any don't return functions anymore
-    # TODO update docs
 })
 
 test_that("eval_quorum", {
@@ -122,17 +120,17 @@ test_that("eval_quorum", {
         "Argument `weighted_votes_matrix` is missing (needed for `any_district_voters`)")
     expect_error_fixed(
         eval_quorum(reached_quorum_total, vm),
-        "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
+        "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     expect_error_fixed(
         eval_quorum(list(1, 2), vm),
-        "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
+        "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
 
     dummy_list = list(function(x) x > 0, function(x) x < 0)
-    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
+    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     attributes(dummy_list)$type <- "either_or"
-    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
+    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     attributes(dummy_list)$type <- c("ALL", "ANY")
-    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
+    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     # TODO change names/doc for reached_quorum to eval_quorum
 })
 
@@ -212,7 +210,7 @@ test_that("apply_quorum", {
 
     expect_error_fixed(
         apply_quorum(vm, 0),
-        "Quorum must be a logical vector or a quorum parameter list (see ?quorum_functions)")
+        "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     expect_identical(sum(apply_quorum(vm, c(FALSE, FALSE))), 0)
     expect_error_fixed(
         apply_quorum(vm, c(FALSE)),
@@ -259,6 +257,16 @@ test_that("quorum vector in biproporz", {
     expect_error(
         pukelsheim(votes_df, seats_df, quorum = quorum_vec3),
         "quorum vector must have the same names as the votes_matrix rows")
+
+    expect_error(quorum_all(), "No quorum argument given")
+    expect_error(quorum_any(), "No quorum argument given")
+    expect_error_fixed(upper_apportionment(votes_matrix, seats, quorum = list()),
+                       "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
+    quorumlist = quorum_all(votes_any_district = 0.05)
+    quorumlist$new_method <- 0.05
+    expect_error_fixed(
+        upper_apportionment(votes_matrix, seats, quorum = quorumlist),
+        "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
 })
 
 test_that("renamend quorum parameters", {
