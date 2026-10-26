@@ -42,8 +42,8 @@ test_that("quorum with vote counts", {
     expect_identical(reached_quorum_any_district(vm, 35), q1)
     expect_identical(reached_quorum_total(vm, 45), q2)
 
-    expect_identical(sum(zero_failed_quorums(vm, c(FALSE,FALSE,FALSE))), 0)
-    expect_identical(sum(zero_failed_quorums(vm, c(FALSE,TRUE,FALSE))), 30)
+    expect_identical(sum(zero_failed_quorum(vm, c(FALSE,FALSE,FALSE))), 0)
+    expect_identical(sum(zero_failed_quorum(vm, c(FALSE,TRUE,FALSE))), 30)
 })
 
 test_that("quorum with percentages counts", {

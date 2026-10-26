@@ -1,7 +1,8 @@
 #' Apply quorum to votes vector or matrix
 #'
 #' This quorum calculation implementation is called within [proporz()], there's generally
-#' no need to call it directly. [biproporz()] uses [eval_quorum()].
+#' no need to call it directly. This method is semi-deprecated, [biproporz()] uses
+#' [eval_quorum()] and [zero_failed_quorum()].
 #'
 #' @param votes Votes vector or votes matrix
 #' @param quorum Depending on `votes`:
@@ -10,8 +11,8 @@
 #'   * For a matrix: List of quorum parameters (created with \code{\link[=quorum_functions]{quorum_functions}})
 #'     or a (named) logical vector with the same length as the number of `votes` rows.
 #'     To prevent potential misapplications, using `total_voters` or `any_district_voters`,
-#'     which might require a weighted votes matrix, is not permitted.
-# TODO
+#'     which might require a weighted votes matrix, is not permitted. Please use [eval_quorum()]
+#'     in such cases.
 #'
 #' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
 #'   specified quorum have their votes set to zero.
@@ -56,7 +57,7 @@ apply_quorum = function(votes, quorum) {
         }
     }
     b = eval_quorum(votes_matrix = votes, quorum = quorum)
-    return(zero_failed_quorums(votes, b))
+    return(zero_failed_quorum(votes, b))
 }
 
 # quorum for single vector for proporz() methods
@@ -77,10 +78,21 @@ apply_quorum_boolvector = function(votes_vector, quorum) {
     return(votes_vector)
 }
 
-zero_failed_quorums = function(M, quorum_vector) {
+#' Set votes of parties failing to reach quorums to zero
+#'
+#' This is a convenience function for `M[!quorum_vector, ] <- 0L`. Used in
+#' combination with [eval_quorum()] in [upper_apportionment()].
+#'
+#' @param M votes or voter matrix
+#' @param quorum_vector logical vector with length equal to `nrow(M)`.
+#'
+#' @returns `M` with party rows set to zero
+#' @export
+zero_failed_quorum = function(M, quorum_vector) {
     assert(is.matrix(M))
     assert(is.logical(quorum_vector))
+    assert(!anyNA(quorum_vector))
     assert(length(quorum_vector) == nrow(M))
-    M[!quorum_vector,] <- 0L
+    M[!quorum_vector, ] <- 0L
     M
 }

@@ -15,8 +15,9 @@ apply_quorum(votes, quorum)
 votes if less than 1 otherwise as number of votes.
 \item For a matrix: List of quorum parameters (created with \code{\link[=quorum_functions]{quorum_functions}})
 or a (named) logical vector with the same length as the number of \code{votes} rows.
-To prevent potential misapplication, using \code{total_voters} or \code{any_district_voters},
-which require a weighted votes matrix, is not permitted.
+To prevent potential misapplications, using \code{total_voters} or \code{any_district_voters},
+which might require a weighted votes matrix, is not permitted. Please use \code{\link[=eval_quorum]{eval_quorum()}}
+in such cases.
 }}
 }
 \value{
@@ -25,7 +26,8 @@ specified quorum have their votes set to zero.
 }
 \description{
 This quorum calculation implementation is called within \code{\link[=proporz]{proporz()}}, there's generally
-no need to call it directly. \code{\link[=biproporz]{biproporz()}} uses \code{\link[=eval_quorum]{eval_quorum()}}.
+no need to call it directly. This method is semi-deprecated, \code{\link[=biproporz]{biproporz()}} uses
+\code{\link[=eval_quorum]{eval_quorum()}} and \code{\link[=zero_failed_quorum]{zero_failed_quorum()}}.
 }
 \examples{
 # vector
