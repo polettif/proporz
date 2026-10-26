@@ -147,18 +147,19 @@ biproporz = function(votes_matrix,
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 #' district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 #'
-#' seats_df = pukelsheim(votes_df,
-#'                       district_seats_df,
-#'                       quorum_any(votes_any_district = 0.05, votes_total = 0.03),
-#'                       winner_take_one = TRUE)
+#' seats_df = pukelsheim(
+#'     votes_df,
+#'     district_seats_df,
+#'     quorum_any(votes_any_district = 0.05, total_voters = 0.03),
+#'     winner_take_one = TRUE)
 #'
 #' head(seats_df)
 #'
 #' # Finland 2019
 #' finland19_result = pukelsheim(finland2019$votes_df,
-#'                              finland2019$district_seats_df,
-#'                              new_seats_col = "mandates",
-#'                              weight_votes = FALSE)
+#'                               finland2019$district_seats_df,
+#'                               new_seats_col = "mandates",
+#'                               weight_votes = FALSE)
 #' tail(finland19_result[order(finland19_result$mandates),])
 #'
 #' @export

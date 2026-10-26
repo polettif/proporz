@@ -97,8 +97,8 @@ quorum_any = function(votes_any_district, votes_total,
 #' given by [quorum_any()] or [quorum_all()].
 #'
 #' @param quorum Quorum parameter list created by [quorum_any()] or [quorum_all()]. It is also
-#'   possible to pass a pre-calculated logical vector indicating which parties meet the quorum
-#'   which is name-matched to `votes_matrix`.
+#'   possible to pass a pre-calculated logical vector (without `NA`) indicating which parties
+#'   meet the quorum. The vector is name-matched to `votes_matrix`.
 #' @param votes_matrix A matrix of unweighted votes. Required when the quorum
 #'   uses `votes_any_district` or `votes_total`, and when `quorum` is a logical
 #'   vector.
@@ -109,7 +109,7 @@ quorum_any = function(votes_any_district, votes_total,
 #'
 #' @export
 eval_quorum = function(quorum, votes_matrix, weighted_votes_matrix) {
-    assert_viable_quorum(quorum) # TODO pass votes_matrix
+    assert_viable_quorum(quorum)
 
     if(is_quorum_paramlist(quorum)) {
         quorum_bool = eval_quorum_paramlist(quorum, votes_matrix, weighted_votes_matrix)

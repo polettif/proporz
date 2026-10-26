@@ -50,7 +50,6 @@ check_quorum_paramlist = function(quorum_params) {
 
 missing_arg_error = function(a, n) {
     stop("Argument `", a, "` is missing (needed for `", n, "`)", call. = FALSE)
-
 }
 
 # can't catch total/any_district via ... because partial argument

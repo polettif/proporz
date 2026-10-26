@@ -9,8 +9,9 @@
 #'     votes if less than 1 otherwise as number of votes.
 #'   * For a matrix: List of quorum parameters (created with \code{\link[=quorum_functions]{quorum_functions}})
 #'     or a (named) logical vector with the same length as the number of `votes` rows.
-#'     To prevent potential misapplication, using `total_voters` or `any_district_voters`,
-#'     which require a weighted votes matrix, is not permitted.
+#'     To prevent potential misapplications, using `total_voters` or `any_district_voters`,
+#'     which might require a weighted votes matrix, is not permitted.
+# TODO
 #'
 #' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
 #'   specified quorum have their votes set to zero.

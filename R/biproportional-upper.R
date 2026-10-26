@@ -71,7 +71,10 @@ upper_apportionment = function(votes_matrix, district_seats,
     }
 
     # weight votes
-    weighted_votes_matrix = weight_votes_matrix(votes_matrix, seats_district)
+    weighted_votes_matrix = votes_matrix
+    if(weight_votes) {
+        weighted_votes_matrix <- weight_votes_matrix(votes_matrix, seats_district)
+    }
 
     # quorum
     if(!missing(quorum) && !is.null(quorum)) {

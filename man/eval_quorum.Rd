@@ -8,8 +8,8 @@ eval_quorum(quorum, votes_matrix, weighted_votes_matrix)
 }
 \arguments{
 \item{quorum}{Quorum parameter list created by \code{\link[=quorum_any]{quorum_any()}} or \code{\link[=quorum_all]{quorum_all()}}. It is also
-possible to pass a pre-calculated logical vector indicating which parties meet the quorum
-which is name-matched to \code{votes_matrix}.}
+possible to pass a pre-calculated logical vector (without \code{NA}) indicating which parties
+meet the quorum. The vector is name-matched to \code{votes_matrix}.}
 
 \item{votes_matrix}{A matrix of unweighted votes. Required when the quorum
 uses \code{votes_any_district} or \code{votes_total}, and when \code{quorum} is a logical

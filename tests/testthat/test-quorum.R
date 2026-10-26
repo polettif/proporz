@@ -131,7 +131,19 @@ test_that("eval_quorum", {
     expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     attributes(dummy_list)$type <- c("ALL", "ANY")
     expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
-    # TODO change names/doc for reached_quorum to eval_quorum
+})
+
+test_that("quorum in upper_apportionment", {
+    vm = matrix(c(90, 40, 20, 25), nrow = 2)
+    ds = c(10, 5)
+    wm = weight_votes_matrix(vm, ds)
+
+    # same result for actually unweighted matrix
+    u1 = upper_apportionment(vm, ds, quorum_any(votes_any_district = 50))
+    u2 = upper_apportionment(vm, ds, quorum_any(votes_any_district = 50), weight_votes = FALSE)
+    u3 = upper_apportionment(vm, ds, quorum_any(any_district_voters = 50), weight_votes = FALSE)
+    expect_identical(u1, u2)
+    expect_identical(u1, u3)
 })
 
 test_that("quorum_all/quorum_any in biproporz", {
