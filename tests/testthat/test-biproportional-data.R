@@ -16,7 +16,7 @@ test_that("Uri 2020", {
 test_that("Zug 2018", {
     pukelsheim_zug = function(votes_df, district_seats_df) {
         pukelsheim(votes_df, district_seats_df,
-                   quorum = quorum_any(votes_any_district = 0.05, votes_total = 0.03),
+                   quorum = quorum_any(votes_any_district = 0.05, total_voters = 0.03),
                    winner_take_one = TRUE)
     }
 
@@ -41,7 +41,7 @@ test_that("Zug 2018", {
 
     # previous behavior check: same result without winner_take_one
     seats_df_wtoFALSE = pukelsheim(votes_df, district_seats_df,
-                                   quorum = quorum_any(votes_any_district = 0.05, votes_total = 0.03),
+                                   quorum = quorum_any(votes_any_district = 0.05, total_voters = 0.03),
                                    winner_take_one = FALSE)
     expect_true(all(seats_df_wtoFALSE == seats_df))
 
@@ -50,7 +50,7 @@ test_that("Zug 2018", {
                                district_seats_df,
                                method = "wto",
                                quorum = quorum_any(votes_any_district = 0.05,
-                                                   votes_total = 0.03))
+                                                   total_voters = 0.03))
     expect_identical(max(seats_mtrx_wto-seats_mtrx), 0L)
 })
 
@@ -58,7 +58,7 @@ test_that("Grisons 2022", {
     grisons2022 = testdata$GR_2022
     biproporz_grisons = function(votes_matrix, seats, ...) {
         biproporz(votes_matrix, seats,
-                  quorum = quorum_all(votes_total = 0.03),
+                  quorum = quorum_all(total_voters = 0.03),
                   method = "wto")
     }
 
@@ -72,7 +72,8 @@ test_that("Zurich 2019", {
     zurich2019 = testdata$ZH_2019
     pukelsheim_zurich = function(votes_df, district_seats_df) {
         pukelsheim(votes_df, district_seats_df,
-                   quorum = quorum_any(votes_any_district = 0.05), new_seats_col = "Sitze")
+                   quorum = quorum_any(votes_any_district = 0.05),
+                   new_seats_col = "Sitze")
     }
 
     seats_expected = zurich2019$expected_result[order(zurich2019$expected_result$Liste,
@@ -98,4 +99,9 @@ test_that("Aargau 2020", {
 
     seats_compare = merge(seats_expected, seats_actual, by = c("Partei", "Bezirk"))
     expect_identical(seats_compare$Sitze, seats_compare$seats)
+
+    seats2 = pukelsheim(aargau2020$votes_df, aargau2020$district_seats_df,
+                        quorum = quorum_any(any_district_voters = 0.05, total_voters = 0.03),
+                        weight_votes = FALSE)
+    expect_identical(seats2, seats_actual)
 })

@@ -27,7 +27,7 @@
 #'
 #' @details There is a difference in how the two functions work. With `quorum_any`,
 #'   \emph{at least one} quorum must be reached. With `quorum_all` \emph{all}
-#'   (i.e. both) quorums must be reached. If you only use one parameter,
+#'   quorums must be reached. If you only use one parameter,
 #'   `quorum_any()` and `quorum_all()` are identical.
 #'
 #' @returns List of parameters that describe which quorum methods and threshold values
@@ -68,7 +68,7 @@ quorum_all = function(votes_any_district, votes_total,
     rm(total, any_district)
 
     quorum = c(as.list(environment()))
-    quorum <- quorum[!sapply(quorum, is.symbol)]
+    quorum <- quorum[!vapply(quorum, is.symbol, logical(1))]
     check_quorum_paramlist(quorum)
 
     attributes(quorum)[["type"]] <- "ALL"
@@ -84,7 +84,7 @@ quorum_any = function(votes_any_district, votes_total,
     rm(total, any_district)
 
     quorum = c(as.list(environment()))
-    quorum <- quorum[!sapply(quorum, is.symbol)]
+    quorum <- quorum[!vapply(quorum, is.symbol, logical(1))]
     check_quorum_paramlist(quorum)
 
     attributes(quorum)[["type"]] <- "ANY"
@@ -93,7 +93,7 @@ quorum_any = function(votes_any_district, votes_total,
 
 #' Evaluate a quorum
 #'
-#' Check which parties (votes matrix rows) reached the quorum specificiations and thresholds
+#' Check which parties (votes matrix rows) reached the quorum specifications and thresholds
 #' given by [quorum_any()] or [quorum_all()].
 #'
 #' @param quorum Quorum parameter list created by [quorum_any()] or [quorum_all()]. It is also
@@ -107,7 +107,20 @@ quorum_any = function(votes_any_district, votes_total,
 #'
 #' @return A logical vector indicating which parties meet the quorum.
 #'
+#' @seealso [zero_failed_quorum()]
+#'
 #' @export
+#' @examples
+#' votes_matrix = matrix(c(5020, 550, 800, 100, 1040, 550, 0, 10), ncol = 2)
+#' dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
+#' seats = c(Z1 = 50, Z2 = 20)
+#'
+#' quorum1 = quorum_all(votes_any_district = 0.1)
+#' eval_quorum(quorum1, votes_matrix)
+#'
+#' quorum2 = quorum_all(votes_any_district = 0.1, total_voters = 20)
+#' votes_matrix_w = weight_votes_matrix(votes_matrix, seats)
+#' eval_quorum(quorum2, votes_matrix, votes_matrix_w)
 eval_quorum = function(quorum, votes_matrix, weighted_votes_matrix) {
     assert_viable_quorum(quorum)
 
@@ -121,6 +134,7 @@ eval_quorum = function(quorum, votes_matrix, weighted_votes_matrix) {
 }
 
 eval_quorum_paramlist = function(quorum, votes_matrix, weighted_votes_matrix) {
+    assert(is_quorum_paramlist(quorum))
     ql = list()
 
     # votes_
@@ -156,9 +170,12 @@ eval_quorum_paramlist = function(quorum, votes_matrix, weighted_votes_matrix) {
     } else if(attr(quorum, "type") == "ANY") {
         quorum_bool = rowSums(quorum_matrix) > 0
     }
+
+    return(quorum_bool)
 }
 
 eval_quorum_boolvector = function(quorum, votes_matrix) {
+    assert(is_quorum_boolvector(quorum))
     assert(length(quorum) == nrow(votes_matrix))
     if(!equal_names(rownames(votes_matrix), names(quorum))) {
         stop("quorum vector must have the same names as the votes_matrix rows (parties)",
@@ -169,4 +186,6 @@ eval_quorum_boolvector = function(quorum, votes_matrix) {
     } else {
         quorum_bool = quorum
     }
+
+    return(quorum_bool)
 }

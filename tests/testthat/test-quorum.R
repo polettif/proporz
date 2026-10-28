@@ -30,7 +30,7 @@ test_that("check seats number after quorum", {
 test_that("quorum with vote counts", {
     vm0 = matrix(c(30, 10, 60, 50, 20, 180), nrow = 3)
     vm = vm0
-    vm[c(1,3),] <- round(c(7.97, 5.14)*vm[c(1,3),])
+    vm[c(1, 3), ] <- round(c(7.97, 5.14) * vm[c(1, 3), ])
 
     q1 = eval_quorum(quorum_all(votes_any_district = 35), vm)
     expect_identical(q1, c(TRUE, FALSE, TRUE))
@@ -42,8 +42,8 @@ test_that("quorum with vote counts", {
     expect_identical(reached_quorum_any_district(vm, 35), q1)
     expect_identical(reached_quorum_total(vm, 45), q2)
 
-    expect_identical(sum(zero_failed_quorum(vm, c(FALSE,FALSE,FALSE))), 0)
-    expect_identical(sum(zero_failed_quorum(vm, c(FALSE,TRUE,FALSE))), 30)
+    expect_identical(sum(zero_failed_quorum(vm, c(FALSE, FALSE, FALSE))), 0)
+    expect_identical(sum(zero_failed_quorum(vm, c(FALSE, TRUE, FALSE))), 30)
 })
 
 test_that("quorum with percentages counts", {
@@ -62,12 +62,12 @@ test_that("quorum with percentages counts", {
 })
 
 test_that("eval_quorum", {
-    vm = matrix(c(90, 4, 5, 1, 104, 4, 1, 1), ncol = 2)*10
+    vm = matrix(c(90, 4, 5, 1, 104, 4, 1, 1), ncol = 2) * 10
 
-    q_district = c(TRUE,FALSE,TRUE,FALSE)
-    q_total = c(TRUE,TRUE,FALSE,FALSE)
-    q_district_and_total = c(TRUE,FALSE,FALSE,FALSE)
-    q_district_or_total = c(TRUE,TRUE,TRUE,FALSE)
+    q_district = c(TRUE, FALSE, TRUE, FALSE)
+    q_total = c(TRUE, TRUE, FALSE, FALSE)
+    q_district_and_total = c(TRUE, FALSE, FALSE, FALSE)
+    q_district_or_total = c(TRUE, TRUE, TRUE, FALSE)
 
     expect_identical(
         eval_quorum(quorum_any(votes_any_district = 0.05), vm),
@@ -125,12 +125,39 @@ test_that("eval_quorum", {
         eval_quorum(list(1, 2), vm),
         "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
 
-    dummy_list = list(function(x) x > 0, function(x) x < 0)
-    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
+    dummy_list = list(threshold = 20)
+    expect_error_fixed(eval_quorum(dummy_list, vm),
+                       "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     attributes(dummy_list)$type <- "either_or"
-    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
+    expect_error_fixed(eval_quorum(dummy_list, vm),
+                       "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
     attributes(dummy_list)$type <- c("ALL", "ANY")
-    expect_error_fixed(eval_quorum(dummy_list, vm), "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
+    expect_error_fixed(eval_quorum(dummy_list, vm),
+                       "Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions")
+})
+
+test_that("all quorum params", {
+    vm = matrix(c(20, 10, 16, 0,
+                  5, 2, 11, 0,
+                  0, 0, 0, 1000), ncol = 3)
+    ds = c(2, 1, 1000)
+    wm = weight_votes_matrix(vm, ds)
+
+    expect_identical(eval_quorum(quorum_any(votes_any_district = 17), vm),
+                     c(TRUE, FALSE, FALSE, TRUE))
+    expect_identical(eval_quorum(quorum_any(any_district_voters = 11), weighted_votes_matrix = wm),
+                     c(FALSE, FALSE, TRUE, FALSE))
+    expect_identical(eval_quorum(quorum_any(votes_total = 1000), vm),
+                     c(FALSE, FALSE, FALSE, TRUE))
+    expect_identical(eval_quorum(quorum_any(total_voters = 19), weighted_votes_matrix = wm),
+                     c(FALSE, FALSE, TRUE, FALSE))
+
+    q_all = quorum_all(votes_any_district = 17, any_district_voters = 11,
+                       votes_total = 1000, total_voters = 19)
+    expect_identical(eval_quorum(q_all, vm, wm), c(FALSE, FALSE, FALSE, FALSE))
+    q_any = q_all
+    attr(q_any, "type") <- "ANY"
+    expect_identical(eval_quorum(q_any, vm, wm), c(TRUE, FALSE, TRUE, TRUE))
 })
 
 test_that("quorum in upper_apportionment", {
@@ -139,20 +166,36 @@ test_that("quorum in upper_apportionment", {
     wm = weight_votes_matrix(vm, ds)
 
     # same result for actually unweighted matrix
-    u1 = upper_apportionment(vm, ds, quorum_any(votes_any_district = 50))
+    u1 = upper_apportionment(vm, ds, quorum_any(votes_any_district = 50), weight_votes = TRUE)
     u2 = upper_apportionment(vm, ds, quorum_any(votes_any_district = 50), weight_votes = FALSE)
     u3 = upper_apportionment(vm, ds, quorum_any(any_district_voters = 50), weight_votes = FALSE)
     expect_identical(u1, u2)
     expect_identical(u1, u3)
+
+    v1 = upper_apportionment(vm, ds, quorum_any(votes_total = 110), weight_votes = TRUE)
+    v2 = upper_apportionment(vm, ds, quorum_any(votes_total = 110), weight_votes = FALSE)
+    v3 = upper_apportionment(vm, ds, quorum_any(votes_total = 110), weight_votes = FALSE)
+    v4 = upper_apportionment(vm, ds, quorum_any(total_voters = 13), weight_votes = TRUE)
+    expect_identical(v1, v2)
+    expect_identical(v1, v3)
+    expect_identical(v1, v4)
+
+    w1 = upper_apportionment(vm, ds, quorum_any(total_voters = 110), weight_votes = FALSE)
+    w2 = upper_apportionment(vm, ds, quorum_any(total_voters = 110), weight_votes = FALSE)
+    expect_identical(v1, w1)
+    expect_identical(v1, w2)
+
+    wght = upper_apportionment(wm, ds, quorum_any(total_voters = 13), weight_votes = FALSE)
+    expect_identical(wght$votes_matrix_quorum != 0, v1$votes_matrix_quorum != 0)
 })
 
 test_that("quorum_all/quorum_any in biproporz", {
-    vm = matrix(c(90, 4, 5, 1, 104, 4, 1, 1), ncol = 2)*10
+    vm = matrix(c(90, 4, 5, 1, 104, 4, 1, 1), ncol = 2) * 10
 
-    q_district = c(TRUE,FALSE,TRUE,FALSE)
-    q_total = c(TRUE,TRUE,FALSE,FALSE)
-    q_district_and_total = c(TRUE,FALSE,FALSE,FALSE)
-    q_district_or_total = c(TRUE,TRUE,TRUE,FALSE)
+    q_district = c(TRUE, FALSE, TRUE, FALSE)
+    q_total = c(TRUE, TRUE, FALSE, FALSE)
+    q_district_and_total = c(TRUE, FALSE, FALSE, FALSE)
+    q_district_or_total = c(TRUE, TRUE, TRUE, FALSE)
 
     # vote_matrix
     soll_district = vm * matrix(rep(q_district, 2), ncol = 2)
@@ -185,8 +228,8 @@ test_that("quorum_all/quorum_any in biproporz", {
     # pukelsheim
     vm_df = pivot_to_df(vm)
     wrap_pukelsheim = function(...) {
-        seats_df = data.frame(col = c(1,2), seats = c(100, 100))
-        unname(pivot_to_matrix(pukelsheim(vm_df, seats_df, ...)[c(1,2,4)]))
+        seats_df = data.frame(col = c(1, 2), seats = c(100, 100))
+        unname(pivot_to_matrix(pukelsheim(vm_df, seats_df, ...)[c(1, 2, 4)]))
     }
 
     expect_identical(
@@ -203,7 +246,7 @@ test_that("quorum_all/quorum_any in biproporz", {
         soll_district_or_total > 0)
 
     # biproportional quorum edge case
-    ec_vm = matrix(c(89,5,2,4, 96,1,1,4), ncol = 2)
+    ec_vm = matrix(c(89, 5, 2, 4, 96, 1, 1, 4), ncol = 2)
     ec_bp = biproporz(vm, c(93, 100), quorum_any(votes_any_district = 0.05))
     expect_is(ec_bp, "proporz_matrix")
 })
@@ -244,7 +287,6 @@ test_that("apply_quorum", {
     expect_error_fixed(
         apply_quorum(vm, quorum_all(any_district_voters = 0.1, total_voters = 10)),
         "Cannot handle unweighted matrix with methods: any_district_voters, total_voters")
-
 })
 
 test_that("quorum vector in biproporz", {
@@ -284,13 +326,13 @@ test_that("quorum vector in biproporz", {
 test_that("renamend quorum parameters", {
     expect_error_fixed(
         quorum_all(total = 1),
-        "The argument `total` is deprecated, please specify total_voters (recommended) or `votes_total`")
+        "The argument `total` is deprecated, please specify `total_voters` (recommended) or `votes_total`")
 
     expect_error_fixed(
         quorum_all(any_district = 1),
         "The argument `any_district` is deprecated, please specify `votes_any_district` (recommended) or `any_district_voters`")
 
-    vm = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)  * 10
+    vm = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2) * 10
     expect_error(
         apply_quorum(vm, quorum_all(total_voters = 10)),
         "Cannot handle unweighted matrix with method: total_voters")

@@ -1,8 +1,7 @@
 #' Apply quorum to votes vector or matrix
 #'
 #' This quorum calculation implementation is called within [proporz()], there's generally
-#' no need to call it directly. This method is semi-deprecated, [biproporz()] uses
-#' [eval_quorum()] and [zero_failed_quorum()].
+#' no need to call it directly.
 #'
 #' @param votes Votes vector or votes matrix
 #' @param quorum Depending on `votes`:
@@ -17,7 +16,7 @@
 #' @returns Vector or matrix with same dimension as `votes`. Parties that failed to reach the
 #'   specified quorum have their votes set to zero.
 #'
-#' @seealso \code{\link[=quorum_functions]{quorum_functions}} for more matrix examples.
+#' @seealso This method is semi-deprecated, [biproporz()] uses [eval_quorum()] and [zero_failed_quorum()].
 #'
 #' @export
 #'
@@ -86,7 +85,14 @@ apply_quorum_boolvector = function(votes_vector, quorum) {
 #' @param M votes or voter matrix
 #' @param quorum_vector logical vector with length equal to `nrow(M)`.
 #'
+#' @seealso [eval_quorum()]
+#'
 #' @returns `M` with party rows set to zero
+#' @examples
+#' (vm <- matrix(c(30, 20, 20, 50), 2))
+#' (b <- eval_quorum(quorum_any(votes_any_district = 40), vm))
+#'
+#' zero_failed_quorum(vm, b)
 #' @export
 zero_failed_quorum = function(M, quorum_vector) {
     assert(is.matrix(M))

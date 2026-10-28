@@ -14,9 +14,9 @@
 #'   ignored, as `votes_matrix` shows the number of voters.
 #'   Note that apportioning district seats according to votes is not the general use case.
 #' @param quorum Optional list of quorum parameters that describe how quorums should be applied
-#'   prior to seat distributions. The easiest way to do this is by passing [quorum_any()] or
-#'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
-#'   vector. No quorum is applied if this parameter is missing or `NULL`.
+#'   prior to seat distributions, created with [quorum_any()] or [quorum_all()], see examples.
+#'   Alternatively you can pass a precalculated logical vector.
+#'   No quorum is applied if this parameter is missing or `NULL`.
 #' @param weight_votes By default (`TRUE`) it is assumed that each voter in a district has
 #'   as many votes as there are seats in a district. Thus, votes are weighted according to
 #'   the number of available district seats with [weight_votes_matrix()]. Set to `FALSE` if
@@ -28,7 +28,8 @@
 #' @seealso [biproporz()], [lower_apportionment()]
 #'
 #' @returns A named list with `district` seats (for `votes_matrix` columns) and `party` seats
-#'   (for rows). The votes_matrix after the quorum has been applied is returned as `votes_matrix_quorum`.
+#'   (for rows). The third list entry, `votes_matrix_quorum`, shows the `votes_matrix` where
+#'   parties failing to reach the quorum had their votes set to zero.
 #'
 #' @note The results from the upper apportionment define the number of seats for each party and
 #'   the number of seats for each district for the whole voting area. The lower apportionment
@@ -42,8 +43,13 @@
 #'
 #' upper_apportionment(votes_matrix, district_seats)
 #'
+#' # with qourum
+#' upper_apportionment(votes_matrix, district_seats,
+#'                     quorum_any(total_voters = 125))
+#'
 #' @export
-upper_apportionment = function(votes_matrix, district_seats,
+upper_apportionment = function(votes_matrix,
+                               district_seats,
                                quorum,
                                weight_votes = TRUE,
                                method = "round") {

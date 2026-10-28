@@ -31,8 +31,12 @@ export(upper_apportionment)
 export(weight_list_votes)
 export(weight_votes_matrix)
 export(zero_failed_quorum)
-importFrom(stats,addmargins)
-importFrom(stats,setNames)
-importFrom(utils,read.csv)
-importFrom(utils,read.table)
-importFrom(utils,write.csv)
+importFrom(stats,
+  addmargins,
+  setNames
+)
+importFrom(utils,
+  read.csv,
+  read.table,
+  write.csv
+)

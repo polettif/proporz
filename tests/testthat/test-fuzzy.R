@@ -330,4 +330,42 @@ test_that("fuzzy params pivot", {
     expect_identical(em, "is.matrix(matrix_wide) is not TRUE")
 })
 
+test_that("fuzzy params eval_quorum", {
+    votes_matrix = matrix(c(90, 40, 20, 25), nrow = 2)
+    weighted_votes_matrix = weight_votes_matrix(votes_matrix, c(10, 5))
+    quorum = quorum_any(votes_total = 100, total_voters = 10)
+
+    em = fuzzy_errors(function(quorum) eval_quorum(quorum, votes_matrix, weighted_votes_matrix))
+    expect_identical(
+        em,
+        c("Quorum must be a quorum parameter list or a logical vector, see ?quorum_functions",
+          "length(quorum) == nrow(votes_matrix) is not TRUE"))
+
+    em = fuzzy_errors(function(votes_matrix) eval_quorum(quorum, votes_matrix, weighted_votes_matrix))
+    expect_identical(
+        em,
+        c("`votes_matrix` must be a matrix", "Votes in `votes_matrix` must be numbers >= 0"))
+
+    em = fuzzy_errors(function(weighted_votes_matrix) eval_quorum(quorum, votes_matrix, weighted_votes_matrix))
+    expect_identical(
+        em,
+        c("`weighted_votes_matrix` must be a matrix", "Votes in `weighted_votes_matrix` must be numbers >= 0"))
+})
+
+test_that("fuzzy params zero_failed_quorum", {
+    M = matrix(c(30, 20, 20, 50), 2)
+    quorum_vector = c(TRUE, FALSE)
+
+    em = fuzzy_errors(function(M) zero_failed_quorum(M, quorum_vector))
+    expect_identical(
+        em,
+        c("is.matrix(M) is not TRUE", "length(quorum_vector) == nrow(M) is not TRUE"))
+
+    em = fuzzy_errors(function(quorum_vector) zero_failed_quorum(M, quorum_vector))
+    expect_identical(
+        em,
+        c("is.logical(quorum_vector) is not TRUE", "length(quorum_vector) == nrow(M) is not TRUE",
+          "!anyNA(quorum_vector) is not TRUE"))
+})
+
 rm(fuzz_params, fuzzy_errors, .startsWith, .endsWith)

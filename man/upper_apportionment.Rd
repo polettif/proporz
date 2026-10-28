@@ -27,9 +27,9 @@ Note that apportioning district seats according to votes is not the general use 
 }}
 
 \item{quorum}{Optional list of quorum parameters that describe how quorums should be applied
-prior to seat distributions. The easiest way to do this is by passing \code{\link[=quorum_any]{quorum_any()}} or
-\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
-vector. No quorum is applied if this parameter is missing or \code{NULL}.}
+prior to seat distributions, created with \code{\link[=quorum_any]{quorum_any()}} or \code{\link[=quorum_all]{quorum_all()}}, see examples.
+Alternatively you can pass a precalculated logical vector.
+No quorum is applied if this parameter is missing or \code{NULL}.}
 
 \item{weight_votes}{By default (\code{TRUE}) it is assumed that each voter in a district has
 as many votes as there are seats in a district. Thus, votes are weighted according to
@@ -42,7 +42,8 @@ is the Sainte-Laguë/Webster method.}
 }
 \value{
 A named list with \code{district} seats (for \code{votes_matrix} columns) and \code{party} seats
-(for rows). The votes_matrix after the quorum has been applied is returned as \code{votes_matrix_quorum}.
+(for rows). The third list entry, \code{votes_matrix_quorum}, shows the \code{votes_matrix} where
+parties failing to reach the quorum had their votes set to zero.
 }
 \description{
 In the first step of biproportional apportionment parties are given seats according to the
@@ -60,6 +61,10 @@ votes_matrix = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
 district_seats = c(7,5,8)
 
 upper_apportionment(votes_matrix, district_seats)
+
+# with qourum
+upper_apportionment(votes_matrix, district_seats,
+                    quorum_any(total_voters = 125))
 
 }
 \seealso{

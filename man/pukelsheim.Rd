@@ -29,9 +29,9 @@ pukelsheim(
 }}
 
 \item{quorum}{Optional list of quorum parameters that describe how quorums should be applied
-prior to seat distributions. The easiest way to do this is by passing \code{\link[=quorum_any]{quorum_any()}} or
-\code{\link[=quorum_all]{quorum_all()}}, see examples. Alternatively you can pass a precalculated logical
-vector. No quorum is applied if this parameter is missing or \code{NULL}.}
+prior to seat distributions, created with \code{\link[=quorum_any]{quorum_any()}} or \code{\link[=quorum_all]{quorum_all()}}, see examples.
+Alternatively you can pass a precalculated logical vector.
+No quorum is applied if this parameter is missing or \code{NULL}.}
 
 \item{new_seats_col}{Name of the new column}
 
@@ -48,8 +48,8 @@ Default is \code{FALSE}.}
 }
 \value{
 A data.frame like \code{votes_df} with a new column denoting the number of seats per
-party and district. Party and district divisors stored in attributes (hidden from print,
-see \code{\link[=get_divisors]{get_divisors()}}). An ungrouped tibble is returned if \code{votes_df} is a tibble.
+party and district. Party and district divisors are stored in attributes (hidden from
+print, see \code{\link[=get_divisors]{get_divisors()}}). An ungrouped tibble is returned if \code{votes_df} is a tibble.
 }
 \description{
 Method to proportionally allocate seats among parties/lists and
@@ -86,10 +86,12 @@ seats_df = pukelsheim(
 head(seats_df)
 
 # Finland 2019
-finland19_result = pukelsheim(finland2019$votes_df,
-                              finland2019$district_seats_df,
-                              new_seats_col = "mandates",
-                              weight_votes = FALSE)
+finland19_result = pukelsheim(
+    finland2019$votes_df,
+    finland2019$district_seats_df,
+    new_seats_col = "mandates",
+    weight_votes = FALSE)
+
 tail(finland19_result[order(finland19_result$mandates),])
 
 }

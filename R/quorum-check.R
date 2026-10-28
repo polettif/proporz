@@ -57,7 +57,7 @@ missing_arg_error = function(a, n) {
 catch_replaced_quorum_params = function(total, any_district) {
     if(!is.null(total)) {
         stop("The argument `total` is deprecated, ",
-             "please specify total_voters (recommended) or `votes_total`",
+             "please specify `total_voters` (recommended) or `votes_total`",
              call. = FALSE)
     }
     if(!is.null(any_district)) {

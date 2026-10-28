@@ -25,4 +25,4 @@ Suggests:
 URL: https://polettif.github.io/proporz/, https://github.com/polettif/proporz
 BugReports: https://github.com/polettif/proporz/issues
 VignetteBuilder: knitr
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1

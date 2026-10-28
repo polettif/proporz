@@ -26,8 +26,7 @@ specified quorum have their votes set to zero.
 }
 \description{
 This quorum calculation implementation is called within \code{\link[=proporz]{proporz()}}, there's generally
-no need to call it directly. This method is semi-deprecated, \code{\link[=biproporz]{biproporz()}} uses
-\code{\link[=eval_quorum]{eval_quorum()}} and \code{\link[=zero_failed_quorum]{zero_failed_quorum()}}.
+no need to call it directly.
 }
 \examples{
 # vector
@@ -50,5 +49,5 @@ quorum_vec = c(B = TRUE, A = FALSE)
 apply_quorum(votes_matrix, quorum_vec)
 }
 \seealso{
-\code{\link[=quorum_functions]{quorum_functions}} for more matrix examples.
+This method is semi-deprecated, \code{\link[=biproporz]{biproporz()}} uses \code{\link[=eval_quorum]{eval_quorum()}} and \code{\link[=zero_failed_quorum]{zero_failed_quorum()}}.
 }

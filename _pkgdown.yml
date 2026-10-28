@@ -34,10 +34,10 @@ reference:
   contents:
   - quorum_functions
   - eval_quorum
-  - zero_failed_quorum
   - reached_quorum_any_district
   - reached_quorum_total
   - apply_quorum
+  - zero_failed_quorum
 - title: "Shiny App"
   contents:
   - run_app

@@ -63,7 +63,7 @@ quorums should be applied prior to seat distributions.
 \details{
 There is a difference in how the two functions work. With \code{quorum_any},
 \emph{at least one} quorum must be reached. With \code{quorum_all} \emph{all}
-(i.e. both) quorums must be reached. If you only use one parameter,
+quorums must be reached. If you only use one parameter,
 \code{quorum_any()} and \code{quorum_all()} are identical.
 }
 \examples{

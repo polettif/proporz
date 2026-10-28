@@ -18,3 +18,12 @@ zero_failed_quorum(M, quorum_vector)
 This is a convenience function for \code{M[!quorum_vector, ] <- 0L}. Used in
 combination with \code{\link[=eval_quorum]{eval_quorum()}} in \code{\link[=upper_apportionment]{upper_apportionment()}}.
 }
+\examples{
+(vm <- matrix(c(30, 20, 20, 50), 2))
+(b <- eval_quorum(quorum_any(votes_any_district = 40), vm))
+
+zero_failed_quorum(vm, b)
+}
+\seealso{
+\code{\link[=eval_quorum]{eval_quorum()}}
+}

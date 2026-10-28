@@ -101,10 +101,11 @@ input data for `pukelsheim()`. The other parameters are set to reflect the actua
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
-seats_df = pukelsheim(votes_df,
-                      district_seats_df,
-                      quorum = quorum_any(votes_any_district = 0.05, total_voters = 0.03),
-                      winner_take_one = TRUE)
+seats_df = pukelsheim(
+    votes_df,
+    district_seats_df,
+    quorum = quorum_any(votes_any_district = 0.05, total_voters = 0.03),
+    winner_take_one = TRUE)
 
 head(seats_df)
 #>   list_id entity_id list_votes seats

@@ -22,6 +22,21 @@ when the quorum uses \code{any_district_voters} or \code{total_voters}.}
 A logical vector indicating which parties meet the quorum.
 }
 \description{
-Check which parties (votes matrix rows) reached the quorum specificiations and thresholds
+Check which parties (votes matrix rows) reached the quorum specifications and thresholds
 given by \code{\link[=quorum_any]{quorum_any()}} or \code{\link[=quorum_all]{quorum_all()}}.
+}
+\examples{
+votes_matrix = matrix(c(5020, 550, 800, 100, 1040, 550, 0, 10), ncol = 2)
+dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
+seats = c(Z1 = 50, Z2 = 20)
+
+quorum1 = quorum_all(votes_any_district = 0.1)
+eval_quorum(quorum1, votes_matrix)
+
+quorum2 = quorum_all(votes_any_district = 0.1, total_voters = 20)
+votes_matrix_w = weight_votes_matrix(votes_matrix, seats)
+eval_quorum(quorum2, votes_matrix, votes_matrix_w)
+}
+\seealso{
+\code{\link[=zero_failed_quorum]{zero_failed_quorum()}}
 }

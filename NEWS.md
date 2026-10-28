@@ -1,6 +1,6 @@
 # proporz (dev)
 
-* `upper_apportionment()`: Added `quorum` parameter (changed argument order), function now also return `votes_matrix_quorum`
+* `upper_apportionment()`: Added `quorum` parameter (changed argument order), function now also returns `votes_matrix_quorum`
 * `quorum_all()`/`quorum_any()`:
   * New explicit params that describe using votes or weighted votes
   * Parameters `any_district` and `total` can no longer be used

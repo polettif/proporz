@@ -139,8 +139,8 @@ biproporz = function(votes_matrix,
 #' @seealso This function calls [biproporz()] after preparing the input data.
 #'
 #' @returns A data.frame like `votes_df` with a new column denoting the number of seats per
-#'   party and district. Party and district divisors stored in attributes (hidden from print,
-#'   see [get_divisors()]). An ungrouped tibble is returned if `votes_df` is a tibble.
+#'   party and district. Party and district divisors are stored in attributes (hidden from
+#'   print, see [get_divisors()]). An ungrouped tibble is returned if `votes_df` is a tibble.
 #'
 #' @examples
 #' # Zug 2018
@@ -156,10 +156,12 @@ biproporz = function(votes_matrix,
 #' head(seats_df)
 #'
 #' # Finland 2019
-#' finland19_result = pukelsheim(finland2019$votes_df,
-#'                               finland2019$district_seats_df,
-#'                               new_seats_col = "mandates",
-#'                               weight_votes = FALSE)
+#' finland19_result = pukelsheim(
+#'     finland2019$votes_df,
+#'     finland2019$district_seats_df,
+#'     new_seats_col = "mandates",
+#'     weight_votes = FALSE)
+#'
 #' tail(finland19_result[order(finland19_result$mandates),])
 #'
 #' @export
