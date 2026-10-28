@@ -2,7 +2,7 @@
 
 # https://en.wikipedia.org/wiki/biproporz_apportionment
 M1 = matrix(c(123,912,312,45,714,255,815,414,215), nrow = 3)
-d1 = c(7,5,8)
+d1 = c(7, 5, 8)
 p1 = c(5L,11L,4L)
 
 # https://de.wikipedia.org/wiki/Doppeltproportionales_Zuteilungsverfahren
@@ -12,7 +12,7 @@ p2 = 4:6
 
 # https://de.wikipedia.org/wiki/Sitzzuteilungsverfahren#Biproportionales_Verfahren
 test_that("upper apportionment (party seats)", {
-    expect_identical(upper_apportionment(M1, d1)$district, d1)
+    expect_identical(upper_apportionment(M1, d1)$district, as.integer(d1))
     expect_identical(upper_apportionment(M1, d1)$party, p1)
     expect_identical(upper_apportionment(M2, d2)$district, d2)
     expect_identical(upper_apportionment(M2, d2)$party, p2)

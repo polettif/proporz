@@ -78,6 +78,7 @@ prep_district_seats = function(district_seats, votes_matrix,
         stop("`", district_seats.name, "` must be integers", call. = FALSE)
     }
     assert(is.atomic(district_seats))
+    mode(district_seats) <- "integer"
 
     return(district_seats)
 }
