@@ -19,11 +19,6 @@
 #' assignment to candidates.
 #'
 #' @inheritParams upper_apportionment
-#' @param quorum Optional list of functions which take the votes matrix and return a logical
-#'   vector that shows for each party/row whether they reached the quorum (i.e. are
-#'   eligible for seats). The easiest way to do this is by passing [quorum_any()] or
-#'   [quorum_all()], see examples. Alternatively you can pass a precalculated logical
-#'   vector. No quorum is applied if this parameter is missing or `NULL`.
 #' @param method Defines which method is used to assign seats. The following methods are
 #'   recommended:
 #'   \itemize{
@@ -65,7 +60,7 @@
 #'
 #' # apply quorum (high values for illustrative purposes)
 #' biproporz(votes_matrix, district_seats,
-#'           quorum_all(any_district = 0.1, total = 0.25))
+#'           quorum_all(votes_any_district = 0.1, votes_total = 0.25))
 #'
 #' @export
 biproporz = function(votes_matrix,
@@ -74,7 +69,7 @@ biproporz = function(votes_matrix,
                      weight_votes = TRUE,
                      method = "round",
                      ...) {
-    assert_empty_dots("use_list_votes", list(...))
+    assert_empty_dots(list(...), "use_list_votes")
     weight_votes <- catch_deprecated_use_list_votes(weight_votes, list(...))
 
     # check parameters
@@ -84,17 +79,15 @@ biproporz = function(votes_matrix,
     district_seats <- prep_district_seats(district_seats, votes_matrix, .dsn, .vmn)
     method <- prep_method(method)
 
-    # quorum
-    if(!missing(quorum) && !is.null(quorum)) {
-        votes_matrix <- apply_quorum_matrix(votes_matrix, quorum)
-    }
-
     # upper apportionment (Oberzuteilung)
-    upp_app = upper_apportionment(votes_matrix, district_seats, weight_votes, method[[1]])
+    upp_app = upper_apportionment(votes_matrix, district_seats,
+                                  quorum, weight_votes, method[[1]])
 
     # lower apportionment (Unterzuteilung)
-    seats_matrix = lower_apportionment(votes_matrix, seats_cols = upp_app[["district"]],
-                                       seats_rows = upp_app[["party"]], method[[2]])
+    seats_matrix = lower_apportionment(upp_app[["votes_matrix_quorum"]],
+                                       seats_cols = upp_app[["district"]],
+                                       seats_rows = upp_app[["party"]],
+                                       method = method[[2]])
 
     class(seats_matrix) <- c("proporz_matrix", class(seats_matrix))
     return(seats_matrix)
@@ -154,18 +147,19 @@ biproporz = function(votes_matrix,
 #' votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 #' district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 #'
-#' seats_df = pukelsheim(votes_df,
-#'                       district_seats_df,
-#'                       quorum_any(any_district = 0.05, total = 0.03),
-#'                       winner_take_one = TRUE)
+#' seats_df = pukelsheim(
+#'     votes_df,
+#'     district_seats_df,
+#'     quorum_any(votes_any_district = 0.05, total_voters = 0.03),
+#'     winner_take_one = TRUE)
 #'
 #' head(seats_df)
 #'
 #' # Finland 2019
 #' finland19_result = pukelsheim(finland2019$votes_df,
-#'                              finland2019$district_seats_df,
-#'                              new_seats_col = "mandates",
-#'                              weight_votes = FALSE)
+#'                               finland2019$district_seats_df,
+#'                               new_seats_col = "mandates",
+#'                               weight_votes = FALSE)
 #' tail(finland19_result[order(finland19_result$mandates),])
 #'
 #' @export
@@ -175,7 +169,7 @@ pukelsheim = function(votes_df, district_seats_df,
                       weight_votes = TRUE,
                       winner_take_one = FALSE,
                       ...) {
-    assert_empty_dots("use_list_votes", list(...))
+    assert_empty_dots(list(...), "use_list_votes")
     weight_votes <- catch_deprecated_use_list_votes(weight_votes, list(...))
 
     check_params.pukelsheim(

@@ -96,7 +96,7 @@ A quorum can ensure that only parties with a minimum percentage or number of vot
 In this example, we impose a 5% quorum on the total votes.
 
 ```{r standard_quorum}
-biproporz(votes_matrix, district_seats, quorum_any(total = 0.05))
+biproporz(votes_matrix, district_seats, quorum_any(votes_total = 0.05))
 ```
 
 This does not actually change the seat distribution compared to the standard method, as *Party D* is already below the "natural quorum" and did not get enough votes for any seat.
@@ -154,7 +154,7 @@ To prevent this case, a quorum is usually applied to ensure that only large enou
 
 ```{r wto_quorum}
 biproporz(votes_matrix, district_seats, method = "wto",
-          quorum = quorum_any(total = 0.01))
+          quorum = quorum_any(total_voters = 0.02))
 ```
 
 ### WTO with an Alternative Upper Apportionment Method
@@ -222,33 +222,30 @@ biproporz_absolute_wto = function(votes_matrix, district_seats,
   district_winners = district_winner_matrix(votes_matrix, district_seats)
   district_winners[is.na(district_winners)] <- FALSE # Ignore ties
   
-  # 2) Apply quorum if specified
-  if(!is.null(quorum)) {
-    votes_matrix <- apply_quorum(votes_matrix, quorum)
-  }
-  
-  # 3) Assign party seats in upper apportionment
+  # 2) Assign party seats in upper apportionment
   ua = upper_apportionment(votes_matrix, district_seats, 
-                           weight_votes, method = "round")
+                           quorum, weight_votes, 
+                           method = "round")
   
-  # 4.1) Assign seats to district winners without 
+  # 3.1) Assign seats to district winners without 
   # enough upper apportionment seats
   seats_without_ua = district_winners * 1L
   seats_without_ua[rowSums(district_winners) <= ua$party, ] <- 0L
   
-  # 4.2) Biproportional apportionment for remaining seats
+  # 3.2) Biproportional apportionment for remaining seats
   # Build votes matrix, set votes for district winners 
   # without enough upper apportionment seats to zero
   biprop_votes_matrix = votes_matrix
   biprop_votes_matrix[seats_without_ua > 0] <- 0
   
-  # Reduce the number of seats for districts that 
+  # 3.3) Reduce the number of seats for districts that 
   # already had a "insufficient district winner" seat assigned
   biprop_district_seats = district_seats - colSums(seats_without_ua)
   
-  # Run biproporz
+  # 4) Run biproporz
   seats_biproporz = biproporz(biprop_votes_matrix, 
                               biprop_district_seats, 
+                              quorum,
                               method = "wto")
   
   # Remove divisor attributes, as they're no longer 

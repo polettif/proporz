@@ -285,7 +285,7 @@ test_that("empty ...", {
 
     expect_error_fixed(
         biproporz(uri2020$votes_matrix, uri2020$seats_vector,
-                  quorum_all(any_district = 0.1, total = 0.25), TRUE, "round",
+                  quorum_all(votes_any_district = 0.1, votes_total = 0.25), TRUE, "round",
                   "more_args", list("even more")),
         "`...` must be empty")
 })

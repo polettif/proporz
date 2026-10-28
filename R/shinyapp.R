@@ -137,11 +137,11 @@ run_app = function(votes_matrix = NULL, district_seats = NULL) {
                     fluidRow(
                         column(
                             width = 6,
-                            shiny::numericInput("quorum_districts", "Districts", 0, min = 0)
+                            shiny::numericInput("quorum_districts", "Votes in any district", 0, min = 0)
                         ),
                         column(
                             width = 6,
-                            shiny::numericInput("quorum_total", "Total", 0, min = 0)
+                            shiny::numericInput("quorum_total", "Total voters", 0, min = 0)
                         )
                     ),
                     tags$span(style = "margin-top:-5px;",
@@ -404,16 +404,16 @@ shiny_get_quorum_function = function(q_districts, q_total, q_all) {
     if(q_districts > 0 && q_total > 0) {
         assert_bool1(q_all)
         if(q_all) {
-            return(quorum_all(any_district = q_districts, total = q_total))
+            return(quorum_all(votes_any_district = q_districts, total_voters = q_total))
         } else {
-            return(quorum_any(any_district = q_districts, total = q_total))
+            return(quorum_any(votes_any_district = q_districts, total_voters = q_total))
         }
     }
     if(q_districts > 0) {
-        return(quorum_any(any_district = q_districts))
+        return(quorum_any(votes_any_district = q_districts))
     }
     if(q_total > 0) {
-        return(quorum_any(total = q_total))
+        return(quorum_any(total_voters = q_total))
     }
     return(NULL)
 }

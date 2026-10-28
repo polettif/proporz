@@ -4,35 +4,61 @@
 \alias{quorum_functions}
 \alias{quorum_all}
 \alias{quorum_any}
-\title{Create quorum functions for biproportional apportionment}
+\title{Create quorum parameter list for biproportional apportionment}
 \usage{
-quorum_all(any_district, total)
+quorum_all(
+  votes_any_district,
+  votes_total,
+  any_district_voters,
+  total_voters,
+  total = NULL,
+  any_district = NULL
+)
 
-quorum_any(any_district, total)
+quorum_any(
+  votes_any_district,
+  votes_total,
+  any_district_voters,
+  total_voters,
+  total = NULL,
+  any_district = NULL
+)
 }
 \arguments{
-\item{any_district}{Vote threshold a party must reach in \emph{at least} one
-district. Used as share of total votes within a district if less than 1,
-otherwise as number of votes.
+\item{votes_any_district}{Vote threshold a party must reach in \emph{at least} one district.
+Used as share of total votes within a district if less than 1, otherwise as number of votes.
 Must be > 0 if provided.
 Uses \code{\link[=reached_quorum_any_district]{reached_quorum_any_district()}}.}
 
-\item{total}{Vote threshold a party must reach for all votes cast. Used as
-share of total votes if less than 1, otherwise as number of votes. Note that
-votes are not weighted with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}} across districts.
+\item{votes_total}{Vote threshold a party must reach for all votes cast.
+Used as share of total votes if less than 1, otherwise as number of votes.
+Note that votes are not weighted with \code{\link[=weight_votes_matrix]{weight_votes_matrix()}} across districts, the
+usual and theoretically sound application for a total quorum is \code{total_voters}.
 Must be > 0 if provided.
 Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}}.}
+
+\item{any_district_voters}{Weighted vote (voters) threshold a party must reach in \emph{at least} one district.
+Used as share of total weighted votes (voters) within a district if less than 1, otherwise as number of voters.
+Must be > 0 if provided.
+Uses \code{\link[=reached_quorum_any_district]{reached_quorum_any_district()}} with a weighted votes matrix.}
+
+\item{total_voters}{Vote threshold a party must reach for all weighted votes (voters).
+Used as share of total weighted votes (voters) if less than 1, otherwise as number of voters.
+Must be > 0 if provided.
+Uses \code{\link[=reached_quorum_total]{reached_quorum_total()}} with a weighted votes matrix.}
+
+\item{total}{Replaced by \code{total_voters} (recommended) or \code{votes_total}}
+
+\item{any_district}{Replaced by \code{votes_any_district} (recommended) or \code{any_district_voters}}
 }
 \value{
-List of functions. Each function, when called with \verb{function(votes_matrix)},
-returns a boolean vector with length equal to the number of lists/parties
-(\code{votes_matrix} rows). The vector shows whether a party has reached any/all
-quorums.
+List of parameters that describe which quorum methods and threshold values
+should be used. The list is handled in \code{\link[=upper_apportionment]{upper_apportionment()}} by \code{\link[=eval_quorum]{eval_quorum()}}.
 }
 \description{
 \code{quorum_any()} and \code{quorum_all()} are used for the \code{quorum} parameter in
-\code{\link[=biproporz]{biproporz()}}/\code{\link[=pukelsheim]{pukelsheim()}} and help describe how quorums should be
-applied prior to seat distributions.
+\code{\link[=upper_apportionment]{upper_apportionment()}} (and thus \code{\link[=biproporz]{biproporz()}}/\code{\link[=pukelsheim]{pukelsheim()}}) and describe how
+quorums should be applied prior to seat distributions.
 }
 \details{
 There is a difference in how the two functions work. With \code{quorum_any},
@@ -41,28 +67,26 @@ There is a difference in how the two functions work. With \code{quorum_any},
 \code{quorum_any()} and \code{quorum_all()} are identical.
 }
 \examples{
-votes_matrix = matrix(c(502, 55, 80, 10, 104, 55, 0, 1), ncol = 2)
+votes_matrix = matrix(c(5020, 550, 800, 100, 1040, 550, 0, 10), ncol = 2)
 dimnames(votes_matrix) <- list(c("A", "B", "C", "D"), c("Z1", "Z2"))
 seats = c(Z1 = 50, Z2 = 20)
 
 # use as parameter in biproporz or pukelsheim (general use case)
 biproporz(votes_matrix, seats,
-          quorum = quorum_any(any_district = 0.1, total = 100))
+          quorum = quorum_any(votes_any_district = 0.1, total_voters = 20))
 
 biproporz(votes_matrix, seats,
-          quorum = quorum_all(any_district = 0.1, total = 100))
+          quorum = quorum_all(votes_any_district = 0.1, total_voters = 20))
 
-biproporz(votes_matrix, seats, quorum = quorum_any(any_district = 0.1))
+biproporz(votes_matrix, seats, quorum = quorum_any(votes_any_district = 0.1))
 
-biproporz(votes_matrix, seats, quorum = quorum_any(total = 100))
-
-biproporz(votes_matrix, seats, quorum = quorum_any(total = 0.5))
+biproporz(votes_matrix, seats, quorum = quorum_any(total_voters = 0.05))
 
 # the quorum parameter also accepts named vectors (e.g. calculated elsewhere)
 biproporz(votes_matrix, seats,
           quorum = c(A = FALSE, B = TRUE, C = TRUE, D = TRUE))
 
-}
-\seealso{
-\code{\link[=apply_quorum]{apply_quorum()}} for standalone quorum calculations
+# quorum specifications are checked with eval_quorum
+eval_quorum(quorum_any(votes_any_district = 0.2), votes_matrix)
+
 }

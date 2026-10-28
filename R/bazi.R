@@ -12,8 +12,8 @@ read_bazi = function(file.bazi) {
         readLines(con)
     }, warning = function(w) {
         if(startsWith(w[["message"]], "incomplete final line found")) {
-            con = file(file.bazi, encoding = "windows-1252")
-            return(readLines(con, warn = FALSE))
+            con = file(file.bazi, encoding = "windows-1252") # nocov
+            return(readLines(con, warn = FALSE)) # nocov
         }
         readLines(file.bazi, warn = FALSE) # nocov
     })

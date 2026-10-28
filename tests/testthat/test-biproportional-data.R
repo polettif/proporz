@@ -16,7 +16,7 @@ test_that("Uri 2020", {
 test_that("Zug 2018", {
     pukelsheim_zug = function(votes_df, district_seats_df) {
         pukelsheim(votes_df, district_seats_df,
-                   quorum = quorum_any(any_district = 0.05, total = 0.03),
+                   quorum = quorum_any(votes_any_district = 0.05, votes_total = 0.03),
                    winner_take_one = TRUE)
     }
 
@@ -34,15 +34,14 @@ test_that("Zug 2018", {
     votes_df = unique(zug2018[c("list_id", "entity_name", "list_votes")])
     district_seats_df = unique(zug2018[c("entity_name", "election_mandates")])
 
-    seats_df = pukelsheim_zug(votes_df,
-                              district_seats_df)
+    seats_df = pukelsheim_zug(votes_df, district_seats_df)
 
     seats_mtrx = pivot_to_matrix(seats_df[c(1,2,4)])
     expect_identical(seats_mtrx[,colnames(seats_matrix_expected)], seats_matrix_expected)
 
     # previous behavior check: same result without winner_take_one
     seats_df_wtoFALSE = pukelsheim(votes_df, district_seats_df,
-                                   quorum = quorum_any(any_district = 0.05, total = 0.03),
+                                   quorum = quorum_any(votes_any_district = 0.05, votes_total = 0.03),
                                    winner_take_one = FALSE)
     expect_true(all(seats_df_wtoFALSE == seats_df))
 
@@ -50,8 +49,8 @@ test_that("Zug 2018", {
     seats_mtrx_wto = biproporz(pivot_to_matrix(votes_df),
                                district_seats_df,
                                method = "wto",
-                               quorum = quorum_any(any_district = 0.05,
-                                                   total = 0.03))
+                               quorum = quorum_any(votes_any_district = 0.05,
+                                                   votes_total = 0.03))
     expect_identical(max(seats_mtrx_wto-seats_mtrx), 0L)
 })
 
@@ -59,7 +58,7 @@ test_that("Grisons 2022", {
     grisons2022 = testdata$GR_2022
     biproporz_grisons = function(votes_matrix, seats, ...) {
         biproporz(votes_matrix, seats,
-                  quorum = quorum_all(total = 0.03),
+                  quorum = quorum_all(votes_total = 0.03),
                   method = "wto")
     }
 
@@ -73,7 +72,7 @@ test_that("Zurich 2019", {
     zurich2019 = testdata$ZH_2019
     pukelsheim_zurich = function(votes_df, district_seats_df) {
         pukelsheim(votes_df, district_seats_df,
-                   quorum = quorum_any(any_district = 0.05), new_seats_col = "Sitze")
+                   quorum = quorum_any(votes_any_district = 0.05), new_seats_col = "Sitze")
     }
 
     seats_expected = zurich2019$expected_result[order(zurich2019$expected_result$Liste,
@@ -90,7 +89,7 @@ test_that("Aargau 2020", {
     aargau2020 = testdata$AG_2020
     pukelsheim_aargau = function(votes_df, district_seats_df) {
         pukelsheim(votes_df, district_seats_df,
-                   quorum = quorum_any(any_district = 0.05, total = 0.03),
+                   quorum = quorum_any(votes_any_district = 0.05, votes_total = 0.03),
                    weight_votes = FALSE) # the test data set uses "Wählerzahl"
     }
 

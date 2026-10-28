@@ -15,7 +15,7 @@ prep_votes_matrix = function(votes_matrix, votes_matrix.name) {
         stop("colnames in ", vmn, " must be unique without NA's", call. = FALSE)
     }
 
-    return(votes_matrix)
+    invisible(votes_matrix)
 }
 
 prep_method = function(method) {
@@ -214,7 +214,7 @@ catch_deprecated_use_list_votes = function(weight_votes, dots) {
     return(weight_votes)
 }
 
-assert_empty_dots = function(allowed_params, dots) {
+assert_empty_dots = function(dots, allowed_params = c()) {
     if(length(dots) > 0) {
         unknown = setdiff(names(dots), allowed_params)
         unknown <- unknown[unknown != ""]
