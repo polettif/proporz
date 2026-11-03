@@ -9,6 +9,7 @@ seats according to the sum of their votes across all districts.
 upper_apportionment(
   votes_matrix,
   district_seats,
+  quorum,
   weight_votes = TRUE,
   method = "round"
 )
@@ -33,6 +34,16 @@ upper_apportionment(
     shows the number of voters. Note that apportioning district seats
     according to votes is not the general use case.
 
+- quorum:
+
+  Optional list of quorum parameters that describe how quorums should be
+  applied prior to seat distributions, created with
+  [`quorum_any()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
+  or
+  [`quorum_all()`](https://polettif.github.io/proporz/reference/quorum_functions.md),
+  see examples. Alternatively you can pass a precalculated logical
+  vector. No quorum is applied if this parameter is missing or `NULL`.
+
 - weight_votes:
 
   By default (`TRUE`) it is assumed that each voter in a district has as
@@ -51,7 +62,9 @@ upper_apportionment(
 ## Value
 
 A named list with `district` seats (for `votes_matrix` columns) and
-`party` seats (for rows).
+`party` seats (for rows). The third list entry, `votes_matrix_quorum`,
+shows the `votes_matrix` where parties failing to reach the quorum had
+their votes set to zero.
 
 ## Note
 
@@ -79,5 +92,27 @@ upper_apportionment(votes_matrix, district_seats)
 #> 
 #> $party
 #> [1]  5 11  4
+#> 
+#> $votes_matrix_quorum
+#>      [,1] [,2] [,3]
+#> [1,]  123   45  815
+#> [2,]  912  714  414
+#> [3,]  312  255  215
+#> 
+
+# with qourum
+upper_apportionment(votes_matrix, district_seats,
+                    quorum_any(total_voters = 125))
+#> $district
+#> [1] 7 5 8
+#> 
+#> $party
+#> [1]  6 14  0
+#> 
+#> $votes_matrix_quorum
+#>      [,1] [,2] [,3]
+#> [1,]  123   45  815
+#> [2,]  912  714  414
+#> [3,]    0    0    0
 #> 
 ```

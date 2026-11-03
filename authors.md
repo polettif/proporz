@@ -7,15 +7,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/polettif/proporz/blob/v1.5.3/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/polettif/proporz/blob/v1.6.0/DESCRIPTION)
 
 Poletti F (2026). *proporz: Proportional Apportionment*. R package
-version 1.5.3, <https://polettif.github.io/proporz/>.
+version 1.6.0, <https://polettif.github.io/proporz/>.
 
     @Manual{,
       title = {proporz: Proportional Apportionment},
       author = {Flavio Poletti},
       year = {2026},
-      note = {R package version 1.5.3},
+      note = {R package version 1.6.0},
       url = {https://polettif.github.io/proporz/},
     }

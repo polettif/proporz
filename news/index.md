@@ -1,6 +1,25 @@
 # Changelog
 
+## proporz 1.6.0
+
+CRAN release: 2026-11-02
+
+- [`upper_apportionment()`](https://polettif.github.io/proporz/reference/upper_apportionment.md):
+  Added `quorum` parameter (changed argument order), function now also
+  returns `votes_matrix_quorum`
+- [`quorum_all()`](https://polettif.github.io/proporz/reference/quorum_functions.md)/[`quorum_any()`](https://polettif.github.io/proporz/reference/quorum_functions.md):
+  - New explicit params that describe using votes or voters (weighted
+    votes)
+  - Parameters `any_district` and `total` can no longer be used
+  - Now return a list of values instead of functions
+- New functions:
+  [`eval_quorum()`](https://polettif.github.io/proporz/reference/eval_quorum.md)
+  and
+  [`zero_failed_quorum()`](https://polettif.github.io/proporz/reference/zero_failed_quorum.md)
+
 ## proporz 1.5.3
+
+CRAN release: 2026-08-28
 
 - feature: enable csv input/output in shiny app
   ([`run_app()`](https://polettif.github.io/proporz/reference/run_app.md))
@@ -75,9 +94,7 @@ CRAN release: 2024-03-04
   [`largest_remainder_method()`](https://polettif.github.io/proporz/reference/largest_remainder_method.md)
 - renamed `divisors()` to
   [`get_divisors()`](https://polettif.github.io/proporz/reference/get_divisors.md)
-- removed `hzv()` alias and made
-  [`reached_quorums()`](https://polettif.github.io/proporz/reference/reached_quorums.md)
-  internal
+- removed `hzv()` alias and made `reached_quorums()` internal
 - update documentation and tests
 - minor bugfixes
 

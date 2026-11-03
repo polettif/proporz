@@ -2,9 +2,7 @@
 
 This quorum calculation implementation is called within
 [`proporz()`](https://polettif.github.io/proporz/reference/proporz.md),
-[`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.md)
-and related functions. Generally, there is no need to call
-`apply_quorum` directly.
+there's generally no need to call it directly.
 
 ## Usage
 
@@ -25,10 +23,14 @@ apply_quorum(votes, quorum)
   - For a vector: Vote threshold a party must reach. Used as fraction of
     total votes if less than 1 otherwise as number of votes.
 
-  - For a matrix: List of quorum functions (created with
+  - For a matrix: List of quorum parameters (created with
     [`quorum_functions`](https://polettif.github.io/proporz/reference/quorum_functions.md))
     or a (named) logical vector with the same length as the number of
-    `votes` rows.
+    `votes` rows. To prevent potential misapplications, using
+    `total_voters` or `any_district_voters`, which might require a
+    weighted votes matrix, is not permitted. Please use
+    [`eval_quorum()`](https://polettif.github.io/proporz/reference/eval_quorum.md)
+    in such cases.
 
 ## Value
 
@@ -37,8 +39,12 @@ reach the specified quorum have their votes set to zero.
 
 ## See also
 
-[`quorum_functions`](https://polettif.github.io/proporz/reference/quorum_functions.md)
-for more matrix examples.
+This method is semi-deprecated,
+[`biproporz()`](https://polettif.github.io/proporz/reference/biproporz.md)
+uses
+[`eval_quorum()`](https://polettif.github.io/proporz/reference/eval_quorum.md)
+and
+[`zero_failed_quorum()`](https://polettif.github.io/proporz/reference/zero_failed_quorum.md).
 
 ## Examples
 
@@ -59,7 +65,7 @@ apply_quorum(votes, .11)
 #> [1,]   91  199
 #> [2,]    9    1
 
-apply_quorum(votes_matrix, quorum_all(total = 0.1))
+apply_quorum(votes_matrix, quorum_all(votes_total = 0.1))
 #>      [,1] [,2]
 #> [1,]   91  199
 #> [2,]    0    0

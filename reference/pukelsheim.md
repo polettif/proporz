@@ -40,10 +40,8 @@ pukelsheim(
 
 - quorum:
 
-  Optional list of functions which take the votes matrix and return a
-  logical vector that shows for each party/row whether they reached the
-  quorum (i.e. are eligible for seats). The easiest way to do this is by
-  passing
+  Optional list of quorum parameters that describe how quorums should be
+  applied prior to seat distributions, created with
   [`quorum_any()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
   or
   [`quorum_all()`](https://polettif.github.io/proporz/reference/quorum_functions.md),
@@ -75,7 +73,7 @@ pukelsheim(
 ## Value
 
 A data.frame like `votes_df` with a new column denoting the number of
-seats per party and district. Party and district divisors stored in
+seats per party and district. Party and district divisors are stored in
 attributes (hidden from print, see
 [`get_divisors()`](https://polettif.github.io/proporz/reference/get_divisors.md)).
 An ungrouped tibble is returned if `votes_df` is a tibble.
@@ -115,10 +113,11 @@ after preparing the input data.
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
-seats_df = pukelsheim(votes_df,
-                      district_seats_df,
-                      quorum_any(any_district = 0.05, total = 0.03),
-                      winner_take_one = TRUE)
+seats_df = pukelsheim(
+    votes_df,
+    district_seats_df,
+    quorum_any(votes_any_district = 0.05, total_voters = 0.03),
+    winner_take_one = TRUE)
 
 head(seats_df)
 #>   list_id entity_id list_votes seats
@@ -130,10 +129,12 @@ head(seats_df)
 #> 6       6      1701      15695     3
 
 # Finland 2019
-finland19_result = pukelsheim(finland2019$votes_df,
-                             finland2019$district_seats_df,
-                             new_seats_col = "mandates",
-                             weight_votes = FALSE)
+finland19_result = pukelsheim(
+    finland2019$votes_df,
+    finland2019$district_seats_df,
+    new_seats_col = "mandates",
+    weight_votes = FALSE)
+
 tail(finland19_result[order(finland19_result$mandates),])
 #>   party_name district_name  votes mandates
 #> 4         PS           UUS  86691        5

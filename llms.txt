@@ -112,10 +112,11 @@ The other parameters are set to reflect the actual election system.
 votes_df = unique(zug2018[c("list_id", "entity_id", "list_votes")])
 district_seats_df = unique(zug2018[c("entity_id", "election_mandates")])
 
-seats_df = pukelsheim(votes_df,
-                      district_seats_df,
-                      quorum = quorum_any(any_district = 0.05, total = 0.03),
-                      winner_take_one = TRUE)
+seats_df = pukelsheim(
+    votes_df,
+    district_seats_df,
+    quorum = quorum_any(votes_any_district = 0.05, total_voters = 0.03),
+    winner_take_one = TRUE)
 
 head(seats_df)
 #>   list_id entity_id list_votes seats
@@ -276,13 +277,17 @@ among parties and districts.
 
 - [`quorum_all()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
   [`quorum_any()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
-  : Create quorum functions for biproportional apportionment
-- [`apply_quorum()`](https://polettif.github.io/proporz/reference/apply_quorum.md)
-  : Apply quorum to votes vector or matrix
+  : Create quorum parameter list for biproportional apportionment
+- [`eval_quorum()`](https://polettif.github.io/proporz/reference/eval_quorum.md)
+  : Evaluate a quorum
 - [`reached_quorum_any_district()`](https://polettif.github.io/proporz/reference/reached_quorum_any_district.md)
   : Check if parties reached a quorum in at least one district
 - [`reached_quorum_total()`](https://polettif.github.io/proporz/reference/reached_quorum_total.md)
   : Check if parties reached the quorum for all votes
+- [`apply_quorum()`](https://polettif.github.io/proporz/reference/apply_quorum.md)
+  : Apply quorum to votes vector or matrix
+- [`zero_failed_quorum()`](https://polettif.github.io/proporz/reference/zero_failed_quorum.md)
+  : Set votes of parties failing to reach quorums to zero
 
 ## Shiny App
 

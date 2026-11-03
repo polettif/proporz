@@ -17,9 +17,9 @@ reached_quorum_any_district(votes_matrix, quorum_districts)
 
 - quorum_districts:
 
-  Vote threshold a party must reach in *at least* one district. Used as
-  fraction of total votes within a district if less than 1, otherwise as
-  number of votes. Must be greater than 0.
+  Vote threshold a party (row) must reach in *at least* one district.
+  Used as fraction of total votes within a district if less than 1,
+  otherwise as number of votes. Must be greater than 0.
 
 ## Value
 

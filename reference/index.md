@@ -45,13 +45,17 @@ among parties and districts.
 
 - [`quorum_all()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
   [`quorum_any()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
-  : Create quorum functions for biproportional apportionment
-- [`apply_quorum()`](https://polettif.github.io/proporz/reference/apply_quorum.md)
-  : Apply quorum to votes vector or matrix
+  : Create quorum parameter list for biproportional apportionment
+- [`eval_quorum()`](https://polettif.github.io/proporz/reference/eval_quorum.md)
+  : Evaluate a quorum
 - [`reached_quorum_any_district()`](https://polettif.github.io/proporz/reference/reached_quorum_any_district.md)
   : Check if parties reached a quorum in at least one district
 - [`reached_quorum_total()`](https://polettif.github.io/proporz/reference/reached_quorum_total.md)
   : Check if parties reached the quorum for all votes
+- [`apply_quorum()`](https://polettif.github.io/proporz/reference/apply_quorum.md)
+  : Apply quorum to votes vector or matrix
+- [`zero_failed_quorum()`](https://polettif.github.io/proporz/reference/zero_failed_quorum.md)
+  : Set votes of parties failing to reach quorums to zero
 
 ## Shiny App
 

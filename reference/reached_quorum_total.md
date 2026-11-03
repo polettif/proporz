@@ -17,9 +17,9 @@ reached_quorum_total(votes_matrix, quorum_total)
 
 - quorum_total:
 
-  Vote threshold a party must reach for all votes cast. Used as fraction
-  of total votes if less than 1, otherwise as number of votes. Must be
-  greater than 0.
+  Vote threshold a party (row) must reach for all votes cast. Used as
+  fraction of total votes if less than 1, otherwise as number of votes.
+  Must be greater than 0.
 
 ## Value
 

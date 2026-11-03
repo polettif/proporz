@@ -37,10 +37,8 @@ biproporz(
 
 - quorum:
 
-  Optional list of functions which take the votes matrix and return a
-  logical vector that shows for each party/row whether they reached the
-  quorum (i.e. are eligible for seats). The easiest way to do this is by
-  passing
+  Optional list of quorum parameters that describe how quorums should be
+  applied prior to seat distributions, created with
   [`quorum_any()`](https://polettif.github.io/proporz/reference/quorum_functions.md)
   or
   [`quorum_all()`](https://polettif.github.io/proporz/reference/quorum_functions.md),
@@ -153,7 +151,7 @@ summary(bp)
 
 # apply quorum (high values for illustrative purposes)
 biproporz(votes_matrix, district_seats,
-          quorum_all(any_district = 0.1, total = 0.25))
+          quorum_all(votes_any_district = 0.1, votes_total = 0.25))
 #>      Altdorf Bürglen Erstfeld Schattdorf
 #> CVP        7       5        3          6
 #> SPGB       8       2        3          3
